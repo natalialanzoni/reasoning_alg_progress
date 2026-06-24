@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# OS
+.DS_Store
+
+# Backups / archives of result files (large, redundant)
+*.bak
+*.bak_before_fix
+*_archive.json
+
+# Editor
+.idea/
+.vscode/
