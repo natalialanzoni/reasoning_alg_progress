@@ -88,7 +88,7 @@ HF_DATASET = "tyrtleli/thinking-benchmark-90"
 # (cost = total_tokens * PRICE_PER_1M / 1e6).
 # Right now this is current price. We may want to change to be price at time of release. 
 PRICE_PER_1M = {
-    "o3":      8,
+    "o3":      40,
     "gpt-5":   10.00,
     "gpt-5.2":  14,
     "gpt-5.4":  15,
