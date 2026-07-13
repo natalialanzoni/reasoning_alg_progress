@@ -61,7 +61,7 @@ OUT_DIR.mkdir(parents=True, exist_ok=True)
 # (label, release date, main k=8 run JSON)
 MAIN_K8 = [
     ("o3",      datetime(2025, 4, 1), RESULTS_DIR / "o3_shallow_pass" / "o3_medium_thinking_bench.json"),
-    ("gpt-5",   datetime(2025, 8, 1), RESULTS_DIR / "gpt5_shallow_pass" / "gpt-5_medium_thinking_bench.json"),
+    ("gpt-5",   datetime(2025, 8, 7), RESULTS_DIR / "gpt5_shallow_pass" / "gpt-5_medium_thinking_bench.json"),
     ("gpt-5.2", datetime(2025, 12, 1), RESULTS_DIR / "gpt5.2_shallow_pass" / "gpt-5.2_medium_thinking_bench.json"),
     ("gpt-5.4", datetime(2026, 3, 1), RESULTS_DIR / "gpt5.4_shallow_pass" / "gpt-5.4_medium_thinking_bench.json"),
     ("gpt-5.5", datetime(2026, 6, 1), RESULTS_DIR / "gpt5.5_shallow_pass" / "gpt-5.5_medium_thinking_bench.json"),
@@ -82,6 +82,10 @@ EDGE_K32 = {
     "gpt-5.2": RESULTS_DIR / "edge_of_capability_k32" / "gpt-5.2_medium_thinking_benchmark_gpt5_2.json",
     "gpt-5.4": RESULTS_DIR / "edge_of_capability_k32" / "gpt-5.4_medium_thinking_benchmark_gpt5_4.json",
 }
+OSS_MODELS = [
+    ("gpt-oss-20b",  datetime(2025, 8, 5), RESULTS_DIR / "gpt_oss20B_shallow_pass"  / "gpt-oss-20b_re-medium.json"),
+    ("gpt-oss-120b", datetime(2025, 8, 6), RESULTS_DIR / "gpt_oss120B_shallow_pass" / "gpt-oss-120b_re-medium.json"),
+]
 HF_DATASET = "tyrtleli/thinking-benchmark-90"
 
 # Blended price in USD per 1M tokens, per model, for the benchmark-cost axis
@@ -119,9 +123,49 @@ print(f"  {len(CANON_KEYS)} problems with canonical solutions; "
       f"avg={canon_avg:.0f}, shortest-avg={canon_short:.0f} tokens\n")
 
 
+def _extract_last_boxed(text):
+    marker = r'\boxed{'
+    idx = text.rfind(marker)
+    if idx == -1:
+        return None
+    start = idx + len(marker)
+    depth, i = 1, start
+    while i < len(text) and depth > 0:
+        if text[i] == '{':
+            depth += 1
+        elif text[i] == '}':
+            depth -= 1
+        i += 1
+    return text[start:i - 1] if depth == 0 else None
+
+
+def _grade_answer(extracted, gold):
+    if extracted is None:
+        return False
+    e, g = extracted.strip(), str(gold).strip()
+    if e == g:
+        return True
+    try:
+        return abs(float(e) - float(g)) < 1e-9
+    except (ValueError, TypeError):
+        return False
+
+
 def load_rows(path):
-    rows = json.load(open(path))
-    return [r for r in rows if not r.get("removed_from_dataset", False)]
+    data = json.load(open(path))
+    if isinstance(data, dict) and "results" in data:
+        rows = []
+        for r in data["results"]:
+            gold = r["answer"]
+            completions = r.get("completions", [])
+            rows.append({
+                "task_id": r["id"],
+                "correct": [_grade_answer(_extract_last_boxed(c["text"]), gold)
+                            for c in completions],
+                "total_completion_tokens": [c["n_tokens"] for c in completions],
+            })
+        return rows
+    return [r for r in data if not r.get("removed_from_dataset", False)]
 
 
 def per_task_mean_lengths(path, correct_only, restrict_to_keys=True):
@@ -562,9 +606,158 @@ def figure4_edge_violins(fname="k40_violin_edge_of_capability.png"):
     print(f"wrote {OUT_DIR / fname}")
 
 
+# ============================================================================
+# FIGURE 1 (OSS-only, 2-panel, mirrors figure1() exactly but uses OSS_MODELS)
+#   Panel A uses k=8 data (no k=32 hard-but-doable for gpt-oss), 45 problems.
+#   Panel B shows tokens only — no cost line (gpt-oss prices not in PRICE_PER_1M).
+#   Both panels use integer x-positions because the two OSS models are 1 day apart.
+# ============================================================================
+def figure1_oss(fname="fig1_oss.png", spread="iqr"):
+    import matplotlib.lines as mlines
+
+    # ------------------------------------------------------------ (A) per-problem
+    dates, labels, traj, band, accs = per_problem_trajectories(OSS_MODELS, spread=spread)
+    macro = [float(np.mean([traj[t][i] for t in traj])) for i in range(len(dates))]
+    panel_keys = [t for t in traj if t in CANON_KEYS]
+    canon = float(np.mean([CANON[t]["mean"] for t in panel_keys])) if panel_keys else None
+
+    fig, axL = plt.subplots(1, 1, figsize=(10, 7))
+    xs = list(range(len(labels)))
+
+    order = sorted(traj, key=lambda t: -max(traj[t]))
+    cmap = plt.cm.viridis
+    for rank, tid in enumerate(order):
+        color = cmap(rank / max(1, len(order) - 1))
+        lows, highs = band[tid]
+        axL.fill_between(xs, lows, highs, color=color, alpha=0.13, zorder=2, edgecolor="none")
+        axL.plot(xs, traj[tid], "-", color=color, linewidth=1.4, alpha=0.85, zorder=3)
+
+    axL.plot(xs, macro, "o-", color="#000000", linewidth=3, markersize=10,
+             zorder=6, label="Mean across problems")
+    for xi, m in zip(xs, macro):
+        axL.annotate(f"{m:,.0f}", (xi, m), textcoords="offset points", xytext=(0, 13),
+                     ha="center", fontsize=9.5, fontweight="bold", color="#000000")
+    if canon is not None:
+        axL.axhline(canon, color="#FFB300", linewidth=2.4, zorder=4,
+                    label=f"Canonical solution ({canon:.0f} tok)")
+        axL.axhspan(0, canon, color="#FFB300", alpha=0.06, zorder=0)
+    axL.set_ylim(bottom=0)
+    axL.set_xlim(-0.5, len(labels) - 0.5)
+    axL.set_ylabel("Per-problem trace length (output tokens, o200k)",
+                   fontsize=11, color=LINE_COLOR)
+    axL.tick_params(axis="y", labelcolor=LINE_COLOR)
+
+    band_lbl = "IQR" if spread == "iqr" else "min–max"
+    prob_proxy = mlines.Line2D([], [], color=cmap(0.5), linewidth=1.4,
+                               label=f"Per problem: mean + {band_lbl} band (n={len(traj)})")
+    h1, l1 = axL.get_legend_handles_labels()
+    axL.legend([prob_proxy] + h1, [prob_proxy.get_label()] + l1,
+               loc="upper right", framealpha=0.95, fontsize=9)
+    axL.set_xticks(xs)
+    axL.set_xticklabels([f"{l}\n{d.strftime('%Y-%m')}\n({acc * 100:.0f}% acc)"
+                         for l, d, acc in zip(labels, dates, accs)],
+                        fontsize=9.5, fontweight="bold")
+    axL.set_xlabel("Model (release date)", fontsize=11)
+    axL.set_title(f"(A)  Reasoning length — every problem ({len(traj)} problems, k=8)",
+                  fontsize=11, loc="left", fontweight="bold")
+
+    fig.suptitle("Figure 1 (OSS).  Open-weight reasoning token usage",
+                 fontsize=13.5, y=1.01)
+    plt.tight_layout()
+    fig.savefig(OUT_DIR / fname, dpi=200, bbox_inches="tight")
+    plt.close(fig)
+    print(f"wrote {OUT_DIR / fname}")
+
+
+# ============================================================================
+# FIGURE 1 (open-weight variant)
+#   Panel A style: per-problem trace lengths for all GPT gens + gpt-oss models,
+#   plotted on an equal-spacing x-axis with accuracy annotated per model.
+#   Uses k=8 main runs for all models (no k=32 hard-but-doable for gpt-oss).
+# ============================================================================
+def figure1_open_weight(fname="fig1_open_weight.png", spread="iqr"):
+    import matplotlib.lines as mlines
+    import matplotlib.patches as mpatches
+
+    OSS_LABELS = {"gpt-oss-20b", "gpt-oss-120b"}
+    all_models = sorted(list(MAIN_K8) + list(OSS_MODELS), key=lambda x: x[1])
+    dates, labels, traj, band, accs = per_problem_trajectories(all_models, spread=spread)
+    macro = [float(np.mean([traj[t][i] for t in traj])) for i in range(len(dates))]
+
+    panel_keys = [t for t in traj if t in CANON_KEYS]
+    canon = float(np.mean([CANON[t]["mean"] for t in panel_keys])) if panel_keys else None
+
+    fig, ax = plt.subplots(figsize=(17, 7))
+    xs = list(range(len(labels)))
+
+    # Shade open-weight model columns
+    for xi, lbl in enumerate(labels):
+        if lbl in OSS_LABELS:
+            ax.axvspan(xi - 0.45, xi + 0.45, facecolor="#FFF3E0", alpha=0.8, zorder=0,
+                       edgecolor="#FF6D00", linewidth=0.5)
+
+    # Per-problem spread bands and mean lines
+    order = sorted(traj, key=lambda t: -max(traj[t]))
+    cmap = plt.cm.viridis
+    for rank, tid in enumerate(order):
+        color = cmap(rank / max(1, len(order) - 1))
+        lows, highs = band[tid]
+        ax.fill_between(xs, lows, highs, color=color, alpha=0.13, zorder=2, edgecolor="none")
+        ax.plot(xs, traj[tid], "-", color=color, linewidth=1.2, alpha=0.75, zorder=3)
+
+    # Bold macro-average
+    ax.plot(xs, macro, "o-", color="#000000", linewidth=3, markersize=9, zorder=6,
+            label="Mean across problems")
+    for xi, m in zip(xs, macro):
+        ax.annotate(f"{m:,.0f}", (xi, m), textcoords="offset points", xytext=(0, 13),
+                    ha="center", fontsize=9, fontweight="bold", color="#000000")
+
+    # Canonical floor
+    if canon is not None:
+        ax.axhline(canon, color="#FFB300", linewidth=2.4, zorder=4,
+                   label=f"Canonical solution ({canon:.0f} tok)")
+        ax.axhspan(0, canon, color="#FFB300", alpha=0.06, zorder=0)
+
+    ax.set_ylim(bottom=0)
+    ax.set_xlim(-0.5, len(labels) - 0.5)
+
+    tick_labels = [f"{l}\n{d.strftime('%Y-%m')}\n({acc * 100:.0f}% acc)"
+                   for l, d, acc in zip(labels, dates, accs)]
+    ax.set_xticks(xs)
+    ax.set_xticklabels(tick_labels, fontsize=9.5, fontweight="bold")
+    for tick, lbl in zip(ax.get_xticklabels(), labels):
+        tick.set_color("#BF360C" if lbl in OSS_LABELS else "#000000")
+
+    ax.set_ylabel("Per-problem trace length (output tokens, o200k)", fontsize=11, color=LINE_COLOR)
+    ax.tick_params(axis="y", labelcolor=LINE_COLOR)
+    ax.set_xlabel("Model (release date)  —  shaded columns: open-weight", fontsize=11)
+
+    band_lbl = "IQR" if spread == "iqr" else "min–max"
+    prob_proxy = mlines.Line2D([], [], color=cmap(0.5), linewidth=1.4,
+                               label=f"Per problem: mean + {band_lbl} band (n={len(traj)})")
+    oss_patch = mpatches.Patch(facecolor="#FFF3E0", label="Open-weight (gpt-oss)",
+                               edgecolor="#FF6D00", linewidth=1.2)
+    h1, l1 = ax.get_legend_handles_labels()
+    ax.legend([prob_proxy, oss_patch] + h1,
+              [prob_proxy.get_label(), oss_patch.get_label()] + l1,
+              loc="upper right", framealpha=0.95, fontsize=9)
+
+    ax.set_title(
+        f"Reasoning length: GPT generations vs. open-weight models  "
+        f"({len(traj)} shared problems, k=8)",
+        fontsize=11, loc="left", fontweight="bold"
+    )
+    plt.tight_layout()
+    fig.savefig(OUT_DIR / fname, dpi=200, bbox_inches="tight")
+    plt.close(fig)
+    print(f"wrote {OUT_DIR / fname}")
+
+
 if __name__ == "__main__":
     figure1()
     figure1_example_problems()
     figure3_forecast()
     figure4_edge_violins()
+    figure1_oss()
+    figure1_open_weight()
     print(f"\nAll figures written to {OUT_DIR}/")
