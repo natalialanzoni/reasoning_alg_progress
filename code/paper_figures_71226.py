@@ -369,7 +369,7 @@ def figure1(fname="fig1.png", spread="iqr"):
                         fontsize=9.5, fontweight="bold")
     axR.set_xlabel("Model (release date)", fontsize=11)
     axR.set_title(f"(B)  Whole-benchmark tokens & cost  "
-                  f"({n_tasks} shared tasks, k=8 — prices are PLACEHOLDERS)",
+                  f"({n_tasks} shared tasks, k=8)",
                   fontsize=11, loc="left", fontweight="bold")
 
     fig.suptitle("Figure 1.  GPT reasoning gets shorter and cheaper over generations",
@@ -466,14 +466,22 @@ def figure3_forecast(fname="fig3_forecast_successes_linear.png"):
         geomean[label] = 1.0 + math.exp(np.mean(np.log(exc)))   # model-consistent central tendency
     df = pd.DataFrame(rows)
 
-    # log(headroom - 1) ~ month, excl o3 (pre-trend peak)
+    # log(headroom - 1) ~ month + problem fixed effects, excl o3 (pre-trend peak).
+    # This matches the paper's excess-trend spec: with problem FE alpha_j, the DV
+    # log(headroom - 1) = log(L - C_j) - log(C_j) yields the SAME month slope as
+    # log(L - C_j) (the -log(C_j) is absorbed by alpha_j). SEs clustered by problem.
     o3_month = (MAIN_K8[0][1] - ORIGIN).days / 30.44
     fitdf = df[(df["headroom"] > 1) & (df["month"] > o3_month)].copy()
     fitdf["y"] = np.log(fitdf["headroom"] - 1.0)
     import statsmodels.formula.api as smf   # only needed here
-    res = smf.ols("y ~ month", data=fitdf).fit(
+    res = smf.ols("y ~ month + C(problem)", data=fitdf).fit(
         cov_type="cluster", cov_kwds={"groups": fitdf["problem"]})
-    a, b = res.params["Intercept"], res.params["month"]
+    b = res.params["month"]
+    # Representative intercept for the forecast curve = mean problem fixed effect
+    # (Intercept is the reference problem; add the average of the dummy offsets,
+    # dividing by n_problems so the reference's implicit 0 is counted).
+    _fe = [v for k, v in res.params.items() if k.startswith("C(problem)")]
+    a = res.params["Intercept"] + sum(_fe) / fitdf["problem"].nunique()
     q_factor = math.exp(3 * b)
     t0 = MAIN_K8[-1][1]; month_t0 = (t0 - ORIGIN).days / 30.44
     H_t0 = math.exp(a + b * month_t0)
