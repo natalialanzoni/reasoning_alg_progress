@@ -15,13 +15,15 @@ code, but differ in every provider-specific detail:
   - OpenAI's usage.output_tokens_details.reasoning_tokens gives an exact
     thinking/answer token split. Anthropic's batch usage has no such
     field -- output_tokens is one combined number covering both the
-    thinking block and the text block. This script approximates the
-    split by separately counting tokens in the parsed thinking text via
-    the count_tokens endpoint, then deriving answer_tokens as
-    total_output_tokens - thinking_tokens. This is an approximation
-    (count_tokens tokenizes the string as a fresh user turn, which is
-    not byte-identical to how the same text was tokenized as generated
-    output) -- not the exact server-side count OpenAI provides.
+    thinking block and the text block, and the raw chain of thought is
+    never returned (thinking blocks come back empty or summarized), so
+    it can't be counted directly. This script instead counts tokens in
+    the verbatim answer text via the count_tokens endpoint and derives
+    thinking_tokens as total_output_tokens - answer_tokens. This is an
+    approximation (count_tokens tokenizes the string as a fresh user
+    turn, which is not byte-identical to how the same text was tokenized
+    as generated output) -- not the exact server-side count OpenAI
+    provides.
 
 Usage:
     python benchmark_claude_opus.py --model claude-opus-5 --effort medium
@@ -76,8 +78,7 @@ MODEL_CONFIGS = {
 }
 
 _BUDGET_FRACTION = {"low": 0.25, "medium": 0.5, "high": 0.75}
-_DEFAULT_MAX_TOKENS = {"claude-opus-4-5": 64_000}
-_FALLBACK_MAX_TOKENS = 100_000
+_DEFAULT_MAX_TOKENS = 40_000
 
 
 def _find_boxed(text: str):
@@ -296,7 +297,7 @@ def main():
     parser.add_argument("--n-problems", type=int, default=None,
                         help="Limit to first N problems. Default = all in the split.")
     parser.add_argument("--max-tokens", type=int, default=None,
-                        help="Default: 64000 for claude-opus-4-5, 100000 otherwise.")
+                        help="Default: 40000.")
     parser.add_argument("--run-name", default=None,
                         help="Subfolder under results/. Defaults to a timestamp.")
     parser.add_argument("--dataset", default=DEFAULT_DATASET,
@@ -315,6 +316,12 @@ def main():
                         help="Dataset to join by id for the full `problem` text (and "
                              "`answer`) when the main --dataset omits them. "
                              "Default: tyrtleli/thinking-benchmark-90.")
+    parser.add_argument("--from-batch-id", default=None,
+                        help="Recover an already-submitted batch instead of "
+                             "submitting a new one (e.g. after interrupted "
+                             "polling — the id is in the run dir's "
+                             "*_batch_id.txt). All other args must match the "
+                             "original submission.")
     parser.add_argument("--seed-from", nargs="*", default=[],
                         help="Prior results JSON file(s) to REUSE rows from for any "
                              "overlapping task_ids (e.g. an earlier run on a "
@@ -325,7 +332,7 @@ def main():
     args = parser.parse_args()
 
     if args.max_tokens is None:
-        args.max_tokens = _DEFAULT_MAX_TOKENS.get(args.model, _FALLBACK_MAX_TOKENS)
+        args.max_tokens = _DEFAULT_MAX_TOKENS
 
     # Fail fast on an unsupported model/effort pairing rather than after
     # building thousands of requests.
@@ -423,35 +430,44 @@ def main():
                 json.dump(existing_rows, f, indent=2)
             return
 
-    n_reqs = len(problems) * args.n_samples
-    print(f"Building {n_reqs} requests "
-          f"({len(problems)} problems x {args.n_samples} samples)...")
-
-    extra_kwargs = thinking_kwargs_for(args.model, args.effort, args.max_tokens)
-
-    batch_requests = []
-    with requests_path.open("w") as f:
-        for row in problems:
-            for s in range(args.n_samples):
-                custom_id = f"{row['id']}__sample_{s}"
-                body = {
-                    "model": args.model,
-                    "max_tokens": args.max_tokens,
-                    "system": INSTRUCTIONS,
-                    "messages": [{"role": "user", "content": row["problem"]}],
-                    **extra_kwargs,
-                }
-                f.write(json.dumps({"custom_id": custom_id, "body": body}) + "\n")
-                batch_requests.append(
-                    Request(
-                        custom_id=custom_id,
-                        params=MessageCreateParamsNonStreaming(**body),
-                    )
-                )
-
     client = anthropic.Anthropic()
-    print("Submitting batch...")
-    batch = client.messages.batches.create(requests=batch_requests)
+
+    if args.from_batch_id:
+        # Recover a batch that was already submitted (e.g. polling was
+        # interrupted). The dataset/model/effort/n-samples args must match
+        # what that batch was submitted with — custom_ids are joined against
+        # the problem list loaded above.
+        print(f"Recovering existing batch {args.from_batch_id}...")
+        batch = client.messages.batches.retrieve(args.from_batch_id)
+    else:
+        n_reqs = len(problems) * args.n_samples
+        print(f"Building {n_reqs} requests "
+              f"({len(problems)} problems x {args.n_samples} samples)...")
+
+        extra_kwargs = thinking_kwargs_for(args.model, args.effort, args.max_tokens)
+
+        batch_requests = []
+        with requests_path.open("w") as f:
+            for row in problems:
+                for s in range(args.n_samples):
+                    custom_id = f"{row['id']}__sample_{s}"
+                    body = {
+                        "model": args.model,
+                        "max_tokens": args.max_tokens,
+                        "system": INSTRUCTIONS,
+                        "messages": [{"role": "user", "content": row["problem"]}],
+                        **extra_kwargs,
+                    }
+                    f.write(json.dumps({"custom_id": custom_id, "body": body}) + "\n")
+                    batch_requests.append(
+                        Request(
+                            custom_id=custom_id,
+                            params=MessageCreateParamsNonStreaming(**body),
+                        )
+                    )
+
+        print("Submitting batch...")
+        batch = client.messages.batches.create(requests=batch_requests)
     print(f"  batch_id = {batch.id}")
     sidecar_path.write_text(batch.id + "\n")
     print(f"  saved batch_id to {sidecar_path.name}")
@@ -501,14 +517,16 @@ def main():
                   "input_tokens": 0, "output_tokens": 0}
             for s in by_problem[str(row["id"])]
         ]
-        thinking_tok = [
-            count_tokens_with_retry(client, args.model, s["thinking_text"])
+        # The answer text is returned verbatim, so count tokens on it; the raw
+        # chain of thought is never returned (thinking blocks are empty or
+        # summarized), so derive thinking as the billed total minus the answer.
+        answer_tok = [
+            min(count_tokens_with_retry(client, args.model, s["answer_text"]),
+                s["output_tokens"])
             for s in samples
         ]
-        # answer_tokens derived from the authoritative billed total minus the
-        # approximated thinking share, so total_completion_tokens stays exact.
-        answer_tok = [
-            max(s["output_tokens"] - t, 0) for s, t in zip(samples, thinking_tok)
+        thinking_tok = [
+            s["output_tokens"] - t for s, t in zip(samples, answer_tok)
         ]
         # Some datasets use "answer", others "final_answer"
         gold_raw = row.get("answer") if "answer" in row else row.get("final_answer")
