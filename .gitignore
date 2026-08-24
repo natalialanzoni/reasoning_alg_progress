@@ -6,6 +6,12 @@ __pycache__/
 venv/
 env/
 
+# Secrets
+.env
+
+# Scratch batch-run output (promote finished runs into data/ manually)
+code/results/
+
 # OS
 .DS_Store
 
