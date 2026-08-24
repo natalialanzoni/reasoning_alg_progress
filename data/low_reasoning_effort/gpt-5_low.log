@@ -1,0 +1,6 @@
+Run dir: /Users/natalia/Desktop/FutureTech/reasoning_alg_efficiency/data/low_reasoning_effort
+Loading tyrtleli/thinking-benchmark-hard-but-doable-10 (split=test)...
+  10 problems loaded.
+  'problem' text missing — joining by id against tyrtleli/thinking-benchmark-90
+  resume: 10 already in output, 0 reused from --seed-from, 0 new to run (was 10). Use --fresh to re-run all.
+  Nothing new to run — writing carried-over rows.

@@ -1,0 +1,98 @@
+Run dir: /Users/natalia/Desktop/FutureTech/reasoning_alg_efficiency/data/high_reasoning_effort
+Loading tyrtleli/thinking-benchmark-hard-but-doable-10 (split=test)...
+  10 problems loaded.
+  'problem' text missing — joining by id against tyrtleli/thinking-benchmark-90
+Building 80 requests (10 problems x 8 samples)...
+Uploading requests file...
+Submitting batch...
+  batch_id = batch_6a8c9844e9108190977db96633439682
+  saved batch_id to gpt-5.6-sol_high_thinking_benchmark_hard_but_doable_10_batch_id.txt
+
+Polling every 30s...
+  [validating] 0/0 completed, 0 failed
+  [in_progress] 0/80 completed, 0 failed
+  [in_progress] 0/80 completed, 0 failed
+  [in_progress] 0/80 completed, 0 failed
+  [in_progress] 0/80 completed, 0 failed
+  [in_progress] 0/80 completed, 0 failed
+  [in_progress] 0/80 completed, 0 failed
+  [in_progress] 0/80 completed, 0 failed
+  [in_progress] 0/80 completed, 0 failed
+  [in_progress] 0/80 completed, 0 failed
+  [in_progress] 20/80 completed, 0 failed
+  [in_progress] 20/80 completed, 0 failed
+  [in_progress] 20/80 completed, 0 failed
+  [in_progress] 20/80 completed, 0 failed
+  [in_progress] 20/80 completed, 0 failed
+  [in_progress] 46/80 completed, 0 failed
+  [in_progress] 46/80 completed, 0 failed
+  [in_progress] 46/80 completed, 0 failed
+  [in_progress] 46/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed
+  [in_progress] 71/80 completed, 0 failed

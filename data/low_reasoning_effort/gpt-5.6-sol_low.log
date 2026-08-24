@@ -1,0 +1,25 @@
+Run dir: /Users/natalia/Desktop/FutureTech/reasoning_alg_efficiency/data/low_reasoning_effort
+Loading tyrtleli/thinking-benchmark-hard-but-doable-10 (split=test)...
+  10 problems loaded.
+  'problem' text missing — joining by id against tyrtleli/thinking-benchmark-90
+Building 80 requests (10 problems x 8 samples)...
+Uploading requests file...
+Submitting batch...
+  batch_id = batch_6a8c984327848190b3e14955879a3d17
+  saved batch_id to gpt-5.6-sol_low_thinking_benchmark_hard_but_doable_10_batch_id.txt
+
+Polling every 30s...
+  [validating] 0/0 completed, 0 failed
+  [in_progress] 0/80 completed, 0 failed
+  [in_progress] 0/80 completed, 0 failed
+  [in_progress] 0/80 completed, 0 failed
+  [in_progress] 26/80 completed, 0 failed
+  [in_progress] 48/80 completed, 0 failed
+  [in_progress] 48/80 completed, 0 failed
+  [in_progress] 78/80 completed, 0 failed
+  [completed] 80/80 completed, 0 failed
+Downloading results...
+
+Done. 10 new task(s) added; 10 total.
+Overall accuracy: 78/80 = 97.5%
+Wrote /Users/natalia/Desktop/FutureTech/reasoning_alg_efficiency/data/low_reasoning_effort/gpt-5.6-sol_low_thinking_benchmark_hard_but_doable_10.json  (0.1 MB)
