@@ -70,6 +70,7 @@ INSTRUCTIONS = (
 #     `effort` as a fraction of --max-tokens. Only low/medium/high are
 #     supported (no xhigh/max).
 MODEL_CONFIGS = {
+    "claude-fable-5":  {"style": "adaptive", "efforts": ["low", "medium", "high", "xhigh", "max"]},
     "claude-opus-5":   {"style": "adaptive", "efforts": ["low", "medium", "high", "xhigh", "max"]},
     "claude-opus-4-8": {"style": "adaptive", "efforts": ["low", "medium", "high", "xhigh", "max"]},
     "claude-opus-4-7": {"style": "adaptive", "efforts": ["low", "medium", "high", "xhigh", "max"]},

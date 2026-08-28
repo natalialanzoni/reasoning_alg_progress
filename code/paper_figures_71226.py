@@ -75,6 +75,14 @@ HARD10_K32 = [
     ("gpt-5.4", datetime(2026, 3, 1), RESULTS_DIR / "hard_but_doable_10q_k32" / "gpt-5.4_medium_thinking_benchmark_hard_but_doable_10.json"),
     ("gpt-5.5", datetime(2026, 6, 1), RESULTS_DIR / "hard_but_doable_10q_k32" / "gpt-5.5_medium_thinking_benchmark_hard_but_doable_10.json"),
 ]
+# Claude Opus k=32 "hard but doable" runs (same 10 problems, same shared folder).
+OPUS_HARD10_K32 = [
+    ("claude-opus-4-5", datetime(2025, 11, 24), RESULTS_DIR / "hard_but_doable_10q_k32" / "claude-opus-4-5_medium_thinking_benchmark_hard_but_doable_10.json"),
+    ("claude-opus-4-6", datetime(2026, 2, 5),   RESULTS_DIR / "hard_but_doable_10q_k32" / "claude-opus-4-6_medium_thinking_benchmark_hard_but_doable_10.json"),
+    ("claude-opus-4-7", datetime(2026, 4, 16),  RESULTS_DIR / "hard_but_doable_10q_k32" / "claude-opus-4-7_medium_thinking_benchmark_hard_but_doable_10.json"),
+    ("claude-opus-4-8", datetime(2026, 5, 28),  RESULTS_DIR / "hard_but_doable_10q_k32" / "claude-opus-4-8_medium_thinking_benchmark_hard_but_doable_10.json"),
+    ("claude-opus-5",   datetime(2026, 7, 24),  RESULTS_DIR / "hard_but_doable_10q_k32" / "claude-opus-5_medium_thinking_benchmark_hard_but_doable_10.json"),
+]
 # k=32 edge_of_capability runs (merged with main k=8 -> k=40 in-memory for fig 4)
 EDGE_K32 = {
     "o3":      RESULTS_DIR / "edge_of_capability_k32" / "o3_medium_thinking_benchmark_o3.json",
@@ -86,6 +94,19 @@ OSS_MODELS = [
     ("gpt-oss-20b",  datetime(2025, 8, 5), RESULTS_DIR / "gpt_oss20B_shallow_pass"  / "gpt-oss-20b_re-medium.json"),
     ("gpt-oss-120b", datetime(2025, 8, 6), RESULTS_DIR / "gpt_oss120B_shallow_pass" / "gpt-oss-120b_re-medium.json"),
 ]
+# Claude Opus generations, main k=8 shallow-pass runs (47-problem benchmark,
+# medium effort/thinking). No hard-but-doable k=32 or edge_of_capability k=32
+# runs exist yet for these models, so only the k=8-based figures are built.
+OPUS_MODELS = [
+    ("claude-opus-4-5", datetime(2025, 11, 24), RESULTS_DIR / "opus4.5_shallow_pass" / "claude-opus-4-5_medium_thinking_benchmark.json"),
+    ("claude-opus-4-6", datetime(2026, 2, 5),   RESULTS_DIR / "opus4.6_shallow_pass" / "claude-opus-4-6_medium_thinking_benchmark.json"),
+    ("claude-opus-4-7", datetime(2026, 4, 16),  RESULTS_DIR / "opus4.7_shallow_pass" / "claude-opus-4-7_medium_thinking_benchmark.json"),
+    ("claude-opus-4-8", datetime(2026, 5, 28),  RESULTS_DIR / "opus4.8_shallow_pass" / "claude-opus-4-8_medium_thinking_benchmark.json"),
+    ("claude-opus-5",   datetime(2026, 7, 24),  RESULTS_DIR / "opus5_shallow_pass"   / "claude-opus-5_medium_thinking_benchmark.json"),
+]
+OPUS_PALETTE = {"claude-opus-4-5": "#CE93D8", "claude-opus-4-6": "#AB47BC",
+                "claude-opus-4-7": "#8E24AA", "claude-opus-4-8": "#6A1B9A",
+                "claude-opus-5":   "#4A148C"}
 HF_DATASET = "tyrtleli/thinking-benchmark-90"
 
 # Blended price in USD per 1M tokens, per model, for the benchmark-cost axis
@@ -286,9 +307,13 @@ def benchmark_token_totals(model_files):
 #   (B) Whole-benchmark resource use: total tokens (left y) and dollar cost
 #       (right y = total tokens x per-model price) over model generations.
 # ============================================================================
-def figure1(fname="fig1.png", spread="iqr"):
+def figure1(hard10_k32_files=None, main_k8_files=None, fname="fig1.png", spread="iqr",
+            suptitle="Figure 1.  GPT reasoning gets shorter and cheaper over generations",
+            show_cost=True):
     import matplotlib.lines as mlines
-    dates, labels, traj, band, accs = per_problem_trajectories(HARD10_K32, spread=spread)
+    hard10_k32_files = hard10_k32_files if hard10_k32_files is not None else HARD10_K32
+    main_k8_files = main_k8_files if main_k8_files is not None else MAIN_K8
+    dates, labels, traj, band, accs = per_problem_trajectories(hard10_k32_files, spread=spread)
     macro = [float(np.mean([traj[t][i] for t in traj])) for i in range(len(dates))]
     # Single canonical length line, restricted to THIS set's keyed problems
     # (hard problems have longer solutions; a global floor would understate it).
@@ -338,9 +363,8 @@ def figure1(fname="fig1.png", spread="iqr"):
                   fontsize=11, loc="left", fontweight="bold")
 
     # ------------------------------------------------- (B) whole-benchmark cost
-    bdates, blabels, totals, n_tasks = benchmark_token_totals(MAIN_K8)
+    bdates, blabels, totals, n_tasks = benchmark_token_totals(main_k8_files)
     tok_M = [t / 1e6 for t in totals]
-    costs = [t * PRICE_PER_1M.get(l, float("nan")) / 1e6 for l, t in zip(blabels, totals)]
 
     axR.plot(bdates, tok_M, "o-", color=LINE_COLOR, linewidth=3, markersize=10,
              zorder=4, label="Tokens to run benchmark")
@@ -352,27 +376,30 @@ def figure1(fname="fig1.png", spread="iqr"):
                    fontsize=11, color=LINE_COLOR)
     axR.tick_params(axis="y", labelcolor=LINE_COLOR)
 
-    axRc = axR.twinx()
-    axRc.plot(bdates, costs, "s--", color=COST_COLOR, linewidth=2.4, markersize=9,
-              zorder=5, label="Cost (tokens × price)")
-    for d, c in zip(bdates, costs):
-        axRc.annotate(f"${c:,.0f}", (d, c), textcoords="offset points", xytext=(0, -16),
-                      ha="center", fontsize=9.5, fontweight="bold", color=COST_COLOR)
-    axRc.set_ylim(bottom=0)
-    axRc.set_ylabel("Benchmark cost (USD)", fontsize=11, color=COST_COLOR)
-    axRc.tick_params(axis="y", labelcolor=COST_COLOR); axRc.grid(False)
-
-    hb1, lb1 = axR.get_legend_handles_labels(); hb2, lb2 = axRc.get_legend_handles_labels()
-    axR.legend(hb1 + hb2, lb1 + lb2, loc="upper right", framealpha=0.95, fontsize=9)
+    if show_cost:
+        costs = [t * PRICE_PER_1M.get(l, float("nan")) / 1e6 for l, t in zip(blabels, totals)]
+        axRc = axR.twinx()
+        axRc.plot(bdates, costs, "s--", color=COST_COLOR, linewidth=2.4, markersize=9,
+                  zorder=5, label="Cost (tokens × price)")
+        for d, c in zip(bdates, costs):
+            axRc.annotate(f"${c:,.0f}", (d, c), textcoords="offset points", xytext=(0, -16),
+                          ha="center", fontsize=9.5, fontweight="bold", color=COST_COLOR)
+        axRc.set_ylim(bottom=0)
+        axRc.set_ylabel("Benchmark cost (USD)", fontsize=11, color=COST_COLOR)
+        axRc.tick_params(axis="y", labelcolor=COST_COLOR); axRc.grid(False)
+        hb1, lb1 = axR.get_legend_handles_labels(); hb2, lb2 = axRc.get_legend_handles_labels()
+        axR.legend(hb1 + hb2, lb1 + lb2, loc="upper right", framealpha=0.95, fontsize=9)
+        b_title = f"(B)  Whole-benchmark tokens & cost  ({n_tasks} shared tasks, k=8)"
+    else:
+        axR.legend(loc="upper right", framealpha=0.95, fontsize=9)
+        b_title = f"(B)  Whole-benchmark tokens  ({n_tasks} shared tasks, k=8)"
     axR.set_xticks(bdates)
     axR.set_xticklabels([f"{l}\n{d.strftime('%Y-%m')}" for l, d in zip(blabels, bdates)],
                         fontsize=9.5, fontweight="bold")
     axR.set_xlabel("Model (release date)", fontsize=11)
-    axR.set_title(f"(B)  Whole-benchmark tokens & cost  "
-                  f"({n_tasks} shared tasks, k=8)",
-                  fontsize=11, loc="left", fontweight="bold")
+    axR.set_title(b_title, fontsize=11, loc="left", fontweight="bold")
 
-    fig.suptitle("Figure 1.  GPT reasoning gets shorter and cheaper over generations",
+    fig.suptitle(suptitle,
                  fontsize=13.5, y=1.01)
     plt.tight_layout()
     fig.savefig(OUT_DIR / fname, dpi=200, bbox_inches="tight")
@@ -383,16 +410,18 @@ def figure1(fname="fig1.png", spread="iqr"):
 # ============================================================================
 # FIGURE 1 (example problems)
 # ============================================================================
-def figure1_example_problems(fname="fig1_example_problems.png"):
-    MODEL_ORDER = [m for m, _, _ in MAIN_K8]
-    PALETTE = {"o3": "#9E9E9E", "gpt-5": "#A5D6A7", "gpt-5.2": "#66BB6A",
-               "gpt-5.4": "#388E3C", "gpt-5.5": "#1B5E20"}
-    EXAMPLES = [
+def figure1_example_problems(model_files=None, palette=None, examples=None,
+                              suptitle=None, fname="fig1_example_problems.png"):
+    model_files = model_files if model_files is not None else MAIN_K8
+    MODEL_ORDER = [m for m, _, _ in model_files]
+    PALETTE = palette or {"o3": "#9E9E9E", "gpt-5": "#A5D6A7", "gpt-5.2": "#66BB6A",
+                           "gpt-5.4": "#388E3C", "gpt-5.5": "#1B5E20"}
+    EXAMPLES = examples or [
         ("Easy",   ["aime_2026_i_01", "math_500_0148"]),
         ("Medium", ["aime_2026_i_06", "aime_2026_i_09"]),
         ("Hard",   ["hmmt_2026_feb_geo_10", "hmmt_2026_feb_comb_09"]),
     ]
-    RAW = {m: {str(r["task_id"]): r for r in load_rows(p)} for m, _, p in MAIN_K8}
+    RAW = {m: {str(r["task_id"]): r for r in load_rows(p)} for m, _, p in model_files}
 
     def trials(pid):
         rows = []
@@ -434,7 +463,7 @@ def figure1_example_problems(fname="fig1_example_problems.png"):
             if row == 0:
                 ax.annotate(tier, xy=(0.5, 1.18), xycoords="axes fraction", ha="center",
                             fontsize=13, fontweight="bold", color="#333")
-    fig.suptitle("Per-problem reasoning length across GPT generations "
+    fig.suptitle(suptitle or "Per-problem reasoning length across GPT generations "
                  "(2 easy / 2 medium / 2 hard; each falls toward its canonical floor)",
                  fontsize=14, fontweight="bold", y=1.01)
     plt.tight_layout()
@@ -446,9 +475,11 @@ def figure1_example_problems(fname="fig1_example_problems.png"):
 # ============================================================================
 # FIGURE 3 (headroom forecast, successes only, linear)
 # ============================================================================
-def figure3_forecast(fname="fig3_forecast_successes_linear.png"):
+def figure3_forecast(model_files=None, fname="fig3_forecast_successes_linear.png",
+                      fit_annotation_date=None):
+    model_files = model_files if model_files is not None else MAIN_K8
     rows, geomean = [], {}
-    for label, date, path in MAIN_K8:
+    for label, date, path in model_files:
         month = (date - ORIGIN).days / 30.44
         hrs = []
         for r in load_rows(path):
@@ -466,12 +497,14 @@ def figure3_forecast(fname="fig3_forecast_successes_linear.png"):
         geomean[label] = 1.0 + math.exp(np.mean(np.log(exc)))   # model-consistent central tendency
     df = pd.DataFrame(rows)
 
-    # log(headroom - 1) ~ month + problem fixed effects, excl o3 (pre-trend peak).
-    # This matches the paper's excess-trend spec: with problem FE alpha_j, the DV
-    # log(headroom - 1) = log(L - C_j) - log(C_j) yields the SAME month slope as
-    # log(L - C_j) (the -log(C_j) is absorbed by alpha_j). SEs clustered by problem.
-    o3_month = (MAIN_K8[0][1] - ORIGIN).days / 30.44
-    fitdf = df[(df["headroom"] > 1) & (df["month"] > o3_month)].copy()
+    # log(headroom - 1) ~ month + problem fixed effects, excl the first model in
+    # model_files (pre-trend peak). This matches the paper's excess-trend spec:
+    # with problem FE alpha_j, the DV log(headroom - 1) = log(L - C_j) - log(C_j)
+    # yields the SAME month slope as log(L - C_j) (the -log(C_j) is absorbed by
+    # alpha_j). SEs clustered by problem.
+    baseline_label = model_files[0][0]
+    baseline_month = (model_files[0][1] - ORIGIN).days / 30.44
+    fitdf = df[(df["headroom"] > 1) & (df["month"] > baseline_month)].copy()
     fitdf["y"] = np.log(fitdf["headroom"] - 1.0)
     import statsmodels.formula.api as smf   # only needed here
     res = smf.ols("y ~ month + C(problem)", data=fitdf).fit(
@@ -483,7 +516,7 @@ def figure3_forecast(fname="fig3_forecast_successes_linear.png"):
     _fe = [v for k, v in res.params.items() if k.startswith("C(problem)")]
     a = res.params["Intercept"] + sum(_fe) / fitdf["problem"].nunique()
     q_factor = math.exp(3 * b)
-    t0 = MAIN_K8[-1][1]; month_t0 = (t0 - ORIGIN).days / 30.44
+    t0 = model_files[-1][1]; month_t0 = (t0 - ORIGIN).days / 30.44
     H_t0 = math.exp(a + b * month_t0)
     def hhat(dt):
         m = (dt - ORIGIN).days / 30.44
@@ -492,10 +525,16 @@ def figure3_forecast(fname="fig3_forecast_successes_linear.png"):
         return ORIGIN + timedelta(days=((math.log(frac) - a) / b) * 30.44)
     mile = {p: reach(p) for p in (0.25, 0.10, 0.05)}
 
-    labels = [m for m, _, _ in MAIN_K8]
-    dates = [d for _, d, _ in MAIN_K8]
+    labels = [m for m, _, _ in model_files]
+    dates = [d for _, d, _ in model_files]
     gm = [geomean[m] for m in labels]
-    fdates = [MAIN_K8[1][1] + timedelta(days=30.44 * mo) for mo in range(0, 58)]
+    fdates = [model_files[1][1] + timedelta(days=30.44 * mo) for mo in range(0, 58)]
+    if fit_annotation_date is None:
+        # Midpoint between the last real data point and the first (least
+        # stringent) milestone, so the label sits clear of both the data
+        # points and the milestone lines/annotations regardless of how fast
+        # this series converges.
+        fit_annotation_date = t0 + (mile[0.25] - t0) / 2
 
     # Display in TOKENS: headroom is trace tokens / per-problem canonical floor,
     # so multiplying by the average canonical floor (a constant) turns the whole
@@ -504,7 +543,7 @@ def figure3_forecast(fname="fig3_forecast_successes_linear.png"):
 
     fig, ax = plt.subplots(figsize=(11.5, 6.8))
     for l, d, g in zip(labels, dates, gm):
-        if l == "o3":
+        if l == baseline_label:
             continue
         ax.plot(d, g * REF, "o", color="#1B5E20", markersize=11, zorder=5)
         ax.annotate(f"{l}: {g:.1f}× over floor ({g * REF:,.0f} tok)", (d, g * REF),
@@ -513,7 +552,7 @@ def figure3_forecast(fname="fig3_forecast_successes_linear.png"):
     ax.plot(fdates, [hhat(d) * REF for d in fdates], "--", color="#1565C0",
             linewidth=2.6, zorder=4)
     ax.annotate(f"fit: {(1-q_factor)*100:.0f}% less reasoning required / quarter",
-                (datetime(2027, 6, 1), hhat(datetime(2027, 6, 1)) * REF),
+                (fit_annotation_date, hhat(fit_annotation_date) * REF),
                 textcoords="offset points", xytext=(30, 22), fontsize=11, fontweight="bold",
                 color="#1565C0", arrowprops=dict(arrowstyle="->", color="#1565C0", lw=1.2))
     ax.axhline(REF, color="#FFB300", linewidth=2.6, zorder=3)
@@ -529,14 +568,14 @@ def figure3_forecast(fname="fig3_forecast_successes_linear.png"):
     ax.axhspan(0, REF, color="#FFB300", alpha=0.07, zorder=0)
     ax.set_ylabel("Reasoning tokens (successful traces, o200k)", fontsize=11)
     ax.set_xlabel("Date", fontsize=11)
-    ax.set_xlim(MAIN_K8[1][1] - timedelta(days=40), fdates[-1] + timedelta(days=20))
+    ax.set_xlim(model_files[1][1] - timedelta(days=40), fdates[-1] + timedelta(days=20))
     ax.xaxis.set_major_locator(mdates.MonthLocator(interval=4))
     ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m"))
     fig.autofmt_xdate(rotation=30)
     plt.tight_layout()
     fig.savefig(OUT_DIR / fname, dpi=200, bbox_inches="tight")
     plt.close(fig)
-    print(f"wrote {OUT_DIR / fname}  (excl o3: {(1-q_factor)*100:.0f}%/quarter; "
+    print(f"wrote {OUT_DIR / fname}  (excl {baseline_label}: {(1-q_factor)*100:.0f}%/quarter; "
           f"within10%={mile[0.10]:%Y-%m})")
 
 
@@ -620,11 +659,13 @@ def figure4_edge_violins(fname="k40_violin_edge_of_capability.png"):
 #   Panel B shows tokens only — no cost line (gpt-oss prices not in PRICE_PER_1M).
 #   Both panels use integer x-positions because the two OSS models are 1 day apart.
 # ============================================================================
-def figure1_oss(fname="fig1_oss.png", spread="iqr"):
+def figure1_oss(model_files=None, fname="fig1_oss.png", spread="iqr",
+                 suptitle="Figure 1 (OSS).  Open-weight reasoning token usage"):
     import matplotlib.lines as mlines
+    model_files = model_files if model_files is not None else OSS_MODELS
 
     # ------------------------------------------------------------ (A) per-problem
-    dates, labels, traj, band, accs = per_problem_trajectories(OSS_MODELS, spread=spread)
+    dates, labels, traj, band, accs = per_problem_trajectories(model_files, spread=spread)
     macro = [float(np.mean([traj[t][i] for t in traj])) for i in range(len(dates))]
     panel_keys = [t for t in traj if t in CANON_KEYS]
     canon = float(np.mean([CANON[t]["mean"] for t in panel_keys])) if panel_keys else None
@@ -669,8 +710,7 @@ def figure1_oss(fname="fig1_oss.png", spread="iqr"):
     axL.set_title(f"(A)  Reasoning length — every problem ({len(traj)} problems, k=8)",
                   fontsize=11, loc="left", fontweight="bold")
 
-    fig.suptitle("Figure 1 (OSS).  Open-weight reasoning token usage",
-                 fontsize=13.5, y=1.01)
+    fig.suptitle(suptitle, fontsize=13.5, y=1.01)
     plt.tight_layout()
     fig.savefig(OUT_DIR / fname, dpi=200, bbox_inches="tight")
     plt.close(fig)
@@ -768,4 +808,20 @@ if __name__ == "__main__":
     figure4_edge_violins()
     figure1_oss()
     figure1_open_weight()
+
+    # Claude Opus family (k=8 shallow-pass only — no hard-but-doable k=32 or
+    # edge_of_capability k=32 runs exist yet, so no fig1()-style panel-A/canonical
+    # trajectory figure or figure4_edge_violins() equivalent is built here).
+    # Panel B has no cost line: PRICE_PER_1M isn't reliably confirmed for all
+    # 5 Opus models, and fabricating a $-axis on a figure like this isn't worth
+    # the risk of quietly presenting wrong numbers as fact.
+    figure1(hard10_k32_files=OPUS_HARD10_K32, main_k8_files=OPUS_MODELS,
+            fname="fig1_opus.png", show_cost=False,
+            suptitle="Figure 1 (Opus).  Claude Opus reasoning gets shorter over generations")
+    figure1_example_problems(
+        model_files=OPUS_MODELS, palette=OPUS_PALETTE,
+        suptitle="Per-problem reasoning length across Claude Opus generations "
+                 "(2 easy / 2 medium / 2 hard; each vs. its canonical floor)",
+        fname="fig1_example_problems_opus.png")
+    figure3_forecast(model_files=OPUS_MODELS, fname="fig3_forecast_opus.png")
     print(f"\nAll figures written to {OUT_DIR}/")
