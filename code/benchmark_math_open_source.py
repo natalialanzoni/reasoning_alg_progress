@@ -381,7 +381,15 @@ def main():
         trace_path = model_dir / f"{slug}_{tag}_reasoning_traces.json"    # separate CoT traces
         existing = json.load(res_path.open()) if (res_path.exists() and not args.fresh) else []
         existing_traces = json.load(trace_path.open()) if (trace_path.exists() and not args.fresh) else []
-        done_ids = {r["task_id"] for r in existing}
+        # Self-healing resume: a problem counts as done ONLY if every trial has
+        # tokens > 0. Failed/partial ones (0 tokens, e.g. a killed run or a 402)
+        # are dropped from existing and re-run — no manual cleanup needed.
+        def _done(r):
+            tc = r.get("total_completion_tokens") or []
+            return len(tc) > 0 and all(t > 0 for t in tc)
+        done_ids = {r["task_id"] for r in existing if _done(r)}
+        existing = [r for r in existing if r["task_id"] in done_ids]
+        existing_traces = [r for r in existing_traces if r["task_id"] in done_ids]
         todo = [p for p in problems if str(p["id"]) not in done_ids]
         print(f"\n=== {m['label']}  ({m['or_model']} @ {m['provider']}/{m['quant'] or 'unknown'}, "
               f"cap={cap:,})  {len(todo)} new / {len(problems)} ===")
