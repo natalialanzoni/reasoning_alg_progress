@@ -15,8 +15,11 @@ EFFORT=low
 K=8
 MAX_TOKENS=40000
 OUTDIR="$(pwd)/data/low_reasoning_effort"
-MODELS=(gpt-5 gpt-5.4 gpt-5.6-sol)
+MODELS=(o3 gpt-5 gpt-5.2 gpt-5.4 gpt-5.5 gpt-5.6-sol)
 # ---------------------------------------------------------------------------
+# Resume-safe: any model whose result json already exists is skipped
+# ("Nothing new to run"); only missing models/problems are (re)submitted.
+# So you can just list every model — completed ones won't re-run or re-charge.
 
 mkdir -p "$OUTDIR"
 echo "Effort=$EFFORT  k=$K  max_tokens=$MAX_TOKENS  ->  $OUTDIR"

@@ -397,14 +397,28 @@ def main():
                     }
                     f.write(json.dumps(req) + "\n")
 
-        print("Uploading requests file...")
-        upload = client.files.create(file=requests_path.open("rb"), purpose="batch")
-        print("Submitting batch...")
-        batch = client.batches.create(
-            input_file_id=upload.id,
-            endpoint="/v1/responses",
-            completion_window="24h",
-        )
+        # Upload + submit, retrying transient connection errors so a network
+        # blip (common when several models submit in parallel) doesn't lose the
+        # run before a batch_id is even saved.
+        print("Uploading + submitting batch...")
+        batch = None
+        for attempt in range(1, 6):
+            try:
+                upload = client.files.create(file=requests_path.open("rb"), purpose="batch")
+                batch = client.batches.create(
+                    input_file_id=upload.id,
+                    endpoint="/v1/responses",
+                    completion_window="24h",
+                )
+                break
+            except Exception as e:
+                wait = 5 * 2 ** (attempt - 1)
+                print(f"  submit attempt {attempt} failed ({type(e).__name__}: {e}); "
+                      f"retrying in {wait}s...", flush=True)
+                time.sleep(wait)
+        if batch is None:
+            print("  submission failed after 5 attempts — skipping this model.")
+            return
         print(f"  batch_id = {batch.id}")
         sidecar_path.write_text(batch.id + "\n")
         print(f"  saved batch_id to {sidecar_path.name}")

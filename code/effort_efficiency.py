@@ -34,18 +34,18 @@ DATA = ROOT.parent / "data"
 OUT = ROOT.parent / "figures"
 
 # release dates (gpt-5.6-sol has no official snapshot; assumed, edit me)
-DATES = {"gpt-5": datetime(2025, 8, 7), "gpt-5.2": datetime(2025, 12, 1),
-         "gpt-5.4": datetime(2026, 3, 5), "gpt-5.5": datetime(2026, 6, 1),
-         "gpt-5.6-sol": datetime(2026, 8, 1)}
+DATES = {"o3": datetime(2025, 4, 1), "gpt-5": datetime(2025, 8, 7),
+         "gpt-5.2": datetime(2025, 12, 1), "gpt-5.4": datetime(2026, 3, 5),
+         "gpt-5.5": datetime(2026, 6, 1), "gpt-5.6-sol": datetime(2026, 8, 1)}
 
-# effort -> where its runs live + which models exist there + plot color
+# Candidate models per effort (any without a run json are skipped). o3 is
+# plotted but EXCLUDED from the trend fit (pre-GPT-5 peak, as in Fig 3).
+ALL = ["o3", "gpt-5", "gpt-5.2", "gpt-5.4", "gpt-5.5", "gpt-5.6-sol"]
+FIT_EXCLUDE = {"o3"}
 EFFORTS = {
-    "low":    {"dir": "low_reasoning_effort",    "color": "#1565C0",
-               "models": ["gpt-5", "gpt-5.4", "gpt-5.6-sol"]},
-    "medium": {"dir": "hard_but_doable_10q_k32", "color": "#2E7D32",
-               "models": ["gpt-5", "gpt-5.2", "gpt-5.4", "gpt-5.5"]},
-    "high":   {"dir": "high_reasoning_effort",   "color": "#C62828",
-               "models": ["gpt-5", "gpt-5.4", "gpt-5.6-sol"]},
+    "low":    {"dir": "low_reasoning_effort",    "color": "#1565C0", "models": ALL},
+    "medium": {"dir": "hard_but_doable_10q_k32", "color": "#2E7D32", "models": ALL},
+    "high":   {"dir": "high_reasoning_effort",   "color": "#C62828", "models": ALL},
 }
 
 
@@ -75,7 +75,7 @@ def gather(eff):
                     continue
                 h = tok / CANON[tid]["mean"]
                 if h > 1:
-                    reg.append({"problem": tid, "month": month, "y": math.log(h - 1)})
+                    reg.append({"problem": tid, "month": month, "y": math.log(h - 1), "model": m})
         dates.append(DATES[m]); per_model.append(by_id)
     common = sorted(set.intersection(*[set(d) for d in per_model])) if per_model else []
     traj = {tid: [d[tid] for d in per_model] for tid in common}
@@ -83,9 +83,10 @@ def gather(eff):
 
 
 def fit(df, label):
+    df = df[~df["model"].isin(FIT_EXCLUDE)]        # drop o3 from the trend (as in Fig 3)
     npts = df["month"].nunique()
     if npts < 2:
-        print(f"  {label:6}: <2 time points — no slope"); return None
+        print(f"  {label:6}: <2 time points after o3 exclusion — no slope"); return None
     res = smf.ols("y ~ month + C(problem)", data=df).fit(
         cov_type="cluster", cov_kwds={"groups": df["problem"]})
     b, se = res.params["month"], res.bse["month"]
