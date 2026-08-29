@@ -65,6 +65,7 @@ MAIN_K8 = [
     ("gpt-5.2", datetime(2025, 12, 1), RESULTS_DIR / "gpt5.2_shallow_pass" / "gpt-5.2_medium_thinking_bench.json"),
     ("gpt-5.4", datetime(2026, 3, 1), RESULTS_DIR / "gpt5.4_shallow_pass" / "gpt-5.4_medium_thinking_bench.json"),
     ("gpt-5.5", datetime(2026, 6, 1), RESULTS_DIR / "gpt5.5_shallow_pass" / "gpt-5.5_medium_thinking_bench.json"),
+    ("gpt-5.6-sol", datetime(2026, 8, 1), RESULTS_DIR / "gpt5.6_sol_shallow_pass" / "gpt-5.6-sol_medium_thinking_bench.json"),
 ]
 # k=32 "hard but doable" runs (10 problems, one JSON per model) — drives Panel A of
 # Figure 1: per-problem trace-length trajectories over GPT generations.
@@ -118,6 +119,7 @@ PRICE_PER_1M = {
     "gpt-5.2":  14,
     "gpt-5.4":  15,
     "gpt-5.5":  30,
+    "gpt-5.6-sol": 30,   # PLACEHOLDER price — update with real gpt-5.6-sol pricing
 }
 
 LINE_COLOR = "#1B5E20"
@@ -476,7 +478,7 @@ def figure1_example_problems(model_files=None, palette=None, examples=None,
 # FIGURE 3 (headroom forecast, successes only, linear)
 # ============================================================================
 def figure3_forecast(model_files=None, fname="fig3_forecast_successes_linear.png",
-                      fit_annotation_date=None):
+                      fit_annotation_date=None, exclude_baseline=True, successes_only=True):
     model_files = model_files if model_files is not None else MAIN_K8
     rows, geomean = [], {}
     for label, date, path in model_files:
@@ -488,7 +490,9 @@ def figure3_forecast(model_files=None, fname="fig3_forecast_successes_linear.png
                 continue
             tt = r.get("thinking_tokens", [1] * len(r["correct"]))
             for tok, c, th in zip(r["total_completion_tokens"], r["correct"], tt):
-                if th == 0 or tok <= 0 or not c:        # successes only
+                if th == 0 or tok <= 0:
+                    continue
+                if successes_only and not c:            # drop incorrect traces
                     continue
                 hr = tok / CANON[tid]["mean"]
                 rows.append({"problem": tid, "month": month, "headroom": hr})
@@ -504,7 +508,10 @@ def figure3_forecast(model_files=None, fname="fig3_forecast_successes_linear.png
     # alpha_j). SEs clustered by problem.
     baseline_label = model_files[0][0]
     baseline_month = (model_files[0][1] - ORIGIN).days / 30.44
-    fitdf = df[(df["headroom"] > 1) & (df["month"] > baseline_month)].copy()
+    mask = df["headroom"] > 1
+    if exclude_baseline:
+        mask &= df["month"] > baseline_month   # drop the first model (pre-trend peak, e.g. o3)
+    fitdf = df[mask].copy()
     fitdf["y"] = np.log(fitdf["headroom"] - 1.0)
     import statsmodels.formula.api as smf   # only needed here
     res = smf.ols("y ~ month + C(problem)", data=fitdf).fit(
@@ -528,7 +535,8 @@ def figure3_forecast(model_files=None, fname="fig3_forecast_successes_linear.png
     labels = [m for m, _, _ in model_files]
     dates = [d for _, d, _ in model_files]
     gm = [geomean[m] for m in labels]
-    fdates = [model_files[1][1] + timedelta(days=30.44 * mo) for mo in range(0, 58)]
+    start_i = 1 if exclude_baseline else 0
+    fdates = [model_files[start_i][1] + timedelta(days=30.44 * mo) for mo in range(0, 58)]
     if fit_annotation_date is None:
         # Midpoint between the last real data point and the first (least
         # stringent) milestone, so the label sits clear of both the data
@@ -543,7 +551,7 @@ def figure3_forecast(model_files=None, fname="fig3_forecast_successes_linear.png
 
     fig, ax = plt.subplots(figsize=(11.5, 6.8))
     for l, d, g in zip(labels, dates, gm):
-        if l == baseline_label:
+        if exclude_baseline and l == baseline_label:
             continue
         ax.plot(d, g * REF, "o", color="#1B5E20", markersize=11, zorder=5)
         ax.annotate(f"{l}: {g:.1f}× over floor ({g * REF:,.0f} tok)", (d, g * REF),
@@ -566,16 +574,17 @@ def figure3_forecast(model_files=None, fname="fig3_forecast_successes_linear.png
                     color="#1565C0", fontweight="bold")
     ax.set_ylim(0, max(gm) * 1.25 * REF)
     ax.axhspan(0, REF, color="#FFB300", alpha=0.07, zorder=0)
-    ax.set_ylabel("Reasoning tokens (successful traces, o200k)", fontsize=11)
+    ax.set_ylabel(f"Reasoning tokens ({'successful' if successes_only else 'all'} traces, o200k)", fontsize=11)
     ax.set_xlabel("Date", fontsize=11)
-    ax.set_xlim(model_files[1][1] - timedelta(days=40), fdates[-1] + timedelta(days=20))
+    ax.set_xlim(model_files[start_i][1] - timedelta(days=40), fdates[-1] + timedelta(days=20))
     ax.xaxis.set_major_locator(mdates.MonthLocator(interval=4))
     ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m"))
     fig.autofmt_xdate(rotation=30)
     plt.tight_layout()
     fig.savefig(OUT_DIR / fname, dpi=200, bbox_inches="tight")
     plt.close(fig)
-    print(f"wrote {OUT_DIR / fname}  (excl {baseline_label}: {(1-q_factor)*100:.0f}%/quarter; "
+    scope = f"excl {baseline_label}" if exclude_baseline else "all models"
+    print(f"wrote {OUT_DIR / fname}  ({scope}: {(1-q_factor)*100:.0f}%/quarter; "
           f"within10%={mile[0.10]:%Y-%m})")
 
 
