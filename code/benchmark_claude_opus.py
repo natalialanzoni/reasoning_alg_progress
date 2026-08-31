@@ -12,18 +12,13 @@ code, but differ in every provider-specific detail:
   - OpenAI's "reasoning.effort" maps to Anthropic's "output_config.effort"
     (on adaptive-thinking models) or a "thinking.budget_tokens" fraction
     (on claude-opus-4-5, which predates adaptive thinking).
-  - OpenAI's usage.output_tokens_details.reasoning_tokens gives an exact
-    thinking/answer token split. Anthropic's batch usage has no such
-    field -- output_tokens is one combined number covering both the
-    thinking block and the text block, and the raw chain of thought is
-    never returned (thinking blocks come back empty or summarized), so
-    it can't be counted directly. This script instead counts tokens in
-    the verbatim answer text via the count_tokens endpoint and derives
-    thinking_tokens as total_output_tokens - answer_tokens. This is an
-    approximation (count_tokens tokenizes the string as a fresh user
-    turn, which is not byte-identical to how the same text was tokenized
-    as generated output) -- not the exact server-side count OpenAI
-    provides.
+  - OpenAI's usage.output_tokens_details.reasoning_tokens has a direct
+    Anthropic equivalent: usage.output_tokens_details.thinking_tokens,
+    present on both live and batch Messages API responses. (The raw
+    chain-of-thought text itself is still hidden -- thinking content
+    blocks come back empty or summarized -- but the exact token COUNT
+    is reported regardless of whether the text is.) answer_tokens is
+    derived as total_output_tokens - thinking_tokens.
 
 Usage:
     python benchmark_claude_opus.py --model claude-opus-5 --effort medium
@@ -266,26 +261,6 @@ def thinking_kwargs_for(model: str, effort: str, max_tokens: int) -> dict:
     return {"thinking": {"type": "enabled", "budget_tokens": budget}}
 
 
-def count_tokens_with_retry(client, model, text, max_attempts=5):
-    """client.messages.count_tokens with backoff on rate limits / transient errors."""
-    if not text:
-        return 0
-    for attempt in range(1, max_attempts + 1):
-        try:
-            return client.messages.count_tokens(
-                model=model,
-                messages=[{"role": "user", "content": text}],
-            ).input_tokens
-        except anthropic.RateLimitError:
-            time.sleep(2 ** attempt)
-        except anthropic.APIStatusError as e:
-            if e.status_code >= 500 and attempt < max_attempts:
-                time.sleep(2 ** attempt)
-                continue
-            raise
-    raise RuntimeError(f"count_tokens failed after {max_attempts} attempts")
-
-
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", required=True, choices=list(MODEL_CONFIGS),
@@ -498,7 +473,7 @@ def main():
         if result.result.type != "succeeded":
             by_problem[problem_id][sample_idx] = {
                 "thinking_text": "", "answer_text": "",
-                "input_tokens": 0, "output_tokens": 0,
+                "input_tokens": 0, "output_tokens": 0, "thinking_tokens": 0,
             }
             continue
         msg = result.result.message
@@ -508,27 +483,21 @@ def main():
             "answer_text": answer_text,
             "input_tokens": msg.usage.input_tokens,
             "output_tokens": msg.usage.output_tokens,
+            "thinking_tokens": msg.usage.output_tokens_details.thinking_tokens,
         }
 
-    print("Approximating thinking/answer token split via count_tokens...")
+    print("Scoring results...")
     rows_out = []
     for row in problems:
         samples = [
             s or {"thinking_text": "", "answer_text": "",
-                  "input_tokens": 0, "output_tokens": 0}
+                  "input_tokens": 0, "output_tokens": 0, "thinking_tokens": 0}
             for s in by_problem[str(row["id"])]
         ]
-        # The answer text is returned verbatim, so count tokens on it; the raw
-        # chain of thought is never returned (thinking blocks are empty or
-        # summarized), so derive thinking as the billed total minus the answer.
-        answer_tok = [
-            min(count_tokens_with_retry(client, args.model, s["answer_text"]),
-                s["output_tokens"])
-            for s in samples
-        ]
-        thinking_tok = [
-            s["output_tokens"] - t for s, t in zip(samples, answer_tok)
-        ]
+        # Exact server-reported split (usage.output_tokens_details.thinking_tokens),
+        # not an approximation.
+        thinking_tok = [s["thinking_tokens"] for s in samples]
+        answer_tok = [s["output_tokens"] - s["thinking_tokens"] for s in samples]
         # Some datasets use "answer", others "final_answer"
         gold_raw = row.get("answer") if "answer" in row else row.get("final_answer")
         gold = str(gold_raw).strip()

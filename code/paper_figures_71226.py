@@ -801,6 +801,80 @@ def figure1_open_weight(fname="fig1_open_weight.png", spread="iqr"):
     print(f"wrote {OUT_DIR / fname}")
 
 
+# ============================================================================
+# HEADLINE (draft): two side-by-side panels, one per provider, each showing
+# the per-problem hard-but-doable k=32 spread bands + bold mean line falling
+# toward the canonical floor. Shared y-axis so magnitudes are honestly
+# comparable at a glance.
+# ============================================================================
+def _draw_trace_length_panel(ax, model_files, spread="iqr"):
+    """Draw the per-problem viridis spread-band + bold mean-line panel used by
+    figure1()'s Panel A onto `ax`. Returns (dates, labels, macro, canon,
+    max_high) so the caller can title the axis and unify y-limits across
+    panels."""
+    import matplotlib.lines as mlines
+    dates, labels, traj, band, accs = per_problem_trajectories(model_files, spread=spread)
+    macro = [float(np.mean([traj[t][i] for t in traj])) for i in range(len(dates))]
+    panel_keys = [t for t in traj if t in CANON_KEYS]
+    canon = float(np.mean([CANON[t]["mean"] for t in panel_keys])) if panel_keys else None
+
+    order = sorted(traj, key=lambda t: -max(traj[t]))
+    cmap = plt.cm.viridis
+    max_high = 0.0
+    for rank, tid in enumerate(order):
+        color = cmap(rank / max(1, len(order) - 1))
+        lows, highs = band[tid]
+        max_high = max(max_high, max(highs))
+        ax.fill_between(dates, lows, highs, color=color, alpha=0.13, zorder=2, edgecolor="none")
+        ax.plot(dates, traj[tid], "-", color=color, linewidth=1.4, alpha=0.85, zorder=3)
+
+    ax.plot(dates, macro, "o-", color="#000000", linewidth=3, markersize=10,
+            zorder=6, label="Mean across problems")
+    for d, m in zip(dates, macro):
+        ax.annotate(f"{m:,.0f}", (d, m), textcoords="offset points", xytext=(0, 13),
+                    ha="center", fontsize=9.5, fontweight="bold", color="#000000")
+    if canon is not None:
+        ax.axhline(canon, color="#FFB300", linewidth=2.4, zorder=4,
+                   label=f"Canonical solution ({canon:.0f} tok)")
+        ax.axhspan(0, canon, color="#FFB300", alpha=0.06, zorder=0)
+        max_high = max(max_high, canon)
+
+    band_lbl = "IQR" if spread == "iqr" else "min–max"
+    prob_proxy = mlines.Line2D([], [], color=cmap(0.5), linewidth=1.4,
+                               label=f"Per problem: mean + {band_lbl} band (n={len(traj)})")
+    h1, l1 = ax.get_legend_handles_labels()
+    ax.legend([prob_proxy] + h1, [prob_proxy.get_label()] + l1,
+              loc="upper right", framealpha=0.95, fontsize=8.5)
+    ax.set_xticks(dates)
+    ax.set_xticklabels([f"{l}\n{d.strftime('%Y-%m')}" for l, d in zip(labels, dates)],
+                       fontsize=9, fontweight="bold")
+    ax.set_xlabel("Model (release date)", fontsize=11)
+    return dates, labels, macro, canon, max_high
+
+
+def figure_headline_openai_vs_anthropic(fname="headline_openai_vs_anthropic.png", spread="iqr"):
+    fig, (axL, axR) = plt.subplots(1, 2, figsize=(20, 7.5), sharey=True)
+
+    *_, maxL = _draw_trace_length_panel(axL, HARD10_K32, spread=spread)
+    *_, maxR = _draw_trace_length_panel(axR, OPUS_HARD10_K32, spread=spread)
+
+    axL.set_ylim(0, max(maxL, maxR) * 1.08)
+    axL.set_ylabel("Per-problem trace length (output tokens, o200k)",
+                   fontsize=11, color=LINE_COLOR)
+    axL.tick_params(axis="y", labelcolor=LINE_COLOR)
+
+    axL.set_title("(A)  OpenAI", fontsize=13, loc="left", fontweight="bold")
+    axR.set_title("(B)  Anthropic", fontsize=13, loc="left", fontweight="bold")
+
+    fig.suptitle("DRAFT — Reasoning length falls toward the canonical floor: "
+                 "OpenAI vs. Anthropic  (10 hard-but-doable problems, k=32)",
+                 fontsize=14.5, y=1.03)
+    plt.tight_layout()
+    fig.savefig(OUT_DIR / fname, dpi=200, bbox_inches="tight")
+    plt.close(fig)
+    print(f"wrote {OUT_DIR / fname}")
+
+
 if __name__ == "__main__":
     figure1()
     figure1_example_problems()
@@ -809,12 +883,11 @@ if __name__ == "__main__":
     figure1_oss()
     figure1_open_weight()
 
-    # Claude Opus family (k=8 shallow-pass only — no hard-but-doable k=32 or
-    # edge_of_capability k=32 runs exist yet, so no fig1()-style panel-A/canonical
-    # trajectory figure or figure4_edge_violins() equivalent is built here).
-    # Panel B has no cost line: PRICE_PER_1M isn't reliably confirmed for all
-    # 5 Opus models, and fabricating a $-axis on a figure like this isn't worth
-    # the risk of quietly presenting wrong numbers as fact.
+    # Claude Opus family. Panel B has no cost line: PRICE_PER_1M isn't reliably
+    # confirmed for all 5 Opus models, and fabricating a $-axis on a figure
+    # like this isn't worth the risk of quietly presenting wrong numbers as
+    # fact. No edge_of_capability k=32 runs exist yet, so no figure4_edge_violins()
+    # equivalent is built here.
     figure1(hard10_k32_files=OPUS_HARD10_K32, main_k8_files=OPUS_MODELS,
             fname="fig1_opus.png", show_cost=False,
             suptitle="Figure 1 (Opus).  Claude Opus reasoning gets shorter over generations")
@@ -824,4 +897,6 @@ if __name__ == "__main__":
                  "(2 easy / 2 medium / 2 hard; each vs. its canonical floor)",
         fname="fig1_example_problems_opus.png")
     figure3_forecast(model_files=OPUS_MODELS, fname="fig3_forecast_opus.png")
+
+    figure_headline_openai_vs_anthropic()
     print(f"\nAll figures written to {OUT_DIR}/")

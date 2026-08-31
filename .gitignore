@@ -11,6 +11,8 @@ env/
 
 # Scratch batch-run output (promote finished runs into data/ manually)
 code/results/
+*_sweep.log
+reprocess.log
 
 # OS
 .DS_Store
