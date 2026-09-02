@@ -26,7 +26,9 @@ if [ ! -d venv ]; then
   python3 -m venv venv
 fi
 ./venv/bin/pip install -q --upgrade pip
-./venv/bin/pip install -q datasets openai sympy antlr4-python3-runtime
+# antlr4 pinned: sympy 1.14's parse_latex requires exactly 4.11.x, and a newer
+# runtime fails at call time inside a bare except -> silent grading degradation.
+./venv/bin/pip install -q datasets openai sympy 'antlr4-python3-runtime==4.11.1'
 
 echo "Launching: models=${MODELS[*]}  k=$N_SAMPLES  max_tokens=$MAX_TOKENS  workers=$WORKERS"
 ./venv/bin/python code/benchmark_math_open_source.py \

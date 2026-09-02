@@ -295,6 +295,7 @@ def run_model(client, m, problems, n_samples, max_tokens, workers):
             "answer_tokens": [max(s["output_tokens"] - s["reasoning_tokens"], 0) for s in samples],
             "response_chars": [len(s["text"]) for s in samples],
             "providers_used": [s.get("provider") for s in samples],
+            "errors": [s.get("error") for s in samples],  # None when the call succeeded
             "solved_at_least_once": any(correct),
         })
     return rows_out
@@ -369,7 +370,13 @@ def main():
             "    source ~/.bash_profile            # loads it into the CURRENT shell\n"
             "  then re-run. Verify first with:  echo ${OPENROUTER_API_KEY:+SET}\n"
             "  (Permanent fix: add the same `export OPENROUTER_API_KEY=...` line to ~/.zshrc)")
-    client = OpenAI(base_url=OPENROUTER_BASE, api_key=api_key)
+    # timeout must cover a full 40k-token generation (~800s at slow providers).
+    # max_retries=5: providers (baseten especially) return 429s under concurrency.
+    # The SDK honors Retry-After and backs off properly; one_request's own 2/4/8s
+    # sleeps are far too short for a rate-limit cooldown. Setting this to 0 raised
+    # kimi-k3's failed requests from 115 to 174 -- do not disable it.
+    client = OpenAI(base_url=OPENROUTER_BASE, api_key=api_key,
+                    timeout=900.0, max_retries=5)
 
     for m in selected:
         cap = min(args.max_tokens, m["provider_max"])

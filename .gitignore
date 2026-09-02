@@ -23,3 +23,10 @@ code/results/
 # Editor
 .idea/
 .vscode/
+
+# Local-only backups / diagnostics of result files (not part of the dataset)
+code/results_backup/
+code/results_diagnostic/
+
+# Sweep driver logs
+kimi_*.log
