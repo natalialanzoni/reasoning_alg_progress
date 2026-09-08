@@ -1,0 +1,39 @@
+Run dir: /Users/natalia/Desktop/FutureTech/reasoning_alg_efficiency/data/low_reasoning_effort
+Loading tyrtleli/thinking-benchmark-hard-but-doable-10 (split=test)...
+  10 problems loaded.
+  'problem' text missing — joining by id against tyrtleli/thinking-benchmark-90
+Building 80 requests (10 problems x 8 samples)...
+Uploading + submitting batch...
+  batch_id = batch_6a8ca459cdc88190b4dbe3af8e63e821
+  saved batch_id to gpt-5.5_low_thinking_benchmark_hard_but_doable_10_batch_id.txt
+
+Polling every 30s...
+  [validating] 0/0 completed, 0 failed
+  [in_progress] 0/80 completed, 0 failed
+  [in_progress] 11/80 completed, 0 failed
+  [in_progress] 18/80 completed, 0 failed
+  [in_progress] 22/80 completed, 0 failed
+  [in_progress] 22/80 completed, 0 failed
+  [in_progress] 22/80 completed, 0 failed
+  [in_progress] 22/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [in_progress] 50/80 completed, 0 failed
+  [completed] 80/80 completed, 0 failed
+Downloading results...
+
+Done. 10 new task(s) added; 10 total.
+Overall accuracy: 72/80 = 90.0%
+Wrote /Users/natalia/Desktop/FutureTech/reasoning_alg_efficiency/data/low_reasoning_effort/gpt-5.5_low_thinking_benchmark_hard_but_doable_10.json  (0.1 MB)

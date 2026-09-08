@@ -204,11 +204,38 @@ def parse_output_text(body):
     return "".join(chunks)
 
 
+def _dump_error_file(client, batch, n_show=3):
+    """Print a few representative errors from a batch's error_file, so failures
+    (e.g. an unsupported effort level) are visible instead of silent."""
+    efid = getattr(batch, "error_file_id", None)
+    if not efid:
+        print("  (no error_file_id available to explain the failure)")
+        return
+    try:
+        text = client.files.content(efid).text
+    except Exception as e:
+        print(f"  could not download error file: {e}")
+        return
+    lines = [ln for ln in text.splitlines() if ln.strip()]
+    print(f"  error file: {len(lines)} error line(s); first {min(n_show, len(lines))}:")
+    for ln in lines[:n_show]:
+        try:
+            rec = json.loads(ln)
+            err = (rec.get("response", {}) or {}).get("body", {}).get("error") or rec.get("error")
+            print(f"    - {rec.get('custom_id', '?')}: {err}")
+        except Exception:
+            print(f"    - {ln[:200]}")
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", required=True,
                         help="OpenAI reasoning model id (e.g. o3-mini, o4-mini, o3).")
-    parser.add_argument("--effort", choices=["low", "medium", "high"], default="medium")
+    parser.add_argument("--effort",
+                        choices=["minimal", "low", "medium", "high", "xhigh", "max"],
+                        default="medium",
+                        help="reasoning.effort. Note: not every model accepts every "
+                             "level (older models may cap at 'high').")
     parser.add_argument("--n-samples", type=int, default=1)
     parser.add_argument("--n-problems", type=int, default=None,
                         help="Limit to first N problems. Default = all in the split.")
@@ -227,6 +254,13 @@ def main():
                         help="Re-run ALL problems even if an output file exists "
                              "(default: resume — skip problems already done and "
                              "append only the new ones).")
+    parser.add_argument("--from-batch", default=None,
+                        help="COLLECT mode: attach to an existing batch id and "
+                             "download/parse its results instead of submitting a "
+                             "new batch. Use to recover an orphaned batch (e.g. one "
+                             "whose poller died) without paying again. Pass the SAME "
+                             "--model/--effort/--dataset/--run-name/--n-samples as the "
+                             "original run so results parse and land at the right path.")
     parser.add_argument("--problem-source", default="tyrtleli/thinking-benchmark-90",
                         help="Dataset to join by id for the full `problem` text (and "
                              "`answer`) when the main --dataset omits them. "
@@ -332,43 +366,74 @@ def main():
                 json.dump(existing_rows, f, indent=2)
             return
 
-    n_reqs = len(problems) * args.n_samples
-    print(f"Building {n_reqs} requests "
-          f"({len(problems)} problems x {args.n_samples} samples)...")
-
-    with requests_path.open("w") as f:
-        for row in problems:
-            for s in range(args.n_samples):
-                req = {
-                    "custom_id": f"{row['id']}__sample_{s}",
-                    "method": "POST",
-                    "url": "/v1/responses",
-                    "body": {
-                        "model": args.model,
-                        "reasoning": {"effort": args.effort},
-                        "max_output_tokens": args.max_tokens,
-                        "instructions": INSTRUCTIONS,
-                        "input": row["problem"],
-                    },
-                }
-                f.write(json.dumps(req) + "\n")
-
     client = OpenAI()
-    print("Uploading requests file...")
-    upload = client.files.create(file=requests_path.open("rb"), purpose="batch")
-    print("Submitting batch...")
-    batch = client.batches.create(
-        input_file_id=upload.id,
-        endpoint="/v1/responses",
-        completion_window="24h",
-    )
-    print(f"  batch_id = {batch.id}")
-    sidecar_path.write_text(batch.id + "\n")
-    print(f"  saved batch_id to {sidecar_path.name}")
+
+    if args.from_batch:
+        # Collect mode: attach to an already-submitted batch instead of
+        # creating a new one. Results are parsed + merged into out_path below,
+        # so a later normal run resumes by problem (skips what we recovered).
+        print(f"Collect mode: attaching to existing batch {args.from_batch} "
+              f"(no new submission)...")
+        batch = client.batches.retrieve(args.from_batch)
+    else:
+        n_reqs = len(problems) * args.n_samples
+        print(f"Building {n_reqs} requests "
+              f"({len(problems)} problems x {args.n_samples} samples)...")
+
+        with requests_path.open("w") as f:
+            for row in problems:
+                for s in range(args.n_samples):
+                    req = {
+                        "custom_id": f"{row['id']}__sample_{s}",
+                        "method": "POST",
+                        "url": "/v1/responses",
+                        "body": {
+                            "model": args.model,
+                            "reasoning": {"effort": args.effort},
+                            "max_output_tokens": args.max_tokens,
+                            "instructions": INSTRUCTIONS,
+                            "input": row["problem"],
+                        },
+                    }
+                    f.write(json.dumps(req) + "\n")
+
+        # Upload + submit, retrying transient connection errors so a network
+        # blip (common when several models submit in parallel) doesn't lose the
+        # run before a batch_id is even saved.
+        print("Uploading + submitting batch...")
+        batch = None
+        for attempt in range(1, 6):
+            try:
+                upload = client.files.create(file=requests_path.open("rb"), purpose="batch")
+                batch = client.batches.create(
+                    input_file_id=upload.id,
+                    endpoint="/v1/responses",
+                    completion_window="24h",
+                )
+                break
+            except Exception as e:
+                wait = 5 * 2 ** (attempt - 1)
+                print(f"  submit attempt {attempt} failed ({type(e).__name__}: {e}); "
+                      f"retrying in {wait}s...", flush=True)
+                time.sleep(wait)
+        if batch is None:
+            print("  submission failed after 5 attempts — skipping this model.")
+            return
+        print(f"  batch_id = {batch.id}")
+        sidecar_path.write_text(batch.id + "\n")
+        print(f"  saved batch_id to {sidecar_path.name}")
 
     print("\nPolling every 30s...")
     while True:
-        b = client.batches.retrieve(batch.id)
+        try:
+            b = client.batches.retrieve(batch.id)
+        except Exception as e:
+            # A transient network/read timeout on a poll must NOT kill the run —
+            # the batch keeps processing server-side. Log and retry.
+            print(f"  poll failed ({type(e).__name__}: {e}); retrying in 30s...",
+                  flush=True)
+            time.sleep(30)
+            continue
         c = b.request_counts
         print(
             f"  [{b.status}] {c.completed}/{c.total} completed, {c.failed} failed",
@@ -381,6 +446,17 @@ def main():
 
     if batch.status != "completed":
         print(f"\nBatch ended with status: {batch.status}")
+        _dump_error_file(client, batch)
+        return
+
+    # A "completed" batch can still have zero successful outputs — e.g. every
+    # request errored on an unsupported param (an older model rejecting a too-new
+    # effort level). Then output_file_id is None; don't try to download it.
+    if not batch.output_file_id:
+        print(f"\nBatch completed but produced NO output file — "
+              f"{batch.request_counts.failed}/{batch.request_counts.total} "
+              f"request(s) errored.")
+        _dump_error_file(client, batch)
         return
 
     print("Downloading results...")
@@ -431,10 +507,16 @@ def main():
 
     rows_out = []
     for row in problems:
+        raw_slots = by_problem[str(row["id"])]
+        # In collect mode the loaded dataset may be larger than the batch's
+        # problem set; skip problems with no result at all so we don't write
+        # bogus empty rows (they stay unrun and a later resume picks them up).
+        if args.from_batch and all(s is None for s in raw_slots):
+            continue
         samples = [
             s or {"output_text": "", "input_tokens": 0,
                   "output_tokens": 0, "reasoning_tokens": 0}
-            for s in by_problem[str(row["id"])]
+            for s in raw_slots
         ]
         # Some datasets use "answer", others "final_answer"
         gold_raw = row.get("answer") if "answer" in row else row.get("final_answer")
