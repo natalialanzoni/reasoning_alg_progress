@@ -475,9 +475,23 @@ def figure1_example_problems(model_files=None, palette=None, examples=None,
 # ============================================================================
 # FIGURE 3 (headroom forecast, successes only, linear)
 # ============================================================================
-def figure3_forecast(model_files=None, fname="fig3_forecast_successes_linear.png",
-                      fit_annotation_date=None):
-    model_files = model_files if model_files is not None else MAIN_K8
+def _fit_headroom_forecast(model_files):
+    """Fit log(headroom - 1) ~ month + problem fixed effects on a (label, date,
+    path) list (successes only, excl. the first/baseline model -- pre-trend
+    peak). Shared by figure3_forecast() and figure3_forecast_combined() so the
+    econometrics live in exactly one place.
+
+    This matches the paper's excess-trend spec: with problem FE alpha_j, the
+    DV log(headroom - 1) = log(L - C_j) - log(C_j) yields the SAME month slope
+    as log(L - C_j) (the -log(C_j) is absorbed by alpha_j). SEs clustered by
+    problem.
+
+    Returns a dict: labels, dates, gm (geomean headroom per model), hhat
+    (fitted headroom at any datetime), reach (datetime a target headroom
+    fraction is hit), mile ({0.25,0.10,0.05: datetime}), baseline_label,
+    quarterly_pct (% less reasoning required per quarter), t0 (last real
+    data point's date).
+    """
     rows, geomean = [], {}
     for label, date, path in model_files:
         month = (date - ORIGIN).days / 30.44
@@ -497,11 +511,6 @@ def figure3_forecast(model_files=None, fname="fig3_forecast_successes_linear.png
         geomean[label] = 1.0 + math.exp(np.mean(np.log(exc)))   # model-consistent central tendency
     df = pd.DataFrame(rows)
 
-    # log(headroom - 1) ~ month + problem fixed effects, excl the first model in
-    # model_files (pre-trend peak). This matches the paper's excess-trend spec:
-    # with problem FE alpha_j, the DV log(headroom - 1) = log(L - C_j) - log(C_j)
-    # yields the SAME month slope as log(L - C_j) (the -log(C_j) is absorbed by
-    # alpha_j). SEs clustered by problem.
     baseline_label = model_files[0][0]
     baseline_month = (model_files[0][1] - ORIGIN).days / 30.44
     fitdf = df[(df["headroom"] > 1) & (df["month"] > baseline_month)].copy()
@@ -516,8 +525,7 @@ def figure3_forecast(model_files=None, fname="fig3_forecast_successes_linear.png
     _fe = [v for k, v in res.params.items() if k.startswith("C(problem)")]
     a = res.params["Intercept"] + sum(_fe) / fitdf["problem"].nunique()
     q_factor = math.exp(3 * b)
-    t0 = model_files[-1][1]; month_t0 = (t0 - ORIGIN).days / 30.44
-    H_t0 = math.exp(a + b * month_t0)
+
     def hhat(dt):
         m = (dt - ORIGIN).days / 30.44
         return 1.0 + math.exp(a + b * m)
@@ -528,6 +536,21 @@ def figure3_forecast(model_files=None, fname="fig3_forecast_successes_linear.png
     labels = [m for m, _, _ in model_files]
     dates = [d for _, d, _ in model_files]
     gm = [geomean[m] for m in labels]
+
+    return {
+        "labels": labels, "dates": dates, "gm": gm, "hhat": hhat, "reach": reach,
+        "mile": mile, "baseline_label": baseline_label,
+        "quarterly_pct": (1 - q_factor) * 100, "t0": model_files[-1][1],
+    }
+
+
+def figure3_forecast(model_files=None, fname="fig3_forecast_successes_linear.png",
+                      fit_annotation_date=None):
+    model_files = model_files if model_files is not None else MAIN_K8
+    fit = _fit_headroom_forecast(model_files)
+    labels, dates, gm = fit["labels"], fit["dates"], fit["gm"]
+    hhat, mile, baseline_label, t0 = fit["hhat"], fit["mile"], fit["baseline_label"], fit["t0"]
+
     fdates = [model_files[1][1] + timedelta(days=30.44 * mo) for mo in range(0, 58)]
     if fit_annotation_date is None:
         # Midpoint between the last real data point and the first (least
@@ -551,7 +574,7 @@ def figure3_forecast(model_files=None, fname="fig3_forecast_successes_linear.png
                     fontsize=9, fontweight="bold", color="#1B5E20")
     ax.plot(fdates, [hhat(d) * REF for d in fdates], "--", color="#1565C0",
             linewidth=2.6, zorder=4)
-    ax.annotate(f"fit: {(1-q_factor)*100:.0f}% less reasoning required / quarter",
+    ax.annotate(f"fit: {fit['quarterly_pct']:.0f}% less reasoning required / quarter",
                 (fit_annotation_date, hhat(fit_annotation_date) * REF),
                 textcoords="offset points", xytext=(30, 22), fontsize=11, fontweight="bold",
                 color="#1565C0", arrowprops=dict(arrowstyle="->", color="#1565C0", lw=1.2))
@@ -575,8 +598,64 @@ def figure3_forecast(model_files=None, fname="fig3_forecast_successes_linear.png
     plt.tight_layout()
     fig.savefig(OUT_DIR / fname, dpi=200, bbox_inches="tight")
     plt.close(fig)
-    print(f"wrote {OUT_DIR / fname}  (excl {baseline_label}: {(1-q_factor)*100:.0f}%/quarter; "
+    print(f"wrote {OUT_DIR / fname}  (excl {baseline_label}: {fit['quarterly_pct']:.0f}%/quarter; "
           f"within10%={mile[0.10]:%Y-%m})")
+
+
+def figure3_forecast_combined(fname="fig3_forecast_combined.png",
+                               families=(("OpenAI", MAIN_K8, "#1B5E20", "#66BB6A"),
+                                         ("Anthropic", None, "#4A148C", "#AB47BC"))):
+    """Both families' headroom-over-canonical-floor fits on one shared axis,
+    for a direct pace-of-convergence comparison. `families` is a list of
+    (display_name, model_files, dot_color, curve_color); `model_files=None`
+    for the second entry defaults to OPUS_MODELS (deferred so this default
+    argument doesn't need OPUS_MODELS defined above this function)."""
+    families = [(name, mf if mf is not None else OPUS_MODELS, dot_c, line_c)
+                for name, mf, dot_c, line_c in families]
+    REF = canon_avg
+    fig, ax = plt.subplots(figsize=(12.5, 7.2))
+
+    # Labels go above the first family's points and below the second's --
+    # the two series' points land close together in date/value, so a single
+    # fixed offset direction would make same-vicinity labels overlap.
+    label_side = [(14, "bottom"), (-14, "top")]
+
+    fdate_ends = []
+    for fam_idx, (fam_name, model_files, dot_color, line_color) in enumerate(families):
+        fit = _fit_headroom_forecast(model_files)
+        labels, dates, gm = fit["labels"], fit["dates"], fit["gm"]
+        dy, va = label_side[fam_idx % len(label_side)]
+        for l, d, g in zip(labels, dates, gm):
+            if l == fit["baseline_label"]:
+                continue
+            ax.plot(d, g * REF, "o", color=dot_color, markersize=10, zorder=5)
+            ax.annotate(f"{l}", (d, g * REF), textcoords="offset points",
+                        xytext=(0, dy), ha="center", va=va, fontsize=8,
+                        fontweight="bold", color=dot_color)
+        fdates = [model_files[1][1] + timedelta(days=30.44 * mo) for mo in range(0, 58)]
+        ax.plot(fdates, [fit["hhat"](d) * REF for d in fdates], "--",
+                color=line_color, linewidth=2.6, zorder=4,
+                label=f"{fam_name} fit: {fit['quarterly_pct']:.0f}% less reasoning / quarter")
+        fdate_ends.append(fdates[-1])
+
+    ax.axhline(REF, color="#FFB300", linewidth=2.4, zorder=3)
+    ax.annotate(f"canonical floor ({REF:,.0f} tok)", (max(fdate_ends), REF),
+                textcoords="offset points", xytext=(-6, 6), ha="right", va="bottom",
+                fontsize=9, color="#C79100", fontweight="bold")
+    ax.axhspan(0, REF, color="#FFB300", alpha=0.07, zorder=0)
+    ax.set_ylim(bottom=0)
+    ax.set_ylabel("Reasoning tokens (successful traces, o200k)", fontsize=11)
+    ax.set_xlabel("Date", fontsize=11)
+    ax.xaxis.set_major_locator(mdates.MonthLocator(interval=4))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m"))
+    fig.autofmt_xdate(rotation=30)
+    ax.legend(loc="upper right", framealpha=0.95, fontsize=10)
+    ax.set_title("Reasoning-length forecast: OpenAI vs. Anthropic converge toward "
+                 "the same canonical floor", fontsize=12.5, loc="left", fontweight="bold")
+    plt.tight_layout()
+    fig.savefig(OUT_DIR / fname, dpi=200, bbox_inches="tight")
+    plt.close(fig)
+    print(f"wrote {OUT_DIR / fname}")
 
 
 # ============================================================================
@@ -899,4 +978,5 @@ if __name__ == "__main__":
     figure3_forecast(model_files=OPUS_MODELS, fname="fig3_forecast_opus.png")
 
     figure_headline_openai_vs_anthropic()
+    figure3_forecast_combined()
     print(f"\nAll figures written to {OUT_DIR}/")
