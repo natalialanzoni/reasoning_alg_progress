@@ -476,6 +476,87 @@ def figure1_example_problems(model_files=None, palette=None, examples=None,
 
 
 # ============================================================================
+# FIGURE 2 (draft): per-problem distributions collapsing toward each problem's
+# own canonical floor. One panel per sample problem (easy row, hard row); each
+# panel shows the k=8 trial distribution per model generation — OpenAI gens
+# (greens) then Claude Opus gens (purples) on one x-axis — so you can watch
+# the violin for a single problem slide down and squeeze onto its floor.
+# ============================================================================
+def figure2_sample_problems(fname="fig2_sample_problems.png",
+                             openai_files=None, anthropic_files=None,
+                             examples=None):
+    openai_files = openai_files if openai_files is not None else MAIN_K8
+    anthropic_files = anthropic_files if anthropic_files is not None else OPUS_MODELS
+    # (tier, problem id) — 2 easy on the top row, 2 hard on the bottom row.
+    EXAMPLES = examples or [
+        ("Easy", "aime_2026_i_01"), ("Easy", "math_500_0148"),
+        ("Hard", "hmmt_2026_feb_geo_10"), ("Hard", "hmmt_2026_feb_comb_09"),
+    ]
+    all_models = list(openai_files) + list(anthropic_files)
+    MODEL_ORDER = [m for m, _, _ in all_models]
+    n_openai = len(openai_files)
+    GPT_PALETTE = {"o3": "#9E9E9E", "gpt-5": "#A5D6A7", "gpt-5.2": "#66BB6A",
+                   "gpt-5.4": "#388E3C", "gpt-5.5": "#1B5E20",
+                   "gpt-5.6-sol": "#0D3D14"}
+    PALETTE = {**GPT_PALETTE, **OPUS_PALETTE}
+    RAW = {m: {str(r["task_id"]): r for r in load_rows(p)} for m, _, p in all_models}
+
+    def trials(pid):
+        rows = []
+        for m in MODEL_ORDER:
+            r = RAW[m].get(pid)
+            if not r:
+                continue
+            tt = r.get("thinking_tokens", [1] * len(r["correct"]))
+            for tok, th in zip(r["total_completion_tokens"], tt):
+                if th != 0:
+                    rows.append({"model": m, "tokens": int(tok)})
+        return pd.DataFrame(rows)
+
+    fig, axes = plt.subplots(2, 2, figsize=(17, 10))
+    for idx, (tier, pid) in enumerate(EXAMPLES):
+        ax = axes[idx // 2, idx % 2]
+        df = trials(pid)
+        sns.violinplot(data=df, x="model", y="tokens", order=MODEL_ORDER,
+                       hue="model", hue_order=MODEL_ORDER, palette=PALETTE, legend=False,
+                       density_norm="width", cut=0, inner="quartile", linewidth=0.8, ax=ax)
+        for xi, m in enumerate(MODEL_ORDER):
+            v = df[df["model"] == m]["tokens"]
+            if not v.empty:
+                ax.scatter([xi], [v.median()], marker="D", s=34, color="white",
+                           edgecolors="black", linewidths=0.9, zorder=6)
+        c = CANON.get(pid)
+        if c:
+            ax.axhline(c["mean"], color="#FFB300", linewidth=2.2, zorder=7,
+                       label=f"Canonical avg ({c['mean']:.0f})")
+            ax.axhline(c["min"], color="#000000", linewidth=1.5, linestyle="--",
+                       alpha=0.8, zorder=7, label=f"Shortest ({c['min']:.0f})")
+            ax.legend(loc="upper right", fontsize=8.5, framealpha=0.95)
+        # Divider + group labels between the two providers
+        ax.axvline(n_openai - 0.5, color="#555555", linewidth=1.2, linestyle=":",
+                   alpha=0.8, zorder=1)
+        ax.annotate("OpenAI", xy=((n_openai - 1) / 2 / len(MODEL_ORDER) + 0.5 / len(MODEL_ORDER), 1.02),
+                    xycoords="axes fraction", ha="center", fontsize=9.5,
+                    fontweight="bold", color="#1B5E20")
+        ax.annotate("Anthropic", xy=((n_openai + (len(MODEL_ORDER) - n_openai - 1) / 2) / len(MODEL_ORDER) + 0.5 / len(MODEL_ORDER), 1.02),
+                    xycoords="axes fraction", ha="center", fontsize=9.5,
+                    fontweight="bold", color="#4A148C")
+        ax.set_ylim(bottom=0); ax.set_xlabel("")
+        ax.set_xticks(range(len(MODEL_ORDER)))
+        ax.set_xticklabels(MODEL_ORDER, rotation=40, ha="right", fontsize=8.5)
+        ax.set_ylabel("Trace length (tokens)" if idx % 2 == 0 else "", fontsize=10)
+        # pad pushes the title a line above the provider group labels at y=1.02
+        ax.set_title(f"[{tier}]  {pid}", fontsize=11, fontweight="bold", loc="left", pad=26)
+    fig.suptitle("DRAFT Figure 2.  Per-problem trace-length distributions collapse onto "
+                 "each problem's canonical floor\n(k=8 trials per violin; white diamond = median)",
+                 fontsize=13.5, fontweight="bold", y=1.0)
+    plt.tight_layout()
+    fig.savefig(OUT_DIR / fname, dpi=200, bbox_inches="tight")
+    plt.close(fig)
+    print(f"wrote {OUT_DIR / fname}")
+
+
+# ============================================================================
 # FIGURE 3 (headroom forecast, successes only, linear)
 # ============================================================================
 def _fit_headroom_forecast(model_files, exclude_baseline=True, successes_only=True):
@@ -995,4 +1076,5 @@ if __name__ == "__main__":
 
     figure_headline_openai_vs_anthropic()
     figure3_forecast_combined()
+    figure2_sample_problems()
     print(f"\nAll figures written to {OUT_DIR}/")
