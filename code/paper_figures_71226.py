@@ -60,21 +60,22 @@ OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 # (label, release date, main k=8 run JSON)
 MAIN_K8 = [
-    ("o3",      datetime(2025, 4, 1), RESULTS_DIR / "o3_shallow_pass" / "o3_medium_thinking_bench.json"),
+    ("o3",      datetime(2025, 4, 16), RESULTS_DIR / "o3_shallow_pass" / "o3_medium_thinking_bench.json"),
     ("gpt-5",   datetime(2025, 8, 7), RESULTS_DIR / "gpt5_shallow_pass" / "gpt-5_medium_thinking_bench.json"),
-    ("gpt-5.2", datetime(2025, 12, 1), RESULTS_DIR / "gpt5.2_shallow_pass" / "gpt-5.2_medium_thinking_bench.json"),
-    ("gpt-5.4", datetime(2026, 3, 1), RESULTS_DIR / "gpt5.4_shallow_pass" / "gpt-5.4_medium_thinking_bench.json"),
-    ("gpt-5.5", datetime(2026, 6, 1), RESULTS_DIR / "gpt5.5_shallow_pass" / "gpt-5.5_medium_thinking_bench.json"),
-    ("gpt-5.6-sol", datetime(2026, 8, 1), RESULTS_DIR / "gpt5.6_sol_shallow_pass" / "gpt-5.6-sol_medium_thinking_bench.json"),
+    ("gpt-5.2", datetime(2025, 12, 11), RESULTS_DIR / "gpt5.2_shallow_pass" / "gpt-5.2_medium_thinking_bench.json"),
+    ("gpt-5.4", datetime(2026, 3, 5), RESULTS_DIR / "gpt5.4_shallow_pass" / "gpt-5.4_medium_thinking_bench.json"),
+    ("gpt-5.5", datetime(2026, 4, 23), RESULTS_DIR / "gpt5.5_shallow_pass" / "gpt-5.5_medium_thinking_bench.json"),
+    ("gpt-5.6-sol", datetime(2026, 7, 9), RESULTS_DIR / "gpt5.6_sol_shallow_pass" / "gpt-5.6-sol_medium_thinking_bench.json"),
+    ("gpt-6-astra", datetime(2026, 9, 1), RESULTS_DIR / "gpt6_astra_shallow_pass" / "gpt-6-astra_medium_thinking_bench.json"),
 ]
 # k=32 "hard but doable" runs (10 problems, one JSON per model) — drives Panel A of
 # Figure 1: per-problem trace-length trajectories over GPT generations.
 HARD10_K32 = [
-    ("o3",      datetime(2025, 4, 1), RESULTS_DIR / "hard_but_doable_10q_k32" / "o3_medium_thinking_benchmark_hard_but_doable_10.json"),
-    ("gpt-5",   datetime(2025, 8, 1), RESULTS_DIR / "hard_but_doable_10q_k32" / "gpt-5_medium_thinking_benchmark_hard_but_doable_10.json"),
-    ("gpt-5.2", datetime(2025, 12, 1), RESULTS_DIR / "hard_but_doable_10q_k32" / "gpt-5.2_medium_thinking_benchmark_hard_but_doable_10.json"),
-    ("gpt-5.4", datetime(2026, 3, 1), RESULTS_DIR / "hard_but_doable_10q_k32" / "gpt-5.4_medium_thinking_benchmark_hard_but_doable_10.json"),
-    ("gpt-5.5", datetime(2026, 6, 1), RESULTS_DIR / "hard_but_doable_10q_k32" / "gpt-5.5_medium_thinking_benchmark_hard_but_doable_10.json"),
+    ("o3",      datetime(2025, 4, 16), RESULTS_DIR / "hard_but_doable_10q_k32" / "o3_medium_thinking_benchmark_hard_but_doable_10.json"),
+    ("gpt-5",   datetime(2025, 8, 7), RESULTS_DIR / "hard_but_doable_10q_k32" / "gpt-5_medium_thinking_benchmark_hard_but_doable_10.json"),
+    ("gpt-5.2", datetime(2025, 12, 11), RESULTS_DIR / "hard_but_doable_10q_k32" / "gpt-5.2_medium_thinking_benchmark_hard_but_doable_10.json"),
+    ("gpt-5.4", datetime(2026, 3, 5), RESULTS_DIR / "hard_but_doable_10q_k32" / "gpt-5.4_medium_thinking_benchmark_hard_but_doable_10.json"),
+    ("gpt-5.5", datetime(2026, 4, 23), RESULTS_DIR / "hard_but_doable_10q_k32" / "gpt-5.5_medium_thinking_benchmark_hard_but_doable_10.json"),
 ]
 # Claude Opus k=32 "hard but doable" runs (same 10 problems, same shared folder).
 OPUS_HARD10_K32 = [

@@ -1,0 +1,23 @@
+\begin{table}[t]
+\centering
+\caption{Output-cap truncation on the open-source OpenRouter runs (requested cap 40{,}000 tokens; $k{=}8$ over 47 problems $=$ 376 trials per model). A trial is \emph{truncated} if its output piled up at the provider's effective cap; such trials usually emit no final \texttt{\textbackslash boxed\{\}} answer (\emph{empty}), which depresses measured accuracy. Providers that honored no cap (ran past 40k) and the two naturally-short medium-effort models show ``--''. For reference, all GPT and Opus runs stayed far below the cap (0\% truncation).}
+\label{tab:truncation}
+\begin{tabular}{llrrr}
+\toprule
+Model & Provider & Eff.\ cap & Truncated & Empty ans. \\
+\midrule
+GLM 5 & streamlake & 40{,}000 & 105/376 (28\%) & 27\% \\
+Kimi K2.5 & streamlake & 32{,}768 & 102/376 (27\%) & 27\% \\
+Kimi K2.6 & crusoe & 40{,}000 & 99/376 (26\%) & 26\% \\
+GLM 4.6 & novita & 40{,}000 & 84/376 (22\%) & 22\% \\
+GLM 5.1 & baidu & 40{,}000 & 72/376 (19\%) & 19\% \\
+Kimi K2.7 Code & siliconflow & 40{,}000 & 42/376 (11\%) & 10\% \\
+GLM 5.2 & phala & 40{,}000 & 40/376 (11\%) & 10\% \\
+GLM 5.3 & z-ai & 40{,}000 & 14/376 (4\%) & 4\% \\
+GLM 4.5 & z-ai & -- & 0\% & 0\% \\
+GLM 4.7 & novita & -- & 0\% & 5\% \\
+Kimi K2 Thinking & novita & -- & 0\% & 4\% \\
+Kimi K3 & baseten & -- & 0\% & 0\% \\
+\bottomrule
+\end{tabular}
+\end{table}
