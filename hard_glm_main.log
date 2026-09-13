@@ -1,0 +1,148 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Pinned providers (common cap 40,000):
+  GLM 5.3                  z-ai         fp8     cap=  40,000  effort=medium
+  GLM 5.2                  phala        fp8     cap=  40,000  effort=medium
+  GLM 5.1                  baidu        fp8     cap=  40,000  effort=n/a  
+  GLM 5                    streamlake   fp8     cap=  40,000  effort=n/a  
+  GLM 4.7                  novita       fp8     cap=  40,000  effort=n/a  
+  GLM 4.6                  novita       bf16    cap=  40,000  effort=n/a  
+  GLM 4.5                  z-ai         fp8     cap=  40,000  effort=n/a  
+
+Results root: /home/nfl234/reasoning_trace_efficiency/reasoning_alg_progress/code/results  (one <model>_shallow_pass/ folder per model)
+Loading tyrtleli/thinking-benchmark-hard-but-doable-10 (split=test)...
+  10 problems
+
+=== GLM 5.3  (z-ai/glm-5.3 @ z-ai/fp8, cap=40,000)  10 new / 10 ===
+    GLM 5.3: 20/320 requests
+    GLM 5.3: 40/320 requests
+    GLM 5.3: 60/320 requests
+    GLM 5.3: 80/320 requests
+    GLM 5.3: 100/320 requests
+    GLM 5.3: 120/320 requests
+    GLM 5.3: 140/320 requests
+    GLM 5.3: 160/320 requests
+    GLM 5.3: 180/320 requests
+    GLM 5.3: 200/320 requests
+    GLM 5.3: 220/320 requests
+    GLM 5.3: 240/320 requests
+    GLM 5.3: 260/320 requests
+    GLM 5.3: 280/320 requests
+    GLM 5.3: 300/320 requests
+    GLM 5.3: 320/320 requests
+  wrote glm_5_3_thinking_benchmark_hard_but_doable_10.json + glm_5_3_thinking_benchmark_hard_but_doable_10_reasoning_traces.json  (/home/nfl234/reasoning_trace_efficiency/reasoning_alg_progress/code/results/glm_5_3_shallow_pass)  accuracy 241/320 = 75.3%
+
+=== GLM 5.2  (z-ai/glm-5.2 @ phala/fp8, cap=40,000)  10 new / 10 ===
+    GLM 5.2: 20/320 requests
+    GLM 5.2: 40/320 requests
+    GLM 5.2: 60/320 requests
+    GLM 5.2: 80/320 requests
+    GLM 5.2: 100/320 requests
+    GLM 5.2: 120/320 requests
+    GLM 5.2: 140/320 requests
+    GLM 5.2: 160/320 requests
+    GLM 5.2: 180/320 requests
+    GLM 5.2: 200/320 requests
+    GLM 5.2: 220/320 requests
+    GLM 5.2: 240/320 requests
+    GLM 5.2: 260/320 requests
+    GLM 5.2: 280/320 requests
+    GLM 5.2: 300/320 requests
+    GLM 5.2: 320/320 requests
+  wrote glm_5_2_thinking_benchmark_hard_but_doable_10.json + glm_5_2_thinking_benchmark_hard_but_doable_10_reasoning_traces.json  (/home/nfl234/reasoning_trace_efficiency/reasoning_alg_progress/code/results/glm_5_2_shallow_pass)  accuracy 301/320 = 94.1%
+
+=== GLM 5.1  (z-ai/glm-5.1 @ baidu/fp8, cap=40,000)  10 new / 10 ===
+    GLM 5.1: 20/320 requests
+    GLM 5.1: 40/320 requests
+    GLM 5.1: 60/320 requests
+    GLM 5.1: 80/320 requests
+    GLM 5.1: 100/320 requests
+    GLM 5.1: 120/320 requests
+    GLM 5.1: 140/320 requests
+    GLM 5.1: 160/320 requests
+    GLM 5.1: 180/320 requests
+    GLM 5.1: 200/320 requests
+    GLM 5.1: 220/320 requests
+    GLM 5.1: 240/320 requests
+    GLM 5.1: 260/320 requests
+    GLM 5.1: 280/320 requests
+    GLM 5.1: 300/320 requests
+    GLM 5.1: 320/320 requests
+  wrote glm_5_1_thinking_benchmark_hard_but_doable_10.json + glm_5_1_thinking_benchmark_hard_but_doable_10_reasoning_traces.json  (/home/nfl234/reasoning_trace_efficiency/reasoning_alg_progress/code/results/glm_5_1_shallow_pass)  accuracy 292/320 = 91.2%
+
+=== GLM 5  (z-ai/glm-5 @ streamlake/fp8, cap=40,000)  10 new / 10 ===
+    GLM 5: 20/320 requests
+    GLM 5: 40/320 requests
+    GLM 5: 60/320 requests
+    GLM 5: 80/320 requests
+    GLM 5: 100/320 requests
+    GLM 5: 120/320 requests
+    GLM 5: 140/320 requests
+    GLM 5: 160/320 requests
+    GLM 5: 180/320 requests
+    GLM 5: 200/320 requests
+    GLM 5: 220/320 requests
+    GLM 5: 240/320 requests
+    GLM 5: 260/320 requests
+    GLM 5: 280/320 requests
+    GLM 5: 300/320 requests
+    GLM 5: 320/320 requests
+  wrote glm_5_thinking_benchmark_hard_but_doable_10.json + glm_5_thinking_benchmark_hard_but_doable_10_reasoning_traces.json  (/home/nfl234/reasoning_trace_efficiency/reasoning_alg_progress/code/results/glm_5_shallow_pass)  accuracy 245/320 = 76.6%
+
+=== GLM 4.7  (z-ai/glm-4.7 @ novita/fp8, cap=40,000)  10 new / 10 ===
+    GLM 4.7: 20/320 requests
+    GLM 4.7: 40/320 requests
+    GLM 4.7: 60/320 requests
+    GLM 4.7: 80/320 requests
+    GLM 4.7: 100/320 requests
+    GLM 4.7: 120/320 requests
+    GLM 4.7: 140/320 requests
+    GLM 4.7: 160/320 requests
+    GLM 4.7: 180/320 requests
+    GLM 4.7: 200/320 requests
+    GLM 4.7: 220/320 requests
+    GLM 4.7: 240/320 requests
+    GLM 4.7: 260/320 requests
+    GLM 4.7: 280/320 requests
+    GLM 4.7: 300/320 requests
+    GLM 4.7: 320/320 requests
+  wrote glm_4_7_thinking_benchmark_hard_but_doable_10.json + glm_4_7_thinking_benchmark_hard_but_doable_10_reasoning_traces.json  (/home/nfl234/reasoning_trace_efficiency/reasoning_alg_progress/code/results/glm_4_7_shallow_pass)  accuracy 284/320 = 88.8%
+
+=== GLM 4.6  (z-ai/glm-4.6 @ novita/bf16, cap=40,000)  10 new / 10 ===
+    GLM 4.6: 20/320 requests
+    GLM 4.6: 40/320 requests
+    GLM 4.6: 60/320 requests
+    GLM 4.6: 80/320 requests
+    GLM 4.6: 100/320 requests
+    GLM 4.6: 120/320 requests
+    GLM 4.6: 140/320 requests
+    GLM 4.6: 160/320 requests
+    GLM 4.6: 180/320 requests
+    GLM 4.6: 200/320 requests
+    GLM 4.6: 220/320 requests
+    GLM 4.6: 240/320 requests
+    GLM 4.6: 260/320 requests
+    GLM 4.6: 280/320 requests
+    GLM 4.6: 300/320 requests
+    GLM 4.6: 320/320 requests
+  wrote glm_4_6_thinking_benchmark_hard_but_doable_10.json + glm_4_6_thinking_benchmark_hard_but_doable_10_reasoning_traces.json  (/home/nfl234/reasoning_trace_efficiency/reasoning_alg_progress/code/results/glm_4_6_shallow_pass)  accuracy 252/320 = 78.8%
+
+=== GLM 4.5  (z-ai/glm-4.5 @ z-ai/fp8, cap=40,000)  10 new / 10 ===
+    GLM 4.5: 20/320 requests
+    GLM 4.5: 40/320 requests
+    GLM 4.5: 60/320 requests
+    GLM 4.5: 80/320 requests
+    GLM 4.5: 100/320 requests
+    GLM 4.5: 120/320 requests
+    GLM 4.5: 140/320 requests
+    GLM 4.5: 160/320 requests
+    GLM 4.5: 180/320 requests
+    GLM 4.5: 200/320 requests
+    GLM 4.5: 220/320 requests
+    GLM 4.5: 240/320 requests
+    GLM 4.5: 260/320 requests
+    GLM 4.5: 280/320 requests
+    GLM 4.5: 300/320 requests
+    GLM 4.5: 320/320 requests
+  wrote glm_4_5_thinking_benchmark_hard_but_doable_10.json + glm_4_5_thinking_benchmark_hard_but_doable_10_reasoning_traces.json  (/home/nfl234/reasoning_trace_efficiency/reasoning_alg_progress/code/results/glm_4_5_shallow_pass)  accuracy 310/320 = 96.9%
+
+All done. Per-model folders under /home/nfl234/reasoning_trace_efficiency/reasoning_alg_progress/code/results
