@@ -71,8 +71,13 @@ MODELS = [
          provider="siliconflow", quant="fp8", provider_max=235_929, price_in=0.86, price_out=3.80),
     dict(label="Kimi K2.6", series="kimi-k2", or_model="moonshotai/kimi-k2.6",
          provider="crusoe", quant="bf16", provider_max=235_929, price_in=0.70, price_out=3.50),
+    # Repinned from streamlake: it imposed a hard 32,768-token output ceiling
+    # (27% of k=8 trials pinned there, all graded wrong) despite advertising more,
+    # and is no longer a listed endpoint for this model. Phala advertises 235,929.
+    # quant left None: no current k2.5 endpoint advertises fp8, and a quantizations
+    # pin would fail to route. int4/fp4 providers avoided deliberately.
     dict(label="Kimi K2.5", series="kimi-k2", or_model="moonshotai/kimi-k2.5",
-         provider="streamlake", quant="fp8", provider_max=230_400, price_in=0.54, price_out=2.70),
+         provider="phala", quant=None, provider_max=235_929, price_in=0.54, price_out=2.70),
     dict(label="Kimi K2 Thinking", series="kimi-k2", or_model="moonshotai/kimi-k2-thinking",
          provider="novita", quant="bf16", provider_max=100_352, price_in=0.60, price_out=2.50),
     dict(label="GLM 5.3", series="glm-5", or_model="z-ai/glm-5.3",
