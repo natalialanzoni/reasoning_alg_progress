@@ -26,7 +26,8 @@ Note `completions[].text` holds the full generation, so these files are large
 
 | model | status | accuracy |
 |-------|--------|----------|
-| GLM 4.5 / 4.6 / 4.7 / 5 / 5.1 / 5.2 / 5.3 | present | see `GLM_ANALYSIS_NOTES.md` — do not read raw accuracy as capability |
+| GLM 4.5 / 4.6 / 4.7 / 5 / 5.1 | present (`enabled`) | see `GLM_ANALYSIS_NOTES.md` — do not read raw accuracy as capability |
+| GLM 5.2 / 5.3 | present (`_high` files) | 90.9% / 89.1% at matched `effort="high"`; the original `medium` runs are archived |
 | gpt-oss-120b | present | 273/320 = **85.3%**, pass@32 100%, **0 truncations** |
 | gpt-oss-20b  | present | 259/320 = **80.9%**, pass@32 100%, 10/320 truncated |
 | Kimi K3 / K2.7 Code / K2.6 / K2.5 / K2 Thinking | **missing** | driver died 2026-09-07, nothing written |
@@ -37,10 +38,18 @@ Note `completions[].text` holds the full generation, so these files are large
 - **40k output cap.** A response that hits it emits no `\boxed{}` and grades wrong.
   This dominates several GLM numbers (see `GLM_ANALYSIS_NOTES.md`). gpt-oss-120b never
   reached the cap (max 37,955 tokens); gpt-oss-20b hit it on 10/320.
-- **Reasoning effort is not comparable across models.** gpt-oss ran `re-medium`;
-  GLM 5.2/5.3 ran `effort="medium"` via OpenRouter while the other five GLMs ran
-  `reasoning={"enabled":true}` with no ceiling. The same nominal label buys very
-  different token budgets across vendors and versions.
+- **Reasoning effort is not comparable across models.** gpt-oss ran `re-medium`.
+  GLM 4.5-5.1 can only take `reasoning={"enabled":true}` (they expose no effort
+  knob on any provider); GLM 5.2/5.3 are re-run at `effort="high"`. A probe
+  (`code/effort_probe.py`) found `enabled` resolves to
+  the model's own default near `max`, so those five ran at a *higher* level than
+  the 5.2/5.3 `high` files. The same nominal label buys very different budgets
+  across vendors and versions — that is a finding, not just a caveat.
+- **An unsupported effort value is silent.** The original GLM 5.2/5.3 runs sent
+  `"medium"`, which neither model has; both vendors remapped it and the runs
+  completed with zero errors. See `data/archive/effort_medium_invalid/`. Runs since
+  2026-09-14 record `generation_ids` and `reasoning_sent` per trial so this is
+  self-documenting.
 
 ## Provenance
 

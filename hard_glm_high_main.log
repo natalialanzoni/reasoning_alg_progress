@@ -1,0 +1,48 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Pinned providers (common cap 40,000):
+  GLM 5.3                  z-ai         fp8     cap=  40,000  effort=high 
+  GLM 5.2                  phala        fp8     cap=  40,000  effort=high 
+
+Results root: /home/nfl234/reasoning_trace_efficiency/reasoning_alg_progress/code/results  (one <model>_shallow_pass/ folder per model)
+Loading tyrtleli/thinking-benchmark-hard-but-doable-10 (split=test)...
+  10 problems
+
+=== GLM 5.3  (z-ai/glm-5.3 @ z-ai/fp8, cap=40,000)  10 new / 10 ===
+    GLM 5.3: 20/320 requests
+    GLM 5.3: 40/320 requests
+    GLM 5.3: 60/320 requests
+    GLM 5.3: 80/320 requests
+    GLM 5.3: 100/320 requests
+    GLM 5.3: 120/320 requests
+    GLM 5.3: 140/320 requests
+    GLM 5.3: 160/320 requests
+    GLM 5.3: 180/320 requests
+    GLM 5.3: 200/320 requests
+    GLM 5.3: 220/320 requests
+    GLM 5.3: 240/320 requests
+    GLM 5.3: 260/320 requests
+    GLM 5.3: 280/320 requests
+    GLM 5.3: 300/320 requests
+    GLM 5.3: 320/320 requests
+  wrote glm_5_3_thinking_benchmark_hard_but_doable_10_high.json + glm_5_3_thinking_benchmark_hard_but_doable_10_high_reasoning_traces.json  (/home/nfl234/reasoning_trace_efficiency/reasoning_alg_progress/code/results/glm_5_3_shallow_pass)  accuracy 285/320 = 89.1%
+
+=== GLM 5.2  (z-ai/glm-5.2 @ phala/fp8, cap=40,000)  10 new / 10 ===
+    GLM 5.2: 20/320 requests
+    GLM 5.2: 40/320 requests
+    GLM 5.2: 60/320 requests
+    GLM 5.2: 80/320 requests
+    GLM 5.2: 100/320 requests
+    GLM 5.2: 120/320 requests
+    GLM 5.2: 140/320 requests
+    GLM 5.2: 160/320 requests
+    GLM 5.2: 180/320 requests
+    GLM 5.2: 200/320 requests
+    GLM 5.2: 220/320 requests
+    GLM 5.2: 240/320 requests
+    GLM 5.2: 260/320 requests
+    GLM 5.2: 280/320 requests
+    GLM 5.2: 300/320 requests
+    GLM 5.2: 320/320 requests
+  wrote glm_5_2_thinking_benchmark_hard_but_doable_10_high.json + glm_5_2_thinking_benchmark_hard_but_doable_10_high_reasoning_traces.json  (/home/nfl234/reasoning_trace_efficiency/reasoning_alg_progress/code/results/glm_5_2_shallow_pass)  accuracy 291/320 = 90.9%
+
+All done. Per-model folders under /home/nfl234/reasoning_trace_efficiency/reasoning_alg_progress/code/results

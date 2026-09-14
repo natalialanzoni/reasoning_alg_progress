@@ -96,13 +96,34 @@ MODELS = [
          provider="z-ai", quant="fp8", provider_max=98_304, price_in=0.60, price_out=2.20),
 ]
 
-# reasoning_effort is only exposed by these on OpenRouter; every other model is
-# reasoning-on with NO effort knob (a comparability caveat vs the GPT/Opus runs,
-# where all models take medium). We set medium where supported, else just force
-# reasoning on. Edit the set / per-model "effort" as OpenRouter adds support.
-_EFFORT_CAPABLE = {"DeepSeek V4 Pro 0813", "Kimi K3", "GLM 5.3", "GLM 5.2"}
+# Per-model reasoning effort. MUST be a value the model actually accepts -- an
+# unsupported value is NOT an error you will see. Vendors silently remap it, so
+# the run looks clean while measuring a level you did not choose.
+#
+# This bit us: the 2026-09-05/06 GLM run sent "medium" to GLM 5.2 and 5.3, and
+# neither model has a "medium". Per Z.AI's docs (docs.z.ai/guides/capabilities/
+# thinking) GLM 5.2 accepts max/xhigh/high/medium/low/minimal/none but maps
+# low and medium onto HIGH, while GLM 5.3 accepts only max/high/low and errors
+# on anything else -- yet that run logged zero errors, so OpenRouter had already
+# remapped it upstream ("maps your requested effort to the nearest supported
+# level"). The two models therefore ran at different, unrecorded levels and are
+# not comparable. See data/hard_but_doable_10q_k32/GLM_ANALYSIS_NOTES.md.
+#
+# "high" is used below because it is natively supported by BOTH GLM 5.2 and 5.3,
+# so it is a genuinely matched setting. None => send {"enabled": True}, which is
+# the only reasoning control the pre-5.2 GLMs expose at all.
+_EFFORT = {
+    "GLM 5.3": "high",   # accepts max/high/low only
+    "GLM 5.2": "high",   # accepts the full ladder, but low/medium collapse to high
+    # Same bug, same fix: neither of these has a "medium" either.
+    "Kimi K3": "high",              # platform.kimi.ai: low/high/max, default max
+    "DeepSeek V4 Pro 0813": "high", # api-docs.deepseek.com: high/max; low+medium -> high
+}
+# "high" is the one level natively supported by all four of these models, which is
+# what makes it the matched setting. Every other model here exposes no effort knob
+# at all and gets {"enabled": True}.
 for _m in MODELS:
-    _m["effort"] = "medium" if _m["label"] in _EFFORT_CAPABLE else None
+    _m["effort"] = _EFFORT.get(_m["label"])
 
 
 def provider_pref(m):
@@ -254,13 +275,19 @@ def one_request(client, m, problem, max_tokens, max_attempts=4):
                     "reasoning": getattr(msg, "reasoning", None) or "",  # full CoT trace
                     "input_tokens": u.prompt_tokens,
                     "output_tokens": u.completion_tokens, "reasoning_tokens": reasoning_tok,
-                    "provider": getattr(resp, "provider", None)}
+                    "provider": getattr(resp, "provider", None),
+                    # recorded so a run is self-documenting: gen_id can be replayed
+                    # against GET /api/v1/generation?id=... and reasoning_sent shows
+                    # what we asked for (vendors may silently remap it -- see _EFFORT)
+                    "gen_id": getattr(resp, "id", None),
+                    "reasoning_sent": reasoning}
         except Exception as e:
             if attempt < max_attempts:
                 time.sleep(2 ** attempt)
                 continue
             return {"text": "", "reasoning": "", "input_tokens": 0, "output_tokens": 0,
-                    "reasoning_tokens": 0, "provider": None, "error": f"{type(e).__name__}: {e}"}
+                    "reasoning_tokens": 0, "provider": None, "gen_id": None,
+                    "reasoning_sent": reasoning, "error": f"{type(e).__name__}: {e}"}
 
 
 def run_model(client, m, problems, n_samples, max_tokens, workers):
@@ -300,6 +327,8 @@ def run_model(client, m, problems, n_samples, max_tokens, workers):
             "answer_tokens": [max(s["output_tokens"] - s["reasoning_tokens"], 0) for s in samples],
             "response_chars": [len(s["text"]) for s in samples],
             "providers_used": [s.get("provider") for s in samples],
+            "generation_ids": [s.get("gen_id") for s in samples],
+            "reasoning_sent": [s.get("reasoning_sent") for s in samples],
             "errors": [s.get("error") for s in samples],  # None when the call succeeded
             "solved_at_least_once": any(correct),
         })

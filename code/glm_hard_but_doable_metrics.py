@@ -14,25 +14,36 @@ SRC = ROOT / "code" / "results"
 OUT = ROOT / "data" / "hard_but_doable_10q_k32" / "glm_per_trial_metrics.csv"
 CAP = 40_000  # common requested cap; see CENSORING note in the analysis README
 
-MODELS = ["glm_4_5", "glm_4_6", "glm_4_7", "glm_5", "glm_5_1", "glm_5_2", "glm_5_3"]
-EFFORT = {"glm_5_2": "medium", "glm_5_3": "medium"}  # rest ran reasoning={"enabled":true}
+# (model, filename tag, effort actually in force)
+# GLM 5.2/5.3 point at the effort="high" re-run. Their original files sent
+# reasoning_effort="medium", which NEITHER model has -- each vendor silently
+# remapped it to a different level, so those runs were not comparable. Archived
+# under data/archive/effort_medium_invalid/.
+#
+# "enabled" = reasoning={"enabled": true}, the only control the pre-5.2 GLMs
+# expose. A 2026-09-14 probe found this resolves to the model's own default
+# (near max), NOT to medium as OpenRouter's docs state -- so these five ran
+# effectively unthrottled, at a HIGHER level than the 5.2/5.3 "high" rows.
+MODELS = [("glm_4_5", "", "enabled"), ("glm_4_6", "", "enabled"), ("glm_4_7", "", "enabled"),
+          ("glm_5", "", "enabled"), ("glm_5_1", "", "enabled"),
+          ("glm_5_2", "_high", "high"), ("glm_5_3", "_high", "high")]
 
 BACKTRACK = re.compile(
     r"\b(wait|hmm|actually|let me (re)?check|double-check|recompute|verify|but that|hold on)\b", re.I)
 RECALL = re.compile(r"\b(known|classic|recall|I remember|memor|seen this|standard problem)\b", re.I)
 
 rows = []
-for m in MODELS:
+for m, tag, effort in MODELS:
     d = SRC / f"{m}_shallow_pass"
-    res = json.loads((d / f"{m}_thinking_benchmark_hard_but_doable_10.json").read_text())
+    res = json.loads((d / f"{m}_thinking_benchmark_hard_but_doable_10{tag}.json").read_text())
     traces = {r["task_id"]: r["reasoning_texts"]
-              for r in json.loads((d / f"{m}_thinking_benchmark_hard_but_doable_10_reasoning_traces.json").read_text())}
+              for r in json.loads((d / f"{m}_thinking_benchmark_hard_but_doable_10{tag}_reasoning_traces.json").read_text())}
     for r in res:
         for i in range(len(r["correct"])):
             txt = traces[r["task_id"]][i]
             tot = r["total_completion_tokens"][i]
             rows.append(dict(
-                model=m, effort=EFFORT.get(m, "enabled"), task_id=r["task_id"], trial=i,
+                model=m, effort=effort, task_id=r["task_id"], trial=i,
                 provider=r["providers_used"][i], gold_answer=r["gold_answer"],
                 extracted_answer=r["extracted_answers"][i],
                 correct=int(bool(r["correct"][i])),
