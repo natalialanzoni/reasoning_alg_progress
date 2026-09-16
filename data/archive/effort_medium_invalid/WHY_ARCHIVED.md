@@ -28,6 +28,8 @@ effort level, not the model.
 
 - `glm_5_3_thinking_benchmark_90.json` — 73.7%, median 1,034 thinking tokens
 - `kimi_k3_thinking_benchmark_90.json` — 67.3%, median 1,086 thinking tokens
+- `glm_5_2_thinking_benchmark_90.json` — 86.4%, median 17,292 thinking tokens
+  (archived 2026-09-15; see "Superseded" below)
 - `glm_5_2_thinking_benchmark_hard_but_doable_10.json` — 94.1%
 - `glm_5_3_thinking_benchmark_hard_but_doable_10.json` — 75.3%
 
@@ -46,13 +48,21 @@ natively supported by both, so no remapping — the gap is **-1.9pp, 95% CI
 3,084 thinking tokens against GLM 5.2's 17,742, i.e. **5.8x fewer**. The real
 result is an efficiency gain, not a regression.
 
-## Not archived
+## Superseded (updated 2026-09-15)
 
-`data/glm_5_2_shallow_pass/glm_5_2_thinking_benchmark_90.json` (86.4%, median
-17,292) also ran at the invalid `medium`, but Z.AI maps medium->high and the
-resulting budget sits inside the 14.7k-22.3k range of its `enabled` siblings, so
-the number is usable. Caveat: it is nominally `high` where every other model in
-that set is at its own default. Re-run it if you need the set strictly uniform.
+`glm_5_2_thinking_benchmark_90.json` (86.4%, median 17,292) was originally kept
+here rather than archived: it ran at the invalid `medium`, but Z.AI documents
+medium->high for GLM 5.2, and the resulting budget sat inside the 14.7k-22.3k
+range of its `enabled` siblings, so the number was judged usable.
 
-Kimi K3 needs a re-run at `effort="high"` before its benchmark-90 number is
-citable. GLM 5.3's benchmark-90 likewise.
+It is now archived anyway. Both GLM 5.2 and GLM 5.3 were re-run on
+thinking-benchmark-90 at an explicit `effort="high"` on 2026-09-15
+(tag `_high`, log `glm_k8_high_main.log`) so that the k=8 and k=32 layers of the
+GLM figure are at a matched, natively-supported level for both models. Relying on
+an undocumented vendor remap is not the same as requesting the level directly.
+
+## Still outstanding
+
+`kimi_k3_thinking_benchmark_90.json` needs a re-run at `effort="high"` before
+Kimi K3's benchmark-90 number is citable. That has not been done — Kimi K3
+currently has **no valid k=8 result** in `data/`.

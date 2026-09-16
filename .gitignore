@@ -32,3 +32,7 @@ code/results_diagnostic/
 
 # Sweep driver logs
 kimi_*.log
+
+# Sweep/driver logs (kept locally, not part of the dataset)
+*.log
+!hard_but_doable_sweep.log
