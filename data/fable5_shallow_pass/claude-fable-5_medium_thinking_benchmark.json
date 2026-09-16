@@ -118,7 +118,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_02",
@@ -239,7 +249,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_03",
@@ -360,7 +380,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_04",
@@ -481,7 +511,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_05",
@@ -602,7 +642,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_06",
@@ -723,7 +773,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_07",
@@ -844,7 +904,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_08",
@@ -965,7 +1035,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_09",
@@ -1086,7 +1166,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_10",
@@ -1207,7 +1297,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_11",
@@ -1328,7 +1428,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_12",
@@ -1449,7 +1559,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_13",
@@ -1570,7 +1690,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_14",
@@ -1691,7 +1821,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_01",
@@ -1812,7 +1952,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_03",
@@ -1933,7 +2083,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_04",
@@ -2054,7 +2214,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_05",
@@ -2175,7 +2345,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_06",
@@ -2296,7 +2476,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_07",
@@ -2417,7 +2607,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_08",
@@ -2538,7 +2738,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_09",
@@ -2659,7 +2869,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_10",
@@ -2780,7 +3000,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_11",
@@ -2901,7 +3131,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_12",
@@ -3022,7 +3262,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_13",
@@ -3143,7 +3393,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_14",
@@ -3264,7 +3524,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_15",
@@ -3385,7 +3655,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "frontiermath_tier1_counting_nonzero_solutions",
@@ -3427,14 +3707,14 @@
       "## Setting Up\n\nThe curve $C: x^3y + y^3z + z^3x = 0$ is the **Klein quartic**, a smooth plane curve of genus 3. \"Nonzero points up to scaling\" means we count projective points $\\#C(\\mathbb{F}_q)$ with $q = 5^{18}$.\n\n## Frobenius Eigenvalues\n\nThe Jacobian of the Klein quartic is isogenous **over $\\mathbb{Q}$** to $E^3$, where $E$ is the elliptic curve of conductor 49 with CM by $\\mathbb{Z}\\left[\\frac{1+\\sqrt{-7}}{2}\\right]$. So over $\\mathbb{F}_5$, the Frobenius eigenvalues of $C$ are those of $E$, each with multiplicity 3.\n\n**Behavior at $p = 5$:** Since $-7 \\equiv 3 \\pmod 5$ is a quadratic nonresidue, $5$ is inert in $\\mathbb{Q}(\\sqrt{-7})$, so $E$ is **supersingular** at 5 with trace $a_5 = 0$. Its Frobenius eigenvalues are $\\pm i\\sqrt{5}$.\n\n**Sanity check over $\\mathbb{F}_5$:** Direct counting gives points $(1:0:0), (0:1:0), (0:0:1)$, plus affine solutions of $y^3 + x^3y + x = 0$: none for $x=1,2$; two for $x=3$ (namely $y=2,4$); one for $x=4$ (namely $y=2$). Total: $6 = 5 + 1 - 0$, confirming trace $0$. \u2713\n\n## Counting over $\\mathbb{F}_{5^{18}}$\n\nThe six eigenvalues are $\\alpha = \\pm i\\sqrt{5}$ (each three times). Then:\n$$\\alpha^{18} = (\\pm i)^{18} \\cdot 5^{9} = ((\\pm i)^2)^9 \\cdot 5^9 = (-1)^9 \\cdot 5^9 = -5^9.$$\n\nBy the Weil formula:\n$$\\#C(\\mathbb{F}_{5^{18}}) = 5^{18} + 1 - \\sum_{j=1}^{6} \\alpha_j^{18} = 5^{18} + 1 - 6(-5^9) = 5^{18} + 6\\cdot 5^9 + 1.$$\n\n## Numerical Value\n\n$$5^{18} = 3814697265625, \\qquad 6 \\cdot 5^9 = 11718750$$\n$$\\#C(\\mathbb{F}_{5^{18}}) = 3814697265625 + 11718750 + 1 = 3814708984376.$$\n\n$$\\boxed{5^{18} + 6\\cdot 5^{9} + 1 = 3814708984376}$$"
     ],
     "correct": [
-      false,
-      false,
+      true,
+      true,
+      true,
+      true,
       true,
       true,
       false,
-      false,
-      false,
-      false
+      true
     ],
     "prompt_length_tokens": [
       124,
@@ -3506,7 +3786,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false
+    ]
   },
   {
     "task_id": "frontiermath_tier2_recursive_permutations",
@@ -3627,7 +3917,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "math_500_0136",
@@ -3748,7 +4048,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "math_500_0148",
@@ -3869,7 +4179,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "math_500_0158",
@@ -3990,7 +4310,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "math_500_0200",
@@ -4035,11 +4365,11 @@
       true,
       true,
       true,
-      false,
-      false,
-      false,
       true,
-      false
+      true,
+      true,
+      true,
+      true
     ],
     "prompt_length_tokens": [
       219,
@@ -4111,7 +4441,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      false,
+      false,
+      false,
+      true,
+      false
+    ]
   },
   {
     "task_id": "math_500_0369",
@@ -4232,7 +4572,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_comb_05",
@@ -4353,7 +4703,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_comb_06",
@@ -4398,11 +4758,11 @@
       true,
       false,
       true,
-      false,
       true,
       true,
       true,
-      false
+      true,
+      true
     ],
     "prompt_length_tokens": [
       218,
@@ -4474,7 +4834,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_comb_07",
@@ -4595,7 +4965,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": false
+    "solved_at_least_once": false,
+    "correct_original": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_comb_08",
@@ -4716,7 +5096,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_comb_09",
@@ -4837,7 +5227,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_geo_05",
@@ -4958,7 +5358,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_geo_06",
@@ -5079,7 +5489,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_geo_07",
@@ -5121,14 +5541,14 @@
       "## Setting Up\n\nSince \u2220BAP + \u2220PAQ + \u2220QAC = 20\u00b0 + 46\u00b0 + 26\u00b0 = 92\u00b0, we have \u2220BAC = 92\u00b0, so \u2220ABC = \u2220ACB = 44\u00b0.\n\nSet $AB = AC = 1$, $AP = p$, $AQ = q$. Then \u2220BAP = 20\u00b0, \u2220PAQ = 46\u00b0, \u2220QAC = 26\u00b0, and by the Law of Cosines:\n\n$$BP^2 = 1 + p^2 - 2p\\cos 20^\\circ,\\quad PQ^2 = p^2 + q^2 - 2pq\\cos 46^\\circ,\\quad QC^2 = 1 + q^2 - 2q\\cos 26^\\circ$$\n\n**Condition BP = PQ:**\n$$1 - 2p\\cos 20^\\circ = q^2 - 2pq\\cos 46^\\circ \\quad (1)$$\n\n**Condition QC = PQ:**\n$$1 - 2q\\cos 26^\\circ = p^2 - 2pq\\cos 46^\\circ \\quad (2)$$\n\n## Solving the System\n\nFrom (2): \n$$q = \\frac{1 - p^2}{2\\cos 26^\\circ - 2p\\cos 46^\\circ}$$\n\nSubstituting into (1) and solving numerically:\n\n- $p = 0.58$: residual $-0.00143$  \n- $p = 0.582$: residual $+0.00022$\n\nInterpolating gives:\n$$p = AP \\approx 0.58174, \\qquad q = AQ \\approx 0.66869$$\n\n## Computing \u2220APC\n\nIn triangle $APC$: $AP = 0.58174$, $AC = 1$, and \u2220PAC = 46\u00b0 + 26\u00b0 = 72\u00b0.\n\nBy the Law of Cosines:\n$$PC^2 = p^2 + 1 - 2p\\cos 72^\\circ = 0.338421 + 1 - 2(0.58174)(0.309017) = 0.978887$$\n\nso $PC \\approx 0.989387$. Then:\n$$\\cos(\\angle APC) = \\frac{AP^2 + PC^2 - AC^2}{2 \\cdot AP \\cdot PC} = \\frac{0.338421 + 0.978887 - 1}{2(0.58174)(0.989387)} = \\frac{0.317308}{1.151130} \\approx 0.27565$$\n\nSince $\\cos 74^\\circ = 0.27564$, we get:\n$$\\angle APC = 74^\\circ$$\n\n**Check:** Then \u2220ACP = 180\u00b0 \u2212 72\u00b0 \u2212 74\u00b0 = 34\u00b0, so \u2220PCB = 44\u00b0 \u2212 34\u00b0 = 10\u00b0 > 0, consistent with $P$ inside the triangle. \u2713\n\n$$\\boxed{74^\\circ}$$"
     ],
     "correct": [
-      false,
-      true,
-      false,
-      false,
-      false,
       true,
       true,
-      false
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
     ],
     "prompt_length_tokens": [
       222,
@@ -5200,7 +5620,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      false,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_geo_08",
@@ -5321,7 +5751,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_geo_09",
@@ -5364,7 +5804,7 @@
     ],
     "correct": [
       false,
-      false,
+      true,
       true,
       true,
       true,
@@ -5442,7 +5882,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_geo_10",
@@ -5484,14 +5934,14 @@
       "**Setup.** Place the midpoint $M$ of $BC$ at the origin with $BC$ on the x-axis, so $B=(-a/2,0)$, $C=(a/2,0)$, $A=(x,y)$. Then:\n- $G = (x/3, y/3)$, and line $AG$ (the median) passes through the origin with direction $(x,y)$.\n- $O = (0,d)$ where equating $OA=OB$ gives $d = \\dfrac{x^2+y^2-a^2/4}{2y}$.\n\n**Orthocenter condition.** Let $H=(h,0)$ lie on $BC$.\n\n*$OH \\perp AG$:*  $(h,-d)\\cdot(x,y)=0 \\Rightarrow h = \\dfrac{dy}{x}$.\n\n*$GH \\perp AO$:*  $\\left(h-\\tfrac{x}{3}, -\\tfrac{y}{3}\\right)\\cdot(-x, d-y)=0$, giving\n$$-xh + \\frac{x^2}{3} - \\frac{yd}{3} + \\frac{y^2}{3} = 0.$$\nSubstituting $h = dy/x$:\n$$-dy + \\frac{x^2+y^2 - yd}{3} = 0 \\;\\Rightarrow\\; x^2+y^2 = 4dy.$$\n\nSince $2dy = x^2+y^2 - a^2/4$, we get\n$$x^2+y^2 = 2(x^2+y^2) - \\frac{a^2}{2} \\;\\Rightarrow\\; x^2+y^2 = \\frac{a^2}{2}.$$\n\n**Median length.** Note $x^2+y^2 = AM^2 = m_a^2 = \\frac{2b^2+2c^2-a^2}{4}$, so\n$$\\frac{2b^2+2c^2-a^2}{4} = \\frac{a^2}{2} \\;\\Rightarrow\\; a^2 = \\frac{2b^2+2c^2}{3}.$$\n\nWith $b=13$, $c=11$:\n$$a^2 = \\frac{2(169+121)}{3} = \\frac{580}{3}, \\qquad a = \\sqrt{\\frac{580}{3}} = \\frac{2\\sqrt{435}}{3}.$$\n\n$$\\boxed{\\dfrac{2\\sqrt{435}}{3}}$$"
     ],
     "correct": [
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
     ],
     "prompt_length_tokens": [
       174,
@@ -5563,7 +6013,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": false
+    "solved_at_least_once": true,
+    "correct_original": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_algnt_04",
@@ -5684,6 +6144,16 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   }
 ]

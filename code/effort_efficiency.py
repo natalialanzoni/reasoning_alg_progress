@@ -34,8 +34,8 @@ DATA = ROOT.parent / "data"
 OUT = ROOT.parent / "figures"
 
 # release dates (gpt-5.6-sol has no official snapshot; assumed, edit me)
-DATES = {"o3": datetime(2025, 4, 1), "gpt-5": datetime(2025, 8, 7),
-         "gpt-5.2": datetime(2025, 12, 1), "gpt-5.4": datetime(2026, 3, 5),
+DATES = {"o3": datetime(2025, 4, 16), "gpt-5": datetime(2025, 8, 7),
+         "gpt-5.2": datetime(2025, 12, 11), "gpt-5.4": datetime(2026, 3, 5),
          "gpt-5.5": datetime(2026, 6, 1), "gpt-5.6-sol": datetime(2026, 8, 1)}
 
 # Candidate models per effort (any without a run json are skipped). o3 is

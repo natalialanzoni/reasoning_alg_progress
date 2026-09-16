@@ -9,7 +9,7 @@ paper_figures_71226._fit_headroom_forecast:
 
     log(L_ijt - C_j) = alpha_j + beta * Month_i + eps_ijt,     beta = -1/tau
 
-  L = trace tokens, C_j = irreducible floor for problem j, alpha_j = problem FE,
+  L = total output tokens (reasoning + answer), C_j = irreducible floor for problem j, alpha_j = problem FE,
   Month = months since 2025-04-01, SEs clustered by problem, fit on L > C_j.
   Code DV log(headroom-1) = log(L-C_j) - log(C_j); the -log(C_j) is absorbed by
   alpha_j so beta is identical. The C_j SUBTRACTION (decay toward the floor) and
@@ -256,7 +256,7 @@ def build(fname, gpt_exclude_o3, successes_only):
         ax.yaxis.set_major_formatter(unit_formatter(1e3, "k"))
         ax.xaxis.set_major_locator(mdates.YearLocator())
         ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
-    axes[0].set_ylabel(f"Reasoning tokens ({'successful' if successes_only else 'all'} traces)")
+    axes[0].set_ylabel(f"Output tokens: reasoning + answer ({'correct' if successes_only else 'all'} traces)")
     handles = [
         mlines.Line2D([], [], color=TOK, lw=2.6, marker="o", ms=9, label="Fitted trend + data points"),
         mlines.Line2D([], [], color=TOK, lw=2.6, ls="--", label="Forecast (extrapolated)"),
@@ -291,7 +291,7 @@ def build_combined(fname, successes_only=True, gpt_exclude_o3=True):
     _floor(ax, xhi)
     _sep(ax, tlast_all, ymax)
     ax.set_ylim(0, ymax); ax.set_xlim(xlo, xhi)
-    ax.set_ylabel(f"Reasoning tokens ({'successful' if successes_only else 'all'} traces)")
+    ax.set_ylabel(f"Output tokens: reasoning + answer ({'correct' if successes_only else 'all'} traces)")
     ax.set_xlabel("Date")
     ax.yaxis.set_major_formatter(unit_formatter(1e3, "k"))
     ax.xaxis.set_major_locator(mdates.YearLocator())

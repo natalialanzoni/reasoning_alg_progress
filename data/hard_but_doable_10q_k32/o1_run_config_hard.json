@@ -1,0 +1,13 @@
+{
+  "model": "o1",
+  "effort": "medium",
+  "n_samples": 32,
+  "max_output_tokens": 40000,
+  "endpoint": "/v1/responses",
+  "dataset": "tyrtleli/thinking-benchmark-hard-but-doable-10",
+  "split": "test",
+  "run_name": "hard_but_doable_10q_k32",
+  "matches": "data/hard_but_doable_10q_k32/*_requests.jsonl",
+  "git_commit": "f223c0a40356c43803f5a61c1b3a830b83a86d92",
+  "utc": "2026-09-16T20:43:43.717688Z"
+}
