@@ -29,7 +29,6 @@ OUT = os.path.join(os.path.dirname(HERE), "figures", "figs_sept")
 _D = pf.RESULTS_DIR
 
 FABLE_SHALLOW = [
-    ("Fable 5",   datetime(2026, 6, 9), _D / "fable5_shallow_pass" / "claude-fable-5_medium_thinking_benchmark.json"),
     ("Fable 5.1", datetime(2026, 9, 1), _D / "fable5.1_shallow_pass" / "claude-fable-5-1_medium_thinking_benchmark.json"),
 ]
 ANTH_SHALLOW = sorted(pf.OPUS_MODELS + FABLE_SHALLOW, key=lambda t: t[1])
@@ -59,11 +58,12 @@ def series(ax, model_files, color, family):
                label=family)
     for xi, yi, name in zip(x, y, labs):
         ax.annotate(clean_label(name), (xi, yi), textcoords="offset points",
-                    xytext=(6, 6), fontsize=8.5, fontweight="bold", color=color, zorder=6)
+                    xytext=(6, 6), fontsize=12, fontweight="bold", color=color, zorder=6)
     return x, y
 
 
 use_style()
+plt.rcParams.update({"axes.labelsize": 17, "xtick.labelsize": 16, "ytick.labelsize": 16})
 fig, ax = plt.subplots(figsize=(11, 7.5))
 series(ax, pf.MAIN_K8, OAI_C, "OpenAI (GPT)")
 series(ax, ANTH_SHALLOW, ANT_C, "Anthropic (Opus + Fable)")
@@ -75,10 +75,9 @@ ax.yaxis.set_major_formatter(unit_formatter(1e3, "k"))
 ax.set_ylim(bottom=0)
 # "better" corner cue
 ax.annotate("more efficient  +  more accurate", xy=(0.98, 0.03), xycoords="axes fraction",
-            ha="right", va="bottom", fontsize=10, style="italic", color="#666666")
-ax.legend(loc="upper left", frameon=True, framealpha=0.95, fontsize=11)
-fig.suptitle("The token/accuracy Pareto: each generation trades along the frontier",
-             fontsize=15, fontweight="bold", y=0.97)
-plt.tight_layout(rect=[0, 0, 1, 0.96])
+            ha="right", va="bottom", fontsize=13, style="italic", color="#666666")
+ax.legend(loc="upper left", frameon=True, framealpha=0.95, fontsize=14)
+# never include titles — captions live in the paper
+plt.tight_layout(rect=[0, 0, 1, 1.0])
 paths = save_figure(fig, "fig3_pareto", outdir=OUT)
 print("wrote", *paths, sep="\n  ")

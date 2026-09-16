@@ -595,7 +595,7 @@ def _fit_headroom_forecast(model_files, exclude_baseline=True, successes_only=Tr
                     continue
                 if successes_only and not c:            # drop incorrect traces
                     continue
-                hr = tok / CANON[tid]["mean"]
+                hr = tok / CANON[tid]["min"]
                 rows.append({"problem": tid, "month": month, "headroom": hr})
                 hrs.append(hr)
         exc = np.array([h - 1 for h in hrs if h > 1])
@@ -636,6 +636,8 @@ def _fit_headroom_forecast(model_files, exclude_baseline=True, successes_only=Tr
         "mile": mile, "baseline_label": baseline_label,
         "quarterly_pct": (1 - q_factor) * 100, "t0": model_files[-1][1],
         "exclude_baseline": exclude_baseline, "successes_only": successes_only,
+        "res": res, "beta": b, "beta_se": res.bse["month"],
+        "n_obs": int(res.nobs), "n_problems": int(fitdf["problem"].nunique()),
     }
 
 

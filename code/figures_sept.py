@@ -104,11 +104,12 @@ def _trial_ok(tok, txt):
     return tok >= 50 and not (txt is not None and not str(txt).strip())
 
 
-def valid_stats(model_files, correct_only=False):
+def valid_stats(model_files, correct_only=False, restrict_canon=False):
     """Per-model (mean tokens, accuracy) over the shared problem set, using the
     corrected valid-trial filter. If correct_only, token means use correct
     trials only ('tokens to correctly solve'); accuracy always uses all valid
-    trials. Accepts str or Path file entries."""
+    trials. If restrict_canon, keep only the 45 problems with a canonical
+    solution (drops the 2 frontiermath problems). Accepts str or Path entries."""
     import os
     dates, labels, per_mean, per_corr = [], [], [], []
     for label, date, path in model_files:
@@ -118,6 +119,8 @@ def valid_stats(model_files, correct_only=False):
         mb, cb = {}, {}
         for r in load_rows(path):
             tid = str(r["task_id"]); n = len(r["correct"])
+            if restrict_canon and tid not in pf.CANON_KEYS:
+                continue
             texts = r.get("response_texts", [None] * n)
             toks, corr = [], []
             for tok, c, txt in zip(r["total_completion_tokens"], r["correct"], texts):

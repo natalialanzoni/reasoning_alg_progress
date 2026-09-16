@@ -35,7 +35,6 @@ YCLIP = 25000           # shared token axis; clip the long early-generation tail
 
 # Anthropic hard-but-doable = Opus + Fable, date-ordered (matches Figure 1).
 FABLE_HARD = [
-    ("claude-fable-5",   datetime(2026, 6, 9), _D / "hard_but_doable_10q_k32" / "claude-fable-5_medium_thinking_benchmark_hard_but_doable_10.json"),
     ("claude-fable-5-1", datetime(2026, 9, 1), _D / "hard_but_doable_10q_k32" / "claude-fable-5-1_medium_thinking_benchmark_hard_but_doable_10.json"),
 ]
 GPT_HARD = fs.GPT_HARD
@@ -76,7 +75,7 @@ def model_samples(path):
 
 def canonical_floor(keys):
     ks = [k for k in keys if k in pf.CANON_KEYS]
-    return float(np.mean([pf.CANON[k]["mean"] for k in ks])) if ks else None
+    return float(np.mean([pf.CANON[k]["min"] for k in ks])) if ks else None
 
 
 def plot_row(ax, hard_files, title):
@@ -108,35 +107,35 @@ def plot_row(ax, hard_files, title):
     floor = canonical_floor(keys)
     if floor:
         ax.axhline(floor, ls="--", lw=1.6, color=FLOOR_C, zorder=4)
-        ax.text(0.015, 0.955, f"Irreducible reasoning ≈ {floor:,.0f} tokens",
-                transform=ax.transAxes, ha="left", va="top", fontsize=12,
+        ax.text(0.015, 0.955, f"Minimal human derivation ≈ {floor:,.0f} tokens",
+                transform=ax.transAxes, ha="left", va="top", fontsize=15,
                 fontweight="bold", color=FLOOR_C, zorder=8,
                 bbox=dict(boxstyle="round,pad=0.3", fc="white", ec=FLOOR_C, alpha=0.9))
 
-    ax.set_xticks(pos); ax.set_xticklabels(labels, fontsize=10)
+    ax.set_xticks(pos); ax.set_xticklabels(labels, fontsize=14)
     ax.set_xlim(-0.6, n - 0.4)
     ax.set_ylim(0, YCLIP)
-    ax.set_title(title, fontsize=13, fontweight="bold", loc="left")
+    ax.set_title(title, fontsize=16, fontweight="bold", loc="left")
     ax.set_ylabel("Output tokens")
     ax.yaxis.set_major_formatter(unit_formatter(1e3, "k"))
 
 
 use_style()
+plt.rcParams.update({"axes.labelsize": 17, "xtick.labelsize": 16, "ytick.labelsize": 16,
+                     "axes.titlesize": 18})
 
 
-def build(fname, title):
+def build(fname):
     fig, axes = plt.subplots(2, 1, figsize=(13, 10), gridspec_kw={"hspace": 0.32})
     plot_row(axes[0], GPT_HARD, "OpenAI (GPT)")
     plot_row(axes[1], ANTH_HARD, "Anthropic (Opus + Fable)")
-    fig.suptitle(title, fontsize=16, fontweight="bold", y=0.98)
-    plt.tight_layout(rect=[0, 0, 1, 0.96])
+    # never include titles — captions live in the paper
+    plt.tight_layout(rect=[0, 0, 1, 1.0])
     return save_figure(fig, fname, outdir=OUT)
 
 
 CORRECT_ONLY = False
-p1 = build("fig2_hard_distributions",
-           "Hard-but-doable problems collapse toward the canonical floor")
+p1 = build("fig2_hard_distributions")
 CORRECT_ONLY = True   # success-only replicate (correct trials only)
-p2 = build("fig2_hard_distributions_success",
-           "Correct solves only: hard-but-doable problems collapse toward the floor")
+p2 = build("fig2_hard_distributions_success")
 print("wrote", *p1, *p2, sep="\n  ")
