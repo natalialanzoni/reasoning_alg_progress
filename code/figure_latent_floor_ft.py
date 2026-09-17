@@ -45,20 +45,30 @@ MODELS = [
 
 
 def load(fn):
-    ratios, latent, latent_ok, below, n = [], 0, 0, 0, 0
+    # ratios are relative to the MINIMAL human derivation (shortest canonical)
+    ratios, latent, latent_ok, below, below_mean, n = [], 0, 0, 0, 0, 0
     for r in pf.load_rows(D / fn):
-        tid = str(r["task_id"]); cj = pf.CANON.get(tid, {}).get("mean")
+        tid = str(r["task_id"]); cj = pf.CANON.get(tid, {})
+        mn, me = cj.get("min"), cj.get("mean")
         tt = r.get("thinking_tokens", [None] * len(r["correct"]))
         for tok, c, th in zip(r["total_completion_tokens"], r["correct"], tt):
             n += 1
             if th == 0:
                 latent += 1; latent_ok += int(c)
-            if cj:
-                ratios.append(tok / cj)
-                if tok < cj:
+            if mn and c:                     # distance-to-floor: correct traces only
+                ratios.append(tok / mn)
+                if tok < mn:
                     below += 1
+                if me and tok < me:
+                    below_mean += 1
+    nc = max(1, len(ratios))     # correct traces (matches the violin population)
     return dict(n=n, latent_pct=100 * latent / n, latent_ok=(100 * latent_ok / latent if latent else 0),
-                below_pct=100 * below / n, ratios=np.array(ratios))
+                below_pct=100 * below / nc, below_mean_pct=100 * below_mean / nc, ratios=np.array(ratios))
+
+
+# average human solution as a multiple of the MHD (shortest), over these problems
+_k = [str(r["task_id"]) for r in pf.load_rows(D / MODELS[0][1]) if str(r["task_id"]) in pf.CANON_KEYS]
+MEAN_REF = float(np.median([pf.CANON[k]["mean"] / pf.CANON[k]["min"] for k in _k]))
 
 
 labels = [m for m, _ in MODELS]
@@ -86,24 +96,28 @@ axA.yaxis.set_major_formatter(unit_formatter(1, "%", "{:.0f}"))
 axA.set_title("Latent reasoning (no explicit thinking)", fontsize=15, fontweight="bold", loc="left")
 axA.set_xticks(x); axA.set_xticklabels(labels, fontsize=12, rotation=20, ha="right")
 
-# ---- Panel B: distance to the canonical floor (L / C_j) ----
-axB.axhspan(1e-2, 1.0, color=ACC, alpha=0.08, zorder=0)   # "below canonical" band
-axB.axhline(1.0, color=ACC, lw=2.2, zorder=3)
+# ---- Panel B: distance to the minimal human derivation (L / MHD) ----
+axB.axhspan(1e-2, 1.0, color=ACC, alpha=0.08, zorder=0)          # below the MHD floor
+axB.axhline(1.0, color=ACC, lw=2.2, zorder=3)                    # minimal human derivation
+axB.axhline(MEAN_REF, color="#8A8A8A", lw=1.8, ls="--", zorder=3)  # average human solution
 parts = axB.violinplot([s["ratios"] for s in stats], positions=x, widths=0.8,
                        showmedians=True, showextrema=False)
 for b, c in zip(parts["bodies"], colors):
     b.set_facecolor(c); b.set_alpha(0.6); b.set_edgecolor(c)
 parts["cmedians"].set_color(TOK); parts["cmedians"].set_linewidth(2)
 for xi, s in zip(x, stats):
-    if s["below_pct"] > 0.5:
-        axB.annotate(f"{s['below_pct']:.0f}%\nbelow", (xi, 0.62), ha="center", va="center",
-                     fontsize=10, fontweight="bold", color=ACC)
+    if s["below_mean_pct"] > 3:      # share beating the average human solution
+        axB.annotate(f"{s['below_mean_pct']:.0f}%\n<avg", (xi, MEAN_REF * 0.78), ha="center",
+                     va="center", fontsize=10, fontweight="bold", color="#5A5A5A")
 axB.set_yscale("log")
-axB.set_ylim(0.3, 40)
-axB.set_ylabel("Trace length / canonical solution")
-axB.set_title("Distance to the canonical floor", fontsize=15, fontweight="bold", loc="left")
-axB.annotate("canonical floor (1×)", (len(MODELS) - 0.5, 1.0), textcoords="offset points",
+axB.set_ylim(0.5, 60)
+axB.set_ylabel("Trace length / minimal human derivation")
+axB.set_title("Distance to the minimal human derivation", fontsize=15, fontweight="bold", loc="left")
+axB.annotate("minimal human derivation (1×)", (len(MODELS) - 0.5, 1.0), textcoords="offset points",
              xytext=(0, 4), ha="right", va="bottom", fontsize=11, fontweight="bold", color=ACC)
+axB.annotate(f"average human solution (≈{MEAN_REF:.1f}×)", (len(MODELS) - 0.5, MEAN_REF),
+             textcoords="offset points", xytext=(0, 4), ha="right", va="bottom",
+             fontsize=10.5, fontweight="bold", color="#5A5A5A")
 axB.set_xticks(x); axB.set_xticklabels(labels, fontsize=12, rotation=20, ha="right")
 
 plt.tight_layout()

@@ -119,7 +119,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_02",
@@ -241,7 +251,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_03",
@@ -363,7 +383,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_04",
@@ -485,7 +515,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_05",
@@ -607,7 +647,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_06",
@@ -729,7 +779,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_07",
@@ -851,7 +911,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_08",
@@ -973,7 +1043,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_09",
@@ -1095,7 +1175,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_10",
@@ -1217,7 +1307,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_11",
@@ -1339,7 +1439,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_12",
@@ -1461,7 +1571,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_13",
@@ -1583,7 +1703,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_14",
@@ -1705,7 +1835,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_15",
@@ -1827,7 +1967,17 @@
       true,
       true
     ],
-    "removed_from_dataset": true
+    "removed_from_dataset": true,
+    "correct_original": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
   },
   {
     "task_id": "aime_2026_ii_01",
@@ -1949,7 +2099,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_03",
@@ -2071,7 +2231,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_04",
@@ -2193,7 +2363,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_05",
@@ -2315,7 +2495,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_06",
@@ -2437,7 +2627,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_07",
@@ -2559,7 +2759,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_08",
@@ -2681,7 +2891,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_09",
@@ -2803,7 +3023,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_10",
@@ -2925,7 +3155,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_11",
@@ -3047,7 +3287,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_12",
@@ -3169,7 +3419,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_13",
@@ -3291,7 +3551,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_14",
@@ -3413,7 +3683,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_15",
@@ -3535,7 +3815,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false
+    ]
   },
   {
     "task_id": "frontiermath_tier1_counting_nonzero_solutions",
@@ -3574,7 +3864,7 @@
       true,
       true,
       true,
-      false
+      true
     ],
     "prompt_length_tokens": [
       96,
@@ -3657,7 +3947,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false
+    ]
   },
   {
     "task_id": "frontiermath_tier2_recursive_permutations",
@@ -3779,7 +4079,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "frontiermath_tier3_artin_primitive_root_density",
@@ -3901,7 +4211,17 @@
       true,
       true
     ],
-    "removed_from_dataset": true
+    "removed_from_dataset": true,
+    "correct_original": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_algnt_04",
@@ -4023,7 +4343,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_comb_05",
@@ -4145,7 +4475,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_comb_06",
@@ -4267,7 +4607,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_comb_07",
@@ -4389,7 +4739,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_comb_08",
@@ -4511,7 +4871,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_comb_09",
@@ -4633,7 +5003,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_geo_05",
@@ -4755,7 +5135,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_geo_06",
@@ -4877,7 +5267,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_geo_07",
@@ -4913,7 +5313,7 @@
       true,
       true,
       true,
-      false,
+      true,
       true,
       true,
       true
@@ -4999,7 +5399,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_geo_08",
@@ -5121,7 +5531,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_geo_09",
@@ -5243,7 +5663,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_geo_10",
@@ -5365,7 +5795,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "math_500_0136",
@@ -5487,7 +5927,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "math_500_0148",
@@ -5609,7 +6059,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "math_500_0158",
@@ -5731,7 +6191,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "math_500_0200",
@@ -5853,7 +6323,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "math_500_0369",
@@ -5975,7 +6455,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "olymmath_0485",
@@ -6097,7 +6587,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "olymmath_0488",
@@ -6219,7 +6719,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "olymmath_0491",
@@ -6341,7 +6851,17 @@
       false,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true
+    ]
   },
   {
     "task_id": "olymmath_0492",
@@ -6463,7 +6983,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "olymmath_0494",
@@ -6585,7 +7115,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "olymmath_0500",
@@ -6707,7 +7247,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "olymmath_0506",
@@ -6829,7 +7379,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false
+    ]
   },
   {
     "task_id": "olymmath_0518",
@@ -6951,7 +7511,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "olymmath_0527",
@@ -7073,7 +7643,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "olymmath_0531",
@@ -7195,7 +7775,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "olymmath_0536",
@@ -7317,7 +7907,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "olymmath_0541",
@@ -7439,7 +8039,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "olymmath_0543",
@@ -7561,7 +8171,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "olymmath_0549",
@@ -7683,7 +8303,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "olymmath_0551",
@@ -7805,7 +8435,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "olymmath_0552",
@@ -7927,7 +8567,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "olymmath_0571",
@@ -8049,7 +8699,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "olymmath_0573",
@@ -8171,7 +8831,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "olymmath_0574",
@@ -8293,7 +8963,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "olymmath_0587",
@@ -8415,7 +9095,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "olymmath_0589",
@@ -8537,7 +9227,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "olymmath_0590",
@@ -8659,7 +9359,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
   },
   {
     "task_id": "olymmath_0591",
@@ -8781,7 +9491,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+    ]
   },
   {
     "task_id": "olymmath_0595",
@@ -8903,7 +9623,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "olymmath_0600",
@@ -9025,7 +9755,17 @@
       true,
       true
     ],
-    "removed_from_dataset": true
+    "removed_from_dataset": true,
+    "correct_original": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false
+    ]
   },
   {
     "task_id": "olymmath_0601",
@@ -9147,7 +9887,17 @@
       true,
       true
     ],
-    "removed_from_dataset": true
+    "removed_from_dataset": true,
+    "correct_original": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
   },
   {
     "task_id": "olymmath_0613",
@@ -9269,7 +10019,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "olymmath_0614",
@@ -9391,7 +10151,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "olymmath_0616",
@@ -9513,7 +10283,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "olymmath_0617",
@@ -9635,7 +10415,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "olymmath_0623",
@@ -9757,7 +10547,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "olymmath_0626",
@@ -9879,7 +10679,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      false,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true
+    ]
   },
   {
     "task_id": "olymmath_0632",
@@ -10001,7 +10811,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "olymmath_0634",
@@ -10033,7 +10853,7 @@
       "Let  \n\\[\nF=b_1+b_2+\\cdots+b_{n-1}+\\frac43 b_n,\n\\qquad \nb_k=\\sqrt{1-\\frac1{16^k}}\\sqrt{a_1^2+\\cdots+a_k^2}.\n\\]\n\nWe want the minimum of \\(F\\) under\n\\[\na_1+\\cdots+a_n=1.\n\\]\n\n---\n\n## 1. Construct suitable vectors\n\nFor \\(1\\le k\\le n-1\\), define the \\(n\\)-dimensional vector\n\\[\nu^{(k)}=\\left(\\frac{\\sqrt{15}}{4^k},\\frac{\\sqrt{15}}{4^{k-1}},\\dots,\\frac{\\sqrt{15}}4,0,\\dots,0\\right),\n\\]\nwhose first \\(k\\) entries are\n\\[\n\\frac{\\sqrt{15}}{4^k},\\frac{\\sqrt{15}}{4^{k-1}},\\dots,\\frac{\\sqrt{15}}4.\n\\]\nAlso define\n\\[\nu^{(n)}=\\left(\\frac{\\sqrt{15}}{3\\cdot 4^{\\,n-1}},\\frac{\\sqrt{15}}{3\\cdot 4^{\\,n-2}},\\dots,\\frac{\\sqrt{15}}3\\right).\n\\]\n\nLet\n\\[\nx^{(k)}=(a_1,\\dots,a_k,0,\\dots,0), \\qquad x=(a_1,\\dots,a_n).\n\\]\n\n---\n\n## 2. Compute the norms of these vectors\n\nFor \\(1\\le k\\le n-1\\),\n\\[\n\\|u^{(k)}\\|^2\n=\\frac{15}{16^k}\\left(1+16+\\cdots+16^{k-1}\\right)\n=\\frac{15}{16^k}\\cdot\\frac{16^k-1}{15}\n=1-\\frac1{16^k}.\n\\]\nSo\n\\[\n\\|u^{(k)}\\|=\\sqrt{1-\\frac1{16^k}}.\n\\]\n\nSimilarly,\n\\[\n\\|u^{(n)}\\|^2\n=\\frac{15}{9\\cdot 16^{n-1}}\\left(1+16+\\cdots+16^{n-1}\\right)\n=\\frac{16^n-1}{9\\cdot 16^{n-1}}\n=\\frac{16}{9}\\left(1-\\frac1{16^n}\\right),\n\\]\nhence\n\\[\n\\|u^{(n)}\\|=\\frac43\\sqrt{1-\\frac1{16^n}}.\n\\]\n\nTherefore, by Cauchy-Schwarz,\n\\[\nb_k=\\sqrt{1-\\frac1{16^k}}\\;\\|x^{(k)}\\|\n\\ge \\langle x^{(k)},u^{(k)}\\rangle\n=\\langle x,u^{(k)}\\rangle\n\\quad (1\\le k\\le n-1),\n\\]\nand\n\\[\n\\frac43 b_n\n=\\frac43\\sqrt{1-\\frac1{16^n}}\\;\\|x\\|\n\\ge \\langle x,u^{(n)}\\rangle.\n\\]\n\nSo\n\\[\nF\\ge \\left\\langle x,\\sum_{k=1}^n u^{(k)}\\right\\rangle.\n\\]\n\n---\n\n## 3. Sum the vectors componentwise\n\nFix \\(i\\in\\{1,\\dots,n\\}\\). The \\(i\\)-th component of \\(u^{(k)}\\) for \\(k\\ge i\\), \\(k\\le n-1\\), is\n\\[\n\\sqrt{15}\\,4^{\\,i-1-k}.\n\\]\nThe \\(i\\)-th component of \\(u^{(n)}\\) is\n\\[\n\\frac{\\sqrt{15}}3\\,4^{\\,i-n}.\n\\]\n\nThus\n\\[\n\\sum_{k=1}^n (u^{(k)})_i\n=\n\\sum_{k=i}^{n-1}\\sqrt{15}\\,4^{i-1-k}\n+\\frac{\\sqrt{15}}3\\,4^{i-n}.\n\\]\nLet \\(m=k-i\\). Then\n\\[\n\\sum_{k=i}^{n-1}\\sqrt{15}\\,4^{i-1-k}\n=\n\\sqrt{15}\\sum_{m=0}^{n-1-i}4^{-1-m}\n=\n\\sqrt{15}\\cdot \\frac13\\left(1-4^{i-n}\\right).\n\\]\nSo\n\\[\n\\sum_{k=1}^n (u^{(k)})_i\n=\n\\frac{\\sqrt{15}}3\\left(1-4^{i-n}\\right)\n+\\frac{\\sqrt{15}}3\\,4^{i-n}\n=\n\\frac{\\sqrt{15}}3.\n\\]\n\nHence\n\\[\n\\sum_{k=1}^n u^{(k)}=\\left(\\frac{\\sqrt{15}}3,\\dots,\\frac{\\sqrt{15}}3\\right).\n\\]\n\nTherefore\n\\[\nF\\ge \\left\\langle x,\\left(\\frac{\\sqrt{15}}3,\\dots,\\frac{\\sqrt{15}}3\\right)\\right\\rangle\n=\n\\frac{\\sqrt{15}}3(a_1+\\cdots+a_n)\n=\n\\frac{\\sqrt{15}}3.\n\\]\n\nSo we have the lower bound\n\\[\nF\\ge \\frac{\\sqrt{15}}3.\n\\]\n\n---\n\n## 4. Show the bound is attainable\n\nTake\n\\[\na_i=\\frac{3\\cdot 4^{i-1}}{4^n-1}\\qquad (1\\le i\\le n).\n\\]\nThen\n\\[\n\\sum_{i=1}^n a_i=\\frac{3(1+4+\\cdots+4^{n-1})}{4^n-1}=1.\n\\]\nAlso each prefix \\((a_1,\\dots,a_k)\\) is proportional to\n\\[\n(1,4,\\dots,4^{k-1}),\n\\]\nwhich is exactly the direction of \\(u^{(k)}\\), and \\(x\\) is in the direction of \\(u^{(n)}\\). Hence equality holds in every Cauchy-Schwarz step, so\n\\[\nF=\\frac{\\sqrt{15}}3.\n\\]\n\nThus the minimum value is\n\n\\[\n\\boxed{\\frac{\\sqrt{15}}3}.\n\\]"
     ],
     "correct": [
-      false,
+      true,
       true,
       true,
       true,
@@ -10123,7 +10943,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "olymmath_0637",
@@ -10245,7 +11075,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "olymmath_0644",
@@ -10367,7 +11207,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
   },
   {
     "task_id": "olymmath_0646",
@@ -10489,7 +11339,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      false,
+      true,
+      false,
+      true,
+      false
+    ]
   },
   {
     "task_id": "olymmath_0661",
@@ -10611,7 +11471,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "olymmath_0663",
@@ -10645,11 +11515,11 @@
     "correct": [
       true,
       true,
-      false,
       true,
       true,
-      false,
-      false,
+      true,
+      true,
+      true,
       true
     ],
     "prompt_length_tokens": [
@@ -10733,7 +11603,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      false,
+      true,
+      true,
+      false,
+      false,
+      true
+    ]
   },
   {
     "task_id": "olymmath_0667",
@@ -10855,7 +11735,17 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "olymmath_0669",
@@ -10977,6 +11867,16 @@
       true,
       true
     ],
-    "removed_from_dataset": false
+    "removed_from_dataset": false,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   }
 ]

@@ -176,7 +176,14 @@ def _sympy_equivalent(extracted, gold):
 
 
 def is_correct(extracted, gold):
-    """Cascading equivalence: normalized string -> integer -> float -> sympy symbolic."""
+    """Cascading equivalence: normalized string -> integer -> float -> sympy symbolic.
+
+    WARNING: this grader is BRITTLE and under-counts terse/efficient models (it fails
+    on answer prefixes, work-in-\\boxed{}, units, leading zeros, equivalent radicals).
+    It was the source of a systematic grading bias — see archive/README.md. For grading
+    results, use the robust grader in code/regrade.py::is_correct instead. This function
+    is retained only for backward compatibility with old run scripts.
+    """
     a = normalize(extracted)
     b = normalize(gold)
     if a is None or b is None:
@@ -239,6 +246,13 @@ def main():
     parser.add_argument("--n-samples", type=int, default=1)
     parser.add_argument("--n-problems", type=int, default=None,
                         help="Limit to first N problems. Default = all in the split.")
+    parser.add_argument("--task-ids-file", default=None,
+                        help="Path to a newline-delimited list of task ids. If given, "
+                             "restrict the run to exactly those problems (order and "
+                             "membership from the file). Use to run only the canonical "
+                             "subset so results drop into the figures unchanged. "
+                             "Composes with everything else; only model params are "
+                             "unaffected (this just subsets which problems are sent).")
     parser.add_argument("--max-tokens", type=int, default=100000)
     parser.add_argument("--run-name", default=None,
                         help="Subfolder under results/. Defaults to a timestamp.")
@@ -297,6 +311,15 @@ def main():
     problems = list(ds)
     if args.n_problems is not None:
         problems = problems[:args.n_problems]
+    if args.task_ids_file:
+        wanted = [ln.strip() for ln in Path(args.task_ids_file).expanduser().read_text().splitlines()
+                  if ln.strip()]
+        by_id = {str(p["id"]): p for p in problems}
+        missing = [t for t in wanted if t not in by_id]
+        problems = [by_id[t] for t in wanted if t in by_id]
+        print(f"  restricted to {len(problems)} task id(s) from {args.task_ids_file}"
+              + (f"; {len(missing)} not found in split: {missing[:5]}"
+                 f"{'...' if len(missing) > 5 else ''}" if missing else ""))
     print(f"  {len(problems)} problems loaded.")
 
     # Some benchmark datasets ship only ids/metadata (no full `problem` text, and

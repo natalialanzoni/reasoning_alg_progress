@@ -118,7 +118,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_02",
@@ -239,7 +249,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_03",
@@ -360,7 +380,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_04",
@@ -481,7 +511,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_05",
@@ -602,7 +642,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_06",
@@ -723,7 +773,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_07",
@@ -844,7 +904,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_08",
@@ -965,7 +1035,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_09",
@@ -1086,7 +1166,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_10",
@@ -1207,7 +1297,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_11",
@@ -1328,7 +1428,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_12",
@@ -1449,7 +1559,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_13",
@@ -1570,7 +1690,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_14",
@@ -1691,7 +1821,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_01",
@@ -1812,7 +1952,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_03",
@@ -1933,7 +2083,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_04",
@@ -2054,7 +2214,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_05",
@@ -2175,7 +2345,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_06",
@@ -2296,7 +2476,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_07",
@@ -2417,7 +2607,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_08",
@@ -2459,11 +2659,11 @@
       "## Setting Up Coordinates\n\nLet $AB = BC = a$ and $AC = b$. Place $A=(0,0)$, $C=(b,0)$, $B=(b/2, h)$ where $h^2 = a^2 - b^2/4$.\n\n**Finding the incenter:** Using the weighted formula (weights = opposite side lengths), the incenter lies at $x = b/2$ and \n$$y = r = \\frac{bh}{2a+b}.$$\n\n**Computing $AI$:**\n$$AI^2 = \\frac{b^2}{4} + \\frac{b^2 h^2}{(2a+b)^2} = \\frac{b^2}{4}\\cdot\\frac{(2a+b)^2 + 4a^2 - b^2}{(2a+b)^2}$$\n\nSince $(2a+b)^2 + 4a^2 - b^2 = 8a^2 + 4ab = 4a(2a+b)$:\n$$AI^2 = \\frac{b^2 \\cdot a}{2a+b} \\implies AI = b\\sqrt{\\frac{a}{2a+b}}.$$\n\nBy symmetry $CI = AI$, so the perimeter of $\\triangle AIC$ is $b + 2AI$.\n\n## Applying the Ratio\n\nLet $AI = m$ (must be an integer). Then:\n$$m^2 = \\frac{b^2 a}{2a+b} \\implies a = \\frac{b m^2}{b^2 - 2m^2}.$$\n\nThe perimeter ratio gives:\n$$\\frac{2a+b}{b+2m} = \\frac{125}{6} \\implies 12a = 119b + 250m \\implies a = \\frac{119b + 250m}{12}.$$\n\n## Solving the System\n\nSetting the two expressions for $a$ equal:\n$$12bm^2 = (119b + 250m)(b^2 - 2m^2)$$\n\nExpanding and simplifying:\n$$119b^3 + 250b^2m - 250bm^2 - 500m^3 = 0.$$\n\nDividing by $m^3$ and letting $t = b/m$:\n$$119t^3 + 250t^2 - 250t - 500 = 0.$$\n\nTesting $t = \\tfrac{10}{7}$:\n$$\\frac{17000 + 25000 - 17500 - 24500}{49} = 0. \\checkmark$$\n\nFactoring: $(7t-10)(17t^2 + 60t + 50) = 0$, and the quadratic has no positive rational roots. So the only valid solution is $t = \\tfrac{10}{7}$.\n\n## Getting the Sides\n\nLet $b = 10k$, $m = 7k$. Then:\n$$b^2 - 2m^2 = 100k^2 - 98k^2 = 2k^2, \\qquad bm^2 = 10k\\cdot 49k^2 = 490k^3$$\n$$a = \\frac{490k^3}{2k^2} = 245k.$$\n\nSo the sides are:\n$$AB = BC = 245k, \\quad AC = 10k, \\quad AI = CI = 7k.$$\n\n**Check:** Perimeter of $\\triangle ABC = 500k$, perimeter of $\\triangle AIC = 10k + 14k = 24k$, ratio $= \\frac{500}{24} = \\frac{125}{6}.$ \u2713  \nAll sides are integers, and triangle inequalities hold ($245+245 > 10$).\n\n## Minimum Value\n\nTaking $k = 1$ gives the minimum:\n$$AB = 245.$$\n\n\\boxed{245}"
     ],
     "correct": [
-      false,
-      false,
-      false,
       true,
-      false,
+      true,
+      true,
+      true,
+      true,
       true,
       true,
       true
@@ -2538,7 +2738,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      false,
+      false,
+      false,
+      true,
+      false,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_09",
@@ -2659,7 +2869,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_10",
@@ -2780,7 +3000,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_11",
@@ -2901,7 +3131,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_12",
@@ -3022,7 +3262,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_13",
@@ -3143,7 +3393,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_14",
@@ -3264,7 +3524,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_15",
@@ -3385,7 +3655,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "frontiermath_tier1_counting_nonzero_solutions",
@@ -3430,7 +3710,7 @@
       false,
       true,
       false,
-      false,
+      true,
       true,
       false,
       false,
@@ -3506,7 +3786,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      false,
+      true,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false
+    ]
   },
   {
     "task_id": "frontiermath_tier2_recursive_permutations",
@@ -3627,7 +3917,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "math_500_0136",
@@ -3748,7 +4048,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "math_500_0148",
@@ -3869,7 +4179,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "math_500_0158",
@@ -3990,7 +4310,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "math_500_0200",
@@ -4111,7 +4441,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "math_500_0369",
@@ -4232,7 +4572,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_comb_05",
@@ -4353,7 +4703,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_comb_06",
@@ -4395,13 +4755,13 @@
       "## Setting Up the Process\n\nLet $d$ be the current debt. Each day Derek subtracts $X \\in \\{1,2\\}$ (each with probability $1/2$). If $d - X \\le 0$ he becomes debt-free; otherwise the remaining debt **doubles**, so the new debt is $2(d-X)$.\n\nStarting from $w_0 = \\pi$, the recursion is:\n$$w_n = 2(w_{n-1} - X_n) = 2w_{n-1} - 2X_n.$$\n\n## Solving the Recursion\n\nUnrolling:\n$$w_n = 2^n\\!\\left(w_0 - \\sum_{k=1}^n X_k\\, 2^{1-k}\\right).$$\n\nDefine the partial sum:\n$$S_n = \\sum_{k=1}^n X_k\\, 2^{1-k}.$$\n\nAt step $n$, before doubling, the value is\n$$w_{n-1} - X_n = 2^{n-1}\\!\\left(w_0 - S_n\\right).$$\n\nSince $2^{n-1} > 0$, Derek becomes **debt-free at step $n$** precisely when\n$$S_n \\ge w_0 = \\pi.$$\n\n## The Key Observation\n\nBecause each $X_k > 0$, the sequence $S_n$ is **increasing**, converging to\n$$S_\\infty = \\sum_{k=1}^\\infty X_k\\, 2^{1-k}.$$\n\nSo Derek ever becomes debt-free **iff** $S_\\infty \\ge \\pi$.\n\n## Computing the Distribution of $S_\\infty$\n\nWrite $X_k = 1 + B_k$ with $B_k \\in \\{0,1\\}$ fair independent bits. Then\n$$S_\\infty = \\sum_{k=1}^\\infty (1+B_k)2^{1-k} = \\underbrace{\\sum_{k=1}^\\infty 2^{1-k}}_{=2} + 2\\sum_{k=1}^\\infty B_k 2^{-k}.$$\n\nThe sum $U = \\sum_{k=1}^\\infty B_k 2^{-k}$ is the binary expansion with fair bits, so $U$ is **uniform on $[0,1]$**. Therefore:\n$$S_\\infty = 2 + 2U, \\qquad S_\\infty \\sim \\text{Uniform}[2,4].$$\n\n## Final Probability\n\n$$P(\\text{debt-free}) = P(S_\\infty \\ge \\pi) = P\\!\\left(U \\ge \\tfrac{\\pi-2}{2}\\right) = 1 - \\frac{\\pi-2}{2} = \\frac{4-\\pi}{2}.$$\n\n$$\\boxed{\\dfrac{4-\\pi}{2}}$$"
     ],
     "correct": [
-      false,
       true,
       true,
       true,
       true,
       true,
-      false,
+      true,
+      true,
       true
     ],
     "prompt_length_tokens": [
@@ -4474,7 +4834,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_comb_07",
@@ -4595,7 +4965,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_comb_08",
@@ -4716,7 +5096,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_comb_09",
@@ -4837,7 +5227,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_geo_05",
@@ -4958,7 +5358,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_geo_06",
@@ -5000,14 +5410,14 @@
       "## Setting Up with the Law of Sines\n\nLet $BP = x$ and $CQ = y$, with $BM = MC = 4$.\n\n**In triangle $BPM$:** The angles are $\\angle B$ at $B$, $\\angle PMB = \\tfrac{A}{2}$ at $M$, so $\\angle BPM = 180\u00b0 - B - \\tfrac{A}{2}$. By the Law of Sines:\n$$x = BP = \\frac{BM \\sin\\frac{A}{2}}{\\sin\\left(B + \\frac{A}{2}\\right)}$$\n\n**In triangle $CQM$:** similarly\n$$y = CQ = \\frac{CM \\sin\\frac{A}{2}}{\\sin\\left(C + \\frac{A}{2}\\right)}$$\n\n## Key Simplification\n\nSince $A + B + C = 180\u00b0$, we have $\\frac{A}{2} = 90\u00b0 - \\frac{B+C}{2}$, so:\n$$B + \\frac{A}{2} = 90\u00b0 + \\frac{B-C}{2}, \\qquad C + \\frac{A}{2} = 90\u00b0 + \\frac{C-B}{2}$$\n\nTherefore:\n$$\\sin\\left(B+\\tfrac{A}{2}\\right) = \\sin\\left(C+\\tfrac{A}{2}\\right) = \\cos\\tfrac{B-C}{2}$$\n\nThis gives $x = y$, so **$BP = CQ = t$**. Then:\n$$AB = 1+t, \\quad AC = 3+t, \\quad t = \\frac{4\\sin\\frac{A}{2}}{\\cos\\frac{B-C}{2}} \\quad (\\star)$$\n\n## Using Law of Sines in Triangle $ABC$\n\nLet $2R$ be the circumdiameter. Then $AB = 2R\\sin C$, $AC = 2R\\sin B$, $BC = 8 = 2R\\sin A$.\n\n**Sum** $AB + AC = 4 + 2t$:\n$$2R(\\sin B + \\sin C) = 4R\\cos\\tfrac{A}{2}\\cos\\tfrac{B-C}{2} = 4+2t \\quad (1)$$\n\n**Product** relation from $BC$:\n$$8 = 4R\\sin\\tfrac{A}{2}\\cos\\tfrac{A}{2} \\quad (2)$$\n\nFrom $(2)$: $\\;4R\\cos\\frac{A}{2} = \\dfrac{8}{\\sin\\frac{A}{2}}$. Substituting into $(1)$:\n$$\\frac{8}{\\sin\\frac{A}{2}}\\cos\\tfrac{B-C}{2} = 4+2t \\;\\Longrightarrow\\; \\cos\\tfrac{B-C}{2} = \\frac{(2+t)\\sin\\frac{A}{2}}{4} \\quad (1')$$\n\n## Combining the Equations\n\nFrom $(\\star)$: \n$$\\cos\\tfrac{B-C}{2} = \\frac{4\\sin\\frac{A}{2}}{t}$$\n\nSetting this equal to $(1')$ and cancelling $\\sin\\frac{A}{2}$:\n$$\\frac{2+t}{4} = \\frac{4}{t} \\;\\Longrightarrow\\; t(2+t) = 16 \\;\\Longrightarrow\\; t^2 + 2t - 16 = 0$$\n\nSolving:\n$$t = \\frac{-2 + \\sqrt{4 + 64}}{2} = -1 + \\sqrt{17}$$\n\n**Verification:** Using $AC - AB = 2$ gives $\\sin\\frac{B-C}{2} = \\frac{\\cos\\frac{A}{2}}{4}$, and combined with the equations above yields $\\sin^2\\frac{A}{2} = \\frac{15}{17+2\\sqrt{17}} \\approx 0.594$, a valid value. \u2713\n\n$$\\boxed{BP = \\sqrt{17} - 1}$$"
     ],
     "correct": [
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
     ],
     "prompt_length_tokens": [
       219,
@@ -5079,7 +5489,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": false
+    "solved_at_least_once": true,
+    "correct_original": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_geo_07",
@@ -5126,7 +5546,7 @@
       true,
       true,
       true,
-      false,
+      true,
       true,
       true
     ],
@@ -5200,7 +5620,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_geo_08",
@@ -5242,14 +5672,14 @@
       "## Setting Up the Framework\n\nLet me place $A$ at the origin with the angle bisector along the positive $x$-axis, so $AB$ makes angle $+\\alpha$ and $AC$ makes angle $-\\alpha$ with the bisector, where $\\angle BAC = 2\\alpha$.\n\n**Key fact:** The circle through $A,B,H$ is the reflection of the circumcircle over line $AB$, so it has the **same radius** $R$ as the circumcircle. Similarly for circle $ACH$.\n\n## Computing the Chord Lengths\n\nUsing inscribed angles (with $k = 2R$), and verifying against direct coordinate computation:\n\n- **Circle $ABH$:** $\\quad AP = 2R\\sin(C - \\alpha)$\n- **Circle $ACH$:** $\\quad AQ = 2R\\sin(B - \\alpha)$  \n- **Circumcircle:** $\\quad AM = 2R\\sin(B + \\alpha)$\n- **Side:** $\\quad BC = 2R\\sin 2\\alpha$\n\nSince $C - \\alpha = 180^\\circ - 3\\alpha - B$, we have $AP = 2R\\sin(B+3\\alpha)$.\n\n**Substitution:** Let $u = B + \\alpha$. Then:\n$$AQ = k\\sin(u-2\\alpha)=5,\\quad AP = k\\sin(u+2\\alpha)=4,\\quad AM = k\\sin u,\\quad BC = k\\sin 2\\alpha = 7$$\n\n## Solving the System\n\n**Expand** using sum-to-product:\n\n$$\\sin(u-2\\alpha) = \\sin u\\cos 2\\alpha - \\cos u \\sin 2\\alpha = \\tfrac{5}{k}$$\n$$\\sin(u+2\\alpha) = \\sin u\\cos 2\\alpha + \\cos u \\sin 2\\alpha = \\tfrac{4}{k}$$\n\n**Subtracting:**\n$$-2\\cos u \\sin 2\\alpha = \\tfrac{1}{k} \\implies \\cos u \\sin 2\\alpha = -\\tfrac{1}{2k}$$\n\nSince $k\\sin 2\\alpha = 7$, i.e. $\\sin 2\\alpha = \\tfrac{7}{k}$:\n$$\\cos u \\cdot \\tfrac{7}{k} = -\\tfrac{1}{2k} \\implies \\boxed{\\cos u = -\\tfrac{1}{14}}$$\n\nTherefore:\n$$\\sin u = \\sqrt{1 - \\tfrac{1}{196}} = \\frac{\\sqrt{195}}{14}$$\n\n**Adding** the two expansions:\n$$2\\sin u\\cos 2\\alpha = \\tfrac{9}{k} \\implies k\\sin u \\cos 2\\alpha = \\tfrac{9}{2}$$\n\nSo:\n$$k\\cos 2\\alpha = \\frac{9/2}{\\sin u} = \\frac{9/2}{\\sqrt{195}/14} = \\frac{63}{\\sqrt{195}}$$\n\n## Finding AM\n\nUsing $k^2 = (k\\cos 2\\alpha)^2 + (k\\sin 2\\alpha)^2$:\n\n$$k^2 = \\frac{3969}{195} + 49 = \\frac{3969 + 9555}{195} = \\frac{13524}{195} = \\frac{4508}{65}$$\n\nNow:\n$$AM^2 = (k\\sin u)^2 = k^2 \\cdot \\frac{195}{196} = \\frac{4508}{65}\\cdot \\frac{195}{196} = \\frac{4508 \\cdot 3}{196} = \\frac{13524}{196} = \\frac{3381}{49}$$\n\nSince $3381 = 49 \\cdot 69$:\n$$AM = \\frac{\\sqrt{49 \\cdot 69}}{7} = \\frac{7\\sqrt{69}}{7} = \\sqrt{69}$$\n\n$$\\boxed{AM = \\sqrt{69}}$$"
     ],
     "correct": [
-      false,
-      false,
-      false,
-      false,
-      false,
       true,
       true,
-      false
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
     ],
     "prompt_length_tokens": [
       265,
@@ -5321,7 +5751,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_geo_09",
@@ -5363,14 +5803,14 @@
       "## Setting Up Coordinates\n\nPlace $A$ at the origin with the angle bisector along the $x$-axis. Let $\\alpha = A/2$. Any circle tangent to lines $AB$ and $AC$ has its center on this bisector, with radius $\\rho = d\\sin\\alpha$ for center at distance $d$.\n\n**Key observation:** Both $\\omega$ and $\\Gamma$ are tangent to $AB, AC$, so their centers lie on the bisector. Also, the circle $(BIC)$ is centered at the arc-midpoint of $BC$, which lies on the bisector. Thus **all centers lie on the $x$-axis**, and the common chord $EF$ is vertical: $x = x_0$.\n\n## Two Expressions for $x_0$\n\n**From $\\omega$ and $\\Gamma$:** With $\\omega$ centered at $d_1 = r/\\sin\\alpha$ (radius $r$) and $\\Gamma$ at $d_2 = 2r/\\sin\\alpha$ (radius $2r$), subtracting circle equations gives:\n$$x_0 = \\frac{3r}{2}\\cdot\\frac{\\cos^2\\alpha}{\\sin\\alpha}.$$\n\n**From $\\omega$ and $(BIC)$:** Let the center of $(BIC)$ be $(p,0)$, radius $\\rho = |p-t|$ where $t = AI = r/\\sin\\alpha = d_1$. Then $p^2 - \\rho^2 = 2pt - t^2$, giving:\n$$x_0 = t + \\frac{r^2}{2(p-t)}.$$\n\n## Simplifying $p - t$\n\nUsing $BI^2 = (s-b)^2 + r^2 = \\frac{ac(s-b)}{s}$ and $\\cos^2\\alpha = \\frac{s(s-a)}{bc}$, one finds:\n$$p - t = \\frac{BI^2}{2(c\\cos\\alpha - t)}, \\qquad c\\cos\\alpha - t = \\frac{(s-a)(s-b)}{b\\cos\\alpha}.$$\n\nThis simplifies beautifully:\n$$p - t = \\frac{abc\\cos\\alpha}{2s(s-a)}.$$\n\n## The Governing Equation\n\nSetting the two expressions for $x_0$ equal:\n$$\\frac{abc\\cos\\alpha}{2s(s-a)} = \\frac{r\\sin\\alpha}{3\\cos^2\\alpha - 2}.$$\n\nUsing $\\tan\\alpha = \\frac{r}{s-a}$ and $sr^2 = (s-a)(s-b)(s-c)$:\n$$3\\cos^2\\alpha - 2 = \\frac{2(s-a)(s-b)(s-c)}{abc}.$$\n\nSubstituting $\\cos^2\\alpha = \\frac{s(s-a)}{bc}$ and clearing denominators:\n$$3as(s-a) - 2abc = 2(s-a)(s-b)(s-c).$$\n\n## Solving with $b=7,\\ c=5$\n\nLet $x = s-a,\\ y=s-b,\\ z=s-c$. From $x+y=5$ and $x+z=7$: $y = 5-x$, $z = 7-x$, and $a = 12-2x$, $s = 12-x$. Substituting:\n\n$$3(12-2x)(12-x)x - 70(12-2x) = 2x(5-x)(7-x)$$\n\nExpanding both sides:\n$$6x^3 - 108x^2 + 572x - 840 = 2x^3 - 24x^2 + 70x$$\n$$2x^3 - 42x^2 + 251x - 420 = 0.$$\n\nFactoring out the root $x = 12$ (invalid since $x < 5$):\n$$(x-12)(2x^2 - 18x + 35) = 0.$$\n\nSolving $2x^2 - 18x + 35 = 0$:\n$$x = \\frac{9 \\pm \\sqrt{11}}{2}.$$\n\nOnly $x = \\frac{9-\\sqrt{11}}{2} \\approx 2.84$ lies in $(0,5)$.\n\n## Final Answer\n\n$$a = 12 - 2x = 12 - (9 - \\sqrt{11}) = 3 + \\sqrt{11}.$$\n\n$$\\boxed{BC = 3 + \\sqrt{11}}$$"
     ],
     "correct": [
+      true,
+      true,
+      true,
+      true,
       false,
       false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false
+      true,
+      true
     ],
     "prompt_length_tokens": [
       248,
@@ -5442,7 +5882,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": false
+    "solved_at_least_once": true,
+    "correct_original": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_geo_10",
@@ -5484,14 +5934,14 @@
       "## Setting Up Coordinates\n\nPlace $B=(0,0)$, $C=(a,0)$, and $A=(x,y)$ where $a = BC$.\n\nFrom the side lengths:\n- $AB=11$: $x^2+y^2=121$\n- $AC=13$: $(x-a)^2+y^2=169$\n\nSubtracting: $-2ax+a^2 = 48$, so \n$$x = \\frac{a^2-48}{2a}, \\qquad ax = \\frac{a^2-48}{2}.$$\n\n**Centroid:** $G = \\left(\\frac{a+x}{3}, \\frac{y}{3}\\right)$\n\n**Circumcenter:** $O = \\left(\\frac{a}{2}, k\\right)$. Using $OA=OB$:\n$$2ky = 121 - ax = 121 - \\frac{a^2-48}{2} = \\frac{290-a^2}{2} \\implies k = \\frac{290-a^2}{4y}.$$\n\n## Orthocenter Condition\n\nLet $H=(u,v)$ be the orthocenter of $\\triangle AGO$. Using perpendicularity:\n$$(H-A)\\cdot(O-G)=0, \\qquad (H-G)\\cdot(A-O)=0.$$\n\nLet $S = a-2x$. Then:\n- $O_x - G_x = \\frac{a}{2}-\\frac{a+x}{3} = \\frac{S}{6}$\n- $x - \\frac{a}{2} = -\\frac{S}{2}$, and $G_x - x = \\frac{S}{3}$\n\nRequiring $H$ on line $BC$ means $v=0$. Substituting $v=0$:\n\n**Equation 1:** $(u-x)\\frac{S}{6} - y\\left(k-\\tfrac{y}{3}\\right)=0 \\implies u = x + \\frac{6y(k-\\tfrac y3)}{S}$\n\n**Equation 2:** $(u-G_x)\\left(-\\tfrac{S}{2}\\right) - \\tfrac{y}{3}(y-k)=0 \\implies u = G_x + \\frac{2y(y-k)}{S}$\n\nSetting them equal and using $x-G_x=-\\frac{S}{3}$:\n$$\\frac{6y(k-\\tfrac y3)}{S} - \\frac{2y(y-k)}{S}\\cdot(-1)\\cdots$$\n\nCarefully combining (multiply through and simplify):\n$$18yQ + 2y(y-k) = S^2, \\quad Q = k-\\tfrac{y}{3}.$$\n\nNow:\n$$18y\\left(k-\\tfrac y3\\right) + 2y(y-k) = 18yk - 6y^2 + 2y^2 - 2yk = 16yk - 4y^2.$$\n\nSo:\n$$16yk - 4y^2 = S^2.$$\n\n## Solving\n\nSince $yk = \\frac{290-a^2}{4}$:\n$$16yk = 4(290-a^2) = 1160 - 4a^2.$$\n\nUsing $y^2 = 121 - x^2$:\n$$1160 - 4a^2 - 4(121-x^2) = S^2 = (a-2x)^2.$$\n\nLeft side: $676 - 4a^2 + 4x^2$. Right side: $a^2 - 4ax + 4x^2$. Cancel $4x^2$:\n$$676 - 4a^2 = a^2 - 4ax \\implies 676 = 5a^2 - 4ax.$$\n\nSubstitute $4ax = 2(a^2-48) = 2a^2 - 96$:\n$$676 = 5a^2 - 2a^2 + 96 = 3a^2 + 96.$$\n\nThus:\n$$3a^2 = 580 \\implies a^2 = \\frac{580}{3} \\implies a = \\frac{2\\sqrt{435}}{3}.$$\n\n$$\\boxed{BC = \\dfrac{2\\sqrt{435}}{3}}$$"
     ],
     "correct": [
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
     ],
     "prompt_length_tokens": [
       174,
@@ -5563,7 +6013,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": false
+    "solved_at_least_once": true,
+    "correct_original": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_algnt_04",
@@ -5605,14 +6065,14 @@
       "From equations 1 and 2, subtracting:\n\n$$a(b-c)+(b+c)(b-c)=3(b-c)$$\n\nSince $b\\neq c$: $a+b+c=3$.\n\n**Treating b, c symmetrically:** Both satisfy $x^2+ax+a^2=3(a+x)$, i.e.\n$$x^2+(a-3)x+(a^2-3a)=0.$$\nSo $b+c=3-a$ and $bc=a^2-3a$.\n\n**Using equation 3:**\n$$b^2+bc+c^2=(b+c)^2-bc=(3-a)^2-(a^2-3a)=9-3a.$$\n\nSet equal to $5(b+c)+1=5(3-a)+1=16-5a$:\n$$9-3a=16-5a\\implies 2a=7.$$\n\n$$\\boxed{a=\\dfrac{7}{2}}$$"
     ],
     "correct": [
-      false,
       true,
       true,
       true,
       true,
       true,
       true,
-      false
+      true,
+      true
     ],
     "prompt_length_tokens": [
       192,
@@ -5684,6 +6144,16 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false
+    ]
   }
 ]

@@ -118,7 +118,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_02",
@@ -239,7 +249,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_03",
@@ -360,7 +380,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_04",
@@ -406,8 +436,8 @@
       true,
       true,
       true,
-      false,
-      false,
+      true,
+      true,
       true,
       true
     ],
@@ -481,7 +511,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_05",
@@ -602,7 +642,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_06",
@@ -644,7 +694,7 @@
       "Let \\(t=\\log_{2026}x\\), so \\(x=2026^t\\). Taking logarithms base \\(2026\\) of\n\\[\n\\left(x^{\\log_{2026}x}\\right)^{1/20}=26x\n\\]\ngives\n\\[\n\\frac{t^2}{20}=\\log_{2026}26+t.\n\\]\nThus\n\\[\nt^2-20t-20\\log_{2026}26=0.\n\\]\n\nSince \\(\\log_{2026}26>0\\), this quadratic has two distinct real roots \\(t_1,t_2\\), each corresponding to a positive solution \\(x\\). By Vieta\u2019s formula,\n\\[\nt_1+t_2=20.\n\\]\nTherefore the product of all positive solutions is\n\\[\nP=2026^{t_1}2026^{t_2}=2026^{20}.\n\\]\n\nNow \\(2026=2\\cdot1013\\), where \\(1013\\) is prime (none of the primes at most \\(\\sqrt{1013}<32\\) divides it). Hence\n\\[\nP=2^{20}1013^{20},\n\\]\nso its number of positive integer divisors is\n\\[\n(20+1)(20+1)=\\boxed{441}.\n\\]"
     ],
     "correct": [
-      false,
+      true,
       true,
       true,
       true,
@@ -723,7 +773,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_07",
@@ -766,10 +826,10 @@
     ],
     "correct": [
       true,
-      false,
       true,
-      false,
-      false,
+      true,
+      true,
+      true,
       true,
       true,
       true
@@ -844,7 +904,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      false,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_08",
@@ -965,7 +1035,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_09",
@@ -1086,7 +1166,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_10",
@@ -1207,7 +1297,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_11",
@@ -1328,7 +1428,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_12",
@@ -1449,7 +1559,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_13",
@@ -1570,7 +1690,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_14",
@@ -1691,7 +1821,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_01",
@@ -1812,7 +1952,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_03",
@@ -1933,7 +2083,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_04",
@@ -1979,8 +2139,8 @@
       true,
       true,
       true,
-      false,
-      false,
+      true,
+      true,
       true,
       true
     ],
@@ -2054,7 +2214,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_05",
@@ -2175,7 +2345,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_06",
@@ -2296,7 +2476,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_07",
@@ -2417,7 +2607,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_08",
@@ -2538,7 +2738,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_09",
@@ -2659,7 +2869,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_10",
@@ -2780,7 +3000,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_11",
@@ -2901,7 +3131,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_12",
@@ -3022,7 +3262,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_13",
@@ -3143,7 +3393,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_14",
@@ -3185,7 +3445,7 @@
       "Let \\(S_i=a_1\\circ\\cdots\\circ a_i\\). Since addition and subtraction have the same effect on parity, \\(S_i\\) has the same parity as \\(a_1+\\cdots+a_i\\). Consequently:\n\n- Every odd entry is added.\n- An even entry is subtracted exactly when an odd number of odd entries precede it.\n\nThe sum of all entries is \\(12\\), while the signed sum is \\(0\\). Thus the added entries and subtracted entries each sum to \\(6\\).\n\n### 1. Organize the entries into gaps\nLet \\(k\\) be the number of odd entries. Because the total sum is even, \\(k\\) is even. Moreover, \\(k\\ge2\\) (otherwise nothing is subtracted), and \\(k\\le6\\) because all odd entries are added.\n\nWrite \\(k=2r\\). The even entries occupy the \\(2r+1\\) gaps before, between, and after the odd entries. Of these gaps:\n- \\(r\\) contain subtracted entries;\n- \\(r+1\\) contain added entries.\n\nLet \\(C_m(t)\\) count ways to fill \\(m\\) ordered gaps with sequences of positive even integers totaling \\(2t\\), allowing empty gaps. Clearly \\(C_m(0)=1\\). For \\(t>0\\), if there are \\(j\\) entries, dividing them by \\(2\\) gives a composition of \\(t\\), so\n\\[\nC_m(t)=\\sum_{j=1}^{t}\\binom{t-1}{j-1}\\binom{j+m-1}{m-1}.\n\\]\nThe needed values are\n\\[\nC_1(3)=4,\\qquad C_2(3)=12,\\qquad C_3(3)=25,\n\\]\nand\n\\[\nC_2(1)=2,\\qquad C_2(2)=5,\\qquad C_3(1)=3.\n\\]\n\n### 2. Count each possible number of odd entries\nIf the odd entries sum to \\(s\\), the added even entries sum to \\(6-s\\). The number of ordered \\(k\\)-tuples of positive odd integers summing to \\(s\\) is\n\\[\n\\binom{(s-k)/2+k-1}{k-1}.\n\\]\n\nTherefore:\n\\[\n\\begin{array}{c|c|c|c|c|c}\nk&s&\\text{Odd-entry choices}&\\text{Added-even choices}\n&\\text{Subtracted-even choices}&\\text{Total}\\\\ \\hline\n2&2&1&5&4&20\\\\\n2&4&2&2&4&16\\\\\n2&6&3&1&4&12\\\\\n4&4&1&3&12&36\\\\\n4&6&4&1&12&48\\\\\n6&6&1&1&25&25\n\\end{array}\n\\]\n\nAdding these disjoint cases gives\n\\[\n20+16+12+36+48+25=\\boxed{157}.\n\\]"
     ],
     "correct": [
-      false,
+      true,
       true,
       true,
       true,
@@ -3264,7 +3524,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_15",
@@ -3385,7 +3655,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "frontiermath_tier1_counting_nonzero_solutions",
@@ -3427,13 +3707,13 @@
       "We interpret \u201cnonzero points up to scaling\u201d as projective points \\([x:y:z]\\), with \\((x,y,z)\\ne(0,0,0)\\).\n\nLet\n\\[\nC:\\ x^3y+y^3z+z^3x=0.\n\\]\nThis is a smooth plane quartic in characteristic \\(5\\), hence has genus \\(3\\). (Indeed, simultaneous vanishing of the partial derivatives, with all coordinates nonzero, would imply \\(27=-1\\), impossible in characteristic \\(5\\); zero coordinates also give no singular points.)\n\n### 1. Determine the Frobenius polynomial\nLet \\(\\zeta\\) be a primitive seventh root of unity. The curve has the automorphism\n\\[\n\\sigma[x:y:z]=[\\zeta x:\\zeta^4y:\\zeta^2z],\n\\]\nsince each monomial in its equation is unchanged.\n\nOn the six-dimensional first cohomology of \\(C\\), the eigenvalues of \\(\\sigma\\) are\n\\[\n\\zeta,\\zeta^2,\\ldots,\\zeta^6,\n\\]\neach once. To see the characters, the regular differentials of this plane quartic have weights \\(1,4,2\\); their duals supply weights \\(6,3,5\\). These character multiplicities carry over to \\(\\ell\\)-adic cohomology by smooth lifting.\n\nFrobenius permutes these eigenspaces by multiplying their indices by \\(5\\) modulo \\(7\\) (or its inverse, depending on convention). Since\n\\[\n1\\longmapsto5\\longmapsto4\\longmapsto6\n\\longmapsto2\\longmapsto3\\longmapsto1,\n\\]\nthis is a single six-cycle. Consequently, the Frobenius characteristic polynomial has only its leading and constant terms. Its constant term is \\(5^3\\), so it is\n\\[\nP(T)=T^6+125.\n\\]\n\nThus the six Frobenius eigenvalues \\(\\alpha_1,\\ldots,\\alpha_6\\) satisfy\n\\[\n\\alpha_i^6=-125.\n\\]\n\n### 2. Count points over \\(\\mathbb F_{5^{18}}\\)\nThe Weil point-count formula gives\n\\[\n\\#C(\\mathbb F_{5^{18}})\n=5^{18}+1-\\sum_{i=1}^6\\alpha_i^{18}.\n\\]\nFor each eigenvalue,\n\\[\n\\alpha_i^{18}=(-125)^3=-5^9.\n\\]\nTherefore\n\\[\n\\#C(\\mathbb F_{5^{18}})\n=5^{18}+1+6\\cdot5^9\n=3{,}814{,}708{,}984{,}376.\n\\]\n\nProjective points already account for scaling, so no further division is needed.\n\n\\[\n\\boxed{3814708984376}\n\\]"
     ],
     "correct": [
-      false,
-      false,
-      false,
-      false,
       true,
-      false,
-      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
       true
     ],
     "prompt_length_tokens": [
@@ -3506,7 +3786,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      true
+    ]
   },
   {
     "task_id": "frontiermath_tier2_recursive_permutations",
@@ -3550,12 +3840,12 @@
     "correct": [
       true,
       true,
-      false,
       true,
       true,
       true,
       true,
-      false
+      true,
+      true
     ],
     "prompt_length_tokens": [
       235,
@@ -3627,7 +3917,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false
+    ]
   },
   {
     "task_id": "math_500_0136",
@@ -3748,7 +4048,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "math_500_0148",
@@ -3869,7 +4179,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "math_500_0158",
@@ -3990,7 +4310,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "math_500_0200",
@@ -4032,14 +4362,14 @@
       "From the parameterization,\n\\[\nx=8+2t,\\qquad y=-1+3t.\n\\]\nSolve for \\(t\\):\n\\[\nt=\\frac{x-8}{2}.\n\\]\nSubstitute into the equation for \\(y\\):\n\\[\ny=-1+3\\left(\\frac{x-8}{2}\\right)=\\frac32x-13.\n\\]\nThus,\n\\[\n\\boxed{\\left(\\frac32,-13\\right)}.\n\\]"
     ],
     "correct": [
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
     ],
     "prompt_length_tokens": [
       150,
@@ -4111,7 +4441,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": false
+    "solved_at_least_once": true,
+    "correct_original": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
   },
   {
     "task_id": "math_500_0369",
@@ -4232,7 +4572,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_comb_05",
@@ -4353,7 +4703,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_comb_06",
@@ -4402,7 +4762,7 @@
       true,
       true,
       true,
-      false
+      true
     ],
     "prompt_length_tokens": [
       139,
@@ -4474,7 +4834,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_comb_07",
@@ -4517,7 +4887,7 @@
     ],
     "correct": [
       true,
-      false,
+      true,
       true,
       true,
       true,
@@ -4595,7 +4965,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_comb_08",
@@ -4716,7 +5096,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_comb_09",
@@ -4837,7 +5227,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_geo_05",
@@ -4958,7 +5358,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_geo_06",
@@ -5000,14 +5410,14 @@
       "Let \\(\\theta=\\tfrac12\\angle BAC\\), \\(\\beta=\\angle ABC\\), and \\(\\gamma=\\angle ACB\\). Then\n\\[\n\\beta+\\gamma=180^\\circ-2\\theta,\\qquad BM=CM=4.\n\\]\n\n**1. Show that \\(BP=CQ\\).**\n\nIn triangles \\(BMP\\) and \\(CMQ\\),\n\\[\n\\angle BPM=180^\\circ-\\beta-\\theta,\\qquad\n\\angle CQM=180^\\circ-\\gamma-\\theta.\n\\]\nThese angles sum to \\(180^\\circ\\), so their sines are equal. By the sine rule,\n\\[\nBP=\\frac{4\\sin\\theta}{\\sin\\angle BPM}\n=\\frac{4\\sin\\theta}{\\sin\\angle CQM}=CQ.\n\\]\nWrite \\(BP=CQ=x\\). Thus\n\\[\nAB=x+1,\\qquad AC=x+3.\n\\]\n\n**2. Use a cyclic quadrilateral.**\n\nBecause \\(P,Q\\) lie on the same side of \\(BC\\),\n\\[\n\\angle PMQ=180^\\circ-2\\theta.\n\\]\nAlso \\(\\angle PAQ=2\\theta\\), so \\(A,P,M,Q\\) are concyclic.\n\nLet this circle intersect \\(BC\\) again at \\(N\\). Both \\(B\\) and \\(C\\) are outside the circle, as their secants meet it at \\(P,A\\) and \\(Q,A\\), respectively. Hence \\(N\\) lies on segment \\(BC\\).\n\nBy power of a point,\n\\[\nBP\\cdot BA=BM\\cdot BN=4BN,\n\\]\n\\[\nCQ\\cdot CA=CM\\cdot CN=4CN.\n\\]\nAdding and using \\(BN+CN=BC=8\\), we obtain\n\\[\nx(x+1)+x(x+3)=32.\n\\]\n\n**3. Solve for \\(x\\).**\n\nSimplifying,\n\\[\nx^2+2x-16=0,\n\\]\nso \\(x=-1\\pm\\sqrt{17}\\). Since \\(x>0\\),\n\\[\n\\boxed{BP=\\sqrt{17}-1}.\n\\]"
     ],
     "correct": [
-      false,
-      false,
       true,
-      false,
-      false,
-      false,
-      false,
-      false
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
     ],
     "prompt_length_tokens": [
       148,
@@ -5079,7 +5489,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_geo_07",
@@ -5121,14 +5541,14 @@
       "Let \\(D\\) be the reflection of \\(B\\) across \\(AP\\). Since\n\\[\n\\angle BAC=20^\\circ+46^\\circ+26^\\circ=92^\\circ,\n\\]\nthe ray \\(AD\\) makes an angle \\(40^\\circ\\) with \\(AB\\). Reflecting \\(C\\) across \\(AQ\\) gives the same ray, because\n\\[\n2\\angle BAQ-\\angle BAC=2(66^\\circ)-92^\\circ=40^\\circ.\n\\]\nAlso \\(AB=AC\\), so this reflection of \\(C\\) is exactly \\(D\\).\n\nConsequently,\n\\[\nDP=BP=PQ=QC=DQ,\n\\]\nand hence \\(DPQ\\) is equilateral. We also have\n\\[\n\\angle PAD=20^\\circ,\\qquad \\angle DAQ=26^\\circ,\n\\qquad AD=AC.\n\\]\n\nNow orient the diagram with \\(AB\\) at direction \\(0^\\circ\\) and \\(AC\\) at direction \\(92^\\circ\\). Rotate clockwise by \\(60^\\circ\\) about \\(D\\), sending \\(P\\) to \\(Q\\), and let \\(A\\) map to \\(E\\). (This is the correct rotation because \\(P,Q\\) lie inside \\(ABC\\), on opposite sides of \\(AD\\).)\n\nThe rotation gives\n\\[\nEQ=AP.\n\\]\nMoreover, \\(ADE\\) is equilateral, with \\(AE\\) at direction \\(100^\\circ\\). Thus\n\\[\nAE=AD=AC,\\qquad \\angle EAQ=100^\\circ-66^\\circ=34^\\circ.\n\\]\nThe ray \\(EQ\\), being the rotated image of \\(AP\\), has direction\n\\(20^\\circ-60^\\circ=-40^\\circ\\). Since \\(EA\\) has direction \\(280^\\circ\\),\n\\[\n\\angle AEQ=40^\\circ.\n\\]\nTherefore \\(\\angle AQE=106^\\circ\\), and the sine rule in \\(AEQ\\) yields\n\\[\n\\frac{AP}{AC}=\\frac{EQ}{AE}\n=\\frac{\\sin34^\\circ}{\\sin106^\\circ}\n=\\frac{\\sin34^\\circ}{\\sin74^\\circ}.\n\\]\n\nFinally, put \\(x=\\angle APC\\). In triangle \\(APC\\),\n\\[\n\\angle PAC=46^\\circ+26^\\circ=72^\\circ,\n\\qquad \\angle ACP=108^\\circ-x.\n\\]\nApplying the sine rule again,\n\\[\n\\frac{\\sin(108^\\circ-x)}{\\sin x}\n=\\frac{\\sin34^\\circ}{\\sin74^\\circ}.\n\\]\nThe left side equals\n\\[\n\\sin108^\\circ\\cot x-\\cos108^\\circ,\n\\]\nwhich is strictly decreasing for \\(0^\\circ<x<108^\\circ\\). Since \\(x=74^\\circ\\) satisfies the equation, it is the unique solution.\n\n\\[\n\\boxed{74^\\circ}\n\\]"
     ],
     "correct": [
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
     ],
     "prompt_length_tokens": [
       145,
@@ -5200,7 +5620,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": false
+    "solved_at_least_once": true,
+    "correct_original": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_geo_08",
@@ -5321,7 +5751,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_geo_09",
@@ -5363,14 +5803,14 @@
       "Let \\(a=BC\\), and put\n\\[\nu=\\cos\\frac A2,\\qquad v=\\sin\\frac A2.\n\\]\nChoose coordinates with \\(A=(0,0)\\) and the internal angle bisector as the positive \\(x\\)-axis. Then\n\\[\nB=(5u,5v),\\qquad C=(7u,-7v).\n\\]\n\n### 1. Locate the centers of the two tangent circles\nWrite \\(I=(d,0)\\). The inradius is \\(r=dv\\).\n\nA disk tangent to a line lies entirely on one side of it. Since \\(\\Gamma\\) and \\(\\omega\\) share two distinct points, their disks must lie on the same side of each of \\(AB\\) and \\(AC\\); otherwise they could share at most one point on that line. Thus the center of \\(\\Gamma\\) is also on the positive internal angle bisector.\n\nIts radius is \\(2r\\), so its center is \\((2d,0)\\). Therefore\n\\[\n\\omega:\\quad x^2+y^2-2dx+d^2u^2=0,\n\\]\n\\[\n\\Gamma:\\quad x^2+y^2-4dx+4d^2u^2=0.\n\\]\nSubtracting gives the line through their common points:\n\\[\nEF:\\quad x=\\frac32du^2. \\tag{1}\n\\]\n\n### 2. Find the circumcircle of \\(BIC\\)\nThe cosine law gives\n\\[\na^2=25+49-70\\cos A=144-140u^2.\n\\]\nAlso, the incenter formula gives\n\\[\nd=\\frac{70u}{12+a}.\n\\]\nConsequently,\n\\[\ndu=\\frac{12-a}{2},\n\\qquad\nd^2=\\frac{35(12-a)}{12+a},\n\\]\nand hence\n\\[\nd^2-\\frac{12d}{u}+35=0.\n\\]\n\nThe circle\n\\[\n\\mathcal C:\\quad x^2+y^2-\\frac{12}{u}x+35=0\n\\]\npasses through \\(B\\), \\(C\\), and, by the last identity, \\(I\\). Thus it is the circumcircle of \\(BIC\\).\n\nSubtracting the equation of \\(\\omega\\) from that of \\(\\mathcal C\\), every common point satisfies\n\\[\n\\left(2d-\\frac{12}{u}\\right)x+35-d^2u^2=0.\n\\]\nSince \\(E,F\\) also satisfy (1), substitution yields\n\\[\n\\left(2d-\\frac{12}{u}\\right)\\frac32du^2+35-d^2u^2=0,\n\\]\nor\n\\[\n2(du)^2-18du+35=0.\n\\]\n\n### 3. Solve for \\(a\\)\nUsing \\(du=(12-a)/2\\), we obtain\n\\[\n\\frac{(12-a)^2}{2}-9(12-a)+35=0,\n\\]\nwhich simplifies to\n\\[\na^2-6a-2=0.\n\\]\nThus\n\\[\na=3\\pm\\sqrt{11}.\n\\]\nOnly the positive root satisfies the triangle inequalities \\(2<a<12\\).\n\nFor this root,\n\\[\nv^2=\\frac{a^2-4}{140}=\\frac{8+3\\sqrt{11}}{70}>\\frac19.\n\\]\nHence the center distance \\(d\\) satisfies \\(r<d<3r\\), so the circles of radii \\(r\\) and \\(2r\\) indeed intersect in two distinct points.\n\nTherefore,\n\\[\n\\boxed{BC=3+\\sqrt{11}}.\n\\]"
     ],
     "correct": [
-      false,
-      false,
       true,
       true,
       true,
-      false,
       true,
-      false
+      true,
+      true,
+      true,
+      true
     ],
     "prompt_length_tokens": [
       162,
@@ -5442,7 +5882,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      false,
+      false,
+      true,
+      true,
+      true,
+      false,
+      true,
+      false
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_geo_10",
@@ -5484,14 +5934,14 @@
       "Let \\(M\\) be the midpoint of \\(BC\\), and choose coordinates\n\\[\nB=(-x,0),\\qquad C=(x,0),\\qquad A=(p,q),\n\\]\nwhere \\(q\\ne0\\). Thus \\(BC=2x\\).\n\nThe circumcenter lies on the perpendicular bisector of \\(BC\\), so write \\(O=(0,t)\\). The centroid is\n\\[\nG=\\left(\\frac p3,\\frac q3\\right).\n\\]\nBy hypothesis, the orthocenter of \\(\\triangle AGO\\) has the form \\(H=(h,0)\\).\n\nSince \\(OH\\perp AG\\), taking a dot product gives\n\\[\n(h,-t)\\cdot(p,q)=0\n\\quad\\Longrightarrow\\quad ph=qt.\n\\]\nAlso, \\(AH\\perp OG\\), so\n\\[\n(h-p,-q)\\cdot(p,q-3t)=0.\n\\]\nExpanding and substituting \\(ph=qt\\), we obtain\n\\[\np^2+q^2=4qt. \\tag{1}\n\\]\n\nBecause \\(OA=OB\\),\n\\[\np^2+(q-t)^2=x^2+t^2,\n\\]\nhence\n\\[\np^2+q^2-x^2=2qt.\n\\]\nTogether with (1), this yields\n\\[\np^2+q^2=2x^2.\n\\]\n\nFinally,\n\\[\nAB^2+AC^2\n=(p+x)^2+q^2+(p-x)^2+q^2\n=2(p^2+q^2+x^2)=6x^2.\n\\]\nTherefore\n\\[\nx^2=\\frac{11^2+13^2}{6}=\\frac{145}{3},\n\\]\nand consequently\n\\[\n\\boxed{BC=\\frac{2\\sqrt{435}}{3}}.\n\\]"
     ],
     "correct": [
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
     ],
     "prompt_length_tokens": [
       115,
@@ -5563,7 +6013,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": false
+    "solved_at_least_once": true,
+    "correct_original": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_algnt_04",
@@ -5607,12 +6067,12 @@
     "correct": [
       true,
       true,
-      false,
-      false,
-      false,
       true,
-      false,
-      false
+      true,
+      true,
+      true,
+      true,
+      true
     ],
     "prompt_length_tokens": [
       141,
@@ -5684,6 +6144,16 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false
+    ]
   }
 ]

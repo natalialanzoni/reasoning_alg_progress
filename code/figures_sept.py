@@ -52,17 +52,17 @@ GPT_HARD = list(pf.HARD10_K32) + [
      DATA / "hard_but_doable_10q_k32" / "gpt-6-astra_medium_thinking_benchmark_hard_but_doable_10.json"),
 ]
 
-# --- Open-source shallow-pass runs.  RELEASE DATES ARE PLACEHOLDERS — edit. ---
+# --- Open-source shallow-pass runs.  GLM dates are official; KIMI dates are PLACEHOLDERS — edit. ---
 def _sp(slug):
     return DATA / f"{slug}_shallow_pass" / f"{slug}_thinking_benchmark_90.json"
 
 GLM_SHALLOW = [
     ("GLM 4.5", datetime(2025, 7, 1), _sp("glm_4_5")),
     ("GLM 4.6", datetime(2025, 9, 1), _sp("glm_4_6")),
-    ("GLM 4.7", datetime(2025, 11, 1), _sp("glm_4_7")),
-    ("GLM 5",   datetime(2026, 1, 1), _sp("glm_5")),
-    ("GLM 5.1", datetime(2026, 3, 1), _sp("glm_5_1")),
-    ("GLM 5.2", datetime(2026, 5, 1), _sp("glm_5_2")),
+    ("GLM 4.7", datetime(2025, 12, 1), _sp("glm_4_7")),
+    ("GLM 5",   datetime(2026, 2, 1), _sp("glm_5")),
+    ("GLM 5.1", datetime(2026, 4, 1), _sp("glm_5_1")),
+    ("GLM 5.2", datetime(2026, 6, 1), _sp("glm_5_2")),
     ("GLM 5.3", datetime(2026, 8, 1), _sp("glm_5_3")),
 ]
 KIMI_SHALLOW = [

@@ -118,7 +118,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_14",
@@ -239,7 +249,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_13",
@@ -360,7 +380,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_comb_09",
@@ -481,7 +511,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_09",
@@ -602,7 +642,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_algnt_04",
@@ -644,14 +694,14 @@
       "\\[\n\\begin{aligned}\na^2+ab+b^2&=3(a+b) \\\\\na^2+ac+c^2&=3(a+c)\n\\end{aligned}\n\\]\n\nSubtract the second equation from the first:\n\n\\[\nab+b^2-ac-c^2=3b-3c\n\\]\n\nFactor:\n\n\\[\n(b-c)(a+b+c)=3(b-c)\n\\]\n\nSince \\(b\\neq c\\), we can divide by \\(b-c\\):\n\n\\[\na+b+c=3\n\\]\n\nSo\n\n\\[\nb+c=3-a\n\\]\n\nNow use the first two equations. Since \\(b\\) and \\(c\\) both satisfy\n\n\\[\nx^2+ax+a^2=3(a+x),\n\\]\n\nwe have\n\n\\[\nx^2+(a-3)x+(a^2-3a)=0\n\\]\n\nwith roots \\(b,c\\). Hence\n\n\\[\nbc=a^2-3a\n\\]\n\nNow compute the left side of the third equation:\n\n\\[\nb^2+bc+c^2=(b+c)^2-bc\n\\]\n\nSubstitute \\(b+c=3-a\\) and \\(bc=a^2-3a\\):\n\n\\[\nb^2+bc+c^2=(3-a)^2-(a^2-3a)\n\\]\n\n\\[\n=9-6a+a^2-a^2+3a=9-3a\n\\]\n\nThe third equation gives:\n\n\\[\n9-3a=5(b+c)+1\n\\]\n\nSince \\(b+c=3-a\\),\n\n\\[\n9-3a=5(3-a)+1\n\\]\n\n\\[\n9-3a=16-5a\n\\]\n\n\\[\n2a=7\n\\]\n\n\\[\na=\\frac72\n\\]\n\n\\[\n\\boxed{\\frac72}\n\\]"
     ],
     "correct": [
-      false,
-      false,
       true,
-      false,
-      false,
-      false,
-      false,
-      false
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
     ],
     "prompt_length_tokens": [
       141,
@@ -723,7 +773,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
   },
   {
     "task_id": "aime_2026_ii_09",
@@ -844,7 +904,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_07",
@@ -965,7 +1035,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_07",
@@ -1086,7 +1166,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_12",
@@ -1207,6 +1297,16 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   }
 ]

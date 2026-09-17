@@ -44,10 +44,10 @@ OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 # (label, release date, run JSON). Dates match code/paper_figures_71226.py.
 MODELS = [
-    ("o3",      datetime(2025, 4, 1),  DATA_DIR / "o3_shallow_pass" / "o3_medium_thinking_bench.json"),
+    ("o3",      datetime(2025, 4, 16), DATA_DIR / "o3_shallow_pass" / "o3_medium_thinking_bench.json"),
     ("gpt-5",   datetime(2025, 8, 7),  DATA_DIR / "gpt5_shallow_pass" / "gpt-5_medium_thinking_bench.json"),
-    ("gpt-5.2", datetime(2025, 12, 1), DATA_DIR / "gpt5.2_shallow_pass" / "gpt-5.2_medium_thinking_bench.json"),
-    ("gpt-5.4", datetime(2026, 3, 1),  DATA_DIR / "gpt5.4_shallow_pass" / "gpt-5.4_medium_thinking_bench.json"),
+    ("gpt-5.2", datetime(2025, 12, 11), DATA_DIR / "gpt5.2_shallow_pass" / "gpt-5.2_medium_thinking_bench.json"),
+    ("gpt-5.4", datetime(2026, 3, 5),  DATA_DIR / "gpt5.4_shallow_pass" / "gpt-5.4_medium_thinking_bench.json"),
     ("gpt-5.5", datetime(2026, 6, 1),  DATA_DIR / "gpt5.5_shallow_pass" / "gpt-5.5_medium_thinking_bench.json"),
 ]
 BASELINE = "gpt-5"

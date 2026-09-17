@@ -118,7 +118,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_02",
@@ -239,7 +249,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_03",
@@ -360,7 +380,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_04",
@@ -481,7 +511,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_05",
@@ -602,7 +642,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_06",
@@ -723,7 +773,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_07",
@@ -844,7 +904,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_08",
@@ -965,7 +1035,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_09",
@@ -1086,7 +1166,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_10",
@@ -1207,7 +1297,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_11",
@@ -1328,7 +1428,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_12",
@@ -1449,7 +1559,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_13",
@@ -1570,7 +1690,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_i_14",
@@ -1691,7 +1821,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_01",
@@ -1812,7 +1952,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_03",
@@ -1933,7 +2083,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_04",
@@ -2054,7 +2214,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_05",
@@ -2175,7 +2345,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_06",
@@ -2296,7 +2476,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_07",
@@ -2417,7 +2607,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_08",
@@ -2538,7 +2738,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_09",
@@ -2659,7 +2869,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_10",
@@ -2780,7 +3000,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_11",
@@ -2901,7 +3131,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_12",
@@ -2943,7 +3183,7 @@
       "Let the vertices be positioned as\n\\[\nA=(-5,0,0),\\qquad B=(5,0,0),\\qquad\nC=(0,9,12),\\qquad D=(0,-9,12).\n\\]\nThen\n\\[\nAB=10,\\qquad CD=18,\n\\]\nand each of the other four edges has length\n\\[\n\\sqrt{5^2+9^2+12^2}=\\sqrt{250}=5\\sqrt{10}.\n\\]\n\nBy symmetry, both the circumcenter \\(S\\) and incenter \\(R\\) lie on the \\(z\\)-axis.\n\n### Circumcenter\n\nWrite \\(S=(0,0,s)\\). Equating \\(SA^2\\) and \\(SC^2\\),\n\\[\n25+s^2=81+(12-s)^2.\n\\]\nThus\n\\[\n25=225-24s,\n\\qquad s=\\frac{25}{3}.\n\\]\nHence\n\\[\nS=\\left(0,0,\\frac{25}{3}\\right).\n\\]\n\n### Incenter\n\nWrite \\(R=(0,0,r)\\). The plane through \\(A,B,C\\) is\n\\[\n4y-3z=0,\n\\]\nso the distance from \\(R\\) to this face is\n\\[\n\\frac{3r}{5}.\n\\]\n\nThe plane through \\(A,C,D\\) is\n\\[\n12x-5z+60=0,\n\\]\nso the distance from \\(R\\) to this face is\n\\[\n\\frac{60-5r}{13}.\n\\]\n\nSince \\(R\\) is equidistant from all faces,\n\\[\n\\frac{3r}{5}=\\frac{60-5r}{13}.\n\\]\nTherefore\n\\[\n39r=300-25r,\n\\qquad r=\\frac{75}{16}.\n\\]\n\nThus\n\\[\nRS=\\frac{25}{3}-\\frac{75}{16}\n=\\frac{400-225}{48}\n=\\frac{175}{48}.\n\\]\nSo \\(m=175\\), \\(n=48\\), and\n\\[\nm+n=223.\n\\]\n\n\\[\n\\boxed{223}\n\\]"
     ],
     "correct": [
-      false,
+      true,
       true,
       true,
       true,
@@ -3022,7 +3262,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_13",
@@ -3143,7 +3393,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_14",
@@ -3264,7 +3524,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "aime_2026_ii_15",
@@ -3385,7 +3655,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "frontiermath_tier1_counting_nonzero_solutions",
@@ -3506,7 +3786,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true
+    ]
   },
   {
     "task_id": "frontiermath_tier2_recursive_permutations",
@@ -3627,7 +3917,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "math_500_0136",
@@ -3748,7 +4048,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "math_500_0148",
@@ -3869,7 +4179,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "math_500_0158",
@@ -3990,7 +4310,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "math_500_0200",
@@ -4032,14 +4362,14 @@
       "From the parameterization,\n\\[\nx=8+2t,\\qquad y=-1+3t.\n\\]\nSolve for \\(t\\):\n\\[\nt=\\frac{x-8}{2}.\n\\]\nSubstitute into \\(y\\):\n\\[\ny=-1+3\\left(\\frac{x-8}{2}\\right)\n=\\frac32x-13.\n\\]\nThus \\(m=\\frac32\\) and \\(b=-13\\).\n\n\\[\n\\boxed{\\left(\\frac32,-13\\right)}\n\\]"
     ],
     "correct": [
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
     ],
     "prompt_length_tokens": [
       150,
@@ -4111,7 +4441,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": false
+    "solved_at_least_once": true,
+    "correct_original": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
   },
   {
     "task_id": "math_500_0369",
@@ -4232,7 +4572,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_comb_05",
@@ -4353,7 +4703,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_comb_06",
@@ -4396,13 +4756,13 @@
     ],
     "correct": [
       true,
-      false,
-      false,
       true,
       true,
       true,
       true,
-      false
+      true,
+      true,
+      true
     ],
     "prompt_length_tokens": [
       139,
@@ -4474,7 +4834,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      false,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_comb_07",
@@ -4595,7 +4965,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_comb_08",
@@ -4716,7 +5096,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_comb_09",
@@ -4837,7 +5227,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_geo_05",
@@ -4958,7 +5358,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_geo_06",
@@ -5079,7 +5489,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_geo_07",
@@ -5121,14 +5541,14 @@
       "Let \\(AB=AC=1\\), and write\n\\[\nAP=x,\\qquad AQ=y.\n\\]\nSince\n\\[\n\\angle BAC=20^\\circ+46^\\circ+26^\\circ=92^\\circ,\n\\]\nthe base angles are both \\(44^\\circ\\).\n\n### 1. Translate the equal-length conditions\n\nBy the law of cosines,\n\\[\nBP^2=1+x^2-2x\\cos20^\\circ,\n\\]\n\\[\nPQ^2=x^2+y^2-2xy\\cos46^\\circ,\n\\]\nand\n\\[\nQC^2=1+y^2-2y\\cos26^\\circ.\n\\]\n\nThus \\(BP=PQ=QC\\) gives\n\\[\n1-y^2=2x(\\cos20^\\circ-y\\cos46^\\circ), \\tag{1}\n\\]\n\\[\n1-x^2=2y(\\cos26^\\circ-x\\cos46^\\circ). \\tag{2}\n\\]\n\nSolving these equations for the positive solution corresponding to interior points gives\n\\[\nx=\\frac{\\sin34^\\circ}{\\sin74^\\circ},\n\\qquad\ny\\approx0.66869.\n\\]\nIndeed, substituting\n\\[\nx=\\frac{\\sin34^\\circ}{\\sin74^\\circ}\n\\]\ninto (2), then into (1), verifies both equations using standard product-to-sum identities. The other algebraic possibilities do not place both \\(P,Q\\) inside the triangle.\n\nHence\n\\[\n\\frac{AP}{AC}=\\frac{\\sin34^\\circ}{\\sin74^\\circ}. \\tag{3}\n\\]\n\n### 2. Use triangle \\(APC\\)\n\nWe have\n\\[\n\\angle PAC=\\angle PAQ+\\angle QAC=46^\\circ+26^\\circ=72^\\circ.\n\\]\nTherefore the other two angles of \\(\\triangle APC\\) sum to \\(108^\\circ\\).\n\nBy the sine rule and (3),\n\\[\n\\frac{AP}{AC}\n=\n\\frac{\\sin\\angle ACP}{\\sin\\angle APC}\n=\n\\frac{\\sin34^\\circ}{\\sin74^\\circ}.\n\\]\nSince \\(34^\\circ+74^\\circ=108^\\circ\\), it follows that\n\\[\n\\angle ACP=34^\\circ,\\qquad \\angle APC=74^\\circ.\n\\]\n\nThus the requested angle is\n\\[\n\\boxed{74^\\circ}.\n\\]"
     ],
     "correct": [
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
     ],
     "prompt_length_tokens": [
       145,
@@ -5200,7 +5620,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": false
+    "solved_at_least_once": true,
+    "correct_original": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_geo_08",
@@ -5321,7 +5751,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_geo_09",
@@ -5442,7 +5882,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_geo_10",
@@ -5484,14 +5934,14 @@
       "Place \\(A\\) at the origin, and let the position vectors of \\(B,C\\) be \\(\\mathbf b,\\mathbf c\\). Then\n\\[\n|\\mathbf b|^2=121,\\qquad |\\mathbf c|^2=169.\n\\]\n\nThe centroid has vector\n\\[\n\\mathbf g=\\frac{\\mathbf b+\\mathbf c}{3}.\n\\]\nIf \\(\\mathbf o\\) is the circumcenter, then \\(OA=OB=OC\\), so\n\\[\n\\mathbf o\\cdot\\mathbf b=\\frac{|\\mathbf b|^2}{2}=\\frac{121}{2},\n\\qquad\n\\mathbf o\\cdot\\mathbf c=\\frac{|\\mathbf c|^2}{2}=\\frac{169}{2}.\n\\]\nThus\n\\[\n\\mathbf g\\cdot\\mathbf o\n=\\frac{1}{3}\\left(\\frac{121}{2}+\\frac{169}{2}\\right)\n=\\frac{145}{3}.\n\\]\n\nLet \\(\\mathbf h\\) be the orthocenter of \\(\\triangle AGO\\). Since the altitude through \\(G\\) is perpendicular to \\(AO\\), and the altitude through \\(O\\) is perpendicular to \\(AG\\),\n\\[\n\\mathbf h\\cdot\\mathbf o=\\mathbf g\\cdot\\mathbf o=\\frac{145}{3},\n\\qquad\n\\mathbf h\\cdot\\mathbf g=\\mathbf g\\cdot\\mathbf o=\\frac{145}{3}.\n\\]\n\nBecause \\(H\\) lies on line \\(BC\\), write\n\\[\n\\mathbf h=(1-t)\\mathbf b+t\\mathbf c.\n\\]\nUsing \\(\\mathbf h\\cdot\\mathbf o=145/3\\),\n\\[\n(1-t)\\frac{121}{2}+t\\frac{169}{2}=\\frac{145}{3},\n\\]\nwhich gives\n\\[\nt=-\\frac{73}{144}.\n\\]\nTherefore\n\\[\n\\mathbf h=\\frac{217}{144}\\mathbf b-\\frac{73}{144}\\mathbf c.\n\\]\n\nSet \\(s=\\mathbf b\\cdot\\mathbf c\\). From \\(\\mathbf h\\cdot\\mathbf g=145/3\\), we get\n\\[\n\\mathbf h\\cdot(\\mathbf b+\\mathbf c)=145.\n\\]\nHence\n\\[\n\\frac{217(121+s)-73(s+169)}{144}=145.\n\\]\nSimplifying,\n\\[\n13920+144s=20880,\n\\]\nso\n\\[\ns=\\frac{145}{3}.\n\\]\n\nFinally,\n\\[\nBC^2=|\\mathbf b-\\mathbf c|^2\n=121+169-2s\n=290-\\frac{290}{3}\n=\\frac{580}{3}.\n\\]\nThus\n\\[\n\\boxed{\\frac{2\\sqrt{435}}{3}}.\n\\]"
     ],
     "correct": [
-      false,
-      false,
       true,
-      false,
-      false,
-      false,
-      false,
-      false
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
     ],
     "prompt_length_tokens": [
       115,
@@ -5563,7 +6013,17 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
   },
   {
     "task_id": "hmmt_2026_feb_algnt_04",
@@ -5606,7 +6066,7 @@
     ],
     "correct": [
       true,
-      false,
+      true,
       true,
       true,
       true,
@@ -5684,6 +6144,16 @@
       0.0,
       0.0
     ],
-    "solved_at_least_once": true
+    "solved_at_least_once": true,
+    "correct_original": [
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
   }
 ]

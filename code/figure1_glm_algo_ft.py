@@ -45,8 +45,8 @@ HARD = "hard_but_doable_10q_k32"
 
 # (label, hard-but-doable k=32 file) — same model, later algorithm
 MODELS = [
-    ("GLM 5.2", DATA / HARD / "glm_5_2_thinking_benchmark_hard_but_doable_10.json"),
-    ("GLM 5.3", DATA / HARD / "glm_5_3_thinking_benchmark_hard_but_doable_10.json"),
+    ("GLM 5.2", DATA / HARD / "glm_5_2_thinking_benchmark_hard_but_doable_10_high.json"),
+    ("GLM 5.3", DATA / HARD / "glm_5_3_thinking_benchmark_hard_but_doable_10_high.json"),
 ]
 
 
@@ -60,9 +60,7 @@ def load_glm(path):
         vals = []
         for i, (tok, c) in enumerate(zip(r["total_completion_tokens"], r["correct"])):
             correct.append(1 if c else 0)
-            answered = box[i] if box[i] is not None else \
-                (tok < CAP and not (texts[i] is not None and not str(texts[i]).strip()))
-            if answered and tok >= 50:
+            if c and tok >= 50:                      # correct traces only
                 vals.append(min(tok, CAP))
         if vals:
             per[tid] = np.array(vals, float)
