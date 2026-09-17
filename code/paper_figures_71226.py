@@ -102,7 +102,7 @@ OSS_MODELS = [
 # medium effort/thinking). No hard-but-doable k=32 or edge_of_capability k=32
 # runs exist yet for these models, so only the k=8-based figures are built.
 OPUS_MODELS = [
-    ("claude-opus-4-5", datetime(2025, 11, 24), RESULTS_DIR / "opus4.5_shallow_pass" / "claude-opus-4-5_medium_thinking_benchmark.json"),
+    ("claude-opus-4-5", datetime(2025, 11, 24), RESULTS_DIR / "opus4.5_shallow_pass" / "claude-opus-4-5_medium_thinking_benchmark_90.json"),
     ("claude-opus-4-6", datetime(2026, 2, 5),   RESULTS_DIR / "opus4.6_shallow_pass" / "claude-opus-4-6_medium_thinking_benchmark.json"),
     ("claude-opus-4-7", datetime(2026, 4, 16),  RESULTS_DIR / "opus4.7_shallow_pass" / "claude-opus-4-7_medium_thinking_benchmark.json"),
     ("claude-opus-4-8", datetime(2026, 5, 28),  RESULTS_DIR / "opus4.8_shallow_pass" / "claude-opus-4-8_medium_thinking_benchmark.json"),

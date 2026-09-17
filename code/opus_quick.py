@@ -10,7 +10,7 @@ sns.set_theme(style="whitegrid")
 _s = importlib.util.spec_from_file_location("pf", os.path.join(os.path.dirname(__file__), "paper_figures_71226.py"))
 pf = importlib.util.module_from_spec(_s); _s.loader.exec_module(pf)
 
-MODELS = [("Opus 4.5", "data/opus4.5_shallow_pass/claude-opus-4-5_medium_thinking_benchmark.json"),
+MODELS = [("Opus 4.5", "data/opus4.5_shallow_pass/claude-opus-4-5_medium_thinking_benchmark_90.json"),
           ("Opus 5",   "data/opus5_shallow_pass/claude-opus-5_medium_thinking_benchmark.json")]
 
 per_model, accs = [], []
