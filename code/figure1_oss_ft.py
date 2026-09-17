@@ -1,19 +1,15 @@
 """
-Figure 1 — open source (gpt-oss), FutureTech house style, fig1-style shading.
-
-The two graded open-weight models with hard-but-doable k=32 data: gpt-oss-20b and
-gpt-oss-120b.  X axis is model PARAMETERS (not time) -> a size-scaling view.
-Per-problem hard-but-doable IQR bands (one crest color per problem) shade the
-background exactly like the time-series Figure 1; the navy line is the mean over
-problems, amber dashed is accuracy.
+Figure 1 (3-row, FutureTech house style) — open source gpt-oss, 20B -> 120B size
+scaling. Mirrors the main figure1_grid layout:
+  Row 1: accuracy
+  Row 2: mean output tokens + minimal-human-derivation floor (+ N× fewer label)
+  Row 3: within-problem distribution (hard-but-doable-10, k=32), per-problem IQR
+         bands colored by human-solve-rate difficulty (human_tier).
 
 Schema B (local GPU harness): top-level dict with `results`; each result is one
-problem with `id` and a `completions` list of
-{n_tokens, finish_reason, extracted_answer, is_correct}.
-
-Tokens are CLIPPED at 40k for comparability with the 40k-capped GPT/Opus runs.
-A trial counts toward token stats only if it produced an answer (not a
-length-truncation); accuracy uses all trials (truncations count as wrong).
+problem with `id` and a `completions` list of {n_tokens, finish_reason,
+extracted_answer, is_correct}. Tokens clipped at 40k for comparability with the
+40k-capped GPT/Opus runs; a trace needing >40k is re-scored WRONG.
 
     MPLBACKEND=Agg ./venv/bin/python code/figure1_oss_ft.py
 Output -> figures/figs_sept/fig1_oss.{png,pdf}
@@ -21,13 +17,12 @@ Output -> figures/figs_sept/fig1_oss.{png,pdf}
 import importlib.util
 import json
 import os
+import re
 import sys
 
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.lines as mlines
-import matplotlib.patches as mpatches
-import seaborn as sns
 
 sys.path.insert(0, os.path.expanduser("~/.claude/skills/futuretech-charts/python"))
 from futuretech_helpers import use_style, unit_formatter, save_figure
@@ -36,100 +31,125 @@ from futuretech_palette import PRIMARY
 HERE = os.path.dirname(os.path.abspath(__file__))
 _spec = importlib.util.spec_from_file_location("fs", os.path.join(HERE, "figures_sept.py"))
 fs = importlib.util.module_from_spec(_spec); _spec.loader.exec_module(fs)
-DATA = fs.pf.RESULTS_DIR
+pf = fs.pf
 OUT = os.path.join(os.path.dirname(HERE), "figures", "figs_sept")
+D = pf.RESULTS_DIR
 
-CAP = 40000
 TOK = PRIMARY
-ACC = "#E07A3F"
-BANDS = sns.color_palette("crest", 10)
+ACC = "#0E8A8A"
+FLOOR_COLOR = "#E07A3F"
+FLOOR = pf.canon_short
+CLIP = 40000
+TIER_COLOR = {"easy": "#4DAF4A", "medium": "#FDAE61", "hard": "#F16913", "very hard": "#B2182B"}
+TIER_ORDER = ["easy", "medium", "hard", "very hard"]
+
 HARD = "hard_but_doable_10q_k32"
+MODELS = [("gpt-oss-20b", "20B", D / f"{HARD}/gpt-oss-20b_hard-but-doable-10_re-medium_k=32.json",
+           D / "gpt_oss20B_shallow_pass/gpt-oss-20b_re-medium.json"),
+          ("gpt-oss-120b", "120B", D / f"{HARD}/gpt-oss-120b_hard-but-doable-10_re-medium_k=32.json",
+           D / "gpt_oss120B_shallow_pass/gpt-oss-120b_re-medium.json")]
+XLABEL = "Model parameters"
+TITLE = r"gpt-oss (open source): 20B $\rightarrow$ 120B"
 
-# (label, params in billions, hard-but-doable k=32 file) — Schema B
-MODELS = [
-    ("gpt-oss-20b",  20,  DATA / HARD / "gpt-oss-20b_hard-but-doable-10_re-medium_k=32.json"),
-    ("gpt-oss-120b", 120, DATA / HARD / "gpt-oss-120b_hard-but-doable-10_re-medium_k=32.json"),
-]
+
+def _eff_pos(tid):
+    t = str(tid); m = re.search(r"_(\d+)$", t); pos = int(m.group(1)) if m else 0
+    if t.startswith("aime"):     return pos
+    if t.startswith("hmmt"):     return pos + 5
+    if t.startswith("math_500"): return 2
+    return 15
 
 
-def load_oss(path):
-    """Return {problem_id: clipped answered-token array} and all-trial correctness."""
-    d = json.load(open(path))
-    per, correct = {}, []
+def human_tier(tid):
+    e = _eff_pos(tid)
+    return "easy" if e <= 5 else "medium" if e <= 9 else "hard" if e <= 12 else "very hard"
+
+
+def oss_shallow(path):
+    """Accuracy + mean correct-trace tokens over CANON (clip 40k, over-cap = wrong)."""
+    d = json.load(open(path)); toks, nc, nt = [], 0, 0
     for e in d["results"]:
-        vals = []
+        if str(e["id"]) not in pf.CANON_KEYS:
+            continue
         for c in e.get("completions", []):
             tok = c.get("n_tokens", 0)
-            correct.append(1 if c.get("is_correct") else 0)
-            answered = c.get("finish_reason") != "length" and \
-                str(c.get("extracted_answer") or "").strip() != ""
-            if answered and tok >= 50:
-                vals.append(min(tok, CAP))
-        if vals:
-            per[str(e["id"])] = np.array(vals, float)
-    return per, correct
+            if tok < 50:
+                continue
+            ok = bool(c.get("is_correct")) and tok <= CLIP
+            nt += 1; nc += int(ok)
+            if ok:
+                toks.append(tok)
+    return 100 * nc / max(1, nt), float(np.mean(toks))
 
 
-xs, labels, pers, accs = [], [], [], []
-for label, params, path in MODELS:
-    per, correct = load_oss(path)
-    xs.append(params); labels.append(label); pers.append(per)
-    accs.append(100 * np.mean(correct))
+def oss_hard(path):
+    d = json.load(open(path)); prob = {}
+    for e in d["results"]:
+        toks = [c["n_tokens"] for c in e.get("completions", [])
+                if c.get("is_correct") and 50 <= c.get("n_tokens", 0) <= CLIP]
+        if toks:
+            prob[str(e["id"])] = toks
+    return prob
 
-common = sorted(set.intersection(*[set(p) for p in pers]))
 
-use_style()
-plt.rcParams.update({"axes.labelsize": 17, "xtick.labelsize": 16, "ytick.labelsize": 16})
-fig, ax = plt.subplots(figsize=(8.5, 6.3))
+def build():
+    accs, means, hards, labels = [], [], [], []
+    for label, sz, hard_path, sh_path in MODELS:
+        a, m = oss_shallow(sh_path); accs.append(a); means.append(m)
+        hards.append(oss_hard(hard_path)); labels.append(sz)
+    x = list(range(len(MODELS)))
 
-# per-problem IQR bands + faint trajectory, one crest color per problem
-for i, tid in enumerate(common):
-    c = BANDS[i % len(BANDS)]
-    lo = [float(np.percentile(p[tid], 25)) for p in pers]
-    hi = [float(np.percentile(p[tid], 75)) for p in pers]
-    mid = [float(p[tid].mean()) for p in pers]
-    ax.fill_between(xs, lo, hi, color=c, alpha=0.30, lw=0, zorder=1)
-    ax.plot(xs, mid, color=c, lw=1.4, alpha=0.9, zorder=2)
+    use_style()
+    plt.rcParams.update({"axes.labelsize": 15, "xtick.labelsize": 15, "ytick.labelsize": 13})
+    fig, axes = plt.subplots(3, 1, figsize=(7.2, 13.5), sharex=True,
+                             gridspec_kw={"hspace": 0.14})
 
-# mean over problems (macro), navy
-means = [float(np.mean([p[t].mean() for t in common])) for p in pers]
-ax.plot(xs, means, color=TOK, lw=3.5, marker="o", ms=11, zorder=6)
-ax.annotate(f"{means[0] / means[-1]:.1f}× fewer\ntokens", xy=(0.96, 0.52),
-            xycoords="axes fraction", ha="right", va="center",
-            fontsize=18, fontweight="bold", color=TOK)
+    a0 = axes[0]
+    a0.plot(x, accs, "-o", color=ACC, lw=2.6, ms=11, zorder=5)
+    a0.set_ylabel("Accuracy"); a0.set_title(TITLE)
+    a0.yaxis.set_major_formatter(unit_formatter(1, "%", "{:.0f}"))
+    for xi, yi in zip(x, accs):
+        a0.annotate(f"{yi:.0f}%", (xi, yi), textcoords="offset points", xytext=(0, 11),
+                    ha="center", fontsize=13, fontweight="bold", color=ACC)
+    a0.margins(y=0.25)
 
-ax.set_xscale("log")
-ax.set_xlim(14, 175)
-ax.set_xticks(xs); ax.set_xticklabels([f"{p}B" for p in xs])
-ax.xaxis.set_minor_locator(plt.NullLocator())
-ax.set_xlabel("Model parameters")
-ax.set_ylabel("Mean output tokens")
-band_top = max(np.percentile(p[tid], 75) for tid in common for p in pers)
-ax.set_ylim(0, band_top * 1.08)     # fit the data; no wasted space up to 40k
-ax.yaxis.set_major_formatter(unit_formatter(1e3, "k"))
+    a1 = axes[1]
+    a1.plot(x, means, "-o", color=TOK, lw=3, ms=11, zorder=5)
+    a1.axhline(FLOOR, color=FLOOR_COLOR, lw=2, zorder=3)
+    a1.set_ylabel("Mean output tokens"); a1.set_ylim(bottom=0)
+    a1.yaxis.set_major_formatter(unit_formatter(1e3, "k"))
+    ratio = means[0] / means[-1] if means[-1] else float("nan")
+    lbl = (f"{ratio:.1f}× fewer tokens" if ratio >= 1.15
+           else f"{1/ratio:.1f}× more tokens" if ratio <= 0.87 else f"≈flat ({ratio:.1f}×)")
+    a1.annotate(lbl, xy=(0.96, 0.9), xycoords="axes fraction", ha="right", va="top",
+                fontsize=15, fontweight="bold", color=TOK,
+                bbox=dict(boxstyle="round,pad=0.3", fc="white", ec=TOK, alpha=0.9))
+    a1.annotate(f"minimal human derivation ≈ {FLOOR:.0f} tok", (x[-1], FLOOR),
+                textcoords="offset points", xytext=(0, 6), ha="right", va="bottom",
+                fontsize=10, fontweight="bold", color=FLOOR_COLOR)
 
-ax2 = ax.twinx()
-ax2.plot(xs, accs, color=ACC, lw=2, ls="--", marker="D", ms=9, zorder=5)
-# model names on the accuracy line (fig1 format)
-for i, (x, acc, name) in enumerate(zip(xs, accs, labels)):
-    ha = "left" if i == 0 else "right"
-    ox = 6 if i == 0 else -6
-    ax2.annotate(name, (x, acc), textcoords="offset points", xytext=(ox, 11),
-                 ha=ha, va="bottom", fontsize=13, fontweight="bold", color=ACC,
-                 bbox=dict(boxstyle="round,pad=0.15", fc="white", ec="none", alpha=0.75))
-ax2.set_ylim(0, 118)
-ax2.set_ylabel("Accuracy")
-ax2.yaxis.set_major_formatter(unit_formatter(1, "%", "{:.0f}"))
-ax2.set_yticks([0, 20, 40, 60, 80, 100])
-ax2.spines["right"].set_visible(True); ax2.spines["top"].set_visible(False); ax2.grid(False)
+    a2 = axes[2]
+    seen = set()
+    common = sorted(set.intersection(*[set(h) for h in hards])) if hards else []
+    for pid in common:
+        tier = human_tier(pid); seen.add(tier)
+        c = TIER_COLOR.get(tier, "#888888")
+        med = [float(np.median(h[pid])) for h in hards]
+        lo = [float(np.percentile(h[pid], 25)) for h in hards]
+        hi = [float(np.percentile(h[pid], 75)) for h in hards]
+        a2.fill_between(x, lo, hi, color=c, alpha=0.14, lw=0, zorder=1)
+        a2.plot(x, med, color=c, lw=2.2, alpha=0.95, zorder=2)
+    a2.set_ylabel("Output tokens\n(hard-but-doable, per problem)")
+    a2.set_ylim(0, 40000); a2.yaxis.set_major_formatter(unit_formatter(1e3, "k"))
+    a2.set_xticks(x); a2.set_xticklabels(labels, fontweight="bold")
+    a2.set_xlim(-0.25, len(MODELS) - 0.75); a2.set_xlabel(XLABEL)
+    keys = [k for k in TIER_ORDER if k in seen]
+    handles = [mlines.Line2D([], [], color=TIER_COLOR[k], lw=3, label=k) for k in keys]
+    a2.legend(handles=handles, loc="upper right", fontsize=11, frameon=True,
+              framealpha=0.95, title="difficulty")
 
-handles = [
-    mlines.Line2D([], [], color=TOK, lw=3.5, marker="o", ms=9, label="Mean tokens per problem"),
-    mlines.Line2D([], [], color=ACC, lw=2, ls="--", marker="D", ms=8, label="Accuracy"),
-    mpatches.Patch(color=BANDS[0], alpha=0.5, label="Hard-but-doable problems (per-problem IQR)"),
-]
-fig.legend(handles=handles, loc="lower center", ncol=3, fontsize=14,
-           frameon=True, framealpha=0.95, bbox_to_anchor=(0.5, -0.03))
-plt.tight_layout(rect=[0, 0.06, 1, 0.99])
-paths = save_figure(fig, "fig1_oss", outdir=OUT)
-print("wrote", *paths, sep="\n  ")
+    paths = save_figure(fig, "fig1_oss", outdir=OUT)
+    print("wrote", *paths, sep="\n  ")
+
+
+build()
