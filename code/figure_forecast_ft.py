@@ -15,11 +15,13 @@ paper_figures_71226._fit_headroom_forecast:
   alpha_j so beta is identical. The C_j SUBTRACTION (decay toward the floor) and
   the problem FE (per-problem level) are separate and both present.
 
-Versions written:
-  fig4_forecast              GPT excludes o3; successful traces
-  fig4_forecast_with_o3      GPT includes o3; successful traces
-  fig4_forecast_all_traces   GPT excludes o3; ALL traces
+Versions written (PRIMARY includes the full GPT series incl. o1, the earliest anchor):
+  fig4_forecast              per-family; successful traces
+  fig4_forecast_2panel       tokens + log multiple-of-floor
+  fig4_forecast_all_traces   ALL traces
   fig4_forecast_combined     both families on one axis
+  fig4_forecast_*_no_o1      SENSITIVITY: drop the earliest point (o1)
+  fig4_forecast_arith_mean_appendix   arithmetic-mean token space
 
     MPLBACKEND=Agg ./venv/bin/python code/figure_forecast_ft.py
 Output -> figures/figs_sept/fig4_forecast*.{png,pdf}
@@ -270,8 +272,8 @@ plt.rcParams.update({"axes.labelsize": 17, "xtick.labelsize": 15, "ytick.labelsi
                      "axes.titlesize": 18})
 
 
-def build(fname, gpt_exclude_o3, successes_only):
-    panels = [("OpenAI (GPT)", pf.MAIN_K8, gpt_exclude_o3),
+def build(fname, exclude_earliest, successes_only):
+    panels = [("OpenAI (GPT)", pf.MAIN_K8, exclude_earliest),
               ("Anthropic (Opus + Fable)", ANTH, False)]
     print(f"\n########## {fname} ##########")
     fig, axes = plt.subplots(1, 2, figsize=(16, 6.5), gridspec_kw={"wspace": 0.22})
@@ -302,8 +304,8 @@ def build(fname, gpt_exclude_o3, successes_only):
     print("wrote", *paths, sep="\n  ")
 
 
-def build_combined(fname, successes_only=True, gpt_exclude_o3=True):
-    fams = [("OpenAI (GPT)", pf.MAIN_K8, gpt_exclude_o3, OAI_C),
+def build_combined(fname, successes_only=True, exclude_earliest=True):
+    fams = [("OpenAI (GPT)", pf.MAIN_K8, exclude_earliest, OAI_C),
             ("Anthropic (Opus + Fable)", ANTH, False, ANT_C)]
     print(f"\n########## {fname}  (both families) ##########")
     fig, ax = plt.subplots(figsize=(12.5, 7))
@@ -337,10 +339,10 @@ def build_combined(fname, successes_only=True, gpt_exclude_o3=True):
     print("wrote", *paths, sep="\n  ")
 
 
-def build_decay_2panel(fname, gpt_exclude_o3=True, successes_only=True):
+def build_decay_2panel(fname, exclude_earliest=True, successes_only=True):
     """2 rows x 2 cols. Top: absolute tokens (decay + forecast). Bottom: multiple of
     the floor (L/MHD) on a LOG axis, floor at 1x, DOTTED projection."""
-    panels = [("OpenAI (GPT)", pf.MAIN_K8, gpt_exclude_o3),
+    panels = [("OpenAI (GPT)", pf.MAIN_K8, exclude_earliest),
               ("Anthropic (Opus + Fable)", ANTH, False)]
     print(f"\n########## {fname} ##########")
     fig, axes = plt.subplots(2, 2, figsize=(16, 12), sharex="col",
@@ -378,11 +380,11 @@ def build_decay_2panel(fname, gpt_exclude_o3=True, successes_only=True):
     print("wrote", *paths, sep="\n  ")
 
 
-def build_arith_mean(fname, gpt_exclude_o3=True, successes_only=True):
+def build_arith_mean(fname, exclude_earliest=True, successes_only=True):
     """Appendix: same decay but plotted as the ARITHMETIC MEAN token count per model
     (problem-weighted), so the trend is readable in absolute token space. Forecast is a
     simple OLS of log(mean_L - floor) on month across the model means."""
-    panels = [("OpenAI (GPT)", pf.MAIN_K8, gpt_exclude_o3),
+    panels = [("OpenAI (GPT)", pf.MAIN_K8, exclude_earliest),
               ("Anthropic (Opus + Fable)", ANTH, False)]
     print(f"\n########## {fname}  (arithmetic mean) ##########")
     fig, axes = plt.subplots(1, 2, figsize=(16, 6.5), gridspec_kw={"wspace": 0.22})
@@ -430,11 +432,12 @@ def build_arith_mean(fname, gpt_exclude_o3=True, successes_only=True):
     print("wrote", *paths, sep="\n  ")
 
 
-build_decay_2panel("fig4_forecast_2panel", gpt_exclude_o3=True, successes_only=True)
-build_arith_mean("fig4_forecast_arith_mean_appendix", gpt_exclude_o3=True, successes_only=True)
-build("fig4_forecast", gpt_exclude_o3=True, successes_only=True)
-build("fig4_forecast_with_o3", gpt_exclude_o3=False, successes_only=True)
-build("fig4_forecast_all_traces", gpt_exclude_o3=True, successes_only=False)
-build("fig4_forecast_with_o3_all_traces", gpt_exclude_o3=False, successes_only=False)
-build_combined("fig4_forecast_combined", successes_only=True, gpt_exclude_o3=False)
-build_combined("fig4_forecast_combined_with_o3", successes_only=True, gpt_exclude_o3=False)
+# PRIMARY: include the full GPT series incl. o1 (earliest anchor, 2024-12).
+build_decay_2panel("fig4_forecast_2panel", exclude_earliest=False, successes_only=True)
+build_arith_mean("fig4_forecast_arith_mean_appendix", exclude_earliest=False, successes_only=True)
+build("fig4_forecast", exclude_earliest=False, successes_only=True)
+build("fig4_forecast_all_traces", exclude_earliest=False, successes_only=False)
+build_combined("fig4_forecast_combined", successes_only=True, exclude_earliest=False)
+# SENSITIVITY: drop the earliest point (o1) from the GPT fit.
+build("fig4_forecast_no_o1", exclude_earliest=True, successes_only=True)
+build_decay_2panel("fig4_forecast_2panel_no_o1", exclude_earliest=True, successes_only=True)
