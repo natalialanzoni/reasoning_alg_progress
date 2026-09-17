@@ -89,13 +89,13 @@ def clean_label(name):
     return name
 
 
-def shallow_dist(model_files):
-    """Per model: date, mean correct-trace length (clip 40k), accuracy (45 canonical).
+def shallow_dist(model_files, successes_only=True):
+    """Per model: date, mean trace length (clip 40k), accuracy (45 canonical).
 
-    A trial counts as a real ATTEMPT if it generated output (tok >= 50); an empty
-    answer then counts as WRONG. We do NOT use fs._trial_ok here for the denominator,
-    because it drops empty-text trials -- for GLM those are truncated-at-40k failures
-    (17-26% of runs) and dropping them would inflate accuracy from ~73% to ~99%.
+    successes_only=True -> tokens from correct-within-cap traces only (conditions on
+    accuracy). False -> tokens from ALL valid attempts (tok>=50), truncated at 40k;
+    no conditioning. Accuracy (nc/nt) is computed the same either way. A trial is a
+    real ATTEMPT if it generated output (tok>=50); an over-cap or empty answer = wrong.
     """
     labels, dates, mean, acc = [], [], [], []
     for label, date, path in model_files:
@@ -109,21 +109,28 @@ def shallow_dist(model_files):
                     continue
                 ok = bool(c) and tok <= CLIP        # over-cap => truncated before answering => wrong
                 nt += 1; nc += int(ok)
-                if ok:
-                    toks.append(tok)
+                if successes_only:
+                    if ok:
+                        toks.append(tok)
+                else:
+                    toks.append(min(tok, CLIP))     # all attempts, truncated at 40k
         dates.append(date); mean.append(np.mean(toks)); acc.append(100 * nc / max(1, nt))
     return mdates.date2num(dates), labels, mean, acc
 
 
-def hard_perproblem(hard_files):
-    """Per problem: (dates, median, p25, p75) over models (correct traces, clip 40k)."""
+def hard_perproblem(hard_files, successes_only=True):
+    """Per problem: (dates, median, p25, p75) over models. successes_only conditions
+    on correctness; else all valid attempts (truncated at 40k)."""
     dates = [d for _, d, _ in hard_files]
     prob = {}
     for i, (label, date, path) in enumerate(hard_files):
         for r in pf.load_rows(path):
             pid = str(r["task_id"])
-            toks = [tok for tok, c in zip(r["total_completion_tokens"], r["correct"])
-                    if bool(c) and 50 <= tok <= CLIP]   # correct AND within the 40k cap
+            if successes_only:
+                toks = [tok for tok, c in zip(r["total_completion_tokens"], r["correct"])
+                        if bool(c) and 50 <= tok <= CLIP]
+            else:
+                toks = [min(tok, CLIP) for tok in r["total_completion_tokens"] if tok >= 50]
             if toks:
                 d = prob.setdefault(pid, {"i": [], "med": [], "lo": [], "hi": []})
                 d["i"].append(i); d["med"].append(np.median(toks))
@@ -135,53 +142,65 @@ use_style()
 plt.rcParams.update({"axes.labelsize": 15, "xtick.labelsize": 12, "ytick.labelsize": 13,
                      "axes.titlesize": 17})
 ncol = len(FAMILIES)
-fig, axes = plt.subplots(3, ncol, figsize=(7.3 * ncol, 13.5), sharex="col",
-                         gridspec_kw={"hspace": 0.18, "wspace": 0.24})
-seen = set()
-for col, (title, shallow, hard) in enumerate(FAMILIES):
-    dx, labs, mean, acc = shallow_dist(shallow)
 
-    a0 = axes[0][col]                                       # Row 1 — accuracy
-    a0.plot(dx, acc, "-o", color=ACC, lw=2.6, ms=8, zorder=5)
-    a0.set_ylim(58, 103); a0.set_title(title)
-    a0.yaxis.set_major_formatter(unit_formatter(1, "%", "{:.0f}"))
-    for i, (xi, yi, name) in enumerate(zip(dx, acc, labs)):
-        dy, va = [(-16, "top"), (-32, "top"), (-48, "top")][i % 3]
-        a0.annotate(name, (xi, yi), textcoords="offset points", xytext=(0, dy),
-                    ha="center", va=va, fontsize=9, fontweight="bold", color=ACC, zorder=8,
-                    bbox=dict(boxstyle="round,pad=0.12", fc="white", ec="none", alpha=0.8),
-                    arrowprops=dict(arrowstyle="-", color=ACC, lw=0.6, alpha=0.6, shrinkA=1, shrinkB=3))
 
-    a1 = axes[1][col]                                       # Row 2 — mean + floor
-    a1.plot(dx, mean, "-o", color=TOK, lw=3, ms=8, zorder=5)
-    a1.axhline(FLOOR, color=FLOOR_COLOR, lw=2, zorder=3)
-    a1.set_ylim(bottom=0)
-    a1.yaxis.set_major_formatter(unit_formatter(1e3, "k"))
-    a1.annotate(f"minimal human derivation ≈ {FLOOR:.0f} tok", (dx[-1], FLOOR),
-                textcoords="offset points", xytext=(0, 5), ha="right", va="bottom",
-                fontsize=10, fontweight="bold", color=FLOOR_COLOR, zorder=6)
+def build(fname, successes_only):
+    fig, axes = plt.subplots(3, ncol, figsize=(7.3 * ncol, 13.5), sharex="col",
+                             gridspec_kw={"hspace": 0.18, "wspace": 0.24})
+    seen = set()
+    for col, (title, shallow, hard) in enumerate(FAMILIES):
+        dx, labs, mean, acc = shallow_dist(shallow, successes_only)
 
-    a2 = axes[2][col]                                       # Row 3 — per-problem by tier
-    hdx, prob = hard_perproblem(hard)
-    for pid, d in prob.items():
-        k = human_tier(pid); seen.add(k)
-        c = TIER_COLOR.get(k, "#888888")
-        xs = hdx[d["i"]]
-        a2.fill_between(xs, d["lo"], d["hi"], color=c, alpha=0.13, lw=0, zorder=1)
-        a2.plot(xs, d["med"], color=c, lw=2.1, alpha=0.95, zorder=2)
-    a2.set_ylim(0, 40000)
-    a2.yaxis.set_major_formatter(unit_formatter(1e3, "k"))
-    a2.xaxis.set_major_locator(mdates.MonthLocator(interval=4))
-    a2.xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m"))
-    a2.set_xlabel("Release date")
+        a0 = axes[0][col]                                   # Row 1 — accuracy
+        a0.plot(dx, acc, "-o", color=ACC, lw=2.6, ms=8, zorder=5)
+        a0.set_ylim(58, 103); a0.set_title(title)
+        a0.yaxis.set_major_formatter(unit_formatter(1, "%", "{:.0f}"))
+        for i, (xi, yi, name) in enumerate(zip(dx, acc, labs)):
+            dy, va = [(-16, "top"), (-32, "top"), (-48, "top")][i % 3]
+            a0.annotate(name, (xi, yi), textcoords="offset points", xytext=(0, dy),
+                        ha="center", va=va, fontsize=9, fontweight="bold", color=ACC, zorder=8,
+                        bbox=dict(boxstyle="round,pad=0.12", fc="white", ec="none", alpha=0.8),
+                        arrowprops=dict(arrowstyle="-", color=ACC, lw=0.6, alpha=0.6, shrinkA=1, shrinkB=3))
 
-axes[0][0].set_ylabel("Accuracy")
-axes[1][0].set_ylabel("Mean output tokens")
-axes[2][0].set_ylabel("Output tokens\n(hard-but-doable, per problem)")
-keys = [k for k in TIER_ORDER if k in seen]
-handles = [mlines.Line2D([], [], color=TIER_COLOR[k], lw=3, label=k) for k in keys]
-axes[2][ncol - 1].legend(handles=handles, loc="upper right", fontsize=11, ncol=1,
-                         frameon=True, framealpha=0.95, title="difficulty")
+        a1 = axes[1][col]                                   # Row 2 — mean + floor + compression
+        a1.plot(dx, mean, "-o", color=TOK, lw=3, ms=8, zorder=5)
+        a1.axhline(FLOOR, color=FLOOR_COLOR, lw=2, zorder=3)
+        a1.set_ylim(bottom=0)
+        a1.yaxis.set_major_formatter(unit_formatter(1e3, "k"))
+        a1.annotate(f"minimal human derivation ≈ {FLOOR:.0f} tok", (dx[-1], FLOOR),
+                    textcoords="offset points", xytext=(0, 5), ha="right", va="bottom",
+                    fontsize=10, fontweight="bold", color=FLOOR_COLOR, zorder=6)
+        ratio = mean[0] / mean[-1] if mean[-1] else float("nan")   # earliest -> latest
+        lbl = f"{ratio:.1f}× fewer tokens" if ratio >= 1.15 else f"≈flat ({ratio:.1f}×)"
+        a1.annotate(lbl, xy=(0.97, 0.88), xycoords="axes fraction", ha="right", va="top",
+                    fontsize=14, fontweight="bold", color=TOK, zorder=7,
+                    bbox=dict(boxstyle="round,pad=0.3", fc="white", ec=TOK, alpha=0.9))
 
-paths = save_figure(fig, "fig1_grid_glm", outdir=OUT)
-print("wrote", *paths, sep="\n  ")
+        a2 = axes[2][col]                                   # Row 3 — per-problem by tier
+        hdx, prob = hard_perproblem(hard, successes_only)
+        for pid, d in prob.items():
+            k = human_tier(pid); seen.add(k)
+            c = TIER_COLOR.get(k, "#888888")
+            xs = hdx[d["i"]]
+            a2.fill_between(xs, d["lo"], d["hi"], color=c, alpha=0.13, lw=0, zorder=1)
+            a2.plot(xs, d["med"], color=c, lw=2.1, alpha=0.95, zorder=2)
+        a2.set_ylim(0, 40000)
+        a2.yaxis.set_major_formatter(unit_formatter(1e3, "k"))
+        a2.xaxis.set_major_locator(mdates.MonthLocator(interval=4))
+        a2.xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m"))
+        a2.set_xlabel("Release date")
+
+    cond = "correct traces only" if successes_only else "all attempts (incl. failures)"
+    axes[0][0].set_ylabel("Accuracy")
+    axes[1][0].set_ylabel(f"Mean output tokens\n({cond})")
+    axes[2][0].set_ylabel(f"Output tokens\n(hard-but-doable, {cond})")
+    keys = [k for k in TIER_ORDER if k in seen]
+    handles = [mlines.Line2D([], [], color=TIER_COLOR[k], lw=3, label=k) for k in keys]
+    axes[2][ncol - 1].legend(handles=handles, loc="upper right", fontsize=11, ncol=1,
+                             frameon=True, framealpha=0.95, title="difficulty")
+    return save_figure(fig, fname, outdir=OUT)
+
+
+p1 = build("fig1_grid_glm", successes_only=True)
+p2 = build("fig1_grid_glm_alltraces", successes_only=False)
+print("wrote", *p1, *p2, sep="\n  ")
