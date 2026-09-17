@@ -256,10 +256,22 @@ def thinking_kwargs_for(model: str, effort: str, max_tokens: int) -> dict:
             "thinking": {"type": "adaptive"},
             "output_config": {"effort": effort},
         }
-    # "budget" style (claude-opus-4-5): derive a token budget from effort.
-    frac = _BUDGET_FRACTION[effort]
-    budget = min(max_tokens - 1024, max(1024, int(max_tokens * frac)))
-    return {"thinking": {"type": "enabled", "budget_tokens": budget}}
+    # "budget" style (claude-opus-4-5): predates adaptive thinking, so
+    # `budget_tokens` is mandatory -- but it DOES support output_config.effort
+    # alongside it, and effort is live (measured 2026-09-17 on aime_2026_i_02:
+    # low 1,475 / medium 1,903 / high 12,082 thinking tokens).
+    #
+    # The budget is set just under max_tokens so it never binds. That reproduces
+    # the adaptive models' regime -- thinking limited only by the total output
+    # cap -- leaving `effort` as the one active control, so 4.5 is comparable
+    # with 4.6+. Deriving the budget from effort (the old _BUDGET_FRACTION
+    # behaviour) was a stand-in for the effort parameter it failed to send, and
+    # left 4.5 at the API default of "high" with a 20,000-token budget.
+    budget = max(1024, max_tokens - 1024)
+    return {
+        "thinking": {"type": "enabled", "budget_tokens": budget},
+        "output_config": {"effort": effort},
+    }
 
 
 def main():
@@ -332,6 +344,7 @@ def main():
     requests_path = run_dir / f"{model_tag}_{args.effort}_{tag}_requests.jsonl"
     out_path      = run_dir / f"{model_tag}_{args.effort}_{tag}.json"
     sidecar_path  = run_dir / f"{model_tag}_{args.effort}_{tag}_batch_id.txt"
+    runcfg_path   = run_dir / f"{model_tag}_{args.effort}_{tag}_runconfig.json"
 
     print(f"Loading {args.dataset} (split={args.split})...")
     ds = load_dataset(args.dataset, split=args.split)
@@ -422,6 +435,26 @@ def main():
               f"({len(problems)} problems x {args.n_samples} samples)...")
 
         extra_kwargs = thinking_kwargs_for(args.model, args.effort, args.max_tokens)
+
+        # Record exactly what is being sent, next to the results. The filename's
+        # effort tag asserts a setting; this file proves it. Without it, a run
+        # whose parameters were silently remapped (or never sent) is
+        # indistinguishable from a correct one after the fact.
+        runcfg = {
+            "run_started": datetime.now().astimezone().isoformat(timespec="seconds"),
+            "model": args.model,
+            "effort_flag": args.effort,
+            "max_tokens": args.max_tokens,
+            "n_samples": args.n_samples,
+            "dataset": args.dataset,
+            "split": args.split,
+            "n_problems": len(problems),
+            "request_params_sent": extra_kwargs,
+            "system": INSTRUCTIONS,
+        }
+        runcfg_path.write_text(json.dumps(runcfg, indent=2) + "\n")
+        print(f"  wrote run config -> {runcfg_path.name}")
+        print(f"  params sent: {json.dumps(extra_kwargs)}")
 
         batch_requests = []
         with requests_path.open("w") as f:
