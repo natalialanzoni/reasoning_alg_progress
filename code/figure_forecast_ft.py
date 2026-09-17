@@ -169,24 +169,26 @@ def print_spec(title, fit):
 
 
 def draw_family(ax, mfiles, excl, successes_only, color, milestones=True,
-                q_xy=(0.96, 0.82), q_label=None):
-    """Real (solid) observed line + error bars, then dashed forecast + CI band."""
+                q_xy=(0.96, 0.82), q_label=None, ratio=False, show_q=True):
+    """Real (solid) observed line, then forecast + CI band. ratio=False plots absolute
+    tokens; ratio=True plots the MULTIPLE OF THE FLOOR (L/floor) — divide by REF so the
+    floor sits at 1x — with a DOTTED forecast (used on the log panel underneath)."""
+    norm = REF if ratio else 1.0
+    fc_ls = ":" if ratio else "--"
     fit = pf._fit_headroom_forecast(mfiles, exclude_baseline=excl, successes_only=successes_only)
     pts = [p for p in model_points(mfiles, successes_only)
            if not (excl and p[0] == fit["baseline_label"])]
     odates = [p[1] for p in pts]
-    octr = [p[2] for p in pts]
-    olo = [p[3] for p in pts]
-    ohi = [p[4] for p in pts]
+    octr = [p[2] / norm for p in pts]
 
     # fitted trend across observed + forecast, with a continuous shaded 95% CI
-    # ribbon; SOLID over the observed window, DASHED for the extrapolation.
-    # Real data points are shown as dots on top.
+    # ribbon; SOLID over the observed window, DASHED/DOTTED for the extrapolation.
     t_first, t_last = odates[0], odates[-1]
     end_mo = int((fit["mile"][0.05] - t_first).days / 30.44) + 2   # stop 2mo past within-5%
     full = [t_first + timedelta(days=30.44 * mo) for mo in range(0, end_mo + 1)]
     # wild cluster bootstrap over models -> honest 95% CI band for the trend
     ctr, lo, hi, bhat, bci, G = wcb_band(mfiles, excl, successes_only, full)
+    ctr = [c / norm for c in ctr]; lo = [x / norm for x in lo]; hi = [x / norm for x in hi]
     q = lambda bb: (1 - math.exp(3 * bb)) * 100
     print(f"  wild-cluster-bootstrap ({G} models): beta 95% CI [{bci[0]:.3f}, {bci[1]:.3f}]"
           f"  -> {q(bci[1]):.0f}-{q(bci[0]):.0f}% / quarter")
@@ -194,14 +196,14 @@ def draw_family(ax, mfiles, excl, successes_only, color, milestones=True,
     sd = [(d, c) for d, c in zip(full, ctr) if d <= t_last]
     dd = [(d, c) for d, c in zip(full, ctr) if d >= t_last]
     ax.plot([d for d, _ in sd], [c for _, c in sd], "-", color=color, lw=2.6, zorder=4)
-    ax.plot([d for d, _ in dd], [c for _, c in dd], "--", color=color, lw=2.6, zorder=4)
+    ax.plot([d for d, _ in dd], [c for _, c in dd], fc_ls, color=color, lw=2.6, zorder=4)
     ax.plot(odates, octr, "o", color=color, ms=10, zorder=6)
 
-    if q_label:
+    if show_q and q_label:
         ax.annotate(f"{q_label}: {fit['quarterly_pct']:.0f}% / quarter", xy=q_xy,
                     xycoords="axes fraction", ha="right", va="center",
                     fontsize=14, fontweight="bold", color=color)
-    else:
+    elif show_q:
         ax.annotate(f"{fit['quarterly_pct']:.0f}% less reasoning\nrequired / quarter",
                     xy=q_xy, xycoords="axes fraction", ha="right", va="center",
                     fontsize=15, fontweight="bold", color=color)
@@ -226,12 +228,41 @@ def _floor(ax, xend):
                 fontsize=12, fontweight="bold", color=FLOOR_C)
 
 
-def _sep(ax, t_last, ymax, color=SEP_C):
+def _sep(ax, t_last, ytop, color=SEP_C, labels=True):
     ax.axvline(t_last, color=color, lw=1.6, ls="--", zorder=2)
-    ax.annotate("observed", (t_last, ymax * 0.98), textcoords="offset points",
-                xytext=(-6, 0), ha="right", va="top", fontsize=11, style="italic", color=color)
-    ax.annotate("forecast", (t_last, ymax * 0.98), textcoords="offset points",
-                xytext=(6, 0), ha="left", va="top", fontsize=11, style="italic", color=color)
+    if labels:
+        ax.annotate("observed", (t_last, ytop), textcoords="offset points",
+                    xytext=(-6, 0), ha="right", va="top", fontsize=11, style="italic", color=color)
+        ax.annotate("forecast", (t_last, ytop), textcoords="offset points",
+                    xytext=(6, 0), ha="left", va="top", fontsize=11, style="italic", color=color)
+
+
+def _floor_ratio(ax, xend):
+    """Floor at 1x for the multiplier (log) panel."""
+    ax.axhline(1.0, color=FLOOR_C, lw=2.4, zorder=3)
+    ax.annotate("minimal human derivation (1×)", (xend, 1.0), textcoords="offset points",
+                xytext=(-6, 6), ha="right", va="bottom", fontsize=12, fontweight="bold", color=FLOOR_C)
+
+
+def model_amean(mfiles, successes_only):
+    """Per model: (label, date, arithmetic-mean L in tokens), problem-weighted
+    (mean over problems of each problem's mean trace length)."""
+    out = []
+    for label, date, path in mfiles:
+        prob = {}
+        for r in pf.load_rows(path):
+            tid = str(r["task_id"])
+            if tid not in pf.CANON_KEYS:
+                continue
+            tt = r.get("thinking_tokens", [1] * len(r["correct"]))
+            for tok, c, th in zip(r["total_completion_tokens"], r["correct"], tt):
+                if th == 0 or tok <= 0 or (successes_only and not c):
+                    continue
+                prob.setdefault(tid, []).append(tok)
+        pm = [float(np.mean(v)) for v in prob.values() if v]
+        if pm:
+            out.append((label, date, float(np.mean(pm))))
+    return out
 
 
 use_style()
@@ -306,6 +337,101 @@ def build_combined(fname, successes_only=True, gpt_exclude_o3=True):
     print("wrote", *paths, sep="\n  ")
 
 
+def build_decay_2panel(fname, gpt_exclude_o3=True, successes_only=True):
+    """2 rows x 2 cols. Top: absolute tokens (decay + forecast). Bottom: multiple of
+    the floor (L/MHD) on a LOG axis, floor at 1x, DOTTED projection."""
+    panels = [("OpenAI (GPT)", pf.MAIN_K8, gpt_exclude_o3),
+              ("Anthropic (Opus + Fable)", ANTH, False)]
+    print(f"\n########## {fname} ##########")
+    fig, axes = plt.subplots(2, 2, figsize=(16, 12), sharex="col",
+                             gridspec_kw={"wspace": 0.22, "hspace": 0.13})
+    for col, (title, mfiles, excl) in enumerate(panels):
+        start = (mfiles[1] if excl else mfiles[0])[1]
+        at = axes[0][col]                                   # top — absolute tokens
+        fit, t_last, xend, ymax = draw_family(at, mfiles, excl, successes_only, TOK)
+        _floor(at, xend); _sep(at, t_last, ymax * 0.98)
+        at.set_ylim(0, ymax); at.set_xlim(start - timedelta(days=40), xend + timedelta(days=20))
+        at.set_title(title); at.yaxis.set_major_formatter(unit_formatter(1e3, "k"))
+
+        ab = axes[1][col]                                   # bottom — multiple of floor (log)
+        _, t_last2, xend2, ymax2 = draw_family(ab, mfiles, excl, successes_only, TOK,
+                                               milestones=False, ratio=True, show_q=False)
+        ab.set_yscale("log"); _floor_ratio(ab, xend2)
+        ab.set_ylim(0.9, ymax2 * 1.4)
+        _sep(ab, t_last2, ymax2 * 1.3, labels=False)
+        ab.set_xlabel("Date")
+        ab.xaxis.set_major_locator(mdates.YearLocator())
+        ab.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
+    axes[0][0].set_ylabel(f"Output tokens: reasoning + answer\n({'correct' if successes_only else 'all'} traces)")
+    axes[1][0].set_ylabel("Multiple of the floor  (L / MHD)")
+    handles = [
+        mlines.Line2D([], [], color=TOK, lw=2.6, marker="o", ms=9, label="Fitted trend + data points"),
+        mlines.Line2D([], [], color=TOK, lw=2.6, ls="--", label="Forecast (tokens)"),
+        mlines.Line2D([], [], color=TOK, lw=2.6, ls=":", label="Forecast (multiple of floor)"),
+        mpatches.Patch(color=TOK, alpha=0.2, label="95% CI (wild bootstrap)"),
+        mlines.Line2D([], [], color=FLOOR_C, lw=2.4, label="Minimal human derivation"),
+    ]
+    fig.legend(handles=handles, loc="lower center", ncol=5, fontsize=13,
+               frameon=True, framealpha=0.95, bbox_to_anchor=(0.5, -0.02))
+    plt.tight_layout(rect=[0, 0.05, 1, 1.0])
+    paths = save_figure(fig, fname, outdir=OUT)
+    print("wrote", *paths, sep="\n  ")
+
+
+def build_arith_mean(fname, gpt_exclude_o3=True, successes_only=True):
+    """Appendix: same decay but plotted as the ARITHMETIC MEAN token count per model
+    (problem-weighted), so the trend is readable in absolute token space. Forecast is a
+    simple OLS of log(mean_L - floor) on month across the model means."""
+    panels = [("OpenAI (GPT)", pf.MAIN_K8, gpt_exclude_o3),
+              ("Anthropic (Opus + Fable)", ANTH, False)]
+    print(f"\n########## {fname}  (arithmetic mean) ##########")
+    fig, axes = plt.subplots(1, 2, figsize=(16, 6.5), gridspec_kw={"wspace": 0.22})
+    for ax, (title, mfiles, excl) in zip(axes, panels):
+        base = mfiles[0][0]
+        pts = [p for p in model_amean(mfiles, successes_only) if not (excl and p[0] == base)]
+        odates = [p[1] for p in pts]; oy = [p[2] for p in pts]
+        m = np.array([(d - pf.ORIGIN).days / 30.44 for d in odates])
+        yv = np.log(np.array(oy) - REF)                     # excess over floor
+        b1, b0 = np.polyfit(m, yv, 1)                       # slope, intercept
+        t_last = odates[-1]
+        end = t_last + timedelta(days=30.44 * 14)
+        full = [odates[0] + timedelta(days=30.44 * k) for k in
+                range(0, int((end - odates[0]).days / 30.44) + 1)]
+        fm = np.array([(d - pf.ORIGIN).days / 30.44 for d in full])
+        fc = np.exp(b0 + b1 * fm) + REF
+        sd = [(d, c) for d, c in zip(full, fc) if d <= t_last]
+        dd = [(d, c) for d, c in zip(full, fc) if d >= t_last]
+        ax.plot([d for d, _ in sd], [c for _, c in sd], "-", color=TOK, lw=2.6, zorder=4)
+        ax.plot([d for d, _ in dd], [c for _, c in dd], "--", color=TOK, lw=2.6, zorder=4)
+        ax.plot(odates, oy, "o", color=TOK, ms=10, zorder=6)
+        ymax = max(max(oy), max(fc)) * 1.06
+        _floor(ax, full[-1]); _sep(ax, t_last, ymax * 0.98)
+        ax.set_ylim(0, ymax)
+        ax.set_xlim(odates[0] - timedelta(days=40), full[-1] + timedelta(days=20))
+        ax.set_title(title); ax.set_xlabel("Date")
+        ax.yaxis.set_major_formatter(unit_formatter(1e3, "k"))
+        ax.xaxis.set_major_locator(mdates.YearLocator())
+        ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
+        q = (1 - math.exp(3 * b1)) * 100
+        ax.annotate(f"{q:.0f}% fewer tokens\n/ quarter (mean)", xy=(0.96, 0.82),
+                    xycoords="axes fraction", ha="right", va="center",
+                    fontsize=15, fontweight="bold", color=TOK)
+    axes[0].set_ylabel(f"Mean output tokens: reasoning + answer ({'correct' if successes_only else 'all'} traces)")
+    handles = [
+        mlines.Line2D([], [], color=TOK, lw=2.6, marker="o", ms=9, label="Arithmetic mean + fit"),
+        mlines.Line2D([], [], color=TOK, lw=2.6, ls="--", label="Forecast (extrapolated)"),
+        mlines.Line2D([], [], color=SEP_C, lw=1.6, ls="--", label="Forecast start"),
+        mlines.Line2D([], [], color=FLOOR_C, lw=2.4, label="Minimal human derivation"),
+    ]
+    fig.legend(handles=handles, loc="lower center", ncol=4, fontsize=13,
+               frameon=True, framealpha=0.95, bbox_to_anchor=(0.5, -0.08))
+    plt.tight_layout(rect=[0, 0.11, 1, 1.0])
+    paths = save_figure(fig, fname, outdir=OUT)
+    print("wrote", *paths, sep="\n  ")
+
+
+build_decay_2panel("fig4_forecast_2panel", gpt_exclude_o3=True, successes_only=True)
+build_arith_mean("fig4_forecast_arith_mean_appendix", gpt_exclude_o3=True, successes_only=True)
 build("fig4_forecast", gpt_exclude_o3=True, successes_only=True)
 build("fig4_forecast_with_o3", gpt_exclude_o3=False, successes_only=True)
 build("fig4_forecast_all_traces", gpt_exclude_o3=True, successes_only=False)
