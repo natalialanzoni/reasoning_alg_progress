@@ -610,7 +610,8 @@ def build_contamination(fname, successes_only=True):
              EVERY model's training data, so no model can gain a memorisation edge
              over another. The decline here is a contamination-free lower bound.
              GPT and Anthropic are fitted separately, never pooled.
-    Panel 3  both together: same models, problems split by vintage, full window.
+    The problem-vintage difference-in-differences (gamma) is still computed and
+    printed for the caption, but is no longer a panel -- panel 2 shows it more directly.
     """
     gpt_pre = _pre_cutoff(pf.MAIN_K8)
     pooled_full = sorted(list(pf.MAIN_K8) + list(ANTH), key=lambda t: t[1])
@@ -619,7 +620,7 @@ def build_contamination(fname, successes_only=True):
     print(f"\n########## {fname}  (CONTAMINATION CHECK) ##########")
     print(f"  cutoff = {CUTOFF:%Y-%m-%d}  (AIME 2026 I administered; AIME II 02-11, HMMT 02-14)")
     summary = []
-    fig, axes = plt.subplots(1, 3, figsize=(22.5, 6.6), gridspec_kw={"wspace": 0.30})
+    fig, axes = plt.subplots(1, 2, figsize=(15.5, 6.6), gridspec_kw={"wspace": 0.26})
     for ax, (title, pre, full_set) in zip(axes, panels):
         print(f"\n  --- {title} ---")
         print(f"      kept  ({len(pre)}): " + ", ".join(f"{l} {d:%Y-%m}" for l, d, _ in pre))
@@ -710,67 +711,10 @@ def build_contamination(fname, successes_only=True):
     ax.legend(handles=handles2, loc="upper right", fontsize=11.5, frameon=True,
               framealpha=0.95)
 
-    # ---- Panel 3: problem-vintage DiD on the FULL window ------------------
-    # The pre-cutoff refit above necessarily also SHORTENS the window, so a flatter
-    # beta there is ambiguous (contamination vs. genuine recent acceleration). This
-    # panel breaks the tie: it keeps every model and splits the PROBLEMS instead.
-    # Plotted as EXCESS over the floor, INDEXED so each vintage starts at 1.0, on a
-    # log axis. Raw tokens would put hard AIME items ~10x above easy MATH-500 ones and
-    # the reader would see that gap instead of the only thing that matters here: do the
-    # two vintages fall at the SAME RATE. Indexed, "same rate" = the lines lie on top
-    # of each other, and contamination = the new-problem line peeling off downward
-    # after Feb 2026.
-    ax = axes[2]
+    # The problem-vintage DiD is still computed (its gamma is reported in the caption
+    # text) but is no longer plotted: panel 2 makes the same point more directly, and
+    # the indexed two-line version needed too much explaining to earn its space.
     va = _vintage_analysis(pooled_full, successes_only)
-    VCOL = {0: VINT_OLD, 1: VINT_NEW}
-    VLAB = {0: "Panel 3 · MATH-500 — old, already in every model's training data",
-            1: "Panel 3 · AIME/HMMT 2026 — new, only post-cutoff models could have seen"}
-    handles3 = []
-    lo3, hi3 = 1.0, 1.0
-    for nv in (1, 0):
-        p = va["per"][nv]
-        pts = p["pts"]
-        d0, d1 = pts[0][0], pts[-1][0]
-        n_mo = int((d1 - d0).days / 30.44) + 1
-        cd = [d0 + timedelta(days=30.44 * k) for k in range(n_mo + 1)]
-        raw = [math.exp(p["a"] + p["beta"] * ((d - pf.ORIGIN).days / 30.44)) * REF
-               for d in cd]
-        base = raw[0]                       # index: fitted excess at the first model = 1
-        cy = [v / base for v in raw]
-        py = [v / base for _, v in pts]
-        ax.plot(cd, cy, "-", color=VCOL[nv], lw=2.8, zorder=4)
-        ax.plot([d for d, _ in pts], py, "o", color=VCOL[nv], ms=9, zorder=6)
-        lo3 = min(lo3, min(cy), min(py)); hi3 = max(hi3, max(cy), max(py))
-        handles3.append(mlines.Line2D(
-            [], [], color=VCOL[nv], lw=2.8, marker="o", ms=8,
-            label=f"{VLAB[nv]} — {p['pct']:.0f}% / quarter ({p['n_prob']} problems)"))
-    g, gp, gci = va["gamma"], va["gamma_p"], va["gamma_ci"]
-    same = "the same rate" if gp > 0.05 else "DIFFERENT rates"
-    verdict = "no contamination signal" if gp > 0.05 else "CONTAMINATION SIGNAL"
-    ax.annotate(f"Both vintages fall at {same}\n"
-                f"γ = {g:+.3f}  (p = {gp:.2f})  →  {verdict}",
-                xy=(0.5, 0.055), xycoords="axes fraction", ha="center", va="bottom",
-                fontsize=12.5, fontweight="bold", color="#333333", zorder=9,
-                bbox=dict(boxstyle="round,pad=0.3", fc="white", ec="#333333",
-                          lw=0.9, alpha=0.96))
-    ax.annotate("if memorisation drove this,\nthe new-problem line would\nbreak downward from here",
-                xy=(CUTOFF, hi3 * 0.55), xycoords="data",
-                textcoords="offset points", xytext=(12, 0), ha="left", va="center",
-                fontsize=10.5, style="italic", color=CUT_C, zorder=9,
-                bbox=dict(boxstyle="round,pad=0.25", fc="white", ec=CUT_C,
-                          lw=0.8, alpha=0.95))
-    ax.set_yscale("log")
-    ax.set_ylim(lo3 * 0.78, hi3 * 2.2)
-    _cutoff_band(ax, hi3 * 2.05)
-    ax.set_xlim(min(va["per"][1]["pts"])[0] - timedelta(days=40),
-                max(va["per"][1]["pts"])[0] + timedelta(days=60))
-    ax.set_title("Same models, problems split by vintage\n(full window — breaks the tie)",
-                 fontsize=15)
-    ax.set_xlabel("Date")
-    ax.set_ylabel("Excess reasoning over the floor\n(indexed: first model = 1)", fontsize=13)
-    ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda v, _: f"{v:g}×"))
-    ax.xaxis.set_major_locator(mdates.YearLocator())
-    ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
 
     axes[0].set_ylabel(f"Output tokens: reasoning + answer "
                        f"({'correct' if successes_only else 'all'} traces)")
@@ -780,12 +724,11 @@ def build_contamination(fname, successes_only=True):
         mlines.Line2D([], [], color=TOK, lw=2.6, ls="--", label="Pre-cutoff forecast"),
         mpatches.Patch(color=TOK, alpha=0.2, label="95% CI (wild bootstrap)"),
         mlines.Line2D([], [], color=FULL_C, lw=2.2, ls="-.", label="Full-sample fitted trend"),
-    ] + handles3 + [
         mpatches.Patch(color=CUT_C, alpha=0.16, label="Benchmark published (Feb 2026)"),
         mlines.Line2D([], [], color=FLOOR_C, lw=2.4, label="Minimal human derivation"),
     ]
-    fig.legend(handles=handles, loc="lower center", ncol=4, fontsize=11.5,
-               frameon=True, framealpha=0.95, bbox_to_anchor=(0.5, -0.15))
+    fig.legend(handles=handles, loc="lower center", ncol=3, fontsize=11.5,
+               frameon=True, framealpha=0.95, bbox_to_anchor=(0.5, -0.17))
     plt.tight_layout(rect=[0, 0.02, 1, 1.0])
     paths = save_figure(fig, fname, outdir=OUT)
 
@@ -804,16 +747,18 @@ def build_contamination(fname, successes_only=True):
             print(f"  {tag:<44s} {n:>3d} {beta:>9.4f} {se:>7.4f} {pct:>6.1f}% {mile:>11s}")
     print("  NOTE: the pre-cutoff refit also SHORTENS the window, so a flatter beta")
     print("        there is ambiguous (contamination vs. genuine recent acceleration).")
-    print("\n  ===== PROBLEM-VINTAGE DiD (full window — breaks the tie) =====")
+    print("\n  ===== PROBLEM-VINTAGE DiD (not plotted — for the caption text) =====")
     for nv, tag in ((0, "OLD  MATH-500 (all models memorised)"),
                     (1, "NEW  AIME/HMMT 2026 (post-cutoff only)")):
         p = va["per"][nv]
         print(f"  {tag:<42s} {p['n_prob']:>2d} problems  beta={p['beta']:+.4f} "
               f"(SE {p['se']:.4f})  {p['pct']:5.1f}% / quarter  N={p['n_obs']}")
+    gci = va["gamma_ci"]
     print(f"  interaction gamma = {va['gamma']:+.4f} (SE {va['gamma_se']:.4f}), "
           f"p = {va['gamma_p']:.3f}, 95% CI [{gci[0]:+.4f}, {gci[1]:+.4f}]")
     print("  gamma < 0 would mean the possibly-memorised problems compress FASTER.")
-    print(f"  -> {verdict}")
+    print("  -> " + ("no contamination signal" if va["gamma_p"] > 0.05
+                     else "CONTAMINATION SIGNAL"))
     print("wrote", *paths, sep="\n  ")
 
 
