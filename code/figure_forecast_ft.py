@@ -24,7 +24,9 @@ Versions written (PRIMARY includes the full GPT series incl. o1, the earliest an
   fig4_forecast_arith_mean_appendix   arithmetic-mean token space
   fig4_forecast_precutoff_appendix    CONTAMINATION CHECK: same fit on only the
                              models released on/before 2026-02-05, which cannot
-                             have trained on the AIME/HMMT 2026 problems
+                             have trained on the AIME/HMMT 2026 problems. MATH-500
+                             and vintage-DiD diagnostics print to console (see
+                             _floor_drop_report for why they are not panels).
 
 Only ONE milestone is drawn (within 10% of the floor, see MILE_P).
 
@@ -597,6 +599,34 @@ def _subset_fit(mfiles, keep, successes_only=True):
                 a + b * ((d - pf.ORIGIN).days / 30.44))) * REF}
 
 
+def _floor_drop_report(mfiles, successes_only=True):
+    """How much the `L > C_j` filter actually bites, per model and problem vintage.
+
+    The regression DV is log(L - C_j), so any trace at or below the minimal human
+    derivation is DROPPED. On the 40 competition problems this is negligible (0-3.5%).
+    On the 5 MATH-500 problems the recent models sit ON the floor and 20-67% of their
+    correct traces disappear — which is why MATH-500 cannot carry its own panel.
+    """
+    print("      floor-filter drop rate (share of CORRECT traces excluded):")
+    print(f"        {'model':<20s} {'competition':>12s} {'MATH-500':>10s} {'all 45':>8s}")
+    for label, date, path in mfiles:
+        tot = [0, 0]; comp = [0, 0]; m5 = [0, 0]
+        for r in pf.load_rows(path):
+            tid = str(r["task_id"])
+            if tid not in pf.CANON_KEYS:
+                continue
+            bucket = m5 if not _is_new(tid) else comp
+            tt = r.get("thinking_tokens", [1] * len(r["correct"]))
+            for tok, c, th in zip(r["total_completion_tokens"], r["correct"], tt):
+                if th == 0 or tok <= 0 or (successes_only and not c):
+                    continue
+                dropped = int(tok / pf.CANON[tid]["min"] <= 1)
+                for b in (bucket, tot):
+                    b[0] += dropped; b[1] += 1
+        pct = lambda b: f"{100 * b[0] / b[1]:.1f}%" if b[1] else "-"
+        print(f"        {label:<20s} {pct(comp):>12s} {pct(m5):>10s} {pct(tot):>8s}")
+
+
 def build_contamination(fname, successes_only=True):
     """APPENDIX — contamination check, three independent angles on the same worry:
     that newer models only look efficient because they memorised the benchmark.
@@ -620,7 +650,8 @@ def build_contamination(fname, successes_only=True):
     print(f"\n########## {fname}  (CONTAMINATION CHECK) ##########")
     print(f"  cutoff = {CUTOFF:%Y-%m-%d}  (AIME 2026 I administered; AIME II 02-11, HMMT 02-14)")
     summary = []
-    fig, axes = plt.subplots(1, 2, figsize=(15.5, 6.6), gridspec_kw={"wspace": 0.26})
+    fig, _ax0 = plt.subplots(1, 1, figsize=(9.2, 6.6))
+    axes = [_ax0]
     for ax, (title, pre, full_set) in zip(axes, panels):
         print(f"\n  --- {title} ---")
         print(f"      kept  ({len(pre)}): " + ", ".join(f"{l} {d:%Y-%m}" for l, d, _ in pre))
@@ -665,51 +696,21 @@ def build_contamination(fname, successes_only=True):
         ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
         summary.append((title, fit, fit_full, len(pre), len(full_set)))
 
-    # ---- Panel 2: MATH-500 only — contaminated for EVERY model -------------
-    # These problems have been public for years, so they are in the training data of
-    # o1 just as much as of astra: no model can have a memorisation edge over another
-    # on them. Whatever decline survives here cannot be memorisation. Fitted per lab,
-    # never pooled.
-    ax = axes[1]
-    print("\n  --- MATH-500 only (contaminated for every model) ---")
-    old_fams = [("OpenAI (GPT)", list(pf.MAIN_K8), OAI_C),
-                ("Anthropic (Opus + Fable)", list(ANTH), ANT_C)]
-    handles2, ymax2 = [], 0
-    for name, mfiles, col in old_fams:
+    # ---- MATH-500 diagnostics (console only, NOT a panel) -----------------
+    # MATH-500 was tried as a second panel -- old problems, contaminated for every
+    # model, so no memorisation edge is possible. It does NOT survive scrutiny: the
+    # DV log(L - C_j) requires L > C_j, and on these short problems the recent models
+    # sit AT the floor, so 20-67% of their correct traces are dropped by that filter
+    # (vs 0-3.5% on the 40 competition problems). The rate swings 31.3% -> 23.4% per
+    # quarter depending on whether the heavily-truncated models are included, so it
+    # cannot identify anything precisely. Reported in the text with that caveat only.
+    print("\n  --- MATH-500 only (console diagnostic, not plotted) ---")
+    for name, mfiles in (("OpenAI (GPT)", list(pf.MAIN_K8)),
+                         ("Anthropic (Opus + Fable)", list(ANTH))):
         sf = _subset_fit(mfiles, lambda t: not _is_new(t), successes_only)
-        d0, d1 = sf["pts"][0][0], sf["pts"][-1][0]
-        n_mo = int((d1 - d0).days / 30.44) + 1
-        cd = [d0 + timedelta(days=30.44 * k) for k in range(n_mo + 1)]
-        cy = [sf["curve"](d) for d in cd]
-        ax.plot(cd, cy, "-", color=col, lw=2.8, zorder=4)
-        ax.plot([d for d, _ in sf["pts"]], [v for _, v in sf["pts"]], "o",
-                color=col, ms=9, zorder=6)
-        ymax2 = max(ymax2, max(cy), max(v for _, v in sf["pts"]))
-        handles2.append(mlines.Line2D([], [], color=col, lw=2.8, marker="o", ms=8,
-                                      label=f"{name} — {sf['pct']:.0f}% / quarter"))
         print(f"      {name:26s} beta={sf['beta']:+.4f} (SE {sf['se']:.4f})  "
               f"{sf['pct']:5.1f}% / quarter   {sf['n_prob']} problems, N={sf['n_obs']}")
-        summary.append((f"MATH-500 only: {name}", sf, None, sf["n_prob"], 0))
-    ymax2 *= 1.14
-    ax.annotate("These 5 problems predate every model here —\n"
-                "they are in ALL of their training data, so no model\n"
-                "has a memorisation edge. The decline persists anyway.",
-                xy=(0.5, 0.055), xycoords="axes fraction", ha="center", va="bottom",
-                fontsize=11.5, color="#333333", zorder=9,
-                bbox=dict(boxstyle="round,pad=0.3", fc="white", ec="#333333",
-                          lw=0.9, alpha=0.96))
-    _floor(ax)
-    ax.set_ylim(0, ymax2)
-    ax.set_xlim(datetime(2024, 11, 1), datetime(2026, 11, 1))
-    ax.set_title("MATH-500 only — contaminated for every model\n(no memorisation edge possible)",
-                 fontsize=15)
-    ax.set_xlabel("Date")
-    ax.set_ylabel("Output tokens (MATH-500 problems)", fontsize=13)
-    ax.yaxis.set_major_formatter(unit_formatter(1e3, "k"))
-    ax.xaxis.set_major_locator(mdates.YearLocator())
-    ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
-    ax.legend(handles=handles2, loc="upper right", fontsize=11.5, frameon=True,
-              framealpha=0.95)
+    _floor_drop_report(pooled_full, successes_only)
 
     # The problem-vintage DiD is still computed (its gamma is reported in the caption
     # text) but is no longer plotted: panel 2 makes the same point more directly, and
@@ -718,17 +719,19 @@ def build_contamination(fname, successes_only=True):
 
     axes[0].set_ylabel(f"Output tokens: reasoning + answer "
                        f"({'correct' if successes_only else 'all'} traces)")
+    axes[0].set_title("Contamination check — models released before the benchmark\n"
+                      "OpenAI (GPT), pre-cutoff models only", fontsize=15)
     handles = [
         mlines.Line2D([], [], color=TOK, lw=2.6, marker="o", ms=9,
-                      label="Panel 1: pre-cutoff fit + models (cannot be contaminated)"),
+                      label="Pre-cutoff fit + models (cannot be contaminated)"),
         mlines.Line2D([], [], color=TOK, lw=2.6, ls="--", label="Pre-cutoff forecast"),
         mpatches.Patch(color=TOK, alpha=0.2, label="95% CI (wild bootstrap)"),
         mlines.Line2D([], [], color=FULL_C, lw=2.2, ls="-.", label="Full-sample fitted trend"),
         mpatches.Patch(color=CUT_C, alpha=0.16, label="Benchmark published (Feb 2026)"),
         mlines.Line2D([], [], color=FLOOR_C, lw=2.4, label="Minimal human derivation"),
     ]
-    fig.legend(handles=handles, loc="lower center", ncol=3, fontsize=11.5,
-               frameon=True, framealpha=0.95, bbox_to_anchor=(0.5, -0.17))
+    fig.legend(handles=handles, loc="lower center", ncol=2, fontsize=11,
+               frameon=True, framealpha=0.95, bbox_to_anchor=(0.5, -0.22))
     plt.tight_layout(rect=[0, 0.02, 1, 1.0])
     paths = save_figure(fig, fname, outdir=OUT)
 
