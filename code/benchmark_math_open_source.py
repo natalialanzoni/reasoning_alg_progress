@@ -55,9 +55,22 @@ INSTRUCTIONS = (
 # fields: label, series, or_model, provider, quant, provider_max, in$/M, out$/M
 # ----------------------------------------------------------------------------
 MODELS = [
+    # The Apr-2026 V4 Pro launch build -- the frontier point on the DeepSeek
+    # timeline (R1-0528 -> V3.1 Terminus -> V3.2 -> V4 Pro). Parasail advertises
+    # 943,718 max_completion, well clear of our 40k cap. Effort: low/high/max
+    # (medium/xhigh collapse to high, minimal to low, ultra to max).
+    dict(label="DeepSeek V4 Pro", series="deepseek-v4", or_model="deepseek/deepseek-v4-pro",
+         provider="parasail", quant="fp8", provider_max=943_718, price_in=1.60, price_out=3.20),
     dict(label="DeepSeek V4 Pro 0813", series="deepseek-v4", or_model="deepseek/deepseek-v4-pro-0813",
          provider="novita", quant="fp8", provider_max=393_216, price_in=1.32, price_out=3.96),
     # DeepSeek V4 Flash removed: efficiency variant, not a frontier model.
+    # V3.2 (Dec 2025). The earlier run of this model was pinned to a provider that
+    # imposed a hard 16,384-token ceiling (39% of trials pinned there), which is why
+    # the top-level README excludes V3.2 from length analyses. SiliconFlow advertises
+    # 147,456, so a fresh run sits under the common 40k cap like everything else.
+    # Hybrid thinking model: reasoning is toggled, so verify reasoning_tokens > 0.
+    dict(label="DeepSeek V3.2", series="deepseek-v3", or_model="deepseek/deepseek-v3.2",
+         provider="siliconflow", quant="fp8", provider_max=147_456, price_in=0.27, price_out=0.40),
     dict(label="DeepSeek V3.1 Terminus", series="deepseek-v3", or_model="deepseek/deepseek-v3.1-terminus",
          provider="atlas-cloud", quant="fp8", provider_max=65_536, price_in=0.30, price_out=0.95),
     dict(label="DeepSeek R1 0528", series="deepseek-r1", or_model="deepseek/deepseek-r1-0528",
@@ -118,6 +131,9 @@ _EFFORT = {
     # Same bug, same fix: neither of these has a "medium" either.
     "Kimi K3": "high",              # platform.kimi.ai: low/high/max, default max
     "DeepSeek V4 Pro 0813": "high", # api-docs.deepseek.com: high/max; low+medium -> high
+    # api-docs.deepseek.com thinking-mode table: the real levels are low/high/max
+    # (default high). minimal->low, medium/xhigh->high, ultra->max, none disables.
+    "DeepSeek V4 Pro": "high",
 }
 # "high" is the one level natively supported by all four of these models, which is
 # what makes it the matched setting. Every other model here exposes no effort knob
@@ -280,14 +296,22 @@ def one_request(client, m, problem, max_tokens, max_attempts=4):
                     # against GET /api/v1/generation?id=... and reasoning_sent shows
                     # what we asked for (vendors may silently remap it -- see _EFFORT)
                     "gen_id": getattr(resp, "id", None),
-                    "reasoning_sent": reasoning}
+                    "reasoning_sent": reasoning,
+                    # model_served is the RESOLVED snapshot (we may ask for
+                    # "deepseek/deepseek-v3.2" and be served "...-20251201"), so
+                    # mid-study snapshot drift is visible. finish_reason == "length"
+                    # is truncation as a fact rather than inferred from
+                    # output_tokens == cap.
+                    "model_served": getattr(resp, "model", None),
+                    "finish_reason": getattr(resp.choices[0], "finish_reason", None)}
         except Exception as e:
             if attempt < max_attempts:
                 time.sleep(2 ** attempt)
                 continue
             return {"text": "", "reasoning": "", "input_tokens": 0, "output_tokens": 0,
                     "reasoning_tokens": 0, "provider": None, "gen_id": None,
-                    "reasoning_sent": reasoning, "error": f"{type(e).__name__}: {e}"}
+                    "reasoning_sent": reasoning, "model_served": None,
+                    "finish_reason": None, "error": f"{type(e).__name__}: {e}"}
 
 
 def run_model(client, m, problems, n_samples, max_tokens, workers):
@@ -329,6 +353,8 @@ def run_model(client, m, problems, n_samples, max_tokens, workers):
             "providers_used": [s.get("provider") for s in samples],
             "generation_ids": [s.get("gen_id") for s in samples],
             "reasoning_sent": [s.get("reasoning_sent") for s in samples],
+            "models_served": [s.get("model_served") for s in samples],
+            "finish_reasons": [s.get("finish_reason") for s in samples],
             "errors": [s.get("error") for s in samples],  # None when the call succeeded
             "solved_at_least_once": any(correct),
         })
@@ -361,6 +387,18 @@ def main():
     ap.add_argument("--tag", default=None)
     ap.add_argument("--fresh", action="store_true")
     ap.add_argument("--problem-source", default="tyrtleli/thinking-benchmark-90")
+    ap.add_argument("--solutions-only", action="store_true",
+                    help="Keep only problems that have canonical solutions. On "
+                         "thinking-benchmark-90 this is the 45-problem analysis "
+                         "sample (2 of the 47 rows have solution_count 0 and are "
+                         "excluded from every figure). Unlike --n-problems, which "
+                         "slices the first N rows by position, this selects the "
+                         "right set.")
+    ap.add_argument("--effort", default=None,
+                    help="Override the per-model _EFFORT level (low/high/max/...). "
+                         "Applies ONLY to models that have an effort entry -- models "
+                         "with no knob keep {'enabled': True}. The value lands in the "
+                         "output filename, so two efforts never collide.")
     args = ap.parse_args()
 
     selected = select_models(args.models)
@@ -382,8 +420,34 @@ def main():
         print("WARNING: sympy not importable — string+numeric grading only.")
 
     tag = args.tag or args.dataset.split("/")[-1].replace("-", "_")
+
+    # --effort overrides the curated _EFFORT level. Only models that already have
+    # an effort entry are touched: sending an effort to a model with no knob is
+    # exactly the silent-remap bug this map exists to prevent.
+    if args.effort:
+        touched, skipped = [], []
+        for m in selected:
+            if m.get("effort"):
+                m["effort"] = args.effort; touched.append(m["label"])
+            else:
+                skipped.append(m["label"])
+        if not touched:
+            raise SystemExit(f"--effort {args.effort!r} given, but none of the selected "
+                             f"models has an effort knob: {skipped}")
+        print(f"Effort override -> {args.effort!r} for: {', '.join(touched)}")
+        if skipped:
+            print(f"  (no effort knob, left at {{'enabled': True}}: {', '.join(skipped)})")
+        # Effort MUST be in the filename. Without it a second run at a different
+        # level resumes off the first one's file, reports "nothing new -- skipping",
+        # and silently produces no data.
+        tag = f"{tag}_{args.effort}"
     print(f"Loading {args.dataset} (split={args.split})...")
     problems = list(load_dataset(args.dataset, split=args.split))
+    if args.solutions_only:
+        before = len(problems)
+        problems = [p for p in problems if p.get("solutions")]
+        print(f"  --solutions-only: {before} -> {len(problems)} problems "
+              f"(dropped {before - len(problems)} without canonical solutions)")
     if args.n_problems is not None:
         problems = problems[:args.n_problems]
     if any(not p.get("problem") for p in problems):
@@ -405,6 +469,10 @@ def main():
             "  then re-run. Verify first with:  echo ${OPENROUTER_API_KEY:+SET}\n"
             "  (Permanent fix: add the same `export OPENROUTER_API_KEY=...` line to ~/.zshrc)")
     # timeout must cover a full 40k-token generation (~800s at slow providers).
+    # Requests are NOT streamed (no stream=True below), so the read timeout spans
+    # the ENTIRE generation -- the first byte arrives only when the model is done.
+    # Do not lower it on the theory that a silent socket is a dead one; that logic
+    # only holds for streaming, and at 240s it aborts every long trace.
     # max_retries=5: providers (baseten especially) return 429s under concurrency.
     # The SDK honors Retry-After and backs off properly; one_request's own 2/4/8s
     # sleeps are far too short for a rate-limit cooldown. Setting this to 0 raised
@@ -418,6 +486,21 @@ def main():
         # One folder per model, mirroring the proprietary data/<model>_shallow_pass/ layout.
         model_dir = RESULTS_ROOT / f"{slug}_shallow_pass"
         model_dir.mkdir(parents=True, exist_ok=True)
+        # runconfig: what this run ASKED for, next to what it got. The filename
+        # asserts a setting; this proves it.
+        runcfg = model_dir / f"{slug}_{tag}_runconfig.json"
+        runcfg.write_text(json.dumps({
+            "run_started": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
+            "label": m["label"], "or_model": m["or_model"],
+            "provider_pin": provider_pref(m),
+            "reasoning_sent": ({"effort": m["effort"]} if m.get("effort")
+                               else {"enabled": True}),
+            "effort_override": args.effort,
+            "max_tokens_requested": args.max_tokens, "cap_applied": cap,
+            "n_samples": args.n_samples, "dataset": args.dataset, "split": args.split,
+            "n_problems": len(problems), "tag": tag,
+        }, indent=2) + "\n")
+
         res_path = model_dir / f"{slug}_{tag}.json"                       # proprietary-schema results
         trace_path = model_dir / f"{slug}_{tag}_reasoning_traces.json"    # separate CoT traces
         existing = json.load(res_path.open()) if (res_path.exists() and not args.fresh) else []
