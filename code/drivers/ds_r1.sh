@@ -18,12 +18,12 @@ run() { ./venv/bin/python -u code/benchmark_math_open_source.py \
     --models "DeepSeek R1 0528" --solutions-only \
     --n-samples 8 --max-tokens 40000 \
     --dataset tyrtleli/thinking-benchmark-90 --workers "$1"; }
-echo "=== R1-0528 main (workers=4) $(date '+%F %T') ==="
-run 4 >> ds45_r1_0528_main.log 2>&1
+echo "=== R1-0528 main (workers=12) $(date '+%F %T') ==="
+run 12 >> ds45_r1_0528_main.log 2>&1
 echo "  rc=$? zeros=$(zeros) $(date '+%F %T')"
 for p in 1 2 3; do
   z=$(zeros); [ "$z" -eq 0 ] && { echo "  CLEAN"; break; }
-  echo "  repair $p (zeros=$z)"; run 2 >> "ds45_r1_0528_repair${p}.log" 2>&1
+  echo "  repair $p (zeros=$z)"; run 4 >> "ds45_r1_0528_repair${p}.log" 2>&1
   echo "  repair $p done zeros=$(zeros)"
 done
 echo "R1-0528 DONE zeros=$(zeros) $(date '+%F %T')"

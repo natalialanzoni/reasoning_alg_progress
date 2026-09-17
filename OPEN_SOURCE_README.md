@@ -103,16 +103,57 @@ Consequence: **results are written only when a model finishes.** Killing a
 running pass discards everything in flight. Before restarting anything, check
 whether a results JSON exists yet.
 
+## 5a. One provider for the DeepSeek family
+
+All four DeepSeek models are pinned to **SiliconFlow at fp8**. The reason is not
+price or speed — it is that we set no `temperature`, `top_p` or `seed`, so
+**provider sampling defaults apply**. One provider across the series means one
+set of defaults, so provider is not a confound in the within-family comparison.
+
+Two things that are easy to get wrong here:
+
+- **fp8 is not a compromise, it is the ceiling.** No OpenRouter provider offers
+  bf16/fp16 for any of these models; the menu is fp8 or fp4. Every pin is already
+  at fp8, so there is no quantization upgrade available.
+- **SiliconFlow is not the cheapest.** For V4 Pro, GMICloud is fp8 at 943k
+  max_out for $0.96/$1.91 vs SiliconFlow's $1.50/$3.14. Single-provider
+  consistency is being bought, deliberately, at roughly a 55% premium on that
+  model. If the budget matters more than the confound, that is the tradeoff to
+  revisit.
+
+SiliconFlow advertises `max_completion_tokens` >= 147,456 on all four, far above
+the 40k cap, so the cap binds uniformly.
+
+Prices in `MODELS` were corrected to SiliconFlow's at the same time; several
+entries had carried a different provider's numbers, which quietly skews any cost
+estimate computed from them.
+
+## 5b. API keys
+
+The script looks for **`ERA_OPENROUTER_V2` first**, then `OPENROUTER_API_KEY`,
+and prints which one it used. The runconfig records `key_env` — the variable
+name, never the key.
+
+`ERA_OPENROUTER_V2` wins because it is the funded key, and a sweep that dies
+mid-model on an exhausted key loses everything in flight (see §5).
+
+Keys live in `~/.bash_profile`, which zsh does not read — `source` it first.
+That file has been mode 644 on this shared node; `chmod 600` it.
+
 ## 6. Drivers
 
 [`code/drivers/`](code/drivers/) — copied out of a session scratchpad, which is
 ephemeral. A previous chain died when the scratchpad was cleared between
 sessions; launch with `setsid nohup ... &` so the driver survives.
 
-- `ds_v4_chain45.sh` — V4 Pro high → max → low → V3.2, all `--solutions-only`,
-  each with up to 3 repair passes at `--workers 2`.
-- `ds_r1.sh` — R1-0528, run concurrently. Different provider (siliconflow vs
-  parasail), so no rate contention.
+- `ds_siliconflow_chain.sh` — the current one. V3.1 Terminus → V3.2 → V4 Pro
+  high → low → max, all on SiliconFlow, `--solutions-only`, `--workers 8`, with
+  up to 3 repair passes at 4. Oldest model first, so if the clock runs out the
+  timeline keeps its early anchor.
+- `ds_r1.sh` — R1-0528 at `--workers 12`, run concurrently. It was already
+  running on SiliconFlow at the right settings, so it was left alone rather than
+  folded into the chain; that is why the chain omits R1.
+- `ds_v4_chain45.sh` — superseded (it pinned V4 Pro to Parasail).
 
 Both follow the same shape: main pass at `--workers 6`, then loop up to three
 repair passes until the zero-token count reaches 0.
@@ -122,13 +163,22 @@ JSON and then `pkill`ed the first driver. That was a latent bug: the JSON is
 written *before* the repair loop runs, so the supervisor would have killed the
 driver mid-repair. One driver, one process, no file-watching handoff.
 
-## 7. In flight as of 2026-09-17 15:07
+## 7. In flight as of 2026-09-17 15:50
 
-- **DeepSeek V4 Pro `high`**, 45 problems, k=8, cap 40k — running.
-- **DeepSeek R1-0528**, 45 problems, k=8, cap 40k — running concurrently.
-- Queued behind V4 Pro high: `max`, `low`, then V3.2.
+- **DeepSeek R1-0528** on SiliconFlow, 45 problems, k=8, cap 40k, 12 workers —
+  running, 20/360 at 15:47. **Leave it alone.**
+- The V4 Pro run on Parasail was stopped when the family was standardized on
+  SiliconFlow; nothing had been written.
+- `ds_siliconflow_chain.sh` is ready but **not launched**, pending
+  `ERA_OPENROUTER_V2`.
 
-Expect roughly two hours per V4 Pro effort level.
+**Measured throughput, so nobody re-derives it:** one R1-0528 request at these
+exact settings took **265.7s** (5,651 output tokens, `finish_reason: stop`).
+V4 Pro on Parasail ran ~65s/request effective at 6 workers. The completion
+counter prints every 20 requests and **decelerates** as a pass proceeds, because
+short generations finish first and what remains in flight skews long. A counter
+that has not moved in 20 minutes is normal; confirm with an I/O delta
+(`/proc/<pid>/io` rchar over two minutes) before concluding anything is stuck.
 
 ## 8. Known gaps
 

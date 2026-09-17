@@ -56,11 +56,17 @@ INSTRUCTIONS = (
 # ----------------------------------------------------------------------------
 MODELS = [
     # The Apr-2026 V4 Pro launch build -- the frontier point on the DeepSeek
-    # timeline (R1-0528 -> V3.1 Terminus -> V3.2 -> V4 Pro). Parasail advertises
-    # 943,718 max_completion, well clear of our 40k cap. Effort: low/high/max
+    # timeline (R1-0528 -> V3.1 Terminus -> V3.2 -> V4 Pro). Effort: low/high/max
     # (medium/xhigh collapse to high, minimal to low, ultra to max).
+    # SILICONFLOW FOR THE WHOLE FAMILY: all four DeepSeek models below are pinned
+    # to SiliconFlow at fp8 so provider is not a confound in the within-family
+    # comparison. fp8 is the best quantization any OpenRouter provider offers for
+    # these (the alternatives are fp8 or fp4, never bf16), and SiliconFlow's
+    # advertised max_completion is >= 147,456 on every one, far above our 40k cap.
+    # This matters because we set no temperature/top_p/seed, so provider sampling
+    # defaults apply -- one provider means one set of defaults across the series.
     dict(label="DeepSeek V4 Pro", series="deepseek-v4", or_model="deepseek/deepseek-v4-pro",
-         provider="parasail", quant="fp8", provider_max=943_718, price_in=1.60, price_out=3.20),
+         provider="siliconflow", quant="fp8", provider_max=393_216, price_in=1.50, price_out=3.14),
     dict(label="DeepSeek V4 Pro 0813", series="deepseek-v4", or_model="deepseek/deepseek-v4-pro-0813",
          provider="novita", quant="fp8", provider_max=393_216, price_in=1.32, price_out=3.96),
     # DeepSeek V4 Flash removed: efficiency variant, not a frontier model.
@@ -70,11 +76,11 @@ MODELS = [
     # 147,456, so a fresh run sits under the common 40k cap like everything else.
     # Hybrid thinking model: reasoning is toggled, so verify reasoning_tokens > 0.
     dict(label="DeepSeek V3.2", series="deepseek-v3", or_model="deepseek/deepseek-v3.2",
-         provider="siliconflow", quant="fp8", provider_max=147_456, price_in=0.27, price_out=0.40),
+         provider="siliconflow", quant="fp8", provider_max=147_456, price_in=0.26, price_out=0.42),
     dict(label="DeepSeek V3.1 Terminus", series="deepseek-v3", or_model="deepseek/deepseek-v3.1-terminus",
-         provider="atlas-cloud", quant="fp8", provider_max=65_536, price_in=0.30, price_out=0.95),
+         provider="siliconflow", quant="fp8", provider_max=147_456, price_in=0.27, price_out=1.00),
     dict(label="DeepSeek R1 0528", series="deepseek-r1", or_model="deepseek/deepseek-r1-0528",
-         provider="siliconflow", quant="fp8", provider_max=163_800, price_in=0.70, price_out=2.50),
+         provider="siliconflow", quant="fp8", provider_max=147_456, price_in=0.50, price_out=2.18),
     # DeepSeek V3 (deepseek-chat) removed: non-reasoning model (no reasoning
     # params on OpenRouter) and hard-capped at ~16k everywhere.
     # Kimi K3 moved off DeepInfra (16k) to BaseTen fp8 (262k) so the cap doesn't truncate.
@@ -460,14 +466,22 @@ def main():
                 p["answer"] = s.get("answer") if "answer" in s else s.get("final_answer")
     print(f"  {len(problems)} problems")
 
-    api_key = os.environ.get("OPENROUTER_API_KEY")
+    # ERA_OPENROUTER_V2 wins when both are set: it is the funded key, and a sweep
+    # that dies mid-model on an exhausted key loses everything in flight (results
+    # are written only when a model completes). Which one was used is printed, and
+    # recorded in the runconfig as key_env -- never the key itself.
+    key_env = next((k for k in ("ERA_OPENROUTER_V2", "OPENROUTER_API_KEY")
+                    if os.environ.get(k)), None)
+    api_key = os.environ.get(key_env) if key_env else None
     if not api_key:
         raise SystemExit(
-            "OPENROUTER_API_KEY not set in this shell.\n"
-            "  It's defined in ~/.bash_profile, but zsh doesn't read that file. Fix with:\n"
+            "No OpenRouter key in this shell (looked for ERA_OPENROUTER_V2, then\n"
+            "  OPENROUTER_API_KEY). They're defined in ~/.bash_profile, which zsh does\n"
+            "  not read. Fix with:\n"
             "    source ~/.bash_profile            # loads it into the CURRENT shell\n"
-            "  then re-run. Verify first with:  echo ${OPENROUTER_API_KEY:+SET}\n"
-            "  (Permanent fix: add the same `export OPENROUTER_API_KEY=...` line to ~/.zshrc)")
+            "  then re-run. Verify first with:  echo ${ERA_OPENROUTER_V2:+SET}\n"
+            "  (Permanent fix: add the same `export ...` line to ~/.zshrc)")
+    print(f"Using API key from ${key_env}")
     # timeout must cover a full 40k-token generation (~800s at slow providers).
     # Requests are NOT streamed (no stream=True below), so the read timeout spans
     # the ENTIRE generation -- the first byte arrives only when the model is done.
@@ -497,6 +511,7 @@ def main():
                                else {"enabled": True}),
             "effort_override": args.effort,
             "max_tokens_requested": args.max_tokens, "cap_applied": cap,
+            "key_env": key_env,
             "n_samples": args.n_samples, "dataset": args.dataset, "split": args.split,
             "n_problems": len(problems), "tag": tag,
         }, indent=2) + "\n")
