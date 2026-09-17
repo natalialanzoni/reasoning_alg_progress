@@ -531,12 +531,16 @@ def _vintage_analysis(mfiles, successes_only=True):
         out["per"][nv] = {"beta": b, "a": a, "se": r2.bse["month"],
                           "pct": (1 - math.exp(3 * b)) * 100,
                           "n_obs": int(r2.nobs), "n_prob": int(d["problem"].nunique())}
-    # per-model observed points within each vintage (geomean excess -> tokens)
+    # Per-model observed points within each vintage, as EXCESS over the floor
+    # (exp(mean log excess) * REF) — excess is what the regression actually models,
+    # and it is the only quantity on which the two vintages are comparable: raw L
+    # differs ~10x between hard AIME items and easy MATH-500 ones, which would swamp
+    # the slope comparison this panel exists to make.
     for nv in (0, 1):
         pts = []
         for date, g in df[df["new"] == nv].groupby("date"):
             pm = g.groupby("problem")["y"].mean()
-            pts.append((date, (1 + math.exp(float(pm.mean()))) * REF))
+            pts.append((date, math.exp(float(pm.mean())) * REF))
         out["per"][nv]["pts"] = sorted(pts)
     return out
 
@@ -575,7 +579,7 @@ def build_contamination(fname, successes_only=True):
     print(f"\n########## {fname}  (CONTAMINATION CHECK) ##########")
     print(f"  cutoff = {CUTOFF:%Y-%m-%d}  (AIME 2026 I administered; AIME II 02-11, HMMT 02-14)")
     summary = []
-    fig, axes = plt.subplots(1, 3, figsize=(22, 6.6), gridspec_kw={"wspace": 0.2})
+    fig, axes = plt.subplots(1, 3, figsize=(22.5, 6.6), gridspec_kw={"wspace": 0.30})
     for ax, (title, pre, full_set) in zip(axes, panels):
         print(f"\n  --- {title} ---")
         print(f"      kept  ({len(pre)}): " + ", ".join(f"{l} {d:%Y-%m}" for l, d, _ in pre))
@@ -624,50 +628,61 @@ def build_contamination(fname, successes_only=True):
     # The pre-cutoff refit above necessarily also SHORTENS the window, so a flatter
     # beta there is ambiguous (contamination vs. genuine recent acceleration). This
     # panel breaks the tie: it keeps every model and splits the PROBLEMS instead.
-    # LOG y-axis: the outcome is log excess, so equal decay rates render as PARALLEL
-    # lines — which is exactly the thing the reader has to judge here.
+    # Plotted as EXCESS over the floor, INDEXED so each vintage starts at 1.0, on a
+    # log axis. Raw tokens would put hard AIME items ~10x above easy MATH-500 ones and
+    # the reader would see that gap instead of the only thing that matters here: do the
+    # two vintages fall at the SAME RATE. Indexed, "same rate" = the lines lie on top
+    # of each other, and contamination = the new-problem line peeling off downward
+    # after Feb 2026.
     ax = axes[2]
     va = _vintage_analysis(pooled_full, successes_only)
     VCOL = {0: ANT_C, 1: OAI_C}
-    VLAB = {0: "MATH-500 — old, in every model's training data",
+    VLAB = {0: "MATH-500 — old, already in every model's training data",
             1: "AIME/HMMT 2026 — new, only post-cutoff models could have seen"}
-    handles3, ymax3 = [], 0
+    handles3 = []
+    lo3, hi3 = 1.0, 1.0
     for nv in (1, 0):
         p = va["per"][nv]
         pts = p["pts"]
         d0, d1 = pts[0][0], pts[-1][0]
         n_mo = int((d1 - d0).days / 30.44) + 1
         cd = [d0 + timedelta(days=30.44 * k) for k in range(n_mo + 1)]
-        cy = [(1 + math.exp(p["a"] + p["beta"] * ((d - pf.ORIGIN).days / 30.44))) * REF
-              for d in cd]
+        raw = [math.exp(p["a"] + p["beta"] * ((d - pf.ORIGIN).days / 30.44)) * REF
+               for d in cd]
+        base = raw[0]                       # index: fitted excess at the first model = 1
+        cy = [v / base for v in raw]
+        py = [v / base for _, v in pts]
         ax.plot(cd, cy, "-", color=VCOL[nv], lw=2.8, zorder=4)
-        ax.plot([d for d, _ in pts], [v for _, v in pts], "o", color=VCOL[nv],
-                ms=9, zorder=6)
-        ymax3 = max(ymax3, max(cy), max(v for _, v in pts))
-        # direct-label each line at its right end; series identity is in the figure legend
-        ax.annotate(f"{p['pct']:.0f}% / quarter", (cd[-1], cy[-1]),
-                    textcoords="offset points", xytext=(9, -2), ha="left", va="center",
-                    fontsize=12.5, fontweight="bold", color=VCOL[nv], zorder=8)
+        ax.plot([d for d, _ in pts], py, "o", color=VCOL[nv], ms=9, zorder=6)
+        lo3 = min(lo3, min(cy), min(py)); hi3 = max(hi3, max(cy), max(py))
         handles3.append(mlines.Line2D(
             [], [], color=VCOL[nv], lw=2.8, marker="o", ms=8,
-            label=f"{VLAB[nv]} ({p['n_prob']} problems)"))
+            label=f"{VLAB[nv]} — {p['pct']:.0f}% / quarter ({p['n_prob']} problems)"))
     g, gp, gci = va["gamma"], va["gamma_p"], va["gamma_ci"]
+    same = "the same rate" if gp > 0.05 else "DIFFERENT rates"
     verdict = "no contamination signal" if gp > 0.05 else "CONTAMINATION SIGNAL"
-    ax.annotate(f"interaction γ = {g:+.3f}  (p = {gp:.2f})\n→ {verdict}",
-                xy=(0.97, 0.90), xycoords="axes fraction", ha="right", va="top",
+    ax.annotate(f"Both vintages fall at {same}\n"
+                f"γ = {g:+.3f}  (p = {gp:.2f})  →  {verdict}",
+                xy=(0.5, 0.055), xycoords="axes fraction", ha="center", va="bottom",
                 fontsize=12.5, fontweight="bold", color="#333333", zorder=9,
                 bbox=dict(boxstyle="round,pad=0.3", fc="white", ec="#333333",
                           lw=0.9, alpha=0.96))
-    _floor(ax)
+    ax.annotate("if memorisation drove this,\nthe new-problem line would\nbreak downward from here",
+                xy=(CUTOFF, hi3 * 0.55), xycoords="data",
+                textcoords="offset points", xytext=(12, 0), ha="left", va="center",
+                fontsize=10.5, style="italic", color=CUT_C, zorder=9,
+                bbox=dict(boxstyle="round,pad=0.25", fc="white", ec=CUT_C,
+                          lw=0.8, alpha=0.95))
     ax.set_yscale("log")
-    ax.set_ylim(REF * 0.62, ymax3 * 3.4)
-    _cutoff_band(ax, ymax3 * 3.1)
+    ax.set_ylim(lo3 * 0.78, hi3 * 2.2)
+    _cutoff_band(ax, hi3 * 2.05)
     ax.set_xlim(min(va["per"][1]["pts"])[0] - timedelta(days=40),
-                max(va["per"][1]["pts"])[0] + timedelta(days=210))
+                max(va["per"][1]["pts"])[0] + timedelta(days=60))
     ax.set_title("Same models, problems split by vintage\n(full window — breaks the tie)",
                  fontsize=15)
     ax.set_xlabel("Date")
-    ax.yaxis.set_major_formatter(unit_formatter(1e3, "k"))
+    ax.set_ylabel("Excess reasoning over the floor\n(indexed: first model = 1)", fontsize=13)
+    ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda v, _: f"{v:g}×"))
     ax.xaxis.set_major_locator(mdates.YearLocator())
     ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
 
