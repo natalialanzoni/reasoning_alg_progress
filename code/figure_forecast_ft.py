@@ -59,6 +59,11 @@ OAI_C = CATEGORICAL[0]   # blue  — OpenAI (combined plot)
 ANT_C = CATEGORICAL[1]   # MIT red — Anthropic (combined plot)
 FULL_C = "#6E6E6E"       # grey — full-sample trend overlaid on the appendix check
 CUT_C = "#B2182B"        # red  — benchmark publication cutoff
+# Problem-VINTAGE colours, deliberately distinct from the per-LAB blue/red used in the
+# MATH-500 panel next to it — otherwise the same two colours would mean "OpenAI vs
+# Anthropic" in one panel and "new vs old problems" in the next.
+VINT_NEW = "#6A51A3"     # purple — AIME/HMMT 2026 (new problems)
+VINT_OLD = "#238B45"     # green  — MATH-500 (old problems)
 REF = pf.canon_short   # minimal human derivation (shortest canonical), tokens
 
 MILE_P = 0.10            # the ONLY milestone drawn: within 10% of the floor
@@ -557,24 +562,59 @@ def _cutoff_band(ax, ytop):
                           lw=0.8, alpha=0.95))
 
 
-def build_contamination(fname, successes_only=True):
-    """APPENDIX — contamination check. Refits the IDENTICAL excess-trend spec using
-    only models released on or before 2026-02-05, which therefore cannot have been
-    trained on the AIME 2026 I/II + HMMT Feb 2026 problems that make up 40 of the 45
-    canonical items. If beta matches the full-sample beta, the measured decline in
-    reasoning length is not an artifact of newer models having memorised the
-    benchmark. The full-sample fitted trend is overlaid in grey for comparison.
+def _subset_fit(mfiles, keep, successes_only=True):
+    """Same excess-trend spec, restricted to the problems `keep(tid)` selects. Returns
+    beta/intercept/%-per-quarter plus the per-model observed points in TOKENS on the
+    average-floor problem, so it plots on the same axis as the other token panels."""
+    import pandas as pd
+    import statsmodels.formula.api as smf
+    rows = []
+    for label, date, path in mfiles:
+        month = (date - pf.ORIGIN).days / 30.44
+        for r in pf.load_rows(path):
+            tid = str(r["task_id"])
+            if tid not in pf.CANON_KEYS or not keep(tid):
+                continue
+            tt = r.get("thinking_tokens", [1] * len(r["correct"]))
+            for tok, c, th in zip(r["total_completion_tokens"], r["correct"], tt):
+                if th == 0 or tok <= 0 or (successes_only and not c):
+                    continue
+                h = tok / pf.CANON[tid]["min"]
+                if h > 1:
+                    rows.append({"problem": tid, "month": month, "date": date,
+                                 "y": math.log(h - 1)})
+    df = pd.DataFrame(rows)
+    res = smf.ols("y ~ month + C(problem)", data=df).fit(
+        cov_type="cluster", cov_kwds={"groups": df["problem"]})
+    b = res.params["month"]
+    fe = [v for k, v in res.params.items() if k.startswith("C(problem)")]
+    a = res.params["Intercept"] + sum(fe) / df["problem"].nunique()
+    pts = sorted((d, (1 + math.exp(float(g.groupby("problem")["y"].mean().mean()))) * REF)
+                 for d, g in df.groupby("date"))
+    return {"beta": b, "a": a, "se": res.bse["month"], "pct": (1 - math.exp(3 * b)) * 100,
+            "n_obs": int(res.nobs), "n_prob": int(df["problem"].nunique()), "pts": pts,
+            "curve": lambda d, a=a, b=b: (1 + math.exp(
+                a + b * ((d - pf.ORIGIN).days / 30.44))) * REF}
 
-    Panel 1 is single-lab (GPT), so no cross-lab pooling is involved. Panel 2 pools
-    GPT with the pre-cutoff Opus models to widen the sample (one common slope, no lab
-    FE — appendix-grade). Caveats: the pre-cutoff window is shorter than the full
-    window, and the wild bootstrap has few model clusters, so its CI is coarse.
+
+def build_contamination(fname, successes_only=True):
+    """APPENDIX — contamination check, three independent angles on the same worry:
+    that newer models only look efficient because they memorised the benchmark.
+
+    Panel 1  restrict the MODELS: refit the identical excess-trend spec on only the
+             models released on/before 2026-02-05, which cannot have trained on the
+             AIME 2026 / HMMT Feb 2026 problems (40 of the 45 canonical items).
+             Single-lab (GPT) so no cross-lab pooling. Ambiguous on its own, because
+             it also shortens the window.
+    Panel 2  restrict the PROBLEMS: fit on MATH-500 only — old problems that sit in
+             EVERY model's training data, so no model can gain a memorisation edge
+             over another. The decline here is a contamination-free lower bound.
+             GPT and Anthropic are fitted separately, never pooled.
+    Panel 3  both together: same models, problems split by vintage, full window.
     """
     gpt_pre = _pre_cutoff(pf.MAIN_K8)
     pooled_full = sorted(list(pf.MAIN_K8) + list(ANTH), key=lambda t: t[1])
-    pooled_pre = _pre_cutoff(pooled_full)
-    panels = [("OpenAI (GPT) — pre-cutoff models only", gpt_pre, list(pf.MAIN_K8)),
-              ("GPT + Opus pooled — pre-cutoff models only", pooled_pre, pooled_full)]
+    panels = [("OpenAI (GPT) — pre-cutoff models only", gpt_pre, list(pf.MAIN_K8))]
 
     print(f"\n########## {fname}  (CONTAMINATION CHECK) ##########")
     print(f"  cutoff = {CUTOFF:%Y-%m-%d}  (AIME 2026 I administered; AIME II 02-11, HMMT 02-14)")
@@ -624,6 +664,52 @@ def build_contamination(fname, successes_only=True):
         ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
         summary.append((title, fit, fit_full, len(pre), len(full_set)))
 
+    # ---- Panel 2: MATH-500 only — contaminated for EVERY model -------------
+    # These problems have been public for years, so they are in the training data of
+    # o1 just as much as of astra: no model can have a memorisation edge over another
+    # on them. Whatever decline survives here cannot be memorisation. Fitted per lab,
+    # never pooled.
+    ax = axes[1]
+    print("\n  --- MATH-500 only (contaminated for every model) ---")
+    old_fams = [("OpenAI (GPT)", list(pf.MAIN_K8), OAI_C),
+                ("Anthropic (Opus + Fable)", list(ANTH), ANT_C)]
+    handles2, ymax2 = [], 0
+    for name, mfiles, col in old_fams:
+        sf = _subset_fit(mfiles, lambda t: not _is_new(t), successes_only)
+        d0, d1 = sf["pts"][0][0], sf["pts"][-1][0]
+        n_mo = int((d1 - d0).days / 30.44) + 1
+        cd = [d0 + timedelta(days=30.44 * k) for k in range(n_mo + 1)]
+        cy = [sf["curve"](d) for d in cd]
+        ax.plot(cd, cy, "-", color=col, lw=2.8, zorder=4)
+        ax.plot([d for d, _ in sf["pts"]], [v for _, v in sf["pts"]], "o",
+                color=col, ms=9, zorder=6)
+        ymax2 = max(ymax2, max(cy), max(v for _, v in sf["pts"]))
+        handles2.append(mlines.Line2D([], [], color=col, lw=2.8, marker="o", ms=8,
+                                      label=f"{name} — {sf['pct']:.0f}% / quarter"))
+        print(f"      {name:26s} beta={sf['beta']:+.4f} (SE {sf['se']:.4f})  "
+              f"{sf['pct']:5.1f}% / quarter   {sf['n_prob']} problems, N={sf['n_obs']}")
+        summary.append((f"MATH-500 only: {name}", sf, None, sf["n_prob"], 0))
+    ymax2 *= 1.14
+    ax.annotate("These 5 problems predate every model here —\n"
+                "they are in ALL of their training data, so no model\n"
+                "has a memorisation edge. The decline persists anyway.",
+                xy=(0.5, 0.055), xycoords="axes fraction", ha="center", va="bottom",
+                fontsize=11.5, color="#333333", zorder=9,
+                bbox=dict(boxstyle="round,pad=0.3", fc="white", ec="#333333",
+                          lw=0.9, alpha=0.96))
+    _floor(ax)
+    ax.set_ylim(0, ymax2)
+    ax.set_xlim(datetime(2024, 11, 1), datetime(2026, 11, 1))
+    ax.set_title("MATH-500 only — contaminated for every model\n(no memorisation edge possible)",
+                 fontsize=15)
+    ax.set_xlabel("Date")
+    ax.set_ylabel("Output tokens (MATH-500 problems)", fontsize=13)
+    ax.yaxis.set_major_formatter(unit_formatter(1e3, "k"))
+    ax.xaxis.set_major_locator(mdates.YearLocator())
+    ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
+    ax.legend(handles=handles2, loc="upper right", fontsize=11.5, frameon=True,
+              framealpha=0.95)
+
     # ---- Panel 3: problem-vintage DiD on the FULL window ------------------
     # The pre-cutoff refit above necessarily also SHORTENS the window, so a flatter
     # beta there is ambiguous (contamination vs. genuine recent acceleration). This
@@ -636,9 +722,9 @@ def build_contamination(fname, successes_only=True):
     # after Feb 2026.
     ax = axes[2]
     va = _vintage_analysis(pooled_full, successes_only)
-    VCOL = {0: ANT_C, 1: OAI_C}
-    VLAB = {0: "MATH-500 — old, already in every model's training data",
-            1: "AIME/HMMT 2026 — new, only post-cutoff models could have seen"}
+    VCOL = {0: VINT_OLD, 1: VINT_NEW}
+    VLAB = {0: "Panel 3 · MATH-500 — old, already in every model's training data",
+            1: "Panel 3 · AIME/HMMT 2026 — new, only post-cutoff models could have seen"}
     handles3 = []
     lo3, hi3 = 1.0, 1.0
     for nv in (1, 0):
@@ -690,7 +776,7 @@ def build_contamination(fname, successes_only=True):
                        f"({'correct' if successes_only else 'all'} traces)")
     handles = [
         mlines.Line2D([], [], color=TOK, lw=2.6, marker="o", ms=9,
-                      label="Panels 1-2: pre-cutoff fit + models (cannot be contaminated)"),
+                      label="Panel 1: pre-cutoff fit + models (cannot be contaminated)"),
         mlines.Line2D([], [], color=TOK, lw=2.6, ls="--", label="Pre-cutoff forecast"),
         mpatches.Patch(color=TOK, alpha=0.2, label="95% CI (wild bootstrap)"),
         mlines.Line2D([], [], color=FULL_C, lw=2.2, ls="-.", label="Full-sample fitted trend"),
@@ -706,11 +792,16 @@ def build_contamination(fname, successes_only=True):
     print("\n  ===== CONTAMINATION CHECK SUMMARY =====")
     print(f"  {'sample':<44s} {'n':>3s} {'beta':>9s} {'SE':>7s} {'%/qtr':>7s} {'within-10%':>11s}")
     for title, fit, fit_full, npre, nfull in summary:
-        for tag, f, n in ((f"{title.split(' — ')[0]}: PRE-CUTOFF", fit, npre),
-                          (f"{title.split(' — ')[0]}: full sample", fit_full, nfull)):
-            mile = f"{f['mile'][MILE_P]:%Y-%m}"
-            print(f"  {tag:<44s} {n:>3d} {f['beta']:>9.4f} {f['beta_se']:>7.4f} "
-                  f"{f['quarterly_pct']:>6.1f}% {mile:>11s}")
+        pairs = [(f"{title.split(' — ')[0]}: PRE-CUTOFF", fit, npre)]
+        if fit_full is not None:
+            pairs.append((f"{title.split(' — ')[0]}: full sample", fit_full, nfull))
+        for tag, f, n in pairs:
+            # MATH-500 subset fits carry no forecast milestone; key names differ too
+            beta = f["beta"]; se = f.get("beta_se", f.get("se"))
+            pct = f.get("quarterly_pct", f.get("pct"))
+            mile = f"{f['mile'][MILE_P]:%Y-%m}" if "mile" in f else "-"
+            tag = tag.replace(": PRE-CUTOFF", "") if "MATH-500" in tag else tag
+            print(f"  {tag:<44s} {n:>3d} {beta:>9.4f} {se:>7.4f} {pct:>6.1f}% {mile:>11s}")
     print("  NOTE: the pre-cutoff refit also SHORTENS the window, so a flatter beta")
     print("        there is ambiguous (contamination vs. genuine recent acceleration).")
     print("\n  ===== PROBLEM-VINTAGE DiD (full window — breaks the tie) =====")
