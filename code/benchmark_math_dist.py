@@ -176,7 +176,14 @@ def _sympy_equivalent(extracted, gold):
 
 
 def is_correct(extracted, gold):
-    """Cascading equivalence: normalized string -> integer -> float -> sympy symbolic."""
+    """Cascading equivalence: normalized string -> integer -> float -> sympy symbolic.
+
+    WARNING: this grader is BRITTLE and under-counts terse/efficient models (it fails
+    on answer prefixes, work-in-\\boxed{}, units, leading zeros, equivalent radicals).
+    It was the source of a systematic grading bias — see archive/README.md. For grading
+    results, use the robust grader in code/regrade.py::is_correct instead. This function
+    is retained only for backward compatibility with old run scripts.
+    """
     a = normalize(extracted)
     b = normalize(gold)
     if a is None or b is None:
