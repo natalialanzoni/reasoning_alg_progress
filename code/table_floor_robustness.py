@@ -104,7 +104,10 @@ for fam, mf in FAMILIES:
     n_correct = len(build(mf, None))          # every correct trace: the no-floor N
     for name, fl in SPECS:
         b, se, lo, hi, a, n, G = fit(build(mf, fl))
-        cbar = np.mean([FLOORS[t][fl or "min"] for t in KEYS])
+        # No floor is subtracted in the "none" row, so it has no C_j to report.
+        # log(L/C_min) is used there only so the scale matches: with problem FE a
+        # per-problem constant is fully absorbed, so beta equals that of plain log L.
+        cbar = np.mean([FLOORS[t][fl] for t in KEYS]) if fl else None
         target = math.log(0.10) if fl else math.log(1.10)
         res[(fam, name)] = dict(
             b=b, se=se, lo=lo, hi=hi, n=n, G=G, drop=n_correct - n, cbar=cbar,
@@ -116,7 +119,8 @@ print(f"\n{'family':<24s} {'floor':<14s} {'C (tok)':>8s} {'beta':>9s} {'SE':>7s}
 for fam, _ in FAMILIES:
     for name, _fl in SPECS:
         r = res[(fam, name)]
-        print(f"  {fam:<22s} {name:<14s} {r['cbar']:>8.0f} {r['b']:>+9.4f} {r['se']:>7.4f} "
+        cb = f"{r['cbar']:.0f}" if r["cbar"] else "--"
+        print(f"  {fam:<22s} {name:<14s} {cb:>8s} {r['b']:>+9.4f} {r['se']:>7.4f} "
               f"{r['q']:>6.1f}% {r['hl']:>9.1f}m {r['n']:>6d} {r['drop']:>5d} "
               f"{r['date']:%Y-%m}".rjust(0))
     qs = [res[(fam, n)]["q"] for n, _ in SPECS]
@@ -136,7 +140,8 @@ for fi, (fam, _) in enumerate(FAMILIES):
     for si, (name, _fl) in enumerate(SPECS):
         r = res[(fam, name)]
         lead = fam if si == 0 else ""
-        print(f"{lead} & {name} & {r['cbar']:.0f} & ${r['b']:.3f}$ ({r['se']:.3f}) & "
+        cb = f"{r['cbar']:.0f}" if r["cbar"] else r"---"
+        print(f"{lead} & {name} & {cb} & ${r['b']:.3f}$ ({r['se']:.3f}) & "
               f"{r['q']:.1f}\\% & {r['hl']:.1f} & {r['date']:%Y-%m} \\\\")
     if fi == 0:
         print(r"\addlinespace")
