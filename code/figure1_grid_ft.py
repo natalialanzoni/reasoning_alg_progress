@@ -46,28 +46,46 @@ DIFF_NAME = {2: "easy", 3: "medium", 4: "hard", 5: "olympiad", 6: "frontier"}
 # hard-but-doable uses just two levels — give them clearly distinct hues
 HARD_COLOR = {4: "#EC9006", 5: "#7B1E3B"}   # hard = amber, olympiad = deep maroon
 
-# Human-solve-rate difficulty tiers from competition position (AIME "sequential
-# rule": #1-5 solved by 40-70%+ of contestants, #6-10 by 15-40%, #11-15 by <5%).
-# Both AIME and HMMT number problems in increasing difficulty, so position is a
-# graded difficulty scale. We put them on one "effective AIME-equivalent" axis:
-# HMMT is elite (+5 shift), MATH-500 is easy, olymmath/frontiermath are hardest.
+# Difficulty tiers from competition position. AIME numbers its problems in
+# increasing difficulty (the "sequential rule": #1-5 are solved by 40-70%+ of
+# contestants, #6-10 by 15-40%, #11-15 by under 5%). HMMT is a harder competition
+# than AIME outright -- invitational, elite field, olympiad-style -- so every HMMT
+# problem ranks above every AIME problem rather than being interleaved by number:
+#
+#     AIME   1-10   -> medium       (early AIME)
+#     AIME  11-15   -> hard         (late AIME)
+#     HMMT  (any)   -> very hard    (harder competition than AIME throughout)
+#     MATH-500      -> easy
+#
+# So the hard-but-doable-10 sample spans medium / hard / very hard exactly as
+# intended. Problems with no competition position (olymmath, frontiermath) have no
+# position to read and return None, so they are skipped rather than mislabelled.
 TIER_COLOR = {"easy": "#4DAF4A", "medium": "#FDAE61", "hard": "#D7301F", "very hard": "#7F0000"}
 TIER_ORDER = ["easy", "medium", "hard", "very hard"]
 
 
-def _eff_pos(tid):
-    t = str(tid); m = re.search(r"_(\d+)$", t); pos = int(m.group(1)) if m else 0
-    if t.startswith("aime"):      return pos
-    if t.startswith("hmmt"):      return pos + 5      # elite: shift harder
-    if t.startswith("math_500"):  return 2            # highest human solve rates
-    return 15                                          # olymmath / frontiermath
-
-
 def human_tier(tid):
-    e = _eff_pos(tid)
-    return "easy" if e <= 5 else "medium" if e <= 9 else "hard" if e <= 12 else "very hard"
+    t = str(tid); m = re.search(r"_(\d+)$", t)
+    pos = int(m.group(1)) if m else 0
+    if t.startswith("math_500"):
+        return "easy"
+    if t.startswith("aime"):
+        return "medium" if pos <= 10 else "hard"
+    if t.startswith("hmmt"):
+        return "very hard"                             # harder competition than AIME
+    return None                                        # olymmath / frontiermath
 PER_BUCKET = 3     # full-benchmark row 3: problems sampled per difficulty level
-FLOOR = pf.canon_short   # minimal human derivation (shortest canonical), ~303 tok over 45q
+
+# MATH-500 is EXCLUDED from this figure. It is 5 easy problems on which the recent
+# models sit at (or below) the minimal human derivation, so they drag the row-2 mean
+# down and are unusable for any floor-relative statement. The sample here is the 40
+# competition problems: AIME 2026 I/II + HMMT February 2026.
+KEYS = {t for t in pf.CANON_KEYS if not str(t).startswith("math_500")}
+# The floor must be recomputed over the SAME sample — MATH-500's canonical solutions
+# are short (~202 tok), so leaving them in canon_short would understate the floor.
+FLOOR = float(np.mean([pf.CANON[t]["min"] for t in KEYS]))
+print(f"figure1_grid: {len(KEYS)} competition problems (MATH-500 excluded), "
+      f"floor = {FLOOR:.0f} tok  (all-45 floor was {pf.canon_short:.0f})")
 
 FAB_S = [("Fable 5.1", datetime(2026, 9, 1), _D / "fable5.1_shallow_pass" / "claude-fable-5-1_medium_thinking_benchmark.json")]
 FAB_H = [("claude-fable-5-1", datetime(2026, 9, 1), _D / "hard_but_doable_10q_k32" / "claude-fable-5-1_medium_thinking_benchmark_hard_but_doable_10.json")]
@@ -88,13 +106,13 @@ def clean_label(name):
 
 
 def shallow_dist(model_files):
-    """Per model: date, mean correct-trace length, accuracy (45 canonical)."""
+    """Per model: date, mean correct-trace length, accuracy (40 competition problems)."""
     labels, dates, mean, acc = [], [], [], []
     for label, date, path in model_files:
         labels.append(clean_label(label))
         toks, nc, nt = [], 0, 0
         for r in pf.load_rows(path):
-            if str(r["task_id"]) not in pf.CANON_KEYS:
+            if str(r["task_id"]) not in KEYS:
                 continue
             texts = r.get("response_texts", [None] * len(r["correct"]))
             for tok, c, txt in zip(r["total_completion_tokens"], r["correct"], texts):
@@ -114,7 +132,10 @@ def hard_perproblem(hard_files):
     prob, diff = {}, {}
     for i, (label, date, path) in enumerate(hard_files):
         for r in pf.load_rows(path):
-            pid = str(r["task_id"]); diff[pid] = r.get("difficulty")
+            pid = str(r["task_id"])
+            if pid not in KEYS:        # drop MATH-500 and anything with no floor
+                continue               # (olymmath/frontiermath have no canonical soln)
+            diff[pid] = r.get("difficulty")
             texts = r.get("response_texts", [None] * len(r["correct"]))
             toks = [tok for tok, c, txt in zip(r["total_completion_tokens"], r["correct"], texts)
                     if c and fs._trial_ok(tok, txt)]
@@ -164,6 +185,7 @@ def build(fname, full_row3):
         a2 = axes[2][col]                                   # Row 3 — per-problem by difficulty
         hdx, prob, diff = hard_perproblem(shallow if full_row3 else hard)
         cat = {p: human_tier(p) for p in prob}              # human-solve-rate tiers
+        prob = {p: d for p, d in prob.items() if cat[p]}    # skip anything unlabelled
         palette = TIER_COLOR
         if full_row3:                                       # sample N problems per tier
             keep = set()
