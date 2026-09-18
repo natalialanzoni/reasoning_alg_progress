@@ -8,11 +8,20 @@ Figure 1 (3x2, FutureTech house style). Columns = OpenAI (GPT) | Anthropic
      IQR bands over generations, shaded by problem difficulty (dataset rating 4-5:
      4 = "hard", 5 = "olympiad").
 
-Tokens are correct traces only (reasoning + answer). Rows 1-2 use the shallow-pass
-frontier set; row 3 uses the hard-but-doable-10 k=32 set.
+Sample = the 40 competition problems (AIME 2026 I/II + HMMT Feb 2026); MATH-500 is
+excluded and the floor is recomputed over the same 40 (316 tok). Rows 1-2 use the
+shallow-pass set (k=8); row 3 the hard-but-doable-10 set (k=32). Both columns share
+one time axis so the two families can be compared on the same calendar.
+
+Writes:
+  fig1_grid            row 3 = hard-but-doable-10, CORRECT traces  (main text)
+  fig1_grid_fulldiff   row 3 = full benchmark k=8, sampled per tier
+  fig1_grid_alltraces  APPENDIX: identical to fig1_grid but tokens come from ALL
+                       valid attempts, right or wrong -- no conditioning on
+                       correctness, so the problem mix is the same for every model
 
     MPLBACKEND=Agg ./venv/bin/python code/figure1_grid_ft.py
-Output -> figures/figs_sept/fig1_grid.{png,pdf}
+Output -> figures/figs_sept/fig1_grid*.{png,pdf}
 """
 import importlib.util
 import os
@@ -105,8 +114,16 @@ def clean_label(name):
     return name
 
 
-def shallow_dist(model_files):
-    """Per model: date, mean correct-trace length, accuracy (40 competition problems)."""
+def shallow_dist(model_files, successes_only=True):
+    """Per model: date, mean trace length, accuracy (40 competition problems).
+
+    successes_only=True  -> tokens from CORRECT traces only ("tokens to solve"). This
+    conditions on accuracy, so later models' means include harder problems that earlier
+    models never solved -- a bias AGAINST measured efficiency gains.
+    successes_only=False -> tokens from EVERY valid attempt, right or wrong. No
+    conditioning, so the problem mix is identical across models. Accuracy (nc/nt) is
+    computed over all valid attempts either way and is unaffected by this switch.
+    """
     labels, dates, mean, acc = [], [], [], []
     for label, date, path in model_files:
         labels.append(clean_label(label))
@@ -119,14 +136,14 @@ def shallow_dist(model_files):
                 if not fs._trial_ok(tok, txt):
                     continue
                 nt += 1; nc += int(c)
-                if c:
+                if c or not successes_only:
                     toks.append(tok)
         dates.append(date); mean.append(np.mean(toks))
         acc.append(100 * nc / max(1, nt))
     return mdates.date2num(dates), labels, mean, acc
 
 
-def hard_perproblem(hard_files):
+def hard_perproblem(hard_files, successes_only=True):
     """Per problem: (dates, median, p25, p75) over models + its difficulty rating."""
     dates = [d for _, d, _ in hard_files]
     prob, diff = {}, {}
@@ -138,7 +155,7 @@ def hard_perproblem(hard_files):
             diff[pid] = r.get("difficulty")
             texts = r.get("response_texts", [None] * len(r["correct"]))
             toks = [tok for tok, c, txt in zip(r["total_completion_tokens"], r["correct"], texts)
-                    if c and fs._trial_ok(tok, txt)]
+                    if (c or not successes_only) and fs._trial_ok(tok, txt)]
             if toks:
                 d = prob.setdefault(pid, {"i": [], "med": [], "lo": [], "hi": []})
                 d["i"].append(i); d["med"].append(np.median(toks))
@@ -151,9 +168,10 @@ plt.rcParams.update({"axes.labelsize": 15, "xtick.labelsize": 13, "ytick.labelsi
                      "axes.titlesize": 17})
 
 
-def build(fname, full_row3):
+def build(fname, full_row3, successes_only=True):
     """full_row3=False -> row 3 = hard-but-doable k=32 (difficulty 4-5);
-    full_row3=True -> row 3 = full benchmark k=8 (all difficulty levels 2-6)."""
+    full_row3=True -> row 3 = full benchmark k=8 (all difficulty levels 2-6).
+    successes_only=False -> appendix variant on ALL attempts (see shallow_dist)."""
     # ONE SHARED TIME AXIS across both columns. With a per-column axis the two
     # families were drawn the same physical width despite covering very different
     # spans (GPT 2024-12 -> 2026-09, Anthropic 2025-11 -> 2026-09), which made
@@ -167,7 +185,7 @@ def build(fname, full_row3):
                              gridspec_kw={"hspace": 0.18, "wspace": 0.22})
     seen = set()
     for col, (title, shallow, hard) in enumerate(FAMILIES):
-        dx, labs, mean, acc = shallow_dist(shallow)
+        dx, labs, mean, acc = shallow_dist(shallow, successes_only)
 
         a0 = axes[0][col]                                   # Row 1 — accuracy
         a0.plot(dx, acc, "-o", color=ACC, lw=2.6, ms=8, zorder=5)
@@ -211,7 +229,7 @@ def build(fname, full_row3):
               f"  over {months} months ({d0:%Y-%m} -> {d1:%Y-%m})")
 
         a2 = axes[2][col]                                   # Row 3 — per-problem by difficulty
-        hdx, prob, diff = hard_perproblem(shallow if full_row3 else hard)
+        hdx, prob, diff = hard_perproblem(shallow if full_row3 else hard, successes_only)
         cat = {p: human_tier(p) for p in prob}              # human-solve-rate tiers
         prob = {p: d for p, d in prob.items() if cat[p]}    # skip anything unlabelled
         palette = TIER_COLOR
@@ -238,9 +256,10 @@ def build(fname, full_row3):
         a2.set_xlabel("Release date")
 
     axes[0][0].set_ylabel("Accuracy")
-    axes[1][0].set_ylabel("Mean output tokens")
+    cond = "correct traces" if successes_only else "all attempts"
+    axes[1][0].set_ylabel(f"Mean output tokens\n({cond})")
     src = "full benchmark" if full_row3 else "hard-but-doable"
-    axes[2][0].set_ylabel(f"Output tokens\n({src}, per problem)")
+    axes[2][0].set_ylabel(f"Output tokens\n({src}, {cond})")
     # MATCHED-WINDOW check: the raw per-family ratios are not comparable because the
     # families cover different spans. Recompute each family over the LATEST-COMMON
     # window (starts at the later of the two first-model dates) so the two numbers
@@ -250,7 +269,7 @@ def build(fname, full_row3):
     print(f"  matched window from {t0:%Y-%m} (the later of the two family starts):")
     for title, shallow, _ in FAMILIES:
         sub = [m for m in shallow if m[1] >= t0]
-        _, _, mn, _ = shallow_dist(sub)
+        _, _, mn, _ = shallow_dist(sub, successes_only)
         r = mn[0] / mn[-1]
         print(f"    {title:<26s} {mn[0]:.0f} -> {mn[-1]:.0f} tok = {r:.1f}x"
               f"  ({len(sub)} models, {sub[0][0]} -> {sub[-1][0]})")
@@ -264,4 +283,8 @@ def build(fname, full_row3):
 
 p1 = build("fig1_grid", full_row3=False)
 p2 = build("fig1_grid_fulldiff", full_row3=True)
-print("wrote", *p1, *p2, sep="\n  ")
+# APPENDIX: identical figure on ALL attempts (no conditioning on correctness), so
+# the "results are largely unchanged including failures" claim is backed by the
+# same code path and the same 40-problem sample.
+p3 = build("fig1_grid_alltraces", full_row3=False, successes_only=False)
+print("wrote", *p1, *p2, *p3, sep="\n  ")
