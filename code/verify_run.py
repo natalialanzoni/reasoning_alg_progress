@@ -29,8 +29,10 @@ def verify(path, cap):
     cfg = json.load(open(runcfg)) if os.path.exists(runcfg) else None
 
     tok = [v for r in rows for v in r.get("total_completion_tokens", [])]
-    rsn = [v for r in rows for v in r.get("reasoning_tokens", [])] if any(
-        "reasoning_tokens" in r for r in rows) else []
+    # The results schema calls this thinking_tokens (reasoning_tokens is the
+    # per-attempt field inside one_request, not what lands in the file).
+    rsn = [v for r in rows for v in r.get("thinking_tokens", [])] if any(
+        "thinking_tokens" in r for r in rows) else []
     provs = Counter(p for r in rows for p in (r.get("providers_used") or []) if p)
     served = Counter(m for r in rows for m in (r.get("models_served") or []) if m)
     finish = Counter(f for r in rows for f in (r.get("finish_reasons") or []) if f)

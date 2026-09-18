@@ -56,8 +56,13 @@ INSTRUCTIONS = (
 # ----------------------------------------------------------------------------
 MODELS = [
     # The Apr-2026 V4 Pro launch build -- the frontier point on the DeepSeek
-    # timeline (R1-0528 -> V3.1 Terminus -> V3.2 -> V4 Pro). Effort: low/high/max
-    # (medium/xhigh collapse to high, minimal to low, ultra to max).
+    # timeline (R1-0528 -> V3.1 Terminus -> V3.2 -> V4 Pro).
+    # EFFORT: DeepSeek has exactly three levels -- low, high, max. OpenRouter's
+    # API accepts seven (max|xhigh|high|medium|low|minimal|none; anything else is
+    # a 400, verified 2026-09-17) and routes the rest INTERNALLY down to those
+    # three. So sending "medium" here would be silently remapped -- the same trap
+    # that invalidated the GLM 5.2/5.3 sweep. Send only low/high/max, which are
+    # native and pass through unchanged.
     # SILICONFLOW FOR THE WHOLE FAMILY: all four DeepSeek models below are pinned
     # to SiliconFlow at fp8 so provider is not a confound in the within-family
     # comparison. fp8 is the best quantization any OpenRouter provider offers for
@@ -67,6 +72,19 @@ MODELS = [
     # defaults apply -- one provider means one set of defaults across the series.
     dict(label="DeepSeek V4 Pro", series="deepseek-v4", or_model="deepseek/deepseek-v4-pro",
          provider="siliconflow", quant="fp8", provider_max=393_216, price_in=1.50, price_out=3.14),
+    # NEW DATA, NOT the same model as "DeepSeek V4 Pro" above. Served by DeepSeek's
+    # OWN API, where `deepseek-v4-pro` is a ROLLING pointer to the latest GA build
+    # (release note 2026-08-13: "simply set the model name to deepseek-v4-pro to use
+    # the latest version"), i.e. the 0813 GA build -- while OpenRouter's
+    # `deepseek/deepseek-v4-pro` is a fixed 2026-04-24 listing. Keep the two apart.
+    # Why it exists: SiliconFlow truncated ~11% of V4 trials at 32,768 despite a
+    # 40,000 request, varying PER REQUEST. Direct has one backend, and a measured
+    # 39,946-token completion with finish_reason "stop" -- the cap behaves.
+    # provider/quant are unused on this path (no routing); provider_max is DeepSeek's
+    # documented 64K output ceiling.
+    dict(label="DeepSeek V4 Pro GA", series="deepseek-v4-ga", or_model="deepseek-v4-pro",
+         api="deepseek", provider="deepseek-direct", quant=None, provider_max=65_536,
+         price_in=0.28, price_out=0.42),
     dict(label="DeepSeek V4 Pro 0813", series="deepseek-v4", or_model="deepseek/deepseek-v4-pro-0813",
          provider="novita", quant="fp8", provider_max=393_216, price_in=1.32, price_out=3.96),
     # DeepSeek V4 Flash removed: efficiency variant, not a frontier model.
@@ -137,9 +155,13 @@ _EFFORT = {
     # Same bug, same fix: neither of these has a "medium" either.
     "Kimi K3": "high",              # platform.kimi.ai: low/high/max, default max
     "DeepSeek V4 Pro 0813": "high", # api-docs.deepseek.com: high/max; low+medium -> high
-    # api-docs.deepseek.com thinking-mode table: the real levels are low/high/max
-    # (default high). minimal->low, medium/xhigh->high, ultra->max, none disables.
+    # Three native levels: low/high/max (default high). Everything else OpenRouter
+    # accepts is remapped onto these internally -- see the MODELS comment above.
     "DeepSeek V4 Pro": "high",
+    # Same three levels, confirmed by DeepSeek's 2026-08-13 release note:
+    # "low / high / max ... use low for simple tasks, high for daily Agent tasks,
+    # and max for more complex scenarios."
+    "DeepSeek V4 Pro GA": "high",
 }
 # "high" is the one level natively supported by all four of these models, which is
 # what makes it the matched setting. Every other model here exposes no effort knob
@@ -282,22 +304,41 @@ def one_request(client, m, problem, max_tokens, max_attempts=4):
             # medium effort where the model supports it; otherwise just ensure
             # reasoning is turned on (no effort knob available).
             reasoning = {"effort": m["effort"]} if m.get("effort") else {"enabled": True}
-            resp = client.chat.completions.create(
-                model=m["or_model"],
-                messages=[{"role": "system", "content": INSTRUCTIONS},
-                          {"role": "user", "content": problem}],
-                max_tokens=max_tokens,
-                extra_body={"provider": provider_pref(m), "reasoning": reasoning},
-            )
+            if m.get("api") == "deepseek":
+                # DeepSeek's own API: no provider routing (one backend, so
+                # max_tokens means one thing on every request -- the reason for
+                # using it), effort is a TOP-LEVEL reasoning_effort, and the CoT
+                # comes back as reasoning_content rather than reasoning.
+                kw = {"reasoning_effort": m["effort"]} if m.get("effort") else {}
+                resp = client.chat.completions.create(
+                    model=m["or_model"],
+                    messages=[{"role": "system", "content": INSTRUCTIONS},
+                              {"role": "user", "content": problem}],
+                    max_tokens=max_tokens, **kw)
+                reasoning = kw or {"reasoning_effort": None}
+            else:
+                resp = client.chat.completions.create(
+                    model=m["or_model"],
+                    messages=[{"role": "system", "content": INSTRUCTIONS},
+                              {"role": "user", "content": problem}],
+                    max_tokens=max_tokens,
+                    extra_body={"provider": provider_pref(m), "reasoning": reasoning},
+                )
             msg = resp.choices[0].message
             u = resp.usage
             det = getattr(u, "completion_tokens_details", None)
             reasoning_tok = (getattr(det, "reasoning_tokens", 0) or 0) if det else 0
             return {"text": msg.content or "",
-                    "reasoning": getattr(msg, "reasoning", None) or "",  # full CoT trace
+                    # DeepSeek direct returns reasoning_content; OpenRouter returns reasoning.
+                    "reasoning": (getattr(msg, "reasoning", None)
+                                  or getattr(msg, "reasoning_content", None) or ""),
                     "input_tokens": u.prompt_tokens,
                     "output_tokens": u.completion_tokens, "reasoning_tokens": reasoning_tok,
-                    "provider": getattr(resp, "provider", None),
+                    # DeepSeek direct has no provider field; system_fingerprint is
+                    # the only build identifier, and "deepseek-v4-pro" there is a
+                    # ROLLING pointer to the latest GA build (release note 2026-08-13).
+                    "provider": getattr(resp, "provider", None) or m.get("api"),
+                    "fingerprint": getattr(resp, "system_fingerprint", None),
                     # recorded so a run is self-documenting: gen_id can be replayed
                     # against GET /api/v1/generation?id=... and reasoning_sent shows
                     # what we asked for (vendors may silently remap it -- see _EFFORT)
@@ -317,6 +358,7 @@ def one_request(client, m, problem, max_tokens, max_attempts=4):
             return {"text": "", "reasoning": "", "input_tokens": 0, "output_tokens": 0,
                     "reasoning_tokens": 0, "provider": None, "gen_id": None,
                     "reasoning_sent": reasoning, "model_served": None,
+                    "fingerprint": None,
                     "finish_reason": None, "error": f"{type(e).__name__}: {e}"}
 
 
@@ -360,6 +402,7 @@ def run_model(client, m, problems, n_samples, max_tokens, workers):
             "generation_ids": [s.get("gen_id") for s in samples],
             "reasoning_sent": [s.get("reasoning_sent") for s in samples],
             "models_served": [s.get("model_served") for s in samples],
+            "fingerprints": [s.get("fingerprint") for s in samples],
             "finish_reasons": [s.get("finish_reason") for s in samples],
             "errors": [s.get("error") for s in samples],  # None when the call succeeded
             "solved_at_least_once": any(correct),
@@ -494,6 +537,18 @@ def main():
     client = OpenAI(base_url=OPENROUTER_BASE, api_key=api_key,
                     timeout=900.0, max_retries=5)
 
+    # Models on DeepSeek's own API need a different base_url and key. Built lazily
+    # so an OpenRouter-only run never requires DEEPSEEK_API to be set.
+    ds_client = None
+    if any(m.get("api") == "deepseek" for m in selected):
+        ds_key = os.environ.get("DEEPSEEK_API") or os.environ.get("DEEPSEEK_API_KEY")
+        if not ds_key:
+            raise SystemExit("DEEPSEEK_API not set, but a selected model uses the "
+                             "DeepSeek API directly. source ~/.bashrc first.")
+        ds_client = OpenAI(base_url="https://api.deepseek.com", api_key=ds_key,
+                           timeout=1800.0, max_retries=5)
+        print("DeepSeek direct API client ready (base_url=https://api.deepseek.com)")
+
     for m in selected:
         cap = min(args.max_tokens, m["provider_max"])
         slug = _slug(m["label"])
@@ -506,12 +561,17 @@ def main():
         runcfg.write_text(json.dumps({
             "run_started": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
             "label": m["label"], "or_model": m["or_model"],
-            "provider_pin": provider_pref(m),
-            "reasoning_sent": ({"effort": m["effort"]} if m.get("effort")
-                               else {"enabled": True}),
+            "api": m.get("api", "openrouter"),
+            "base_url": ("https://api.deepseek.com" if m.get("api") == "deepseek"
+                         else OPENROUTER_BASE),
+            "provider_pin": None if m.get("api") == "deepseek" else provider_pref(m),
+            "reasoning_sent": (({"reasoning_effort": m["effort"]} if m.get("effort") else {})
+                               if m.get("api") == "deepseek"
+                               else ({"effort": m["effort"]} if m.get("effort")
+                                     else {"enabled": True})),
             "effort_override": args.effort,
             "max_tokens_requested": args.max_tokens, "cap_applied": cap,
-            "key_env": key_env,
+            "key_env": "DEEPSEEK_API" if m.get("api") == "deepseek" else key_env,
             "n_samples": args.n_samples, "dataset": args.dataset, "split": args.split,
             "n_problems": len(problems), "tag": tag,
         }, indent=2) + "\n")
@@ -535,7 +595,8 @@ def main():
         if not todo:
             print("  nothing new — skipping.")
             continue
-        rows = run_model(client, m, todo, args.n_samples, cap, args.workers)
+        rows = run_model(ds_client if m.get("api") == "deepseek" else client,
+                         m, todo, args.n_samples, cap, args.workers)
         # Split: results file matches the proprietary schema (no bulky traces);
         # a parallel file holds the full reasoning traces, joinable by task_id.
         new_res = [{k: v for k, v in r.items() if k != "reasoning_texts"} for r in rows]

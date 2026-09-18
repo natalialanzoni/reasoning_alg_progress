@@ -163,14 +163,25 @@ JSON and then `pkill`ed the first driver. That was a latent bug: the JSON is
 written *before* the repair loop runs, so the supervisor would have killed the
 driver mid-repair. One driver, one process, no file-watching handoff.
 
-## 7. In flight as of 2026-09-17 15:50
+## 7. In flight as of 2026-09-18 10:30
 
-- **DeepSeek R1-0528** on SiliconFlow, 45 problems, k=8, cap 40k, 12 workers —
-  running, 20/360 at 15:47. **Leave it alone.**
-- The V4 Pro run on Parasail was stopped when the family was standardized on
-  SiliconFlow; nothing had been written.
-- `ds_siliconflow_chain.sh` is ready but **not launched**, pending
-  `ERA_OPENROUTER_V2`.
+Complete, 45 problems, k=8, cap 40,000, all on SiliconFlow via OpenRouter.
+Accuracy shown raw and right-censored at 32,768:
+
+| model | raw | censored @32,768 | median tokens | over 40k cap |
+|---|---|---|---|---|
+| R1-0528 | 76.9% | 63.9% | 21,535 | 76 |
+| V3.2 | 91.1% | 84.4% | 11,572 | 25 |
+| V4 Pro (Apr build) high | 80.3% | 78.1% | 8,518 | 0 (41 cut at 32,768) |
+| V3.1 Terminus | 60.6% | 60.6% | 2,940 | 0 — **dropped**, see 7c |
+
+R1's 13-point drop under censoring is the measure of how much SiliconFlow
+ignoring `max_tokens` was flattering it. Read those raw numbers with care: V3.2
+beating the frontier model is substantially an artifact of V3.2 being allowed
+82,918 tokens while V4 Pro was held to 40,000.
+
+Running: V4 Pro (Apr build) `max` on OpenRouter, and the full
+`DeepSeek V4 Pro GA` chain (high → low → max) on the direct API.
 
 **Measured throughput, so nobody re-derives it:** one R1-0528 request at these
 exact settings took **265.7s** (5,651 output tokens, `finish_reason: stop`).
@@ -179,6 +190,82 @@ counter prints every 20 requests and **decelerates** as a pass proceeds, because
 short generations finish first and what remains in flight skews long. A counter
 that has not moved in 20 minutes is normal; confirm with an I/O delta
 (`/proc/<pid>/io` rchar over two minutes) before concluding anything is stuck.
+
+## 7a. DeepSeek: which build is which
+
+Two V4 Pro results exist and they are **different models**. Never merge them.
+
+| our label | endpoint | model string | build |
+|---|---|---|---|
+| `DeepSeek V4 Pro` | OpenRouter | `deepseek/deepseek-v4-pro` | fixed **2026-04-24** listing |
+| `DeepSeek V4 Pro GA` | api.deepseek.com | `deepseek-v4-pro` | **rolling**, currently the 0813 GA build |
+
+OpenRouter lists `deepseek/deepseek-v4-pro` (2026-04-24) and
+`deepseek/deepseek-v4-pro-0813` (2026-08-12) as separate entries, so the
+OpenRouter pin is stable. DeepSeek's own API is not: their 2026-08-13 release
+note says "simply set the model name to `deepseek-v4-pro` to use **the latest
+version**." The only build identifier it returns is `system_fingerprint`, which
+is why that is now recorded per attempt as `fingerprints` (observed
+`a307abda487cd1b463329ccb945ce396`). **Check it before pooling runs** — if it
+changes between passes, DeepSeek shipped a new build mid-study.
+
+Results go to `deepseek_v4_pro_ga_shallow_pass/`, a separate folder, so the two
+cannot be merged by accident.
+
+**Effort levels are low / high / max**, confirmed by that same release note
+("use low for simple tasks, high for daily Agent tasks, and max for more complex
+scenarios"). OpenRouter's API accepts seven values
+(`max|xhigh|high|medium|low|minimal|none`; anything else is a 400) and routes the
+rest internally onto those three — so sending `medium` gets silently remapped,
+the trap that invalidated the GLM 5.2/5.3 sweep. Send only the three native ones.
+
+On the direct API, effort is a **top-level `reasoning_effort`**, not
+`extra_body.reasoning.effort`, and the CoT arrives as **`reasoning_content`**,
+not `reasoning`. Both are handled in `one_request`.
+
+**Do not request `deepseek-reasoner` on the direct API.** It is served as
+`deepseek-flash` — measured, three for three. Flash is the efficiency variant,
+explicitly out of scope. Always name `deepseek-v4-pro` and check `models_served`.
+
+## 7b. Why V4 was re-run directly
+
+SiliconFlow truncated V4 Pro trials at **32,768** despite a 40,000 request — 41
+of 360 on the `high` pass — while other trials on the same model and effort ran
+to the full 40,000. The truncation point varied **per request**, so two trials of
+the same problem were not measuring the same thing. It looks like load-balancing
+across backends with different output limits.
+
+The direct API has one backend. A measured request on the problem that truncated
+under OpenRouter returned **39,946 tokens with `finish_reason: "stop"`** — it
+generated to the cap and stopped naturally.
+
+Separately, SiliconFlow ignores `max_tokens` entirely for the models with no
+effort knob: R1-0528 ran to 66,106 (76 trials over cap) and V3.2 to 82,918 (25
+over). Those need `censor_over_cap.py`; the decision recorded so far is **40,000
+as primary** (matching GLM/Kimi/Opus so cross-family comparisons stay valid) with
+32,768 as a robustness check.
+
+## 7c. SiliconFlow mangles V3.1 Terminus
+
+Dropped from the study, recorded so nobody re-runs it there. Same problem, same
+request, varying only the provider:
+
+| provider | completion tokens | content chars |
+|---|---|---|
+| SiliconFlow | 4,419 | **0** |
+| AtlasCloud | 9,956 | 4,784 |
+| Novita | 9,746 | 1,494 |
+| StreamLake | 11,280 | 3,934 |
+
+SiliconFlow returns under half the tokens and **no answer content at all** —
+359 of 360 trials in the full run. The `<think>` block is never closed, so the
+whole generation including the answer is labelled reasoning. Recoverable
+(`recover_trace_answers.py` took it from 0.3% to 60.6%) but the trace lengths are
+not trustworthy, so the model was dropped rather than re-run.
+
+This was nearly missed: the run had zero errors, zero zero-token trials, reasoning
+tokens present, one provider, one snapshot, and every trial `finish: stop`.
+`reasoning_tokens > 0` is **not** sufficient evidence that thinking is on.
 
 ## 8. Known gaps
 
