@@ -154,7 +154,16 @@ plt.rcParams.update({"axes.labelsize": 15, "xtick.labelsize": 13, "ytick.labelsi
 def build(fname, full_row3):
     """full_row3=False -> row 3 = hard-but-doable k=32 (difficulty 4-5);
     full_row3=True -> row 3 = full benchmark k=8 (all difficulty levels 2-6)."""
-    fig, axes = plt.subplots(3, 2, figsize=(15, 13.5), sharex="col",
+    # ONE SHARED TIME AXIS across both columns. With a per-column axis the two
+    # families were drawn the same physical width despite covering very different
+    # spans (GPT 2024-12 -> 2026-09, Anthropic 2025-11 -> 2026-09), which made
+    # Anthropic's flat-high accuracy look like a property of the models instead of
+    # an artifact of entering the series 11 months later. On a common axis the late
+    # start is visible, and each family sits against its contemporaries.
+    all_dates = [d for _, sh, _ in FAMILIES for _, d, _ in sh]
+    xlo, xhi = min(all_dates), max(all_dates)
+    pad = (xhi - xlo).days * 0.04
+    fig, axes = plt.subplots(3, 2, figsize=(15, 13.5), sharex=True,
                              gridspec_kw={"hspace": 0.18, "wspace": 0.22})
     seen = set()
     for col, (title, shallow, hard) in enumerate(FAMILIES):
@@ -176,19 +185,30 @@ def build(fname, full_row3):
         a1 = axes[1][col]                                   # Row 2 — mean falling to floor
         a1.plot(dx, mean, "-o", color=TOK, lw=3, ms=8, zorder=5)
         a1.axhline(FLOOR, color=FLOOR_COLOR, lw=2, zorder=3)   # minimal human derivation
-        a1.set_ylim(bottom=0)
+        # headroom above the curve for the compression label. Anthropic's series is
+        # squeezed into the right third of the shared axis with its peak at the top,
+        # so without this the label lands on the data in that column.
+        a1.set_ylim(0, max(mean) * 1.38)
         a1.yaxis.set_major_formatter(unit_formatter(1e3, "k"))
         a1.annotate(f"minimal human derivation ≈ {FLOOR:.0f} tok", (dx[-1], FLOOR),
                     textcoords="offset points", xytext=(0, 5), ha="right", va="bottom",
                     fontsize=10, fontweight="bold", color=FLOOR_COLOR, zorder=6)
         # earliest -> latest compression, anchored upper-RIGHT so it reads as a
         # statement about the newest models rather than the oldest
+        # The window is part of the claim: 8.5x over 21 months is not the same
+        # achievement as 4.8x over 10, so the span is printed under the ratio.
         ratio = mean[0] / mean[-1] if mean[-1] else float("nan")
-        lbl = f"{ratio:.1f}× fewer tokens" if ratio >= 1.15 else f"≈flat ({ratio:.1f}×)"
-        a1.annotate(lbl, xy=(0.97, 0.90), xycoords="axes fraction", ha="right", va="top",
-                    fontsize=15, fontweight="bold", color=TOK, zorder=7,
+        d0, d1 = mdates.num2date(dx[0]), mdates.num2date(dx[-1])
+        months = round((d1 - d0).days / 30.44)
+        lbl = (f"{ratio:.1f}× fewer tokens" if ratio >= 1.15 else f"≈flat ({ratio:.1f}×)")
+        lbl += f"\n{d0:%Y-%m} – {d1:%Y-%m}  ({months} months)"   # en dash: Helvetica
+        #                                                        # Neue has no U+2192
+        a1.annotate(lbl, xy=(0.97, 0.97), xycoords="axes fraction", ha="right", va="top",
+                    fontsize=13.5, fontweight="bold", color=TOK, zorder=7,
+                    linespacing=1.5, multialignment="center",
                     bbox=dict(boxstyle="round,pad=0.3", fc="white", ec=TOK, alpha=0.9))
-        print(f"  row2 {title:<26s} {mean[0]:.0f} -> {mean[-1]:.0f} tok  = {ratio:.1f}x")
+        print(f"  row2 {title:<26s} {mean[0]:.0f} -> {mean[-1]:.0f} tok = {ratio:.1f}x"
+              f"  over {months} months ({d0:%Y-%m} -> {d1:%Y-%m})")
 
         a2 = axes[2][col]                                   # Row 3 — per-problem by difficulty
         hdx, prob, diff = hard_perproblem(shallow if full_row3 else hard)
@@ -214,12 +234,27 @@ def build(fname, full_row3):
         a2.yaxis.set_major_formatter(unit_formatter(1e3, "k"))
         a2.xaxis.set_major_locator(mdates.MonthLocator(interval=4))
         a2.xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m"))
+        a2.set_xlim(mdates.date2num(xlo) - pad, mdates.date2num(xhi) + pad)
         a2.set_xlabel("Release date")
 
     axes[0][0].set_ylabel("Accuracy")
     axes[1][0].set_ylabel("Mean output tokens")
     src = "full benchmark" if full_row3 else "hard-but-doable"
     axes[2][0].set_ylabel(f"Output tokens\n({src}, per problem)")
+    # MATCHED-WINDOW check: the raw per-family ratios are not comparable because the
+    # families cover different spans. Recompute each family over the LATEST-COMMON
+    # window (starts at the later of the two first-model dates) so the two numbers
+    # describe the same stretch of calendar time.
+    starts = [min(d for _, d, _ in sh) for _, sh, _ in FAMILIES]
+    t0 = max(starts)
+    print(f"  matched window from {t0:%Y-%m} (the later of the two family starts):")
+    for title, shallow, _ in FAMILIES:
+        sub = [m for m in shallow if m[1] >= t0]
+        _, _, mn, _ = shallow_dist(sub)
+        r = mn[0] / mn[-1]
+        print(f"    {title:<26s} {mn[0]:.0f} -> {mn[-1]:.0f} tok = {r:.1f}x"
+              f"  ({len(sub)} models, {sub[0][0]} -> {sub[-1][0]})")
+
     keys = [k for k in TIER_ORDER if k in seen]             # human-solve-rate tiers
     handles = [mlines.Line2D([], [], color=TIER_COLOR[k], lw=3, label=k) for k in keys]
     axes[2][1].legend(handles=handles, loc="upper right", fontsize=11, ncol=1,
