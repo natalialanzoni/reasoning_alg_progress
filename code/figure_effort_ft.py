@@ -34,11 +34,22 @@ from futuretech_helpers import use_style, unit_formatter, save_figure
 HERE = os.path.dirname(os.path.abspath(__file__))
 _spec = importlib.util.spec_from_file_location("pf", os.path.join(HERE, "paper_figures_71226.py"))
 pf = importlib.util.module_from_spec(_spec); _spec.loader.exec_module(pf)
-CANON, CANON_KEYS, load_rows, ORIGIN = pf.CANON, pf.CANON_KEYS, pf.load_rows, pf.ORIGIN
+CANON, load_rows, ORIGIN = pf.CANON, pf.load_rows, pf.ORIGIN
 DATA = pf.RESULTS_DIR
 OUT = os.path.join(os.path.dirname(HERE), "figures", "figs_sept")
 FLOOR_C = "#E07A3F"
-REF = pf.canon_short   # minimal human derivation (shortest canonical)
+
+# MATH-500 excluded, matching figure1_grid_ft.py / figure_forecast_ft.py /
+# figure_mechanism_ft.py. The hard-but-doable-10 set contains no MATH-500 problems,
+# so this changes no data here -- but the FLOOR does change: pf.canon_short averages
+# over all 45 canonical problems including MATH-500's short solutions (303 tok),
+# whereas every other figure now draws the floor over the 40 competition problems
+# (316 tok). Drawing the 303 line here would put a different floor on this figure
+# than on the ones it is meant to be read against.
+CANON_KEYS = {t for t in pf.CANON_KEYS if not str(t).startswith("math_500")}
+REF = float(np.mean([CANON[t]["min"] for t in CANON_KEYS]))
+print(f"fig_effort: floor = {REF:.0f} tok over {len(CANON_KEYS)} competition problems "
+      f"(all-45 floor was {pf.canon_short:.0f})")
 
 DATES = {"o3": datetime(2025, 4, 16), "gpt-5": datetime(2025, 8, 7),
          "gpt-5.2": datetime(2025, 12, 11), "gpt-5.4": datetime(2026, 3, 5),
@@ -66,12 +77,12 @@ def gather(eff):
         by_id = {}
         for r in load_rows(p):
             tid = str(r["task_id"])
+            if tid not in CANON_KEYS:      # competition problems only (no MATH-500)
+                continue
             tt = r.get("thinking_tokens", [1] * len(r["correct"]))
             toks = [t for t, th in zip(r["total_completion_tokens"], tt) if th > 0]
             if toks:
                 by_id[tid] = float(np.mean(toks))
-            if tid not in CANON_KEYS:
-                continue
             for tok, c, th in zip(r["total_completion_tokens"], r["correct"], tt):
                 if th == 0 or tok <= 0 or not c:
                     continue
