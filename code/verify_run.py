@@ -67,12 +67,31 @@ def verify(path, cap):
     # returns content="" -- no error, no zero-token trial, reasoning tokens
     # present, cap respected, and every trial graded wrong. Check it explicitly.
     texts = [t for r in rows for t in (r.get("response_texts") or [])]
+    fins  = [f for r in rows for f in (r.get("finish_reasons") or [])]
     if texts:
         blank = sum(1 for t in texts if not (t or "").strip())
-        print(f"  empty answer content: {blank} of {len(texts)} trials")
-        if blank:
-            fails.append(f"{blank} trials returned no answer content -- see "
-                         f"recover_trace_answers.py (answer may be inside the trace)")
+        # Empty content has two very different causes and only one is a defect:
+        #   finish=length -> the response was truncated at the cap. Expected, and
+        #                    correctly scored wrong; nothing to recover.
+        #   finish=stop   -> the model finished but its answer was filed as
+        #                    reasoning (unclosed <think>). THIS is the defect --
+        #                    it scores 0% while every other check passes.
+        if len(fins) == len(texts):
+            b_stop = sum(1 for t, f in zip(texts, fins)
+                         if not (t or "").strip() and f == "stop")
+            b_len = sum(1 for t, f in zip(texts, fins)
+                        if not (t or "").strip() and f == "length")
+            print(f"  empty answer content: {blank} of {len(texts)} trials"
+                  f"   ({b_len} truncated = expected, {b_stop} finished = DEFECT)")
+            if b_stop:
+                fails.append(f"{b_stop} trials finished (finish=stop) with no answer "
+                             f"content -- answer filed as reasoning; see "
+                             f"recover_trace_answers.py")
+        else:
+            print(f"  empty answer content: {blank} of {len(texts)} trials")
+            if blank:
+                fails.append(f"{blank} trials returned no answer content -- see "
+                             f"recover_trace_answers.py")
 
     if rsn:
         zr = sum(1 for v in rsn if v == 0)

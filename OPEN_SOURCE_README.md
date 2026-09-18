@@ -267,6 +267,52 @@ This was nearly missed: the run had zero errors, zero zero-token trials, reasoni
 tokens present, one provider, one snapshot, and every trial `finish: stop`.
 `reasoning_tokens > 0` is **not** sufficient evidence that thinking is on.
 
+## 7d. Results, and why there are two groups
+
+**Compare only within provider.** Measured 2026-09-18: after censoring both to a
+common 32,768 ceiling, the same V4 Pro family scored **6-14 points** differently
+across endpoints, so truncation is not the explanation. Three things differ between
+the groups at once - model version (Apr vs GA build), quantization (SiliconFlow
+fp8 vs DeepSeek native), and serving behaviour - and this data cannot decompose
+them. Running `deepseek/deepseek-v4-pro-0813` (the GA build at fp8) would isolate
+quantization from version; not done.
+
+**Group 1 - timeline.** OpenRouter -> SiliconFlow, fp8, censored @32,768:
+
+| model | released | accuracy | median tokens |
+|---|---|---|---|
+| R1-0528 | May 2025 | 63.9% | 21,535 |
+| V3.2 | Dec 2025 | 84.4% | 11,572 |
+| V4 Pro (Apr build) | Apr 2026 | 78.1% | 8,518 |
+
+Trace length falls monotonically, 21,535 -> 8,518, a 2.5x reduction. Raw
+(uncensored) accuracies were 76.9 / 91.1 / 80.3; R1 loses **13 points** to
+censoring because SiliconFlow let it run to 66,106 tokens. Never quote raw numbers
+across models with different cap compliance.
+
+The **V4 dip to 78.1% is partly artifact**: censoring penalises whichever model hits
+the ceiling most, and V4 Pro April had 76 trials >=32,768 against V3.2's 43.
+
+**Group 2 - effort branch.** DeepSeek direct API, GA build, censored @32,768. Zero
+trials cut at 32,768:
+
+| effort | accuracy | median tokens |
+|---|---|---|
+| low | **92.5%** | **3,963** |
+| high | 84.4% | 9,901 |
+| max | 81.4% | 8,325 |
+
+`low` dominates - best accuracy on ~40% of `high`'s tokens - and `max` is both
+worse and shorter than `high`. Unusual shape; verify before publishing.
+
+**Effort control is build-dependent.** The Apr-2026 build collapses `low` and
+`high` (9,098 vs 8,518 median, 80.6% vs 80.3%); only `max` differs (15,268). Effort
+arrived with the GA release. So the effort branch must come from GA, and it is
+reported as its own panel rather than hung off the timeline's V4 point.
+
+**Single-problem probes lie about effort.** n=1 and n=5 samples showed `low` >
+`high`; at 360 trials the ordering was clean. Judge effort response only at scale.
+
 ## 8. Known gaps
 
 - **DeepSeek hard-but-doable-10 at k=32**: nothing usable. Old files in
