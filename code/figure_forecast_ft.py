@@ -16,17 +16,20 @@ paper_figures_71226._fit_headroom_forecast:
   the problem FE (per-problem level) are separate and both present.
 
 Versions written (PRIMARY includes the full GPT series incl. o1, the earliest anchor):
-  fig4_forecast              per-family; successful traces
-  fig4_forecast_2panel       tokens + log multiple-of-floor
+  fig4_forecast_2panel       PRIMARY: ONE ROW, two panels, BOTH families overlaid --
+                             absolute tokens | multiple of the floor (log). Endpoint
+                             dots carry their geometric-mean multiple of the floor.
   fig4_forecast_all_traces   ALL traces
   fig4_forecast_combined     both families on one axis
   fig4_forecast_*_no_o1      SENSITIVITY: drop the earliest point (o1)
   fig4_forecast_arith_mean_appendix   arithmetic-mean token space
   fig4_forecast_precutoff_appendix    CONTAMINATION CHECK: same fit on only the
                              models released on/before 2026-02-05, which cannot
-                             have trained on the AIME/HMMT 2026 problems. MATH-500
-                             and vintage-DiD diagnostics print to console (see
-                             _floor_drop_report for why they are not panels).
+                             have trained on the AIME/HMMT 2026 problems.
+
+SAMPLE: the 40 competition problems. MATH-500 is dropped and the floor is recomputed
+over the same 40 (316 tok, vs 303 over all 45) -- matching figure1_grid_ft.py.
+fig4_forecast (single panel) is RETIRED to archive/stale_figures/.
 
 Only ONE milestone is drawn (within 10% of the floor, see MILE_P).
 
@@ -54,6 +57,22 @@ _spec = importlib.util.spec_from_file_location("pf", os.path.join(HERE, "paper_f
 pf = importlib.util.module_from_spec(_spec); _spec.loader.exec_module(pf)
 OUT = os.path.join(os.path.dirname(HERE), "figures", "figs_sept")
 
+# ---- MATCH FIGURE 1: drop MATH-500, keep the 40 competition problems --------
+# Those 5 easy problems have the newest models sitting at or below the floor, where
+# log(L - C_j) is undefined and 20-67% of their traces get dropped by the L > C_j
+# filter; on the 40 competition problems that falls to 0.3%. We restrict THIS
+# module's private copy of pf (importlib gives each script its own module object,
+# so nothing else is affected) and recompute the floor over the same 40, so every
+# helper below -- including pf._fit_headroom_forecast, which reads pf.CANON_KEYS
+# internally -- is driven off one sample definition rather than two.
+for _t in [t for t in pf.CANON if str(t).startswith("math_500")]:
+    del pf.CANON[_t]
+pf.CANON_KEYS = set(pf.CANON)
+pf.canon_avg = float(np.mean([v["mean"] for v in pf.CANON.values()]))
+pf.canon_short = float(np.mean([v["min"] for v in pf.CANON.values()]))
+print(f"forecast: {len(pf.CANON_KEYS)} competition problems (MATH-500 excluded), "
+      f"floor = {pf.canon_short:.0f} tok")
+
 TOK = PRIMARY            # navy — data + fit (single-family panels)
 FLOOR_C = "#E07A3F"      # amber — irreducible reasoning floor
 SEP_C = "#8A8A8A"        # grey — observed/forecast separator
@@ -61,12 +80,7 @@ OAI_C = CATEGORICAL[0]   # blue  — OpenAI (combined plot)
 ANT_C = CATEGORICAL[1]   # MIT red — Anthropic (combined plot)
 FULL_C = "#6E6E6E"       # grey — full-sample trend overlaid on the appendix check
 CUT_C = "#B2182B"        # red  — benchmark publication cutoff
-# Problem-VINTAGE colours, deliberately distinct from the per-LAB blue/red used in the
-# MATH-500 panel next to it — otherwise the same two colours would mean "OpenAI vs
-# Anthropic" in one panel and "new vs old problems" in the next.
-VINT_NEW = "#6A51A3"     # purple — AIME/HMMT 2026 (new problems)
-VINT_OLD = "#238B45"     # green  — MATH-500 (old problems)
-REF = pf.canon_short   # minimal human derivation (shortest canonical), tokens
+REF = pf.canon_short   # minimal human derivation, over the 40 competition problems
 
 MILE_P = 0.10            # the ONLY milestone drawn: within 10% of the floor
 
@@ -199,7 +213,7 @@ def print_spec(title, fit):
 
 def draw_family(ax, mfiles, excl, successes_only, color, milestones=True,
                 q_xy=(0.96, 0.82), q_label=None, ratio=False, show_q=True,
-                max_end=None):
+                max_end=None, label_dots=False, dot_dy=13, dot_dx=0):
     """Real (solid) observed line, then forecast + CI band. ratio=False plots absolute
     tokens; ratio=True plots the MULTIPLE OF THE FLOOR (L/floor) — divide by REF so the
     floor sits at 1x — with a DOTTED forecast (used on the log panel underneath)."""
@@ -230,6 +244,24 @@ def draw_family(ax, mfiles, excl, successes_only, color, milestones=True,
     ax.plot([d for d, _ in sd], [c for _, c in sd], "-", color=color, lw=2.6, zorder=4)
     ax.plot([d for d, _ in dd], [c for _, c in dd], fc_ls, color=color, lw=2.6, zorder=4)
     ax.plot(odates, octr, "o", color=color, ms=10, zorder=6)
+    if label_dots:
+        # Each dot is the geometric mean of the excess over the floor, so the
+        # natural label is that value as a MULTIPLE of the minimal human
+        # derivation (pts carries it in tokens; divide by REF).
+        # Only the ENDPOINTS: labelling every model made the overlap region
+        # unreadable, and first-vs-last is the comparison the panel is making.
+        _ends = {0, len(pts) - 1}
+        for _i, ((_nm, _dt, _tok, _lo, _hi), _x, _y) in enumerate(zip(pts, odates, octr)):
+            if _i not in _ends:
+                continue
+            ax.annotate(f"{_tok / REF:.0f}x" if _tok / REF >= 10 else
+                        f"{_tok / REF:.1f}x", (_x, _y),
+                        textcoords="offset points", xytext=(dot_dx, dot_dy),
+                        ha="center" if not dot_dx else ("right" if dot_dx < 0 else "left"),
+                        va="bottom" if dot_dy > 0 else "top",
+                        fontsize=10.5, fontweight="bold", color=color,
+                        zorder=9, bbox=dict(boxstyle="round,pad=0.14", fc="white",
+                                           ec="none", alpha=0.85))
 
     if show_q and q_label:
         ax.annotate(f"{q_label}: {fit['quarterly_pct']:.0f}% / quarter", xy=q_xy,
@@ -263,9 +295,12 @@ def _floor(ax, xend=None):
     right edge it collided with the curve as it lands on the floor."""
     ax.axhspan(0, REF, color=FLOOR_C, alpha=0.10, zorder=0)
     ax.axhline(REF, color=FLOOR_C, lw=2.4, zorder=3)
+    # Right-anchored, well above the line. The observed dots (and now their
+    # multiple-of-floor labels) occupy the bottom-LEFT, while by the right-hand end
+    # the curve has flattened onto the floor and everything above it is empty.
     ax.annotate(f"minimal human derivation ≈ {REF:,.0f} tok",
-                xy=(0.015, REF), xycoords=("axes fraction", "data"),
-                textcoords="offset points", xytext=(0, 10), ha="left", va="bottom",
+                xy=(0.985, REF), xycoords=("axes fraction", "data"),
+                textcoords="offset points", xytext=(0, 34), ha="right", va="bottom",
                 fontsize=13.5, fontweight="bold", color=FLOOR_C, zorder=9,
                 bbox=dict(boxstyle="round,pad=0.28", fc="white", ec=FLOOR_C,
                           lw=0.9, alpha=0.96))
@@ -280,7 +315,7 @@ def _sep(ax, t_last, ytop, color=SEP_C, labels=True):
                     xytext=(6, 0), ha="left", va="top", fontsize=11, style="italic", color=color)
 
 
-def _floor_ratio(ax, xend):
+def _floor_ratio(ax, xend=None):
     """Floor at 1x for the multiplier (log) panel — label left-anchored, boxed."""
     ax.axhline(1.0, color=FLOOR_C, lw=2.4, zorder=3)
     ax.annotate("minimal human derivation (1×)",
@@ -323,7 +358,8 @@ def build(fname, exclude_earliest, successes_only):
     print(f"\n########## {fname} ##########")
     fig, axes = plt.subplots(1, 2, figsize=(16, 6.5), gridspec_kw={"wspace": 0.22})
     for ax, (title, mfiles, excl) in zip(axes, panels):
-        fit, t_last, xend, ymax = draw_family(ax, mfiles, excl, successes_only, TOK)
+        fit, t_last, xend, ymax = draw_family(ax, mfiles, excl, successes_only, TOK,
+                                              label_dots=True)
         print_spec(title, fit)
         _floor(ax, xend)
         _sep(ax, t_last, ymax)
@@ -342,9 +378,9 @@ def build(fname, exclude_earliest, successes_only):
         mlines.Line2D([], [], color=SEP_C, lw=1.6, ls="--", label="Forecast start"),
         mlines.Line2D([], [], color=FLOOR_C, lw=2.4, label="Minimal human derivation"),
     ]
-    fig.legend(handles=handles, loc="lower center", ncol=5, fontsize=13,
-               frameon=True, framealpha=0.95, bbox_to_anchor=(0.5, -0.13))
-    plt.tight_layout(rect=[0, 0.02, 1, 1.0])
+    fig.legend(handles=handles, loc="upper center", ncol=5, fontsize=13,
+               frameon=True, framealpha=0.95, bbox_to_anchor=(0.5, -0.01))
+    plt.tight_layout(pad=0.5)
     paths = save_figure(fig, fname, outdir=OUT)
     print("wrote", *paths, sep="\n  ")
 
@@ -377,50 +413,84 @@ def build_combined(fname, successes_only=True, exclude_earliest=True):
     handles += [mpatches.Patch(color="#888888", alpha=0.2, label="95% CI (wild bootstrap)"),
                 mlines.Line2D([], [], color=SEP_C, lw=1.6, ls="--", label="Forecast start"),
                 mlines.Line2D([], [], color=FLOOR_C, lw=2.4, label="Minimal human derivation")]
-    fig.legend(handles=handles, loc="lower center", ncol=5, fontsize=13,
-               frameon=True, framealpha=0.95, bbox_to_anchor=(0.5, -0.11))
-    plt.tight_layout(rect=[0, 0.02, 1, 1.0])
+    fig.legend(handles=handles, loc="upper center", ncol=5, fontsize=13,
+               frameon=True, framealpha=0.95, bbox_to_anchor=(0.5, -0.01))
+    plt.tight_layout(pad=0.5)
     paths = save_figure(fig, fname, outdir=OUT)
     print("wrote", *paths, sep="\n  ")
 
 
 def build_decay_2panel(fname, exclude_earliest=True, successes_only=True):
-    """2 rows x 2 cols. Top: absolute tokens (decay + forecast). Bottom: multiple of
-    the floor (L/MHD) on a LOG axis, floor at 1x, DOTTED projection."""
-    panels = [("OpenAI (GPT)", pf.MAIN_K8, exclude_earliest),
-              ("Anthropic (Opus + Fable)", ANTH, False)]
-    print(f"\n########## {fname} ##########")
-    fig, axes = plt.subplots(2, 2, figsize=(16, 12), sharex="col",
-                             gridspec_kw={"wspace": 0.22, "hspace": 0.13})
-    for col, (title, mfiles, excl) in enumerate(panels):
+    """ONE ROW, two panels, BOTH families overlaid on each so the labs are directly
+    comparable rather than sitting in separate columns on separate axes:
+      left  — absolute output tokens, solid over observed then DASHED forecast
+      right — the same fit as a MULTIPLE OF THE FLOOR (L/MHD) on a log axis, floor
+              at 1x, DOTTED forecast. Equal decay rates read as parallel lines here.
+    Both families end 2026-09, so a single observed/forecast separator serves both.
+    """
+    fams = [("OpenAI (GPT)", pf.MAIN_K8, exclude_earliest, OAI_C),
+            ("Anthropic (Opus + Fable)", ANTH, False, ANT_C)]
+    print(f"\n########## {fname}  (one row, both families) ##########")
+    fig, axes = plt.subplots(1, 2, figsize=(16, 6.8), gridspec_kw={"wspace": 0.2})
+    al, ar = axes
+    ymax = ymax2 = 0; xlo = xhi = None; tlast = None
+    handles, miles = [], []
+    for yi, (name, mfiles, excl, col) in enumerate(fams):
+        fit, t_last, xend, ym = draw_family(
+            al, mfiles, excl, successes_only, col, milestones=False,
+            q_xy=(0.97, 0.93 - 0.08 * yi), q_label=name.split(" (")[0])
+        print_spec(name, fit)
+        # Label the dots on the RIGHT panel only. On the token axis both families
+        # collapse into the same bottom-right corner and the labels overlap; the
+        # log multiple-of-floor axis spreads the same points over a decade, and
+        # there the label is simply a readout of that panel's own y value.
+        _, _, xend2, ym2 = draw_family(ar, mfiles, excl, successes_only, col,
+                                       milestones=False, ratio=True, show_q=False,
+                                       label_dots=True,
+                                       # Anthropic sits ABOVE OpenAI through the
+                                       # overlap, so its labels go up-right and
+                                       # OpenAI's down-left, pushing them apart
+                                       # rather than into each other.
+                                       dot_dy=-13 if yi == 0 else 13,
+                                       dot_dx=-7 if yi == 0 else 7)
+        ymax = max(ymax, ym); ymax2 = max(ymax2, ym2)
         start = (mfiles[1] if excl else mfiles[0])[1]
-        at = axes[0][col]                                   # top — absolute tokens
-        fit, t_last, xend, ymax = draw_family(at, mfiles, excl, successes_only, TOK)
-        _floor(at, xend); _sep(at, t_last, ymax * 0.98)
-        at.set_ylim(0, ymax); at.set_xlim(start - timedelta(days=40), xend + timedelta(days=20))
-        at.set_title(title); at.yaxis.set_major_formatter(unit_formatter(1e3, "k"))
+        s, e = start - timedelta(days=40), xend + timedelta(days=20)
+        xlo = s if xlo is None else min(xlo, s); xhi = e if xhi is None else max(xhi, e)
+        tlast = t_last if tlast is None else max(tlast, t_last)
+        miles.append(f"{name.split(' (')[0]} {fit['mile'][MILE_P]:%Y-%m}")
+        handles.append(mlines.Line2D([], [], color=col, lw=2.6, marker="o", ms=9, label=name))
 
-        ab = axes[1][col]                                   # bottom — multiple of floor (log)
-        _, t_last2, xend2, ymax2 = draw_family(ab, mfiles, excl, successes_only, TOK,
-                                               milestones=False, ratio=True, show_q=False)
-        ab.set_yscale("log"); _floor_ratio(ab, xend2)
-        ab.set_ylim(0.9, ymax2 * 1.4)
-        _sep(ab, t_last2, ymax2 * 1.3, labels=False)
-        ab.set_xlabel("Date")
-        ab.xaxis.set_major_locator(mdates.YearLocator())
-        ab.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
-    axes[0][0].set_ylabel(f"Output tokens: reasoning + answer\n({'correct' if successes_only else 'all'} traces)")
-    axes[1][0].set_ylabel("Multiple of the floor  (L / MHD)")
-    handles = [
-        mlines.Line2D([], [], color=TOK, lw=2.6, marker="o", ms=9, label="Fitted trend + data points"),
-        mlines.Line2D([], [], color=TOK, lw=2.6, ls="--", label="Forecast (tokens)"),
-        mlines.Line2D([], [], color=TOK, lw=2.6, ls=":", label="Forecast (multiple of floor)"),
-        mpatches.Patch(color=TOK, alpha=0.2, label="95% CI (wild bootstrap)"),
+    _floor(al); _sep(al, tlast, ymax * 0.98)
+    al.set_ylim(0, ymax); al.set_xlim(xlo, xhi)
+    al.set_ylabel(f"Output tokens: reasoning + answer\n"
+                  f"({'correct' if successes_only else 'all'} traces)")
+    al.yaxis.set_major_formatter(unit_formatter(1e3, "k"))
+    # one milestone box covering both families, rather than two overlapping vlines
+    al.annotate(f"within {int(MILE_P * 100)}% of floor — " + "  ·  ".join(miles),
+                xy=(0.97, 0.60), xycoords="axes fraction", ha="right", va="center",
+                fontsize=11.5, color="#333333", zorder=9,
+                bbox=dict(boxstyle="round,pad=0.25", fc="white", ec="#BBBBBB",
+                          lw=0.8, alpha=0.95))
+
+    ar.set_yscale("log"); _floor_ratio(ar)
+    ar.set_ylim(0.9, ymax2 * 1.5); ar.set_xlim(xlo, xhi)
+    _sep(ar, tlast, ymax2 * 1.4, labels=False)
+    ar.set_ylabel("Multiple of the floor  (L / MHD)")
+
+    for ax in axes:
+        ax.set_xlabel("Date")
+        ax.xaxis.set_major_locator(mdates.YearLocator())
+        ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
+    handles += [
+        mlines.Line2D([], [], color="#888888", lw=2.6, ls="--", label="Forecast (tokens)"),
+        mlines.Line2D([], [], color="#888888", lw=2.6, ls=":", label="Forecast (multiple of floor)"),
+        mpatches.Patch(color="#888888", alpha=0.2, label="95% CI (wild bootstrap)"),
         mlines.Line2D([], [], color=FLOOR_C, lw=2.4, label="Minimal human derivation"),
     ]
-    fig.legend(handles=handles, loc="lower center", ncol=5, fontsize=13,
-               frameon=True, framealpha=0.95, bbox_to_anchor=(0.5, -0.06))
-    plt.tight_layout(rect=[0, 0.02, 1, 1.0])
+    fig.legend(handles=handles, loc="upper center", ncol=3, fontsize=12.5,
+               frameon=True, framealpha=0.95, bbox_to_anchor=(0.5, -0.01))
+    plt.tight_layout(pad=0.5)
     paths = save_figure(fig, fname, outdir=OUT)
     print("wrote", *paths, sep="\n  ")
 
@@ -470,9 +540,9 @@ def build_arith_mean(fname, exclude_earliest=True, successes_only=True):
         mlines.Line2D([], [], color=SEP_C, lw=1.6, ls="--", label="Forecast start"),
         mlines.Line2D([], [], color=FLOOR_C, lw=2.4, label="Minimal human derivation"),
     ]
-    fig.legend(handles=handles, loc="lower center", ncol=4, fontsize=13,
-               frameon=True, framealpha=0.95, bbox_to_anchor=(0.5, -0.13))
-    plt.tight_layout(rect=[0, 0.02, 1, 1.0])
+    fig.legend(handles=handles, loc="upper center", ncol=4, fontsize=13,
+               frameon=True, framealpha=0.95, bbox_to_anchor=(0.5, -0.01))
+    plt.tight_layout(pad=0.5)
     paths = save_figure(fig, fname, outdir=OUT)
     print("wrote", *paths, sep="\n  ")
 
@@ -480,76 +550,6 @@ def build_arith_mean(fname, exclude_earliest=True, successes_only=True):
 def _pre_cutoff(mfiles):
     """Models released on or before the first benchmark problem went public."""
     return [m for m in mfiles if m[1] <= CUTOFF]
-
-
-def _is_new(tid):
-    """True for the Feb-2026 competition problems (only post-cutoff models could
-    possibly have memorised them); False for MATH-500, which every model here has
-    had in its training corpus for years."""
-    return not str(tid).startswith("math_500")
-
-
-def _vintage_rows(mfiles, successes_only=True):
-    """Trace-level frame with a `new` flag, for the problem-vintage DiD."""
-    import pandas as pd
-    rows = []
-    for label, date, path in mfiles:
-        month = (date - pf.ORIGIN).days / 30.44
-        for r in pf.load_rows(path):
-            tid = str(r["task_id"])
-            if tid not in pf.CANON_KEYS:
-                continue
-            tt = r.get("thinking_tokens", [1] * len(r["correct"]))
-            for tok, c, th in zip(r["total_completion_tokens"], r["correct"], tt):
-                if th == 0 or tok <= 0 or (successes_only and not c):
-                    continue
-                h = tok / pf.CANON[tid]["min"]
-                if h > 1:
-                    rows.append({"problem": tid, "month": month, "date": date,
-                                 "new": int(_is_new(tid)), "y": math.log(h - 1)})
-    return pd.DataFrame(rows)
-
-
-def _vintage_analysis(mfiles, successes_only=True):
-    """Problem-vintage DiD. Fits, on the FULL time window (so it is NOT confounded by
-    the window truncation the pre-cutoff refit suffers):
-
-        log(L - C_j) = alpha_j + beta*Month + gamma*(Month x New_j) + eps
-
-    gamma < 0 => the problems only the newest models could have memorised compress
-    FASTER than the ones every model already memorised, i.e. a contamination signal.
-    gamma ~ 0 => compression is vintage-independent => contamination is not driving it.
-    Also returns a separate same-spec fit per vintage for plotting.
-    """
-    import statsmodels.formula.api as smf
-    df = _vintage_rows(mfiles, successes_only)
-    res = smf.ols("y ~ month + month:new + C(problem)", data=df).fit(
-        cov_type="cluster", cov_kwds={"groups": df["problem"]})
-    ci = res.conf_int().loc["month:new"]
-    out = {"gamma": res.params["month:new"], "gamma_se": res.bse["month:new"],
-           "gamma_p": res.pvalues["month:new"], "gamma_ci": (ci[0], ci[1]), "per": {}}
-    for nv in (0, 1):
-        d = df[df["new"] == nv]
-        r2 = smf.ols("y ~ month + C(problem)", data=d).fit(
-            cov_type="cluster", cov_kwds={"groups": d["problem"]})
-        b = r2.params["month"]
-        fe = [v for k, v in r2.params.items() if k.startswith("C(problem)")]
-        a = r2.params["Intercept"] + sum(fe) / d["problem"].nunique()
-        out["per"][nv] = {"beta": b, "a": a, "se": r2.bse["month"],
-                          "pct": (1 - math.exp(3 * b)) * 100,
-                          "n_obs": int(r2.nobs), "n_prob": int(d["problem"].nunique())}
-    # Per-model observed points within each vintage, as EXCESS over the floor
-    # (exp(mean log excess) * REF) — excess is what the regression actually models,
-    # and it is the only quantity on which the two vintages are comparable: raw L
-    # differs ~10x between hard AIME items and easy MATH-500 ones, which would swamp
-    # the slope comparison this panel exists to make.
-    for nv in (0, 1):
-        pts = []
-        for date, g in df[df["new"] == nv].groupby("date"):
-            pm = g.groupby("problem")["y"].mean()
-            pts.append((date, math.exp(float(pm.mean())) * REF))
-        out["per"][nv]["pts"] = sorted(pts)
-    return out
 
 
 def _cutoff_band(ax, ytop):
@@ -562,69 +562,6 @@ def _cutoff_band(ax, ytop):
                 fontsize=11.5, fontweight="bold", color=CUT_C, zorder=9,
                 bbox=dict(boxstyle="round,pad=0.22", fc="white", ec=CUT_C,
                           lw=0.8, alpha=0.95))
-
-
-def _subset_fit(mfiles, keep, successes_only=True):
-    """Same excess-trend spec, restricted to the problems `keep(tid)` selects. Returns
-    beta/intercept/%-per-quarter plus the per-model observed points in TOKENS on the
-    average-floor problem, so it plots on the same axis as the other token panels."""
-    import pandas as pd
-    import statsmodels.formula.api as smf
-    rows = []
-    for label, date, path in mfiles:
-        month = (date - pf.ORIGIN).days / 30.44
-        for r in pf.load_rows(path):
-            tid = str(r["task_id"])
-            if tid not in pf.CANON_KEYS or not keep(tid):
-                continue
-            tt = r.get("thinking_tokens", [1] * len(r["correct"]))
-            for tok, c, th in zip(r["total_completion_tokens"], r["correct"], tt):
-                if th == 0 or tok <= 0 or (successes_only and not c):
-                    continue
-                h = tok / pf.CANON[tid]["min"]
-                if h > 1:
-                    rows.append({"problem": tid, "month": month, "date": date,
-                                 "y": math.log(h - 1)})
-    df = pd.DataFrame(rows)
-    res = smf.ols("y ~ month + C(problem)", data=df).fit(
-        cov_type="cluster", cov_kwds={"groups": df["problem"]})
-    b = res.params["month"]
-    fe = [v for k, v in res.params.items() if k.startswith("C(problem)")]
-    a = res.params["Intercept"] + sum(fe) / df["problem"].nunique()
-    pts = sorted((d, (1 + math.exp(float(g.groupby("problem")["y"].mean().mean()))) * REF)
-                 for d, g in df.groupby("date"))
-    return {"beta": b, "a": a, "se": res.bse["month"], "pct": (1 - math.exp(3 * b)) * 100,
-            "n_obs": int(res.nobs), "n_prob": int(df["problem"].nunique()), "pts": pts,
-            "curve": lambda d, a=a, b=b: (1 + math.exp(
-                a + b * ((d - pf.ORIGIN).days / 30.44))) * REF}
-
-
-def _floor_drop_report(mfiles, successes_only=True):
-    """How much the `L > C_j` filter actually bites, per model and problem vintage.
-
-    The regression DV is log(L - C_j), so any trace at or below the minimal human
-    derivation is DROPPED. On the 40 competition problems this is negligible (0-3.5%).
-    On the 5 MATH-500 problems the recent models sit ON the floor and 20-67% of their
-    correct traces disappear — which is why MATH-500 cannot carry its own panel.
-    """
-    print("      floor-filter drop rate (share of CORRECT traces excluded):")
-    print(f"        {'model':<20s} {'competition':>12s} {'MATH-500':>10s} {'all 45':>8s}")
-    for label, date, path in mfiles:
-        tot = [0, 0]; comp = [0, 0]; m5 = [0, 0]
-        for r in pf.load_rows(path):
-            tid = str(r["task_id"])
-            if tid not in pf.CANON_KEYS:
-                continue
-            bucket = m5 if not _is_new(tid) else comp
-            tt = r.get("thinking_tokens", [1] * len(r["correct"]))
-            for tok, c, th in zip(r["total_completion_tokens"], r["correct"], tt):
-                if th == 0 or tok <= 0 or (successes_only and not c):
-                    continue
-                dropped = int(tok / pf.CANON[tid]["min"] <= 1)
-                for b in (bucket, tot):
-                    b[0] += dropped; b[1] += 1
-        pct = lambda b: f"{100 * b[0] / b[1]:.1f}%" if b[1] else "-"
-        print(f"        {label:<20s} {pct(comp):>12s} {pct(m5):>10s} {pct(tot):>8s}")
 
 
 def build_contamination(fname, successes_only=True):
@@ -664,6 +601,7 @@ def build_contamination(fname, successes_only=True):
         span_end = datetime(2029, 1, 1)
         fit, t_last, xend, ymax = draw_family(
             ax, pre, False, successes_only, TOK, milestones=False, max_end=span_end,
+            label_dots=True,
             q_xy=(0.97, 0.64), q_label="Pre-cutoff models")
         print_spec(title, fit)
 
@@ -696,27 +634,6 @@ def build_contamination(fname, successes_only=True):
         ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
         summary.append((title, fit, fit_full, len(pre), len(full_set)))
 
-    # ---- MATH-500 diagnostics (console only, NOT a panel) -----------------
-    # MATH-500 was tried as a second panel -- old problems, contaminated for every
-    # model, so no memorisation edge is possible. It does NOT survive scrutiny: the
-    # DV log(L - C_j) requires L > C_j, and on these short problems the recent models
-    # sit AT the floor, so 20-67% of their correct traces are dropped by that filter
-    # (vs 0-3.5% on the 40 competition problems). The rate swings 31.3% -> 23.4% per
-    # quarter depending on whether the heavily-truncated models are included, so it
-    # cannot identify anything precisely. Reported in the text with that caveat only.
-    print("\n  --- MATH-500 only (console diagnostic, not plotted) ---")
-    for name, mfiles in (("OpenAI (GPT)", list(pf.MAIN_K8)),
-                         ("Anthropic (Opus + Fable)", list(ANTH))):
-        sf = _subset_fit(mfiles, lambda t: not _is_new(t), successes_only)
-        print(f"      {name:26s} beta={sf['beta']:+.4f} (SE {sf['se']:.4f})  "
-              f"{sf['pct']:5.1f}% / quarter   {sf['n_prob']} problems, N={sf['n_obs']}")
-    _floor_drop_report(pooled_full, successes_only)
-
-    # The problem-vintage DiD is still computed (its gamma is reported in the caption
-    # text) but is no longer plotted: panel 2 makes the same point more directly, and
-    # the indexed two-line version needed too much explaining to earn its space.
-    va = _vintage_analysis(pooled_full, successes_only)
-
     axes[0].set_ylabel(f"Output tokens: reasoning + answer "
                        f"({'correct' if successes_only else 'all'} traces)")
     axes[0].set_title("Contamination check — models released before the benchmark\n"
@@ -730,9 +647,9 @@ def build_contamination(fname, successes_only=True):
         mpatches.Patch(color=CUT_C, alpha=0.16, label="Benchmark published (Feb 2026)"),
         mlines.Line2D([], [], color=FLOOR_C, lw=2.4, label="Minimal human derivation"),
     ]
-    fig.legend(handles=handles, loc="lower center", ncol=2, fontsize=11,
-               frameon=True, framealpha=0.95, bbox_to_anchor=(0.5, -0.22))
-    plt.tight_layout(rect=[0, 0.02, 1, 1.0])
+    fig.legend(handles=handles, loc="upper center", ncol=2, fontsize=11,
+               frameon=True, framealpha=0.95, bbox_to_anchor=(0.5, -0.01))
+    plt.tight_layout(pad=0.5)
     paths = save_figure(fig, fname, outdir=OUT)
 
     print("\n  ===== CONTAMINATION CHECK SUMMARY =====")
@@ -746,29 +663,18 @@ def build_contamination(fname, successes_only=True):
             beta = f["beta"]; se = f.get("beta_se", f.get("se"))
             pct = f.get("quarterly_pct", f.get("pct"))
             mile = f"{f['mile'][MILE_P]:%Y-%m}" if "mile" in f else "-"
-            tag = tag.replace(": PRE-CUTOFF", "") if "MATH-500" in tag else tag
             print(f"  {tag:<44s} {n:>3d} {beta:>9.4f} {se:>7.4f} {pct:>6.1f}% {mile:>11s}")
     print("  NOTE: the pre-cutoff refit also SHORTENS the window, so a flatter beta")
     print("        there is ambiguous (contamination vs. genuine recent acceleration).")
-    print("\n  ===== PROBLEM-VINTAGE DiD (not plotted — for the caption text) =====")
-    for nv, tag in ((0, "OLD  MATH-500 (all models memorised)"),
-                    (1, "NEW  AIME/HMMT 2026 (post-cutoff only)")):
-        p = va["per"][nv]
-        print(f"  {tag:<42s} {p['n_prob']:>2d} problems  beta={p['beta']:+.4f} "
-              f"(SE {p['se']:.4f})  {p['pct']:5.1f}% / quarter  N={p['n_obs']}")
-    gci = va["gamma_ci"]
-    print(f"  interaction gamma = {va['gamma']:+.4f} (SE {va['gamma_se']:.4f}), "
-          f"p = {va['gamma_p']:.3f}, 95% CI [{gci[0]:+.4f}, {gci[1]:+.4f}]")
-    print("  gamma < 0 would mean the possibly-memorised problems compress FASTER.")
-    print("  -> " + ("no contamination signal" if va["gamma_p"] > 0.05
-                     else "CONTAMINATION SIGNAL"))
     print("wrote", *paths, sep="\n  ")
 
 
 # PRIMARY: include the full GPT series incl. o1 (earliest anchor, 2024-12).
 build_decay_2panel("fig4_forecast_2panel", exclude_earliest=False, successes_only=True)
 build_arith_mean("fig4_forecast_arith_mean_appendix", exclude_earliest=False, successes_only=True)
-build("fig4_forecast", exclude_earliest=False, successes_only=True)
+# fig4_forecast (single-panel, absolute tokens only) is RETIRED -- fig4_forecast_2panel
+# is the primary forecast figure. Archived to archive/stale_figures/. build() is kept
+# because the all-traces and no-o1 variants below still use it.
 build("fig4_forecast_all_traces", exclude_earliest=False, successes_only=False)
 build_combined("fig4_forecast_combined", successes_only=True, exclude_earliest=False)
 # SENSITIVITY: drop the earliest point (o1) from the GPT fit.
