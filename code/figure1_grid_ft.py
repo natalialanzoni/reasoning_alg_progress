@@ -181,6 +181,14 @@ def build(fname, full_row3):
         a1.annotate(f"minimal human derivation ≈ {FLOOR:.0f} tok", (dx[-1], FLOOR),
                     textcoords="offset points", xytext=(0, 5), ha="right", va="bottom",
                     fontsize=10, fontweight="bold", color=FLOOR_COLOR, zorder=6)
+        # earliest -> latest compression, anchored upper-RIGHT so it reads as a
+        # statement about the newest models rather than the oldest
+        ratio = mean[0] / mean[-1] if mean[-1] else float("nan")
+        lbl = f"{ratio:.1f}× fewer tokens" if ratio >= 1.15 else f"≈flat ({ratio:.1f}×)"
+        a1.annotate(lbl, xy=(0.97, 0.90), xycoords="axes fraction", ha="right", va="top",
+                    fontsize=15, fontweight="bold", color=TOK, zorder=7,
+                    bbox=dict(boxstyle="round,pad=0.3", fc="white", ec=TOK, alpha=0.9))
+        print(f"  row2 {title:<26s} {mean[0]:.0f} -> {mean[-1]:.0f} tok  = {ratio:.1f}x")
 
         a2 = axes[2][col]                                   # Row 3 — per-problem by difficulty
         hdx, prob, diff = hard_perproblem(shallow if full_row3 else hard)
