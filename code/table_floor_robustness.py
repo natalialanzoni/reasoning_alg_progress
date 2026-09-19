@@ -68,7 +68,7 @@ def build(mfiles, floor):
                 continue
             tt = r.get("thinking_tokens", [1] * len(r["correct"]))
             for tok, c, th in zip(r["total_completion_tokens"], r["correct"], tt):
-                if th == 0 or tok <= 0 or not c:
+                if tok < 50 or not c:      # zero-thinking traces are valid
                     continue
                 if floor is None:
                     rows.append((tid, month, label, math.log(tok / FLOORS[tid]["min"])))

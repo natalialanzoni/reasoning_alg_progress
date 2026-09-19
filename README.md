@@ -103,10 +103,10 @@ something about the sample or the spec changed.
 | --- | --- | --- |
 | sample + floor | all | **40** competition problems, floor **316** tok |
 | Fig 1 | `figure1_grid_ft.py` | OpenAI 9,547 -> 1,121 tok (**8.5x**), acc 70.4% -> 99.4%; Anthropic 8,617 -> 1,799 (**4.8x**), acc 92.1% -> 97.8% |
-| Fig 4 | `figure_forecast_ft.py` | beta **-0.124** (31.0%/qtr, CI 24-37) and **-0.161** (38.3%/qtr, CI 31-45); within-10% **2029-02** / **2028-09**; endpoints 33x->3.0x and 21x->6.6x |
+| Fig 4 | `figure_forecast_ft.py` | beta **-0.124** (31.0%/qtr, CI 24-37) and **-0.178** (41.4%/qtr, CI 31-50); within-10% **2029-02** / **2028-06** |
 | Fig 5 | `figure_latent_floor_ft.py` | astra 2.5% below min, 35.3% below average; Fable 5.1 0% below min, 10.1% below average, 30.0% zero-thinking |
 | Case study | `figure_mechanism_ft.py` | scale 7,988 -> 4,693 (**1.70x**), acc 68.8% -> 73.8%; algorithm 14,241 -> 8,539 (**1.67x**), acc 83.4% -> 85.6% |
-| Floor table | `table_floor_robustness.py` | OpenAI 27.0-33.6%/qtr, Anthropic 34.9-40.7%/qtr across four floor definitions |
+| Floor table | `table_floor_robustness.py` | OpenAI 27.0-33.6%/qtr, Anthropic 36.2-43.1%/qtr across four floor definitions |
 | Contamination | `figure_forecast_ft.py` | pre-cutoff GPT **18.8%**/qtr vs 31.0% full sample |
 
 ### Which scripts are on the paper's sample
@@ -238,7 +238,22 @@ original preserved in `correct_original`. **Never read `correct_original`.** Ful
 write-up in `archive/README.md`; outputs produced before the fix are in
 `archive/pre_grader_fix_figures/`.
 
-### 5. The regression drops traces below the floor
+### 5. A zero-length thinking block does not make a trace invalid
+
+Several code paths used `thinking_tokens > 0` as a proxy for "this trace is real,
+not an API failure". That proxy broke the moment a model started answering *without*
+a thinking block. **Fable 5.1 answers with zero thinking tokens on 25% of the
+competition problems (81 of 320), every one of them correct**, with 179-1,177 answer
+tokens -- and those are its shortest traces (median 366 vs 2,073 for the rest).
+Dropping them inflated Fable's measured length and flattened the Anthropic trend
+from **41.4%** to 38.3% per quarter.
+
+`figures_sept._trial_ok` (`tok >= 50` and non-empty text) is the correct test and
+Figure 1 always used it; the forecast path did not until 2026-09. Validity is "did
+it produce an answer", never "did it think out loud". Note the old test also *kept*
+degenerate traces that had a thinking block but no answer, which `_trial_ok` rejects.
+
+### 6. The regression drops traces below the floor
 
 The DV is `log(L - C_j)`, undefined when a trace is shorter than the shortest human
 solution, so those traces are silently excluded. On the 40 competition problems this
@@ -253,7 +268,7 @@ form `L = C_j + exp(a_j + b*month)` fitted on log L, which needs no drop and no 
 it gives 27.4% against the headline 29.1% pooled, i.e. censoring is worth ~0.3pp and
 the rest is functional form.
 
-### 6. Reasoning effort must match before comparing absolute lengths across models
+### 7. Reasoning effort must match before comparing absolute lengths across models
 
 Within-model-pair comparisons are safe; cross-family ones usually are not. gpt-oss
 exists **only at medium** effort (`_re-medium`), while GLM 5.2/5.3 are usable **only
@@ -262,7 +277,7 @@ case-study figure the *ratios* within each column are valid but GLM's absolute t
 lengths are not comparable to gpt-oss's. The same applies to any table that lines up
 open-source models side by side.
 
-### 7. GLM version-over-version trends are provider-confounded
+### 8. GLM version-over-version trends are provider-confounded
 
 Every GLM version was served by a **different** OpenRouter provider — 4.5 Z.AI,
 4.6/4.7 Novita, 5 StreamLake, 5.1 Baidu, 5.2 Phala, 5.3 Z.AI — and pre-5.2 GLMs
@@ -273,7 +288,7 @@ the 7-point GLM version line.** The usable comparisons are (a) GLM vs frontier
 verbosity on identical problems, which is robust, and (b) 4.5 vs 5.3, the one
 provider-matched pair (both Z.AI), giving 2.2x compression at flat accuracy.
 
-### 8. Few model clusters limit what the bootstrap can say
+### 9. Few model clusters limit what the bootstrap can say
 
 `Month` is constant within a model, so the wild cluster bootstrap resamples over
 models — 8 for OpenAI, 6 for Anthropic. With `G` clusters a Rademacher bootstrap has

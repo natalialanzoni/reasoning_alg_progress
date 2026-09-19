@@ -113,7 +113,7 @@ def model_points(mfiles, successes_only):
                 continue
             tt = r.get("thinking_tokens", [1] * len(r["correct"]))
             for tok, c, th in zip(r["total_completion_tokens"], r["correct"], tt):
-                if th == 0 or tok <= 0 or (successes_only and not c):
+                if tok < 50 or (successes_only and not c):   # see _trial_ok
                     continue
                 h = tok / pf.CANON[tid]["min"]
                 if h > 1:
@@ -164,7 +164,7 @@ def wcb_band(mfiles, excl, successes_only, dates, B=1999, seed=0):
                 continue
             tt = r.get("thinking_tokens", [1] * len(r["correct"]))
             for tok, c, th in zip(r["total_completion_tokens"], r["correct"], tt):
-                if th == 0 or tok <= 0 or (successes_only and not c):
+                if tok < 50 or (successes_only and not c):   # see _trial_ok
                     continue
                 h = tok / pf.CANON[tid]["min"]
                 if h > 1:
@@ -338,7 +338,7 @@ def model_amean(mfiles, successes_only):
                 continue
             tt = r.get("thinking_tokens", [1] * len(r["correct"]))
             for tok, c, th in zip(r["total_completion_tokens"], r["correct"], tt):
-                if th == 0 or tok <= 0 or (successes_only and not c):
+                if tok < 50 or (successes_only and not c):   # see _trial_ok
                     continue
                 prob.setdefault(tid, []).append(tok)
         pm = [float(np.mean(v)) for v in prob.values() if v]
@@ -676,6 +676,9 @@ build_arith_mean("fig4_forecast_arith_mean_appendix", exclude_earliest=False, su
 # is the primary forecast figure. Archived to archive/stale_figures/. build() is kept
 # because the all-traces and no-o1 variants below still use it.
 build("fig4_forecast_all_traces", exclude_earliest=False, successes_only=False)
+# APPENDIX: the primary two-panel figure on ALL attempts, right or wrong.
+build_decay_2panel("fig4_forecast_2panel_alltraces", exclude_earliest=False,
+                   successes_only=False)
 build_combined("fig4_forecast_combined", successes_only=True, exclude_earliest=False)
 # SENSITIVITY: drop the earliest point (o1) from the GPT fit.
 build("fig4_forecast_no_o1", exclude_earliest=True, successes_only=True)

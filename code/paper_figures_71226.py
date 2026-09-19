@@ -593,7 +593,11 @@ def _fit_headroom_forecast(model_files, exclude_baseline=True, successes_only=Tr
                 continue
             tt = r.get("thinking_tokens", [1] * len(r["correct"]))
             for tok, c, th in zip(r["total_completion_tokens"], r["correct"], tt):
-                if th == 0 or tok <= 0:
+                # A zero-length thinking block is NOT an invalid trace: Fable 5.1 answers
+                # correctly with no thinking block on 25% of problems, and those are its
+                # SHORTEST traces. The old `th == 0` test discarded exactly them. Validity is
+                # "did it produce a real answer" (tok >= 50), matching figures_sept._trial_ok.
+                if tok < 50:
                     continue
                 if successes_only and not c:            # drop incorrect traces
                     continue

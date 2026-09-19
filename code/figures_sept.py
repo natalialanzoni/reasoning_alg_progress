@@ -85,8 +85,9 @@ def shallow_stats(model_files):
         for r in load_rows(path):
             tid = str(r["task_id"])
             tt = r.get("thinking_tokens", [1] * len(r["correct"]))
-            toks = [t for t, th in zip(r["total_completion_tokens"], tt) if th > 0]
-            corr = [c for c, th in zip(r["correct"], tt) if th > 0]
+            toks = [t for t in r["total_completion_tokens"] if t >= 50]
+            corr = [c for c, t in zip(r["correct"], r["total_completion_tokens"])
+                    if t >= 50]
             if toks:
                 mb[tid] = float(np.mean(toks)); cb[tid] = corr
         dates.append(date); labels.append(label); per_mean.append(mb); per_corr.append(cb)

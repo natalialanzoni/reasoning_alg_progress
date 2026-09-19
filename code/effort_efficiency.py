@@ -65,13 +65,13 @@ def gather(eff):
         for r in load_rows(p):
             tid = str(r["task_id"])
             tt = r.get("thinking_tokens", [1] * len(r["correct"]))
-            toks = [t for t, th in zip(r["total_completion_tokens"], tt) if th > 0]
+            toks = [t for t in r["total_completion_tokens"] if t >= 50]
             if toks:
                 by_id[tid] = float(np.mean(toks))
             if tid not in CANON_KEYS:
                 continue
             for tok, c, th in zip(r["total_completion_tokens"], r["correct"], tt):
-                if th == 0 or tok <= 0 or not c:
+                if tok < 50 or not c:      # zero-thinking traces are valid
                     continue
                 h = tok / CANON[tid]["mean"]
                 if h > 1:
