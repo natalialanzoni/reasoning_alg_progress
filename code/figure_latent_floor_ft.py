@@ -1,16 +1,16 @@
 """Distance to the human floor (FutureTech house style).
 
-2x2: samples as ROWS, families as COLUMNS, on one shared log axis.
-  row 1  whole benchmark   40 competition problems, k=8
-  row 2  hard-but-doable   10 problems, k=32
-  col 1  OpenAI    col 2  Anthropic
+OpenAI left, Anthropic right, on a shared log axis. Each violin POOLS both runs of
+that model -- the whole benchmark (40 competition problems, k=8) and the
+hard-but-doable subset (10 problems, k=32) -- giving ~630 correct traces per model
+instead of ~315. The extra sample matters only in the tails, which is where the
+interesting behaviour is: crossing the floor is a sub-1% event for every model
+except Astra and is barely resolvable on either run alone.
 
-Both samples are shown because they disagree, and the paper quotes numbers from
-each: the hard-but-doable problems have longer human write-ups, so the AVERAGE
-human solution sits at 1.8x the minimum there against 1.4x on the whole benchmark,
-and is crossed far more often (Astra 35.3% vs 14.8%). Crossing the MINIMUM is rarer
-and goes the other way (Astra 2.5% vs 3.1%). Fable 5.1 crosses the minimum twice on
-the whole benchmark and never on the hard subset. Each violin is the
+The 10 hard problems are a SUBSET of the 40, so after pooling they carry 8+32=40
+attempts each against 8 for the other 30, tilting the distribution toward the harder
+problems. `avg_ref_pooled` weights the average-human reference line the same way, so
+the line and the violins describe the same sample. Each violin is the
 distribution of trace length divided by that problem's MINIMAL human derivation
 (L / C_j) over correct traces, so 1x means "as short as the shortest human solution
 to this problem". Two human reference lines are drawn:
@@ -84,7 +84,7 @@ FAM_COLORS = [("OpenAI (GPT)", OAI_C), ("Anthropic (Opus + Fable)", ANT_C)]
 
 
 def load(path):
-    """Per model: L/C_j over correct traces, plus floor-crossing and latent shares."""
+    """Per model, ONE run: L/C_j over correct traces, plus crossing/latent shares."""
     ratios, latent, latent_ok, below_min, below_avg, n = [], 0, 0, 0, 0, 0
     for r in pf.load_rows(path):
         tid = str(r["task_id"])
@@ -115,67 +115,101 @@ def avg_ref(path):
     pids = [str(r["task_id"]) for r in pf.load_rows(path) if str(r["task_id"]) in KEYS]
     return float(np.median([pf.CANON[k]["mean"] / pf.CANON[k]["min"] for k in pids])), len(pids)
 
+def load_pooled(paths):
+    """Same as load() but over SEVERAL runs of the same model, concatenated.
+
+    Pooling the whole benchmark (40 problems, k=8) with the hard-but-doable subset
+    (10 problems, k=32) roughly doubles the sample to ~630 correct traces per model,
+    which matters for the tails: crossing the floor is a <1% event for every model
+    except Astra, so it is barely resolvable on either run alone.
+
+    Note the 10 hard problems are a SUBSET of the 40, so after pooling they carry
+    8+32=40 attempts each against 8 for the other 30. The pooled distribution is
+    therefore tilted toward the harder problems; `avg_ref_pooled` is computed with the
+    same weighting so the reference line and the violins describe the same sample.
+    """
+    parts = [load(p) for p in paths]
+    ratios = np.concatenate([q["ratios"] for q in parts])
+    n = sum(q["n"] for q in parts)
+    latent = sum(q["latent_pct"] * q["n"] for q in parts) / max(1, n)
+    nc = max(1, len(ratios))
+    bmin = sum(q["below_min"] * q["n_correct"] for q in parts) / 100
+    bavg = sum(q["below_avg"] * q["n_correct"] for q in parts) / 100
+    return dict(ratios=ratios, n=n, n_correct=len(ratios), latent_pct=latent,
+                below_min=100 * bmin / nc, below_avg=100 * bavg / nc)
+
+
+def avg_ref_pooled(paths):
+    """Average human solution as a multiple of the minimum, weighted by how many
+    traces each problem actually contributes to the pooled violin."""
+    per_trace = []
+    for path in paths:
+        for r in pf.load_rows(path):
+            tid = str(r["task_id"])
+            if tid not in KEYS:
+                continue
+            ratio = pf.CANON[tid]["mean"] / pf.CANON[tid]["min"]
+            per_trace += [ratio] * sum(1 for c in r["correct"] if c)
+    return float(np.median(per_trace))
+
+
 use_style()
-plt.rcParams.update({"axes.labelsize": 14, "xtick.labelsize": 12, "ytick.labelsize": 13,
-                     "axes.titlesize": 15})
-fig, axes = plt.subplots(2, 2, figsize=(16, 12.5), sharey=True,
-                         gridspec_kw={"wspace": 0.06, "hspace": 0.30})
+plt.rcParams.update({"axes.labelsize": 15, "xtick.labelsize": 13, "ytick.labelsize": 14,
+                     "axes.titlesize": 16})
+fig, axes = plt.subplots(1, 2, figsize=(16, 6.8), sharey=True,
+                         gridspec_kw={"wspace": 0.06})
 
-for row, (samp_name, oai_models, ant_models) in enumerate(SAMPLES):
-    # the AVERAGE-solution line is sample-specific and must be recomputed per row
-    AVG_REF, n_prob = avg_ref(oai_models[0][2])
-    print(f"\n{samp_name}  —  {n_prob} problems, average human solution "
-          f"= {AVG_REF:.2f}x the minimum")
-    for col, ((fam_name, fam_c), models) in enumerate(
-            zip(FAM_COLORS, (oai_models, ant_models))):
-        ax = axes[row][col]
-        stats = [load(pth) for _, _, pth in models]
-        labels = [clean(l) for l, _, _ in models]
-        x = np.arange(len(models))
-        ramp = sns.light_palette(fam_c, n_colors=len(models) + 2)[2:]
+# pair each model's two runs by label
+PAIRED = []
+for (fam, fam_c), (_, shallow, hard) in zip(FAM_COLORS,
+                                            [(None, SAMPLES[0][1], SAMPLES[1][1]),
+                                             (None, SAMPLES[0][2], SAMPLES[1][2])]):
+    hmap = {l: p for l, _, p in hard}
+    PAIRED.append((fam, fam_c, [(l, d, [p, hmap[l]]) for l, d, p in shallow if l in hmap]))
 
-        ax.axhspan(1e-2, 1.0, color=MIN_C, alpha=0.10, zorder=0)
-        ax.axhline(AVG_REF, color=AVG_C, lw=1.8, ls="--", zorder=3)
-        ax.axhline(1.0, color=MIN_C, lw=2.4, zorder=4)
+AVG_REF = avg_ref_pooled([p for _, _, models in PAIRED for _, _, ps in models for p in ps])
+print(f"fig5 (POOLED whole benchmark k=8 + hard-but-doable k=32); "
+      f"average human solution = {AVG_REF:.2f}x the minimum\n")
 
-        parts = ax.violinplot([s["ratios"] for s in stats], positions=x, widths=0.82,
-                              showmedians=True, showextrema=False)
-        for b, c in zip(parts["bodies"], ramp):
-            b.set_facecolor(c); b.set_alpha(0.75); b.set_edgecolor(fam_c); b.set_linewidth(0.8)
-        parts["cmedians"].set_color(PRIMARY); parts["cmedians"].set_linewidth(2)
+for ax, (fam, fam_c, models) in zip(axes, PAIRED):
+    stats = [load_pooled(ps) for _, _, ps in models]
+    labels = [clean(l) for l, _, _ in models]
+    x = np.arange(len(models))
+    ramp = sns.light_palette(fam_c, n_colors=len(models) + 2)[2:]
 
-        for xi, st in zip(x, stats):
-            if st["below_min"] >= 0.5:
-                ax.annotate(f"{st['below_min']:.1f}% below", (xi, 0.60), ha="center",
-                            va="center", fontsize=9.5, fontweight="bold", color=MIN_C,
-                            zorder=9, bbox=dict(boxstyle="round,pad=0.15", fc="white",
-                                                ec="none", alpha=0.88))
-            print(f"    {fam_name.split(' (')[0]:<10s} {clean(models[xi][0]):<14s} "
-                  f"median {np.median(st['ratios']):6.2f}x   below-min {st['below_min']:5.1f}%"
-                  f"   below-avg {st['below_avg']:5.1f}%   zero-think {st['latent_pct']:5.1f}%")
+    ax.axhspan(1e-2, 1.0, color=MIN_C, alpha=0.10, zorder=0)
+    ax.axhline(AVG_REF, color=AVG_C, lw=1.8, ls="--", zorder=3)
+    ax.axhline(1.0, color=MIN_C, lw=2.4, zorder=4)
 
-        ax.set_yscale("log"); ax.set_ylim(0.3, 90)
-        ax.set_title(f"{fam_name}" + ("" if row else f"\n{samp_name}"),
-                     fontweight="bold", fontsize=14)
-        ax.set_xticks(x); ax.set_xticklabels(labels, fontsize=11, rotation=20, ha="right")
-        ax.set_xlim(-0.65, len(models) - 0.35)
-        if col == 0:
-            ax.set_ylabel("Trace length / minimal human derivation")
-        # reference lines are labelled once per row, on the right-hand panel
-        if col == 1:
-            for yv, txt, c in ((AVG_REF, f"average human solution (≈{AVG_REF:.1f}×)", AVG_C),
-                               (1.0, "minimal human derivation (1×)", MIN_C)):
-                ax.annotate(txt, xy=(0.015, yv), xycoords=("axes fraction", "data"),
-                            textcoords="offset points", xytext=(0, 5), ha="left",
-                            va="bottom", fontsize=10.5, fontweight="bold", color=c,
-                            zorder=9, bbox=dict(boxstyle="round,pad=0.2", fc="white",
-                                                ec="none", alpha=0.9))
-    # row label for the second sample (the first is in the panel titles)
-    if row:
-        axes[row][0].set_title(f"OpenAI (GPT)\n{samp_name}", fontweight="bold", fontsize=14)
-        axes[row][1].set_title(f"Anthropic (Opus + Fable)\n{samp_name}",
-                               fontweight="bold", fontsize=14)
+    parts = ax.violinplot([st["ratios"] for st in stats], positions=x, widths=0.82,
+                          showmedians=True, showextrema=False)
+    for b, c in zip(parts["bodies"], ramp):
+        b.set_facecolor(c); b.set_alpha(0.75); b.set_edgecolor(fam_c); b.set_linewidth(0.8)
+    parts["cmedians"].set_color(PRIMARY); parts["cmedians"].set_linewidth(2)
 
+    for xi, st in zip(x, stats):
+        if st["below_min"] >= 0.2:
+            ax.annotate(f"{st['below_min']:.1f}% below", (xi, 0.60), ha="center",
+                        va="center", fontsize=9.5, fontweight="bold", color=MIN_C,
+                        zorder=9, bbox=dict(boxstyle="round,pad=0.15", fc="white",
+                                            ec="none", alpha=0.88))
+        print(f"  {fam.split(' (')[0]:<10s} {clean(models[xi][0]):<14s} "
+              f"n={st['n_correct']:>4d}  median {np.median(st['ratios']):6.2f}x  "
+              f"below-min {st['below_min']:5.2f}%  below-avg {st['below_avg']:5.1f}%  "
+              f"zero-think {st['latent_pct']:5.1f}%")
+
+    ax.set_yscale("log"); ax.set_ylim(0.3, 90)
+    ax.set_title(fam, fontweight="bold")
+    ax.set_xticks(x); ax.set_xticklabels(labels, fontsize=12, rotation=20, ha="right")
+    ax.set_xlim(-0.65, len(models) - 0.35)
+
+axes[0].set_ylabel("Trace length / minimal human derivation")
+for yv, txt, c in ((AVG_REF, f"average human solution (≈{AVG_REF:.1f}×)", AVG_C),
+                   (1.0, "minimal human derivation (1×)", MIN_C)):
+    axes[1].annotate(txt, xy=(0.015, yv), xycoords=("axes fraction", "data"),
+                     textcoords="offset points", xytext=(0, 5), ha="left", va="bottom",
+                     fontsize=11, fontweight="bold", color=c, zorder=9,
+                     bbox=dict(boxstyle="round,pad=0.2", fc="white", ec="none", alpha=0.9))
 handles = [mlines.Line2D([], [], color=MIN_C, lw=2.4, label="Minimum human solution (floor)"),
            mlines.Line2D([], [], color=AVG_C, lw=1.8, ls="--", label="Average human solution")]
 fig.legend(handles=handles, loc="upper center", ncol=2, fontsize=12.5,
