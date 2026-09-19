@@ -129,21 +129,29 @@ for fam, _ in FAMILIES:
           f"({max(qs)-min(qs):.1f} pts);  dates {min(ds):%Y-%m} to {max(ds):%Y-%m}\n")
 
 # ---- LaTeX ------------------------------------------------------------------
+_tex = []
+_emit = lambda ln: (_tex.append(ln), print(ln))[1]
 print("% ---------------- appendix table ----------------")
-print(r"\begin{tabular}{llccccc}")
-print(r"\toprule")
-print(r"Family & Floor $C_j$ & $\bar C_j$ & $\hat\beta$ & Quarterly & Half-life & "
+_emit(r"\begin{tabular}{llccccc}")
+_emit(r"\toprule")
+_emit(r"Family & Floor $C_j$ & $\bar C_j$ & $\hat\beta$ & Quarterly & Half-life & "
       r"Within 10\% \\")
-print(r" & & (tok) & (SE) & reduction & (months) & of floor \\")
-print(r"\midrule")
+_emit(r" & & (tok) & (SE) & reduction & (months) & of floor \\")
+_emit(r"\midrule")
 for fi, (fam, _) in enumerate(FAMILIES):
     for si, (name, _fl) in enumerate(SPECS):
         r = res[(fam, name)]
         lead = fam if si == 0 else ""
         cb = f"{r['cbar']:.0f}" if r["cbar"] else r"---"
-        print(f"{lead} & {name} & {cb} & ${r['b']:.3f}$ ({r['se']:.3f}) & "
+        _emit(f"{lead} & {name} & {cb} & ${r['b']:.3f}$ ({r['se']:.3f}) & "
               f"{r['q']:.1f}\\% & {r['hl']:.1f} & {r['date']:%Y-%m} \\\\")
     if fi == 0:
-        print(r"\addlinespace")
-print(r"\bottomrule")
-print(r"\end{tabular}")
+        _emit(r"\addlinespace")
+_emit(r"\bottomrule")
+_emit(r"\end{tabular}")
+
+if len(sys.argv) > 1:          # optional path: also write the LaTeX to a file
+    body = "\n".join(_tex)
+    with open(sys.argv[1], "w") as fh:
+        fh.write(body + "\n")
+    print(f"\nwrote {sys.argv[1]}")

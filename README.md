@@ -83,9 +83,27 @@ dataset on the Hugging Face Hub, tokenized with `tiktoken` (`o200k_base`).
 
 ```bash
 python3 -m venv venv && ./venv/bin/pip install -r requirements.txt
-bash code/make_all_figures.sh main       # the main-text figures + the appendix table
-bash code/make_all_figures.sh all        # + the appendix figures
+bash code/make_paper_figs.sh             # <- ONLY what the paper includes -> paper_figs/
+bash code/make_all_figures.sh all        # everything, incl. variants -> figures/figs_sept/
 ```
+
+`paper_figs/` is the curated set: **if it is not in there, it is not in the paper.**
+It is rebuilt from scratch by `make_paper_figs.sh`, which also writes
+`paper_figs/MANIFEST.md` recording the commit and which script produced each file.
+`figures/figs_sept/` remains the working directory where scripts drop everything
+they make, including sensitivities and variants. To retire a figure, remove its line
+from `ARTIFACTS` in `make_paper_figs.sh`.
+
+Currently in the paper:
+
+| Artifact | Script | Role |
+| --- | --- | --- |
+| `fig1_grid` | `figure1_grid_ft.py` | Figure 1, main text |
+| `fig2_hard_distributions_success` | `figure2_ft.py` | Figure 2, main text |
+| `fig4_forecast_2panel` | `figure_forecast_ft.py` | Figure 4, main text |
+| `fig1_grid_alltraces` | `figure1_grid_ft.py` | appendix: all attempts |
+| `table_decay.tex` | `table_decay.py` | main regression table |
+| `table_floor_robustness.tex` | `table_floor_robustness.py` | appendix robustness |
 
 Everything reads `data/` directly and writes to `figures/figs_sept/`. The canonical
 human solutions are pulled from the
@@ -104,6 +122,7 @@ something about the sample or the spec changed.
 | sample + floor | all | **40** competition problems, floor **316** tok |
 | Fig 1 | `figure1_grid_ft.py` | OpenAI 9,547 -> 1,121 tok (**8.5x**), acc 70.4% -> 99.4%; Anthropic 8,617 -> 1,799 (**4.8x**), acc 92.1% -> 97.8% |
 | Fig 4 | `figure_forecast_ft.py` | beta **-0.124** (31.0%/qtr, CI 24-37) and **-0.178** (41.4%/qtr, CI 31-50); within-10% **2029-02** / **2028-06** |
+| Decay table | `table_decay.py` | same betas; N 2,339 / 1,811; 8 / 6 model clusters |
 | Fig 5 | `figure_latent_floor_ft.py` | astra 2.5% below min, 35.3% below average; Fable 5.1 0% below min, 10.1% below average, 30.0% zero-thinking |
 | Case study | `figure_mechanism_ft.py` | scale 7,988 -> 4,693 (**1.70x**), acc 68.8% -> 73.8%; algorithm 14,241 -> 8,539 (**1.67x**), acc 83.4% -> 85.6% |
 | Floor table | `table_floor_robustness.py` | OpenAI 27.0-33.6%/qtr, Anthropic 36.2-43.1%/qtr across four floor definitions |
