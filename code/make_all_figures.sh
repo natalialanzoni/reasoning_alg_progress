@@ -20,7 +20,8 @@ export MPLBACKEND=Agg
 MAIN=(
   figure1_grid_ft.py          # Fig 1 (+ _fulldiff, + _alltraces appendix)
   figure_forecast_ft.py       # Fig 4 two-panel (+ contamination + sensitivities)
-  figure_latent_floor_ft.py   # Fig 5 distance to floor, by family
+  figure_latent_floor_ft.py   # Fig 5 distance to floor: 2x2, samples x families
+  figure_floor_crossing_ft.py # Fig 5b does any model cross the floor (pooled)
   figure_mechanism_ft.py      # case study: scale vs algorithm
   table_floor_robustness.py   # appendix table: four floor definitions
 )
