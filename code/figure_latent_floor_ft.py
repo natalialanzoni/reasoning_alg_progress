@@ -1,7 +1,16 @@
-"""Distance to the human floor, by family (FutureTech house style).
+"""Distance to the human floor (FutureTech house style).
 
-Two panels on the hard-but-doable k=32 set, OpenAI left and Anthropic right, on a
-shared log axis so the families are directly comparable. Each violin is the
+2x2: samples as ROWS, families as COLUMNS, on one shared log axis.
+  row 1  whole benchmark   40 competition problems, k=8
+  row 2  hard-but-doable   10 problems, k=32
+  col 1  OpenAI    col 2  Anthropic
+
+Both samples are shown because they disagree, and the paper quotes numbers from
+each: the hard-but-doable problems have longer human write-ups, so the AVERAGE
+human solution sits at 1.8x the minimum there against 1.4x on the whole benchmark,
+and is crossed far more often (Astra 35.3% vs 14.8%). Crossing the MINIMUM is rarer
+and goes the other way (Astra 2.5% vs 3.1%). Fable 5.1 crosses the minimum twice on
+the whole benchmark and never on the hard subset. Each violin is the
 distribution of trace length divided by that problem's MINIMAL human derivation
 (L / C_j) over correct traces, so 1x means "as short as the shortest human solution
 to this problem". Two human reference lines are drawn:
@@ -56,12 +65,22 @@ def clean(name):
     return name
 
 
-FAB = [("claude-fable-5-1", datetime(2026, 9, 1),
-        D / "claude-fable-5-1_medium_thinking_benchmark_hard_but_doable_10.json")]
-FAMILIES = [
-    ("OpenAI (GPT)", list(fs.GPT_HARD), OAI_C),
-    ("Anthropic (Opus + Fable)", sorted(list(pf.OPUS_HARD10_K32) + FAB, key=lambda t: t[1]), ANT_C),
+FAB_H = [("claude-fable-5-1", datetime(2026, 9, 1),
+          D / "claude-fable-5-1_medium_thinking_benchmark_hard_but_doable_10.json")]
+FAB_S = [("claude-fable-5-1", datetime(2026, 9, 1),
+          pf.RESULTS_DIR / "fable5.1_shallow_pass"
+          / "claude-fable-5-1_medium_thinking_benchmark.json")]
+
+# Two samples. They disagree, which is the point of showing both: the
+# hard-but-doable problems have longer human write-ups, so the AVERAGE-solution
+# line sits further above the minimum there and is crossed far more often.
+SAMPLES = [
+    ("Whole benchmark  (40 competition problems, $k=8$)",
+     list(pf.MAIN_K8), sorted(list(pf.OPUS_MODELS) + FAB_S, key=lambda t: t[1])),
+    ("Hard-but-doable  (10 problems, $k=32$)",
+     list(fs.GPT_HARD), sorted(list(pf.OPUS_HARD10_K32) + FAB_H, key=lambda t: t[1])),
 ]
+FAM_COLORS = [("OpenAI (GPT)", OAI_C), ("Anthropic (Opus + Fable)", ANT_C)]
 
 
 def load(path):
@@ -90,65 +109,77 @@ def load(path):
 
 # The average human solution as a multiple of the minimum, over the problems in this
 # sample (median across problems of mean/min). This is the second reference line.
-_pids = [str(r["task_id"]) for r in pf.load_rows(FAMILIES[0][1][0][2])
-         if str(r["task_id"]) in KEYS]
-AVG_REF = float(np.median([pf.CANON[k]["mean"] / pf.CANON[k]["min"] for k in _pids]))
-print(f"fig5: {len(_pids)} hard-but-doable problems; average human solution = "
-      f"{AVG_REF:.2f}x the minimum")
+def avg_ref(path):
+    """Average human solution as a multiple of the minimum, over the problems in
+    THIS sample. It is sample-specific: harder problems have longer write-ups."""
+    pids = [str(r["task_id"]) for r in pf.load_rows(path) if str(r["task_id"]) in KEYS]
+    return float(np.median([pf.CANON[k]["mean"] / pf.CANON[k]["min"] for k in pids])), len(pids)
 
 use_style()
-plt.rcParams.update({"axes.labelsize": 15, "xtick.labelsize": 13, "ytick.labelsize": 14,
-                     "axes.titlesize": 16})
-fig, axes = plt.subplots(1, 2, figsize=(16, 6.8), sharey=True,
-                         gridspec_kw={"wspace": 0.06})
+plt.rcParams.update({"axes.labelsize": 14, "xtick.labelsize": 12, "ytick.labelsize": 13,
+                     "axes.titlesize": 15})
+fig, axes = plt.subplots(2, 2, figsize=(16, 12.5), sharey=True,
+                         gridspec_kw={"wspace": 0.06, "hspace": 0.30})
 
-for ax, (title, models, fam_c) in zip(axes, FAMILIES):
-    stats = [load(p) for _, _, p in models]
-    labels = [clean(l) for l, _, _ in models]
-    x = np.arange(len(models))
-    # light -> dark within the family, so "newer" reads as "darker"
-    ramp = sns.light_palette(fam_c, n_colors=len(models) + 2)[2:]
+for row, (samp_name, oai_models, ant_models) in enumerate(SAMPLES):
+    # the AVERAGE-solution line is sample-specific and must be recomputed per row
+    AVG_REF, n_prob = avg_ref(oai_models[0][2])
+    print(f"\n{samp_name}  —  {n_prob} problems, average human solution "
+          f"= {AVG_REF:.2f}x the minimum")
+    for col, ((fam_name, fam_c), models) in enumerate(
+            zip(FAM_COLORS, (oai_models, ant_models))):
+        ax = axes[row][col]
+        stats = [load(pth) for _, _, pth in models]
+        labels = [clean(l) for l, _, _ in models]
+        x = np.arange(len(models))
+        ramp = sns.light_palette(fam_c, n_colors=len(models) + 2)[2:]
 
-    ax.axhspan(1e-2, 1.0, color=MIN_C, alpha=0.10, zorder=0)      # below the floor
-    ax.axhline(AVG_REF, color=AVG_C, lw=1.8, ls="--", zorder=3)   # average human
-    ax.axhline(1.0, color=MIN_C, lw=2.4, zorder=4)                # minimum human
+        ax.axhspan(1e-2, 1.0, color=MIN_C, alpha=0.10, zorder=0)
+        ax.axhline(AVG_REF, color=AVG_C, lw=1.8, ls="--", zorder=3)
+        ax.axhline(1.0, color=MIN_C, lw=2.4, zorder=4)
 
-    parts = ax.violinplot([s["ratios"] for s in stats], positions=x, widths=0.82,
-                          showmedians=True, showextrema=False)
-    for b, c in zip(parts["bodies"], ramp):
-        b.set_facecolor(c); b.set_alpha(0.75); b.set_edgecolor(fam_c); b.set_linewidth(0.8)
-    parts["cmedians"].set_color(PRIMARY); parts["cmedians"].set_linewidth(2)
+        parts = ax.violinplot([s["ratios"] for s in stats], positions=x, widths=0.82,
+                              showmedians=True, showextrema=False)
+        for b, c in zip(parts["bodies"], ramp):
+            b.set_facecolor(c); b.set_alpha(0.75); b.set_edgecolor(fam_c); b.set_linewidth(0.8)
+        parts["cmedians"].set_color(PRIMARY); parts["cmedians"].set_linewidth(2)
 
-    for xi, s in zip(x, stats):
-        if s["below_min"] >= 1:        # how much of the distribution beats the floor
-            ax.annotate(f"{s['below_min']:.0f}% below", (xi, 0.62), ha="center", va="center",
-                        fontsize=10, fontweight="bold", color=MIN_C, zorder=9,
-                        bbox=dict(boxstyle="round,pad=0.15", fc="white", ec="none", alpha=0.85))
-        print(f"  {title.split(' (')[0]:<10s} {clean(models[xi][0]):<14s} "
-              f"median {np.median(s['ratios']):6.2f}x   below-min {s['below_min']:5.1f}%   "
-              f"below-avg {s['below_avg']:5.1f}%   zero-thinking {s['latent_pct']:5.1f}%")
+        for xi, st in zip(x, stats):
+            if st["below_min"] >= 0.5:
+                ax.annotate(f"{st['below_min']:.1f}% below", (xi, 0.60), ha="center",
+                            va="center", fontsize=9.5, fontweight="bold", color=MIN_C,
+                            zorder=9, bbox=dict(boxstyle="round,pad=0.15", fc="white",
+                                                ec="none", alpha=0.88))
+            print(f"    {fam_name.split(' (')[0]:<10s} {clean(models[xi][0]):<14s} "
+                  f"median {np.median(st['ratios']):6.2f}x   below-min {st['below_min']:5.1f}%"
+                  f"   below-avg {st['below_avg']:5.1f}%   zero-think {st['latent_pct']:5.1f}%")
 
-    ax.set_yscale("log"); ax.set_ylim(0.3, 70)
-    ax.set_title(title, fontweight="bold")
-    ax.set_xticks(x); ax.set_xticklabels(labels, fontsize=12, rotation=20, ha="right")
-    ax.set_xlim(-0.65, len(models) - 0.35)
+        ax.set_yscale("log"); ax.set_ylim(0.3, 90)
+        ax.set_title(f"{fam_name}" + ("" if row else f"\n{samp_name}"),
+                     fontweight="bold", fontsize=14)
+        ax.set_xticks(x); ax.set_xticklabels(labels, fontsize=11, rotation=20, ha="right")
+        ax.set_xlim(-0.65, len(models) - 0.35)
+        if col == 0:
+            ax.set_ylabel("Trace length / minimal human derivation")
+        # reference lines are labelled once per row, on the right-hand panel
+        if col == 1:
+            for yv, txt, c in ((AVG_REF, f"average human solution (≈{AVG_REF:.1f}×)", AVG_C),
+                               (1.0, "minimal human derivation (1×)", MIN_C)):
+                ax.annotate(txt, xy=(0.015, yv), xycoords=("axes fraction", "data"),
+                            textcoords="offset points", xytext=(0, 5), ha="left",
+                            va="bottom", fontsize=10.5, fontweight="bold", color=c,
+                            zorder=9, bbox=dict(boxstyle="round,pad=0.2", fc="white",
+                                                ec="none", alpha=0.9))
+    # row label for the second sample (the first is in the panel titles)
+    if row:
+        axes[row][0].set_title(f"OpenAI (GPT)\n{samp_name}", fontweight="bold", fontsize=14)
+        axes[row][1].set_title(f"Anthropic (Opus + Fable)\n{samp_name}",
+                               fontweight="bold", fontsize=14)
 
-axes[0].set_ylabel("Trace length / minimal human derivation")
-# label the two reference lines once, on the right panel where the tail is lowest
-axes[1].annotate(f"average human solution (≈{AVG_REF:.1f}×)", xy=(0.015, AVG_REF),
-                 xycoords=("axes fraction", "data"), textcoords="offset points",
-                 xytext=(0, 5), ha="left", va="bottom", fontsize=11, fontweight="bold",
-                 color=AVG_C, zorder=9,
-                 bbox=dict(boxstyle="round,pad=0.2", fc="white", ec="none", alpha=0.9))
-axes[1].annotate("minimal human derivation (1×)", xy=(0.015, 1.0),
-                 xycoords=("axes fraction", "data"), textcoords="offset points",
-                 xytext=(0, 5), ha="left", va="bottom", fontsize=11, fontweight="bold",
-                 color=MIN_C, zorder=9,
-                 bbox=dict(boxstyle="round,pad=0.2", fc="white", ec="none", alpha=0.9))
 handles = [mlines.Line2D([], [], color=MIN_C, lw=2.4, label="Minimum human solution (floor)"),
            mlines.Line2D([], [], color=AVG_C, lw=1.8, ls="--", label="Average human solution")]
 fig.legend(handles=handles, loc="upper center", ncol=2, fontsize=12.5,
            frameon=True, framealpha=0.95, bbox_to_anchor=(0.5, -0.01))
 plt.tight_layout(pad=0.5)
 paths = save_figure(fig, "fig5_latent_floor", outdir=OUT)
-print("wrote", *paths, sep="\n  ")
+print("\nwrote", *paths, sep="\n  ")
