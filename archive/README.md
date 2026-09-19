@@ -40,3 +40,17 @@ regression" and "astra underperforms" findings were **entirely a grading artifac
   figure set. The dirs archived here (`figure1/`, `time_series/`,
   `effective_compute/`) came from the legacy `paper_figures_71226.py` figure
   functions and predate the fix.
+
+## fig5b_floor_crossing (archived 2026-09-19)
+
+A one-panel "does any model ever cross the floor" chart: median and minimum
+trace/MHD per model against release date, both samples pooled. Built on a misreading
+of what was wanted, then superseded — `figure_latent_floor_ft.py` now pools the same
+two runs into the Figure 5 violins, which carry the same information as
+distributions rather than as two summary statistics. Script in
+`code/archive/figure_floor_crossing_ft.py`.
+
+Its one non-redundant statistic, if it is ever wanted: the **closest approach** to
+the floor per model, which falls steadily even for models that never cross —
+GPT-5.5 reaches 1.03x, GPT-5.6-sol and Opus 5 both 1.37x, against GPT-6-Astra 0.80x,
+Fable 5.1 0.88x and Opus 4.7 0.73x.
