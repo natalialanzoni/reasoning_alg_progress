@@ -12,11 +12,11 @@ attempts each against 8 for the other 30, tilting the distribution toward the ha
 problems. `avg_ref_pooled` weights the average-human reference line the same way, so
 the line and the violins describe the same sample. Each violin is the
 distribution of trace length divided by that problem's MINIMAL human derivation
-(L / C_j) over correct traces, so 1x means "as short as the shortest human solution
+(L / C_j) over correct traces, so 1x means "as short as the shortest human derivation
 to this problem". Two human reference lines are drawn:
 
-    solid  1x       the MINIMUM human solution   (the floor, C_j)
-    dashed ~M x     the AVERAGE human solution   (median over problems of mean/min)
+    solid  1x       the MINIMUM human derivation   (the floor, C_j)
+    dashed ~M x     the AVERAGE human derivation   (median over problems of mean/min)
 
 and the region below the floor is shaded. The newest models dip into it.
 
@@ -49,7 +49,7 @@ OUT = os.path.join(os.path.dirname(HERE), "figures", "figs_sept")
 D = pf.RESULTS_DIR / "hard_but_doable_10q_k32"
 
 MIN_C = "#E07A3F"        # minimal human derivation — orange, as in figures 1 and 4
-AVG_C = "#5A5A5A"        # average human solution — grey
+AVG_C = "#5A5A5A"        # average human derivation — grey
 OAI_C = CATEGORICAL[0]   # blue
 ANT_C = CATEGORICAL[1]   # MIT red
 
@@ -107,10 +107,10 @@ def load(path):
                 below_min=100 * below_min / nc, below_avg=100 * below_avg / nc)
 
 
-# The average human solution as a multiple of the minimum, over the problems in this
+# The average human derivation as a multiple of the minimum, over the problems in this
 # sample (median across problems of mean/min). This is the second reference line.
 def avg_ref(path):
-    """Average human solution as a multiple of the minimum, over the problems in
+    """Average human derivation as a multiple of the minimum, over the problems in
     THIS sample. It is sample-specific: harder problems have longer write-ups."""
     pids = [str(r["task_id"]) for r in pf.load_rows(path) if str(r["task_id"]) in KEYS]
     return float(np.median([pf.CANON[k]["mean"] / pf.CANON[k]["min"] for k in pids])), len(pids)
@@ -140,7 +140,7 @@ def load_pooled(paths):
 
 
 def avg_ref_pooled(paths):
-    """Average human solution as a multiple of the minimum, weighted by how many
+    """Average human derivation as a multiple of the minimum, weighted by how many
     traces each problem actually contributes to the pooled violin."""
     per_trace = []
     for path in paths:
@@ -169,7 +169,7 @@ for (fam, fam_c), (_, shallow, hard) in zip(FAM_COLORS,
 
 AVG_REF = avg_ref_pooled([p for _, _, models in PAIRED for _, _, ps in models for p in ps])
 print(f"fig5 (POOLED whole benchmark k=8 + hard-but-doable k=32); "
-      f"average human solution = {AVG_REF:.2f}x the minimum\n")
+      f"average human derivation = {AVG_REF:.2f}x the minimum\n")
 
 for ax, (fam, fam_c, models) in zip(axes, PAIRED):
     stats = [load_pooled(ps) for _, _, ps in models]
@@ -204,14 +204,14 @@ for ax, (fam, fam_c, models) in zip(axes, PAIRED):
     ax.set_xlim(-0.65, len(models) - 0.35)
 
 axes[0].set_ylabel("Trace length / minimal human derivation")
-for yv, txt, c in ((AVG_REF, f"average human solution (≈{AVG_REF:.1f}×)", AVG_C),
+for yv, txt, c in ((AVG_REF, f"average human derivation (≈{AVG_REF:.1f}×)", AVG_C),
                    (1.0, "minimal human derivation (1×)", MIN_C)):
     axes[1].annotate(txt, xy=(0.015, yv), xycoords=("axes fraction", "data"),
                      textcoords="offset points", xytext=(0, 5), ha="left", va="bottom",
                      fontsize=11, fontweight="bold", color=c, zorder=9,
                      bbox=dict(boxstyle="round,pad=0.2", fc="white", ec="none", alpha=0.9))
-handles = [mlines.Line2D([], [], color=MIN_C, lw=2.4, label="Minimum human solution (floor)"),
-           mlines.Line2D([], [], color=AVG_C, lw=1.8, ls="--", label="Average human solution")]
+handles = [mlines.Line2D([], [], color=MIN_C, lw=2.4, label="Minimum human derivation (floor)"),
+           mlines.Line2D([], [], color=AVG_C, lw=1.8, ls="--", label="Average human derivation")]
 fig.legend(handles=handles, loc="upper center", ncol=2, fontsize=12.5,
            frameon=True, framealpha=0.95, bbox_to_anchor=(0.5, -0.01))
 plt.tight_layout(pad=0.5)
