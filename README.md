@@ -307,15 +307,34 @@ the 7-point GLM version line.** The usable comparisons are (a) GLM vs frontier
 verbosity on identical problems, which is robust, and (b) 4.5 vs 5.3, the one
 provider-matched pair (both Z.AI), giving 2.2x compression at flat accuracy.
 
-### 9. Few model clusters limit what the bootstrap can say
+### 9. Six model clusters cannot support a 5% significance claim
 
-`Month` is constant within a model, so the wild cluster bootstrap resamples over
-models — 8 for OpenAI, 6 for Anthropic. With `G` clusters a Rademacher bootstrap has
-at most `2^G` sign patterns, so the smallest attainable two-sided p-value is
-`2^(1-G)`: 0.008 for OpenAI but **0.031 for Anthropic**, where `p < 0.01` is
-therefore unreachable no matter how strong the effect. Report confidence intervals,
-not stars. Clustering by *problem* instead gives SEs about a quarter as wide and is
-badly anti-conservative here.
+`Month` is constant within a model, so the bootstrap must resample over MODELS — 8
+for OpenAI, 6 for Anthropic. Two things go wrong if this is done casually, and the
+second is the one that bites:
+
+**Rademacher weights run out of resolution.** With `G` clusters a Rademacher
+bootstrap has only `2^G` sign patterns, so the smallest attainable two-sided p is
+`2^(1-G)`: 0.008 at G=8 but **0.031 at G=6**, where `p < 0.01` is unreachable
+regardless of effect size. Use **Webb six-point weights** (`6^G` patterns).
+
+**A percentile interval from an unrestricted bootstrap is anti-conservative.** It
+excludes zero for both families here, which looks like significance at 5%. A proper
+**bootstrap-t imposing H0 and studentizing with a cluster-robust SE each
+replication** disagrees:
+
+| family | beta | t | WCR bootstrap-t p |
+| --- | --- | --- | --- |
+| OpenAI (G=8) | −0.124 | −6.26 | **0.020** |
+| Anthropic (G=6) | −0.178 | −5.80 | **0.066** |
+
+So **Anthropic's decay is not significant at 5%** despite t = −5.8. The percentile
+CI is still reported (it is what the Figure 4 band draws) but the stars in
+`table_decay.py` come from the bootstrap-t, and a p-value row is printed so the two
+cannot be confused. Do not read significance off the interval, and do not claim
+either family compresses significantly faster than the other — the intervals
+overlap. Clustering by *problem* gives SEs about a quarter as wide and is worse
+still.
 
 ### Benchmark composition — known asymmetries
 
