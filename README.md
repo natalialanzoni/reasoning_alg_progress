@@ -79,6 +79,66 @@ The canonical-solution floor in Figure 1 is computed from the
 [`tyrtleli/thinking-benchmark-90`](https://huggingface.co/datasets/tyrtleli/thinking-benchmark-90)
 dataset on the Hugging Face Hub, tokenized with `tiktoken` (`o200k_base`).
 
+## Reproducing the paper
+
+```bash
+python3 -m venv venv && ./venv/bin/pip install -r requirements.txt
+bash code/make_all_figures.sh main       # the main-text figures + the appendix table
+bash code/make_all_figures.sh all        # + the appendix figures
+```
+
+Everything reads `data/` directly and writes to `figures/figs_sept/`. The canonical
+human solutions are pulled from the
+[`tyrtleli/thinking-benchmark-90`](https://huggingface.co/datasets/tyrtleli/thinking-benchmark-90)
+dataset at run time and tokenized with `tiktoken` (`o200k_base`), so the first run
+needs network access. Model results in `data/` are already regraded — `correct`
+holds the corrected verdict (see failure mode 4).
+
+### Verification anchors
+
+If a change is supposed to be cosmetic, these numbers must not move. If they do,
+something about the sample or the spec changed.
+
+| Artifact | Script | Numbers to check |
+| --- | --- | --- |
+| sample + floor | all | **40** competition problems, floor **316** tok |
+| Fig 1 | `figure1_grid_ft.py` | OpenAI 9,547 -> 1,121 tok (**8.5x**), acc 70.4% -> 99.4%; Anthropic 8,617 -> 1,799 (**4.8x**), acc 92.1% -> 97.8% |
+| Fig 4 | `figure_forecast_ft.py` | beta **-0.124** (31.0%/qtr, CI 24-37) and **-0.161** (38.3%/qtr, CI 31-45); within-10% **2029-02** / **2028-09**; endpoints 33x->3.0x and 21x->6.6x |
+| Fig 5 | `figure_latent_floor_ft.py` | astra 2.5% below min, 35.3% below average; Fable 5.1 0% below min, 10.1% below average, 30.0% zero-thinking |
+| Case study | `figure_mechanism_ft.py` | scale 7,988 -> 4,693 (**1.70x**), acc 68.8% -> 73.8%; algorithm 14,241 -> 8,539 (**1.67x**), acc 83.4% -> 85.6% |
+| Floor table | `table_floor_robustness.py` | OpenAI 27.0-33.6%/qtr, Anthropic 34.9-40.7%/qtr across four floor definitions |
+| Contamination | `figure_forecast_ft.py` | pre-cutoff GPT **18.8%**/qtr vs 31.0% full sample |
+
+### Which scripts are on the paper's sample
+
+Not all of them, and the runner does not enforce it — check before promoting any
+figure into the paper.
+
+| Status | Scripts |
+| --- | --- |
+| **On the 40-problem sample** (prints it on startup) | `figure1_grid_ft.py`, `figure_forecast_ft.py`, `figure_latent_floor_ft.py`, `figure_mechanism_ft.py`, `figure_effort_ft.py`, `table_floor_robustness.py` |
+| **Effectively on it** (hard-but-doable-10 contains no MATH-500) | `figure2_ft.py`, `figure_cv_ft.py` |
+| **NOT on it** — include MATH-500 via `valid_stats(..., restrict_canon=False)` | `figure3_pareto_ft.py`, `figures_sept_ft.py` |
+| **PARKED** — MATH-500 included, 303-token floor, and the superseded `pos + 5` difficulty tiering | `figure1_grid_glm_ft.py`, `figure1_glm_algo_ft.py`, `figure1_oss_ft.py` |
+
+The parked GLM figures are additionally provider-confounded (failure mode 7). Bring
+a script onto the 40-problem sample by copying the `KEYS` / `FLOOR` block from
+`figure1_grid_ft.py` before using its output.
+
+### Re-running the benchmarks themselves
+
+Only needed if adding a model; the committed `data/` is sufficient to rebuild every
+figure.
+
+```bash
+bash code/run_o1.sh                       # OpenAI, pinned to the comparable settings
+./venv/bin/python code/benchmark_math_open_source.py --help
+./venv/bin/python code/apply_regrade.py   # ALWAYS regrade a new run before plotting
+```
+
+Read the run-hygiene section below first — all three original failure modes complete
+with zero errors.
+
 ## Setup
 
 ```bash
