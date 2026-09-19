@@ -1,18 +1,18 @@
 """Appendix robustness table: is the MHD definition load-bearing?
 
-Re-estimates the excess-trend slope under four definitions of the floor C_j:
+Re-estimates the excess-trend slope under four definitions of the floor MHD_j:
 
-    shortest      C_j = min of the human solutions   <- the paper's headline (MHD)
-    median        C_j = median of the human solutions
-    mean          C_j = mean of the human solutions
+    shortest      MHD_j = min of the human solutions   <- the paper's headline (MHD)
+    median        MHD_j = median of the human solutions
+    mean          MHD_j = mean of the human solutions
     none          no floor at all: log L with problem fixed effects
 
 Everything else is held fixed: the 40 competition problems (MATH-500 excluded),
 correct traces, problem fixed effects, per family, and the same wild-cluster
 bootstrap over models used in the main decay table.
 
-The DV is exactly pf._fit_headroom_forecast's, log(headroom - 1) = log((L-C)/C),
-with C swapped per row, so the "shortest" row reproduces the headline numbers. The
+The DV is exactly pf._fit_headroom_forecast's, log(headroom - 1) = log((L-MHD)/MHD),
+with MHD swapped per row, so the "shortest" row reproduces the headline numbers. The
 no-floor row uses log(L/C_min); with problem FE that is the same slope as plain
 log L, and it keeps the forecast target on a comparable scale.
 
@@ -104,7 +104,7 @@ for fam, mf in FAMILIES:
     n_correct = len(build(mf, None))          # every correct trace: the no-floor N
     for name, fl in SPECS:
         b, se, lo, hi, a, n, G = fit(build(mf, fl))
-        # No floor is subtracted in the "none" row, so it has no C_j to report.
+        # No floor is subtracted in the "none" row, so it has no MHD_j to report.
         # log(L/C_min) is used there only so the scale matches: with problem FE a
         # per-problem constant is fully absorbed, so beta equals that of plain log L.
         cbar = np.mean([FLOORS[t][fl] for t in KEYS]) if fl else None
@@ -134,7 +134,7 @@ _emit = lambda ln: (_tex.append(ln), print(ln))[1]
 print("% ---------------- appendix table ----------------")
 _emit(r"\begin{tabular}{llccccc}")
 _emit(r"\toprule")
-_emit(r"Family & Floor $C_j$ & $\bar C_j$ & $\hat\beta$ & Quarterly & Half-life & "
+_emit(r"Family & Floor $\mathrm{MHD}_j$ & $\overline{\mathrm{MHD}}_j$ & $\hat\beta$ & Quarterly & Half-life & "
       r"Within 10\% \\")
 _emit(r" & & (tok) & (SE) & reduction & (months) & of floor \\")
 _emit(r"\midrule")

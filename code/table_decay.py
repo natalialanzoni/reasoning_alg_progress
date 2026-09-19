@@ -8,12 +8,21 @@ over MODELS, because Month is constant within a model: only 6-8 time points iden
 beta, so clustering by problem would treat thousands of traces as independent
 evidence about the trend and is badly anti-conservative.
 
-Reports confidence intervals rather than significance stars. With G model clusters a
-Rademacher wild bootstrap draws from at most 2^G sign patterns, so the smallest
-attainable two-sided p-value is 2^(1-G): 0.008 for OpenAI (G=8) but 0.031 for
-Anthropic (G=6), where p<0.01 is unreachable regardless of effect size. Starring one
-column and not the other would wrongly suggest Anthropic's result is weaker when its
-coefficient is in fact larger.
+Inference is a WILD CLUSTER BOOTSTRAP-t (WCR), imposing H0: beta = 0 and studentizing
+with a cluster-robust SE in every replication, using WEBB six-point weights. Two
+choices matter and both are the standard recommendation for few clusters
+(Cameron-Gelbach-Miller; Roodman et al. 2019):
+
+  Webb over Rademacher  -- a Rademacher bootstrap has only 2^G sign patterns, so with
+    G=6 the smallest attainable two-sided p is 2^(1-G) = 0.031 and p<0.01 is
+    unreachable regardless of effect size. Webb gives 6^G patterns.
+  bootstrap-t over percentile -- the percentile interval from an UNRESTRICTED
+    bootstrap is anti-conservative here. It excludes zero for both families, but the
+    bootstrap-t puts Anthropic at p = 0.066, i.e. NOT significant at 5% despite
+    t = -5.8. Do not read significance off the reported interval.
+
+The interval is still printed because it is what the Figure 4 band shows, but the
+stars come from the bootstrap-t.
 
     ./venv/bin/python code/table_decay.py            # print
     ./venv/bin/python code/table_decay.py OUT.tex    # and write LaTeX
@@ -76,25 +85,49 @@ def fit(rows, B=9999, seed=0):
     wm = rng.choice([-1.0, 1.0], size=(B, G))
     bs = (((P @ bh)[None, :] + wm[:, cl] * e[None, :]) @ Pinv.T)[:, 1]
     b = float(bh[1])
+    A = np.linalg.pinv(P.T @ P)
+
+    def cr_se1(Xm, u):
+        """cluster-robust SE of the month coefficient, with the G/(G-1) correction."""
+        meat = np.zeros((Xm.shape[1], Xm.shape[1]))
+        for g in range(G):
+            m = cl == g; sc = Xm[m].T @ u[m]; meat += np.outer(sc, sc)
+        return math.sqrt(max((A @ meat @ A * (G / (G - 1)))[1, 1], 1e-300))
+
+    # WCR bootstrap-t under H0: beta = 0, Webb weights
+    t_hat = b / cr_se1(P, e)
+    Q = np.delete(P, 1, axis=1); br = np.linalg.pinv(Q) @ y
+    er = y - Q @ br; fit0 = Q @ br
+    webb = np.array([-math.sqrt(1.5), -1.0, -math.sqrt(0.5),
+                     math.sqrt(0.5), 1.0, math.sqrt(1.5)])
+    hits = 0
+    for w in np.random.default_rng(seed + 1).choice(webb, size=(B, G)):
+        ys = fit0 + w[cl] * er
+        bstar = Pinv @ ys
+        hits += int(abs(bstar[1] / cr_se1(P, ys - P @ bstar)) >= abs(t_hat))
+    pval = (hits + 1) / (B + 1)
     return dict(b=b, se=float(bs.std(ddof=1)),
                 lo=float(np.percentile(bs, 2.5)), hi=float(np.percentile(bs, 97.5)),
                 n=n, G=G, J=J, q=(1 - math.exp(3 * b)) * 100, hl=-math.log(2) / b,
-                pmin=2.0 ** (1 - G))
+                t=t_hat, p=pval,
+                star="***" if pval < 0.01 else "**" if pval < 0.05
+                     else "*" if pval < 0.10 else "")
 
 
 res = {fam: fit(rows_for(mf)) for fam, mf in FAMILIES}
-print(f"{'family':<26s} {'beta':>9s} {'SE':>7s} {'95% CI':>18s} {'%/qtr':>7s} "
-      f"{'half-life':>10s} {'N':>6s} {'G':>3s} {'min p':>7s}")
+print(f"{'family':<26s} {'beta':>9s} {'SE':>7s} {'95% CI':>18s} {'t':>7s} "
+      f"{'WCR p':>7s} {'%/qtr':>7s} {'N':>6s} {'G':>3s}")
 for fam, _ in FAMILIES:
     r = res[fam]
     print(f"  {fam:<24s} {r['b']:>+9.4f} {r['se']:>7.4f} "
-          f"[{r['lo']:+.3f}, {r['hi']:+.3f}] {r['q']:>6.1f}% {r['hl']:>9.1f}m "
-          f"{r['n']:>6d} {r['G']:>3d} {r['pmin']:>7.3f}")
+          f"[{r['lo']:+.3f}, {r['hi']:+.3f}] {r['t']:>7.2f} {r['p']:>7.4f}{r['star']:<3s} "
+          f"{r['q']:>6.1f}% {r['n']:>6d} {r['G']:>3d}")
 
 tex = [r"\begin{tabular}{lcc}", r"\toprule",
        " & " + " & ".join(f for f, _ in FAMILIES) + r" \\", r"\midrule"]
 cells = lambda f: [res[fam][f] for fam, _ in FAMILIES]
-tex += ["Release month & " + " & ".join(f"${v:.3f}$" for v in cells("b")) + r" \\",
+tex += ["Release month & " + " & ".join(f"${res[f]['b']:.3f}^{{{res[f]['star']}}}$"
+                                        for f, _ in FAMILIES) + r" \\",
         " & " + " & ".join(f"$({v:.3f})$" for v in cells("se")) + r" \\",
         " & " + " & ".join(f"$[{res[f]['lo']:.3f}, {res[f]['hi']:.3f}]$"
                            for f, _ in FAMILIES) + r" \\",
@@ -104,6 +137,8 @@ tex += ["Release month & " + " & ".join(f"${v:.3f}$" for v in cells("b")) + r" \
         "Observations & " + " & ".join(f"${v:,}$".replace(",", "{,}")
                                        for v in cells("n")) + r" \\",
         "Model clusters & " + " & ".join(f"${v}$" for v in cells("G")) + r" \\",
+        "Bootstrap-$t$ $p$ & " + " & ".join(f"${res[f]['p']:.3f}$"
+                                            for f, _ in FAMILIES) + r" \\",
         r"\midrule",
         "Quarterly reduction & " + " & ".join(f"${v:.1f}\\%$" for v in cells("q")) + r" \\",
         "Half-life (months) & " + " & ".join(f"${v:.1f}$" for v in cells("hl")) + r" \\",
