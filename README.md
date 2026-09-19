@@ -6,10 +6,34 @@ better, does the amount of "thinking" (output/completion tokens) they spend per
 problem fall toward an irreducible floor — the length of a canonical human
 solution — while accuracy holds or improves?
 
-The headline finding (Figure 1) is that across GPT generations
-(`o3 → gpt-5 → gpt-5.2 → gpt-5.4 → gpt-5.5`), mean trace length on the reference
-problems falls steadily toward the canonical-solution floor, while accuracy on
-the same problems stays flat or rises.
+The headline finding (Figure 1) is that across generations — OpenAI
+`o1 → o3 → gpt-5 → 5.2 → 5.4 → 5.5 → 5.6-sol → gpt-6-astra` and Anthropic
+`Opus 4.5 → 4.6 → 4.7 → 4.8 → Opus 5 → Fable 5.1` — mean trace length falls
+steadily toward the minimal-human-derivation floor while accuracy rises.
+Mean tokens per correct solution fall **8.5x** for OpenAI (20 months) and **4.8x**
+for Anthropic (9 months); the excess over the floor decays **31%/quarter** and
+**38%/quarter** respectively.
+
+## Sample definition — read this before touching a figure
+
+Every current figure uses the **40 competition problems**: AIME 2026 I/II (28) plus
+HMMT February 2026 (12). The five MATH-500 problems in the benchmark are
+**excluded**, and the floor is recomputed over the same 40.
+
+- **floor = 316 tokens**, the mean shortest human solution over those 40.
+  `pf.canon_short` is **303** — that is the all-45 value and includes MATH-500's
+  short solutions. Do not draw 303 on a 40-problem figure; `figure_effort_ft.py`
+  did exactly that until it was caught.
+- MATH-500 is excluded because the newest models sit *at or below* the floor on
+  those easy problems, where `log(L - C_j)` is undefined: 20-67% of recent-model
+  traces there get dropped by the `L > C_j` filter, against 0.3% on the 40
+  competition problems. MATH-500-only regressions are unusable for that reason
+  (the rate swings 31.3% -> 23.4% depending on which models you keep). Descriptive
+  statistics on MATH-500 are fine; regressions are not.
+- Difficulty tiers are a-priori, from competition position: AIME 1-10 medium,
+  AIME 11-15 hard, **HMMT (any position) very hard** — HMMT ranks above all AIME
+  rather than interleaving by number. Defined in `figure1_grid_ft.py::human_tier`
+  and duplicated in the other figure scripts; change all of them together.
 
 ## Repository layout
 
@@ -23,11 +47,18 @@ figures/     Generated plots (figure1/ and time_series/)
 
 | Script | What it produces |
 | --- | --- |
-| `plot_figure1.py` | Figure 1: trace length falling toward the canonical floor, across GPT generations (overall, per-problem, and faceted-by-source views). |
-| `analyze_time_series_overall.py` | Mean ± SD, coefficient of variation (CV), and p90/p95 tail of trace length over model release dates. |
-| `analyze_time_series_by_difficulty.py` | Token distribution per task, sorted by AoPS difficulty. |
-| `analyze_time_series_by_difficulty_bins.py` | Trace length stratified by per-model per-task success rate (easy / medium / hard bins). |
-| `analyze_time_series_cv_successes.py` | CV computed over *successful* trials only. |
+| `figure1_grid_ft.py` | **Figure 1** (3x2): accuracy / mean tokens + floor / per-problem IQR by difficulty, OpenAI vs Anthropic on one shared time axis. Also writes the all-traces appendix replica. |
+| `figure_forecast_ft.py` | **Figure 4**: one row, two panels, both families overlaid — tokens and multiple-of-floor — plus the forecast, the pre-cutoff contamination appendix, and sensitivity variants. |
+| `figure_latent_floor_ft.py` | **Figure 5**: distance to the floor by family, violins of L/C_j with the minimum and average human solution drawn. |
+| `figure_mechanism_ft.py` | Case study: scale (gpt-oss 20B->120B) vs algorithm (GLM 5.2->5.3), in Figure 1 style. |
+| `figure_effort_ft.py` | Appendix: trace length over generations by reasoning effort (low/medium/high). |
+| `table_floor_robustness.py` | Appendix table: beta re-estimated under four floor definitions (shortest / median / mean / none). |
+| `regrade.py`, `apply_regrade.py` | The corrected answer grader and the script that bakes it into `correct`. See `archive/README.md`. |
+| `censor_over_cap.py` | Right-censors runs whose provider ignored `max_tokens`. |
+
+Legacy `plot_figure1.py` / `analyze_time_series_*.py` live in `code/archive/` and
+still expect the old `code/results/` layout. The `_ft` scripts above read `data/`
+directly and run end-to-end.
 
 ### `data/`
 
@@ -59,19 +90,13 @@ pip install -r requirements.txt
 ## Running
 
 ```bash
-python code/plot_figure1.py
-python code/analyze_time_series_overall.py
-# ...etc
+MPLBACKEND=Agg ./venv/bin/python code/figure1_grid_ft.py
+MPLBACKEND=Agg ./venv/bin/python code/figure_forecast_ft.py
+./venv/bin/python code/table_floor_robustness.py
 ```
 
-> **⚠️ Data paths need wiring up.** These scripts were lifted from another
-> codebase and still expect their inputs under `code/results/` with the
-> original run-directory names (e.g. `thinking_20260612_100207/`), and write
-> figures to `code/new_graphs/`. The data in this repo lives under `data/` with
-> renamed directories (e.g. `gpt5_shallow_pass/`), and committed figures are in
-> `figures/`. Before the scripts will run end-to-end you'll need to reconcile
-> the `RESULTS` path and the per-model file paths at the top of each script with
-> the actual `data/` layout. See the `MODELS` / `FILES` lists in each file.
+Each figure script prints its sample size and floor on startup — check that line
+says `40 competition problems ... floor = 316 tok` before trusting the output.
 
 ## Notes
 
@@ -141,6 +166,82 @@ Client settings that matter: `max_retries=5` on the OpenAI client so the SDK
 backs off on 429s honoring `Retry-After` (setting it to 0 raised Kimi K3's
 failures from 115 to 174), and `timeout=900` to cover a full 40k-token
 generation. Reduce `--workers` before anything else when 429s appear.
+
+### 4. The grader penalised terse models — fixed, but check before trusting old numbers
+
+The original grader marked correct answers wrong on formatting alone (answer
+prefixes, work inside `\boxed{}`, units, leading zeros, equivalent radicals).
+Because efficient models write terser answers, it penalised exactly the models the
+paper is about: gpt-6-astra read **85.3%** when its true accuracy was **99.5%**.
+`code/regrade.py` fixes it and `correct` now holds the corrected verdict, with the
+original preserved in `correct_original`. **Never read `correct_original`.** Full
+write-up in `archive/README.md`; outputs produced before the fix are in
+`archive/pre_grader_fix_figures/`.
+
+### 5. The regression drops traces below the floor
+
+The DV is `log(L - C_j)`, undefined when a trace is shorter than the shortest human
+solution, so those traces are silently excluded. On the 40 competition problems this
+is **0.3%** (13 of 4,084) and concentrated in two models — gpt-6-astra (11) and
+Opus 4.7 (2) — so it is immaterial. It is *not* immaterial if you change the sample
+or the floor: on MATH-500 it reaches 67%.
+
+**Do not "fix" this by clipping at the bound.** Clipping `h` at 1.10 / 1.01 / 1.001
+gives 29.5% / 30.9% / 32.0% per quarter — it diverges as the clip tightens, so any
+number it produces is an artifact of the clip. The defensible check is the nonlinear
+form `L = C_j + exp(a_j + b*month)` fitted on log L, which needs no drop and no clip:
+it gives 27.4% against the headline 29.1% pooled, i.e. censoring is worth ~0.3pp and
+the rest is functional form.
+
+### 6. Reasoning effort must match before comparing absolute lengths across models
+
+Within-model-pair comparisons are safe; cross-family ones usually are not. gpt-oss
+exists **only at medium** effort (`_re-medium`), while GLM 5.2/5.3 are usable **only
+at high** (their medium runs were silently remapped — see failure mode 1). So in the
+case-study figure the *ratios* within each column are valid but GLM's absolute trace
+lengths are not comparable to gpt-oss's. The same applies to any table that lines up
+open-source models side by side.
+
+### 7. GLM version-over-version trends are provider-confounded
+
+Every GLM version was served by a **different** OpenRouter provider — 4.5 Z.AI,
+4.6/4.7 Novita, 5 StreamLake, 5.1 Baidu, 5.2 Phala, 5.3 Z.AI — and pre-5.2 GLMs
+expose no thinking-budget knob at all, so the provider's default governs how much
+the model thinks. Median thinking tokens track the provider, not the version, which
+is why the raw version line *rises* 14.4k -> 21.6k from 4.5 to 5.1. **Do not plot
+the 7-point GLM version line.** The usable comparisons are (a) GLM vs frontier
+verbosity on identical problems, which is robust, and (b) 4.5 vs 5.3, the one
+provider-matched pair (both Z.AI), giving 2.2x compression at flat accuracy.
+
+### 8. Few model clusters limit what the bootstrap can say
+
+`Month` is constant within a model, so the wild cluster bootstrap resamples over
+models — 8 for OpenAI, 6 for Anthropic. With `G` clusters a Rademacher bootstrap has
+at most `2^G` sign patterns, so the smallest attainable two-sided p-value is
+`2^(1-G)`: 0.008 for OpenAI but **0.031 for Anthropic**, where `p < 0.01` is
+therefore unreachable no matter how strong the effect. Report confidence intervals,
+not stars. Clustering by *problem* instead gives SEs about a quarter as wide and is
+badly anti-conservative here.
+
+### Benchmark composition — known asymmetries
+
+- **AIME is nearly complete**, 29 of 30 problems (all of 2026 I, and II minus #2).
+  **HMMT is a subset and skewed**: 12 of 30, and both the Combinatorics and Geometry
+  rounds start at problem #5, so the easier front half is absent. Algebra/NT
+  contributes a single problem. The selection rule is not recorded anywhere in this
+  repo — if you know it, write it down here.
+- `aime_2026_i_15` is in the benchmark but has **no canonical solution**, so the
+  hardest AIME I problem is absent from every floor-based analysis.
+- Canonical solutions come from the AoPS Wiki: 122 solutions over 45 problems,
+  **1 to 8 per problem (median 3 on the competition set)**. Audited clean — no
+  empties, duplicates, count mismatches, truncation or wiki markup. Two caveats:
+  **11 of the 40 competition problems have only one solution**, so no minimum is
+  actually being taken there and the floor is likely an overestimate; and 6
+  solutions embed `[asy]` diagram source, though stripping it leaves the floor
+  unchanged at 316 because a diagram-free solution is already shortest in every
+  such problem.
+- Competition dates, needed for the contamination cutoff: **AIME 2026 I 2026-02-05**,
+  **AIME 2026 II 2026-02-11**, **HMMT February 2026 2026-02-14**.
 
 ### Conventions
 
