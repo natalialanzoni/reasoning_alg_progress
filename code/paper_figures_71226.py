@@ -614,7 +614,9 @@ def _fit_headroom_forecast(model_files, exclude_baseline=True, successes_only=Tr
                 # "did it produce a real answer" (tok >= 50), matching figures_sept._trial_ok.
                 if tok < 50:
                     continue
-                if successes_only and not c:            # drop incorrect traces
+                # a cap-hit trace never delivered an answer, so it is not a
+                # success no matter what the grader extracted from the fragment
+                if successes_only and not (c and tok < 40000):
                     continue
                 hr = tok / CANON[tid]["min"]
                 rows.append({"problem": tid, "month": month, "headroom": hr})

@@ -114,7 +114,22 @@ def clean_label(name):
     return name
 
 
-def shallow_dist(model_files, successes_only=True):
+def _tok_of(r, i, tok, thinking_only):
+    """The length this figure is measuring for trial i: total output, or thinking only.
+
+    thinking_only=True answers "is the decline just shorter ANSWERS?". It is not: the
+    series switches output format at gpt-5.1 (plain-text math -> LaTeX display blocks,
+    ~22% of answer characters becoming markup), which inflates L for every later model.
+    Thinking tokens are untouched by that switch, so the thinking-only variant retires
+    both the answer-verbosity and the format-switch objection at once.
+    """
+    if not thinking_only:
+        return tok
+    tt = r.get("thinking_tokens")
+    return None if tt is None else tt[i]
+
+
+def shallow_dist(model_files, successes_only=True, thinking_only=False):
     """Per model: date, mean trace length, accuracy (40 competition problems).
 
     successes_only=True  -> tokens from CORRECT traces only ("tokens to solve"). This
@@ -132,7 +147,8 @@ def shallow_dist(model_files, successes_only=True):
             if str(r["task_id"]) not in KEYS:
                 continue
             texts = r.get("response_texts", [None] * len(r["correct"]))
-            for tok, c, txt in zip(r["total_completion_tokens"], r["correct"], texts):
+            for i, (tok, c, txt) in enumerate(zip(r["total_completion_tokens"],
+                                                  r["correct"], texts)):
                 if not fs._trial_ok(tok, txt):
                     continue
                 # a cap-hit trace is a real attempt (denominator) that FAILED
@@ -140,7 +156,9 @@ def shallow_dist(model_files, successes_only=True):
                 ok = fs._trial_correct(tok, c)
                 nt += 1; nc += int(ok)
                 if ok or not successes_only:
-                    toks.append(tok)
+                    v = _tok_of(r, i, tok, thinking_only)
+                    if v is not None:
+                        toks.append(v)
         dates.append(date); mean.append(np.mean(toks))
         acc.append(100 * nc / max(1, nt))
     return mdates.date2num(dates), labels, mean, acc
@@ -171,7 +189,7 @@ plt.rcParams.update({"axes.labelsize": 15, "xtick.labelsize": 13, "ytick.labelsi
                      "axes.titlesize": 17})
 
 
-def build(fname, full_row3, successes_only=True):
+def build(fname, full_row3, successes_only=True, thinking_only=False):
     """full_row3=False -> row 3 = hard-but-doable k=32 (difficulty 4-5);
     full_row3=True -> row 3 = full benchmark k=8 (all difficulty levels 2-6).
     successes_only=False -> appendix variant on ALL attempts (see shallow_dist)."""
@@ -188,7 +206,7 @@ def build(fname, full_row3, successes_only=True):
                              gridspec_kw={"hspace": 0.18, "wspace": 0.22})
     seen = set()
     for col, (title, shallow, hard) in enumerate(FAMILIES):
-        dx, labs, mean, acc = shallow_dist(shallow, successes_only)
+        dx, labs, mean, acc = shallow_dist(shallow, successes_only, thinking_only)
 
         a0 = axes[0][col]                                   # Row 1 — accuracy
         a0.plot(dx, acc, "-o", color=ACC, lw=2.6, ms=8, zorder=5)
@@ -205,15 +223,21 @@ def build(fname, full_row3, successes_only=True):
 
         a1 = axes[1][col]                                   # Row 2 — mean falling to floor
         a1.plot(dx, mean, "-o", color=TOK, lw=3, ms=8, zorder=5)
-        a1.axhline(FLOOR, color=FLOOR_COLOR, lw=2, zorder=3)   # minimal human derivation
+        # The floor is the shortest HUMAN-WRITTEN derivation -- exposition, which is
+        # the analogue of the model's ANSWER, not of its hidden scratch work. So it is
+        # drawn only in the total-tokens view; there is no principled floor for
+        # thinking alone (and subtracting one would censor 38% of astra's traces).
+        if not thinking_only:
+            a1.axhline(FLOOR, color=FLOOR_COLOR, lw=2, zorder=3)
         # headroom above the curve for the compression label. Anthropic's series is
         # squeezed into the right third of the shared axis with its peak at the top,
         # so without this the label lands on the data in that column.
         a1.set_ylim(0, max(mean) * 1.38)
         a1.yaxis.set_major_formatter(unit_formatter(1e3, "k"))
-        a1.annotate(f"minimal human derivation ≈ {FLOOR:.0f} tok", (dx[-1], FLOOR),
-                    textcoords="offset points", xytext=(0, 5), ha="right", va="bottom",
-                    fontsize=10, fontweight="bold", color=FLOOR_COLOR, zorder=6)
+        if not thinking_only:
+            a1.annotate(f"minimal human derivation ≈ {FLOOR:.0f} tok", (dx[-1], FLOOR),
+                        textcoords="offset points", xytext=(0, 5), ha="right", va="bottom",
+                        fontsize=10, fontweight="bold", color=FLOOR_COLOR, zorder=6)
         # earliest -> latest compression, anchored upper-RIGHT so it reads as a
         # statement about the newest models rather than the oldest
         # The window is part of the claim: 8.5x over 21 months is not the same
@@ -260,7 +284,8 @@ def build(fname, full_row3, successes_only=True):
 
     axes[0][0].set_ylabel("Accuracy")
     cond = "correct traces" if successes_only else "all attempts"
-    axes[1][0].set_ylabel(f"Mean output tokens\n({cond})")
+    axes[1][0].set_ylabel(("Mean THINKING tokens\n" if thinking_only
+                           else "Mean output tokens\n") + f"({cond})")
     src = "full benchmark" if full_row3 else "hard-but-doable"
     axes[2][0].set_ylabel(f"Output tokens\n({src}, {cond})")
     # MATCHED-WINDOW check: the raw per-family ratios are not comparable because the
@@ -272,7 +297,7 @@ def build(fname, full_row3, successes_only=True):
     print(f"  matched window from {t0:%Y-%m} (the later of the two family starts):")
     for title, shallow, _ in FAMILIES:
         sub = [m for m in shallow if m[1] >= t0]
-        _, _, mn, _ = shallow_dist(sub, successes_only)
+        _, _, mn, _ = shallow_dist(sub, successes_only, thinking_only)
         r = mn[0] / mn[-1]
         print(f"    {title:<26s} {mn[0]:.0f} -> {mn[-1]:.0f} tok = {r:.1f}x"
               f"  ({len(sub)} models, {sub[0][0]} -> {sub[-1][0]})")
@@ -290,4 +315,9 @@ p2 = build("fig1_grid_fulldiff", full_row3=True)
 # the "results are largely unchanged including failures" claim is backed by the
 # same code path and the same 40-problem sample.
 p3 = build("fig1_grid_alltraces", full_row3=False, successes_only=False)
+# APPENDIX ROBUSTNESS: thinking tokens only. Answers a referee asking whether the
+# decline is just shorter/less-formatted ANSWERS -- see README run-hygiene item 10 on
+# the gpt-5.1 LaTeX format switch. No floor line: see the comment in build().
+p4 = build("fig1_grid_thinking", full_row3=False, successes_only=True,
+           thinking_only=True)
 print("wrote", *p1, *p2, *p3, sep="\n  ")

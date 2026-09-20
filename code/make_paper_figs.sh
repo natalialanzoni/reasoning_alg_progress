@@ -26,10 +26,13 @@ ARTIFACTS=(
   "fig1_grid_alltraces:figure1_grid_ft.py"              # appendix: all attempts
   "fig4_forecast_excess_appendix:figure_forecast_ft.py"  # appendix: same fit, excess tokens
   "fig4_forecast_precutoff_appendix:figure_forecast_ft.py"  # appendix: contamination check
+  "fig1_grid_thinking:figure1_grid_ft.py"               # appendix: thinking tokens only
+  "fig4_thinking_only:figure_thinking_only_ft.py"       # appendix: thinking-only trend
 )
 TABLES=(
   "table_decay:table_decay.py"                          # main regression table
   "table_floor_robustness:table_floor_robustness.py"    # appendix robustness
+  "table_thinking_only:table_thinking_only.py"          # appendix: thinking-only regression
 )
 
 mkdir -p "$DEST"

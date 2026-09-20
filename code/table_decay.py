@@ -47,7 +47,21 @@ ANTH = list(pf.OPUS_MODELS) + [
 FAMILIES = [("OpenAI (GPT)", list(pf.MAIN_K8)), ("Anthropic (Opus + Fable)", ANTH)]
 
 
-def rows_for(mfiles):
+def rows_for(mfiles, dv="excess"):
+    """Build the regression rows. `dv` selects the dependent variable:
+
+      "excess"    log(L/MHD_j - 1)  -- the headline spec; decay toward the floor
+      "logL"      log(L)            -- same form, no floor, for comparability
+      "logthink"  log(thinking)     -- ROBUSTNESS: is the decline just shorter answers?
+
+    The thinking-only variant takes NO floor. The floor is the shortest human-written
+    derivation, i.e. exposition, which is the analogue of the model's ANSWER rather
+    than its hidden scratch work, so subtracting it from thinking is not meaningful.
+    It is also unusable empirically: log(thinking - MHD_j) would censor 38.4% of
+    gpt-6-astra's traces and 26.2% of Fable 5.1's, which is the same defect that
+    disqualified MATH-500 as a contamination panel. "logL" is reported alongside so
+    the thinking comparison holds functional form fixed and varies only the DV.
+    """
     out = []
     for label, date, path in mfiles:
         month = (date - pf.ORIGIN).days / 30.44
@@ -55,16 +69,26 @@ def rows_for(mfiles):
             tid = str(r["task_id"])
             if tid not in KEYS:
                 continue
-            for tok, c in zip(r["total_completion_tokens"], r["correct"]):
+            th = r.get("thinking_tokens")
+            for i, (tok, c) in enumerate(zip(r["total_completion_tokens"], r["correct"])):
                 # validity is "did it produce an answer" (tok >= 50). A zero-length
                 # thinking block is NOT invalid -- Fable 5.1 answers correctly with
                 # no thinking block on a quarter of problems, and those are its
-                # shortest traces. See figures_sept._trial_ok.
-                if tok < 50 or not c:
+                # shortest traces. See figures_sept._trial_ok. A cap-hit trace never
+                # delivered an answer, so it cannot count as a success here either.
+                if tok < 50 or not c or tok >= 40000:
                     continue
-                h = tok / pf.CANON[tid]["min"]
-                if h > 1:                      # log requires excess > 0
-                    out.append((tid, month, label, math.log(h - 1)))
+                if dv == "excess":
+                    h = tok / pf.CANON[tid]["min"]
+                    if h > 1:                  # log requires excess > 0
+                        out.append((tid, month, label, math.log(h - 1)))
+                elif dv == "logL":
+                    out.append((tid, month, label, math.log(tok)))
+                elif dv == "logthink":
+                    if th is not None and th[i] > 0:
+                        out.append((tid, month, label, math.log(th[i])))
+                else:
+                    raise ValueError(dv)
     return out
 
 

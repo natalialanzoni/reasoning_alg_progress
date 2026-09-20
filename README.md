@@ -102,8 +102,13 @@ Currently in the paper:
 | `fig2_hard_distributions_success` | `figure2_ft.py` | Figure 2, main text |
 | `fig4_forecast_2panel` | `figure_forecast_ft.py` | Figure 4, main text |
 | `fig1_grid_alltraces` | `figure1_grid_ft.py` | appendix: all attempts |
+| `fig4_forecast_excess_appendix` | `figure_forecast_ft.py` | appendix: excess tokens |
+| `fig4_forecast_precutoff_appendix` | `figure_forecast_ft.py` | appendix: contamination |
+| `fig1_grid_thinking` | `figure1_grid_ft.py` | appendix: thinking tokens only |
+| `fig4_thinking_only` | `figure_thinking_only_ft.py` | appendix: thinking-only trend |
 | `table_decay.tex` | `table_decay.py` | main regression table |
 | `table_floor_robustness.tex` | `table_floor_robustness.py` | appendix robustness |
+| `table_thinking_only.tex` | `table_thinking_only.py` | appendix: thinking-only regression |
 
 Everything reads `data/` directly and writes to `figures/figs_sept/`. The canonical
 human solutions are pulled from the
@@ -120,13 +125,16 @@ something about the sample or the spec changed.
 | Artifact | Script | Numbers to check |
 | --- | --- | --- |
 | sample + floor | all | **40** competition problems, floor **316** tok |
-| Fig 1 | `figure1_grid_ft.py` | OpenAI 9,547 -> 1,121 tok (**8.5x**), acc 70.4% -> 99.4%; Anthropic 8,617 -> 1,799 (**4.8x**), acc 92.1% -> 97.8% |
-| Fig 4 | `figure_forecast_ft.py` | beta **-0.124** (31.0%/qtr, CI 24-37) and **-0.178** (41.4%/qtr, CI 31-50); within-10% **2029-02** / **2028-06** |
-| Decay table | `table_decay.py` | same betas; N 2,339 / 1,811; 8 / 6 model clusters |
+| accuracy denominator | all | **N = 320** per model (40 x k=8); o3 is 317 |
+| Fig 1 | `figure1_grid_ft.py` | OpenAI 9,547 -> 1,121 tok (**8.5x**), acc 70.0% -> 99.4%; Anthropic 8,617 -> 1,799 (**4.8x**), acc 90.6% -> 97.8% |
+| Fig 4 | `figure_forecast_ft.py` | beta **-0.126** (31.5%/qtr, CI 24-37) and **-0.178** (41.4%/qtr, CI 31-50); within-10% **2029-02** / **2028-06** |
+| Decay table | `table_decay.py` | same betas; N 2,609 / 1,811; 9 / 6 model clusters |
+| Thinking-only | `table_thinking_only.py` | thinking **33.1%** / **42.1%** vs log L 27.6% / 36.2% |
+| Fig 1 thinking | `figure1_grid_ft.py` | OpenAI 8,309 -> 649 (**12.8x**); Anthropic 7,804 -> 1,173 (**6.7x**) |
 | Fig 5 | `figure_latent_floor_ft.py` | astra 2.5% below min, 35.3% below average; Fable 5.1 0% below min, 10.1% below average, 30.0% zero-thinking |
-| Case study | `figure_mechanism_ft.py` | scale 7,988 -> 4,693 (**1.70x**), acc 68.8% -> 73.8%; algorithm 14,241 -> 8,539 (**1.67x**), acc 83.4% -> 85.6% |
-| Floor table | `table_floor_robustness.py` | OpenAI 27.0-33.6%/qtr, Anthropic 36.2-43.1%/qtr across four floor definitions |
-| Contamination | `figure_forecast_ft.py` | pre-cutoff GPT **18.8%**/qtr vs 31.0% full sample |
+| Case study | `figure_mechanism_ft.py` | scale 7,842 -> 4,693 (**1.7x**), acc 68.4% -> 73.8%; algorithm 14,241 -> 8,539 (**1.7x**), acc 83.4% -> 85.6% |
+| Floor table | `table_floor_robustness.py` | OpenAI 27.6-34.0%/qtr, Anthropic 36.2-43.1%/qtr across four floor definitions |
+| Contamination | `figure_forecast_ft.py` | training-cutoff rule: GPT **22.0%**/qtr (7 models), Anthropic **29.5%** (4); release-date rule GPT 12.9% (5) |
 
 ### Which scripts are on the paper's sample
 
@@ -387,18 +395,28 @@ astra because answers are 42% of its `L`. The o1 -> astra compression would read
 **8.9x instead of 8.5x**. Small, and in the safe direction — but quote 8.5x, since
 markup is genuinely emitted output.
 
-Decomposing the OpenAI trend (problem-FE OLS on log of each component, no floor
-subtraction, so these are not the headline 31.5%):
+**This motivated a thinking-only robustness check, now a paper artifact** —
+`table_thinking_only.py` / `figure_thinking_only_ft.py`, same wild cluster bootstrap
+as the main table. Thinking takes NO floor (see below), so `log L` is the
+like-for-like comparison:
 
-| DV | %/quarter |
-| --- | --- |
-| thinking only | **32.7%** |
-| L = thinking + answer | 27.3% |
-| answer only | 11.5% |
+| DV | OpenAI | Anthropic |
+| --- | --- | --- |
+| `log(thinking)` | **33.1%**/qtr ** | **42.1%**/qtr * |
+| `log L` (think+answer) | 27.6%/qtr ** | 36.2%/qtr * |
+| `log(L - MHD_j)` (headline) | 31.5%/qtr ** | 41.4%/qtr * |
 
-The decline is overwhelmingly a reasoning-length phenomenon; answers barely shrink.
-Keeping answers in `L` therefore makes the headline **conservative**. Dropping gpt-5.1
-entirely moves the OpenAI slope only 27.3% -> 26.7%, so it is not distorting anything.
+Reasoning falls **5-6pp/quarter faster** than total output in both families, so
+keeping answers in `L` makes the headline **conservative**. Dropping gpt-5.1 entirely
+moves the OpenAI slope only 27.3% -> 26.7%, so it is not distorting anything.
+
+Two spec notes, both pushing the same way:
+* **No floor on thinking.** The MHD is a human's *written* derivation — the analogue
+  of the model's answer, not its scratch work. Subtracting it is also empirically
+  unusable: `log(thinking - MHD_j)` censors **38.4%** of gpt-6-astra's traces and
+  **26.2%** of Fable 5.1's, the defect that disqualified MATH-500 as a panel.
+* **Zero-thinking traces cannot enter `log(thinking)`.** All 81 dropped are Fable 5.1,
+  the newest model's shortest traces, so their loss *understates* the decline.
 
 **Its accuracy drop is real. The grader was ruled out four ways:**
 
