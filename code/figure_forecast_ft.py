@@ -27,7 +27,7 @@ Versions written (PRIMARY includes the full GPT series incl. o1, the earliest an
                              whose builder no longer exists -- do not expect that file)
   fig4_forecast_precutoff_appendix    CONTAMINATION CHECK: two panels, one per family,
                              refit on only the models whose published TRAINING-DATA
-                             cutoff predates 2026-02-05 and which therefore cannot
+                             cutoff month predates Feb 2026 and which therefore cannot
                              have trained on the AIME/HMMT 2026 problems. Keyed on the
                              training cutoff, NOT the release date -- see TRAIN_CUTOFF.
 
@@ -83,19 +83,29 @@ SEP_C = "#8A8A8A"        # grey — observed/forecast separator
 OAI_C = CATEGORICAL[0]   # blue  — OpenAI (combined plot)
 ANT_C = CATEGORICAL[1]   # MIT red — Anthropic (combined plot)
 FULL_C = "#6E6E6E"       # grey — full-sample trend overlaid on the appendix check
-CUT_C = "#B2182B"        # red  — benchmark publication cutoff
 REF = pf.canon_short   # minimal human derivation, over the 40 competition problems
 
 MILE_P = 0.10            # the ONLY milestone drawn: within 10% of the floor
 
 # ---- benchmark contamination cutoff ---------------------------------------
-# 40 of the 45 canonical problems are AIME 2026 I/II + HMMT February 2026:
-#   AIME 2026 I   administered 2026-02-05
-#   AIME 2026 II  administered 2026-02-11
-#   HMMT February 2026  held   2026-02-14
-# (the other 5 are MATH-500, which long predates every model here). The earliest
-# public release of any benchmark problem is therefore 2026-02-05.
-CUTOFF = datetime(2026, 2, 5)
+# 40 of the 45 canonical problems are AIME 2026 I/II + HMMT February 2026, all three
+# held in FEBRUARY 2026 (the other 5 are MATH-500, which long predates every model).
+#
+# MONTH GRANULARITY, DELIBERATELY. The competitions have exact dates (2026-02-05,
+# -02-11, -02-14) but the training cutoffs we compare them against do not: Anthropic
+# publishes months ("Jan 2026", "Aug 2025"), and a cutoff stated as a month could mean
+# any day in it. Testing a month-precise cutoff against a day-precise competition date
+# is false precision, and it would be actively wrong for any model whose cutoff fell in
+# the same month. So the rule is stated at the granularity the inputs actually have:
+#
+#     a model is clean iff its training cutoff month is STRICTLY BEFORE 2026-02.
+#
+# No model sits in the ambiguous same-month case under this rule -- the nearest is
+# gpt-5.6-sol at Feb 2026, which is excluded either way -- so nothing turns on it. But
+# the rule holds up if a future model lands there, whereas a day comparison would not.
+CUTOFF_MONTH = datetime(2026, 2, 1)     # benchmark problems published in Feb 2026
+RELEASE_CUTOFF = datetime(2026, 2, 5)   # first problem public; used ONLY by the
+                                        # release-date variant, where days are known
 
 # WHICH DATE DECIDES CONTAMINATION. The RELEASE date is the wrong test: what
 # determines whether a model could have memorised a problem is whether the problem
@@ -107,28 +117,29 @@ CUTOFF = datetime(2026, 2, 5)
 # matters because a shortened window was the main thing making the old refit
 # ambiguous.
 #
-# Published cutoffs, read off the vendors' own model pages on 2026-09-20.
-# OpenAI states one "knowledge cutoff" per model; Anthropic states both a "reliable
-# knowledge cutoff" and a broader "training data cutoff" -- we take the BROADER one,
-# which is the conservative choice for a contamination test.
+# Published cutoffs, read off the vendors' own model pages on 2026-09-20, recorded as
+# the FIRST OF THE STATED MONTH so no day precision is implied. OpenAI states one
+# "knowledge cutoff" per model; Anthropic states both a "reliable knowledge cutoff" and
+# a broader "training data cutoff" -- we take the BROADER one, which is the
+# conservative choice for a contamination test.
 TRAIN_CUTOFF = {
     # OpenAI — developers.openai.com/api/docs/models/<id>
     "o1":               datetime(2023, 10, 1),
     "o3":               datetime(2024, 6, 1),
-    "gpt-5":            datetime(2024, 9, 30),
-    "gpt-5.1":          datetime(2024, 9, 30),
-    "gpt-5.2":          datetime(2025, 8, 31),
-    "gpt-5.4":          datetime(2025, 8, 31),
-    "gpt-5.5":          datetime(2025, 12, 1),   # released 2026-04-23, still clean
-    "gpt-5.6-sol":      datetime(2026, 2, 16),   # 2 days AFTER HMMT Feb -> excluded
-    "gpt-6-astra":      datetime(2026, 4, 30),
+    "gpt-5":            datetime(2024, 9, 1),
+    "gpt-5.1":          datetime(2024, 9, 1),
+    "gpt-5.2":          datetime(2025, 8, 1),
+    "gpt-5.4":          datetime(2025, 8, 1),
+    "gpt-5.5":          datetime(2025, 12, 1),   # released 2026-04, still clean
+    "gpt-5.6-sol":      datetime(2026, 2, 1),    # Feb 2026 -> NOT strictly before
+    "gpt-6-astra":      datetime(2026, 4, 1),
     # Anthropic — platform.claude.com/docs/en/models/<id>/overview, "training data cutoff"
-    "claude-opus-4-5":  datetime(2025, 8, 31),
-    "claude-opus-4-6":  datetime(2025, 8, 31),
-    "claude-opus-4-7":  datetime(2026, 1, 31),   # released 2026-04-16, still clean
-    "claude-opus-4-8":  datetime(2026, 1, 31),   # released 2026-05-28, still clean
-    "claude-opus-5":    datetime(2026, 5, 31),
-    "Fable 5.1":        datetime(2026, 6, 30),
+    "claude-opus-4-5":  datetime(2025, 8, 1),
+    "claude-opus-4-6":  datetime(2025, 8, 1),
+    "claude-opus-4-7":  datetime(2026, 1, 1),    # released 2026-04, still clean
+    "claude-opus-4-8":  datetime(2026, 1, 1),    # released 2026-05, still clean
+    "claude-opus-5":    datetime(2026, 5, 1),
+    "Fable 5.1":        datetime(2026, 6, 1),
 }
 
 ANTH = list(pf.OPUS_MODELS) + [
@@ -630,27 +641,21 @@ def _pre_cutoff(mfiles):
     smaller, never silently larger.
     """
     return [m for m in mfiles
-            if m[0] in TRAIN_CUTOFF and TRAIN_CUTOFF[m[0]] < CUTOFF]
+            if m[0] in TRAIN_CUTOFF and TRAIN_CUTOFF[m[0]] < CUTOFF_MONTH]
 
 
 def _pre_cutoff_release(mfiles):
     """Stricter variant: models RELEASED before the problems existed. Airtight (it
     needs no vendor claim at all), but small. Reported alongside as a lower bound."""
-    return [m for m in mfiles if m[1] <= CUTOFF]
+    return [m for m in mfiles if m[1] <= RELEASE_CUTOFF]
 
 
-def _cutoff_band(ax, ytop, label=True):
-    """Shade AIME-I -> HMMT-Feb publication window and mark the cutoff."""
-    ax.axvspan(datetime(2026, 2, 5), datetime(2026, 2, 14), color=CUT_C, alpha=0.16,
-               lw=0, zorder=1)
-    ax.axvline(CUTOFF, color=CUT_C, lw=1.8, zorder=2)
-    if not label:
-        return
-    ax.annotate("benchmark problems\npublished (Feb 2026)", (CUTOFF, ytop),
-                textcoords="offset points", xytext=(9, 0), ha="left", va="top",
-                fontsize=11.5, fontweight="bold", color=CUT_C, zorder=9,
-                bbox=dict(boxstyle="round,pad=0.22", fc="white", ec=CUT_C,
-                          lw=0.8, alpha=0.95))
+# NO PUBLICATION-DATE MARKER ON THIS FIGURE. It used to draw a red line at
+# Feb 2026, which made sense when models were selected by RELEASE date -- everything
+# plotted then sat to its left. Under the training-cutoff rule four of the models shown
+# (gpt-5.4, gpt-5.5, Opus 4.7, Opus 4.8) were released to the RIGHT of that date and are
+# still clean, so the line contradicted the panel it was drawn on. The selection rule is
+# stated in the title and caption instead.
 
 
 def build_contamination(fname, successes_only=True):
@@ -658,8 +663,9 @@ def build_contamination(fname, successes_only=True):
     that newer models only look efficient because they memorised the benchmark.
 
     Panel 1  restrict the MODELS: refit the identical excess-trend spec on only the
-             models released on/before 2026-02-05, which cannot have trained on the
-             AIME 2026 / HMMT Feb 2026 problems (40 of the 45 canonical items).
+             models whose training cutoff month is strictly before Feb 2026 and which
+             cannot have trained on the AIME 2026 / HMMT Feb 2026 problems (40 of the
+             45 canonical items).
              Single-lab (GPT) so no cross-lab pooling. Ambiguous on its own, because
              it also shortens the window.
     Panel 2  restrict the PROBLEMS: fit on MATH-500 only — old problems that sit in
@@ -673,7 +679,8 @@ def build_contamination(fname, successes_only=True):
               ("Anthropic (Opus + Fable)", _pre_cutoff(ANTH), list(ANTH))]
 
     print(f"\n########## {fname}  (CONTAMINATION CHECK) ##########")
-    print(f"  cutoff = {CUTOFF:%Y-%m-%d}  (AIME 2026 I administered; AIME II 02-11, HMMT 02-14)")
+    print("  benchmark problems published Feb 2026 (AIME I/II, HMMT Feb)")
+    print(f"  clean iff training cutoff month < {CUTOFF_MONTH:%Y-%m}")
     print("  selection = published TRAINING-DATA cutoff < benchmark publication")
     summary, ymaxes = [], []
     fig, axes = plt.subplots(1, 2, figsize=(16.4, 6.8), sharey=True)
@@ -720,7 +727,6 @@ def build_contamination(fname, successes_only=True):
 
         ymax = max(ymax, max(gy) * 1.06)
         _floor(ax)
-        _cutoff_band(ax, 0, label=False)     # rule marked on both; labelled once below
         ax.set_xlim(pre[0][1] - timedelta(days=40), span_end + timedelta(days=20))
         ax.set_title(title, fontsize=15)
         ax.set_xlabel("Date")
@@ -736,7 +742,6 @@ def build_contamination(fname, successes_only=True):
     ytop = max(ymaxes)
     for ax in axes:
         ax.set_ylim(0, ytop)
-    _cutoff_band(axes[0], ytop * 0.98)   # label once; the rule is the same in both
 
     axes[0].set_ylabel(f"Output tokens: reasoning + answer "
                        f"({'correct' if successes_only else 'all'} traces)")
@@ -748,7 +753,6 @@ def build_contamination(fname, successes_only=True):
         mlines.Line2D([], [], color=TOK, lw=2.6, ls="--", label="Pre-cutoff forecast"),
         mpatches.Patch(color=TOK, alpha=0.2, label="95% CI (wild bootstrap)"),
         mlines.Line2D([], [], color=FULL_C, lw=2.2, ls="-.", label="Full-sample fitted trend"),
-        mpatches.Patch(color=CUT_C, alpha=0.16, label="Benchmark published (Feb 2026)"),
         mlines.Line2D([], [], color=FLOOR_C, lw=2.4, label="Minimal human derivation"),
     ]
     fig.legend(handles=handles, loc="upper center", ncol=2, fontsize=11,
