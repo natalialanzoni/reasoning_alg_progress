@@ -107,6 +107,7 @@ MILE_P = 0.10            # the ONLY milestone drawn: within 10% of the floor
 # table_floor_robustness.py can use the same table. One copy only.
 CUTOFF_MONTH = pf.CUTOFF_MONTH
 TRAIN_CUTOFF = pf.TRAIN_CUTOFF
+RELEASE_CUTOFF = pf.RELEASE_CUTOFF
 
 ANTH = list(pf.OPUS_MODELS) + [
     ("Fable 5.1", datetime(2026, 9, 1),
@@ -541,7 +542,7 @@ def build_excess_appendix(fname, successes_only=True):
     fig, ax = plt.subplots(figsize=(11, 6.8))
     lo_y = 1e9
     handles = []
-    for name, mfiles, col in fams:
+    for yi, (name, mfiles, col) in enumerate(fams):
         fit = pf._fit_headroom_forecast(mfiles, exclude_baseline=False,
                                         successes_only=successes_only)
         res = fit["res"]
@@ -556,7 +557,9 @@ def build_excess_appendix(fname, successes_only=True):
                     continue
                 mn = pf.CANON[tid]["min"]
                 for tok, c in zip(r["total_completion_tokens"], r["correct"]):
-                    if tok < 50 or (successes_only and not c):
+                    # a cap-hit trace never delivered an answer, so it is not a
+                    # success (same rule as figures_sept._trial_correct)
+                    if tok < 50 or (successes_only and not (c and tok < 40000)):
                         continue
                     if tok > mn:
                         ex.append(tok - mn)
@@ -575,6 +578,21 @@ def build_excess_appendix(fname, successes_only=True):
         ax.plot([d for d, _ in sd], [v for _, v in sd], "-", color=col, lw=2.6, zorder=4)
         ax.plot([d for d, _ in dd], [v for _, v in dd], ":", color=col, lw=2.6, zorder=4)
         ax.plot(dx, ys, "o", color=col, ms=10, zorder=6)
+        # Label every dot with its mean excess in TOKENS -- the arithmetic-mean
+        # counterpart of the multiple-of-floor labels on panel B of Figure 4.
+        # Stagger by family: Anthropic sits above OpenAI through the overlap, so its
+        # labels go up-right and OpenAI's down-left, pushing them apart.
+        # centred, one family below its dots and the other above. Offsetting
+        # sideways instead let a label drift onto a neighbouring dot.
+        ddy = -17 if yi == 0 else 15
+        va = "top" if yi == 0 else "bottom"
+        for xi, vi in zip(dx, ys):
+            ax.annotate(f"{vi:,.0f}", (xi, vi), textcoords="offset points",
+                        xytext=(0, ddy), ha="center", va=va, fontsize=8.6,
+                        fontweight="bold", color=col, zorder=8,
+                        # halo: the fitted line descends through the label band
+                        bbox=dict(boxstyle="round,pad=0.12", fc="white",
+                                  ec="none", alpha=0.75))
         lo_y = min(lo_y, min(ys), min(cy))
         handles.append(mlines.Line2D([], [], color=col, lw=2.6, marker="o", ms=9,
                                      # en dash: Helvetica Neue has no U+2192
