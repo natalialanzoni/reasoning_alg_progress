@@ -98,11 +98,34 @@ def shallow_stats(model_files):
     return dates, labels, means, accs
 
 
-def _trial_ok(tok, txt):
-    """A trial produced a real answer: non-empty text and >= 50 tokens.
-    Replaces the old `thinking_tokens>0` test, which wrongly dropped legit
-    zero-thinking short answers and kept empty/degenerate glitches."""
-    return tok >= 50 and not (txt is not None and not str(txt).strip())
+CAP = 40000        # the output cap every published run was issued at
+
+
+def _trial_ok(tok, txt, cap=CAP):
+    """Did this trial actually happen? (It may still be WRONG -- that is `correct`.)
+
+    A trial counts if it produced >= 50 tokens AND either has non-empty response
+    text, or hit the output cap.
+
+    The cap clause matters and was missing. A trace that spends its whole budget
+    thinking and never writes an answer has empty text and `answer_tokens == 0`, so
+    the empty-text test discarded it -- removing a genuine failure from the
+    DENOMINATOR and inflating accuracy for exactly the models that hit the cap.
+    Measured before the fix: Opus 4.6 read 98.0% against a true 90.3% (25 dropped
+    truncations), gpt-5 91.6% against 88.4% (11). Models from gpt-5.2 and Opus 5
+    onward never hit the cap and are unaffected. The README already specified the
+    right behaviour -- "truncated-but-real attempts (tokens == cap) also score 0%"
+    -- so this was an implementation gap, not a judgement call.
+
+    Still excluded: empty/degenerate glitches below the cap, and sub-50-token runs.
+    Token means are unaffected either way, since these traces contribute no usable
+    length; only the accuracy denominator changes.
+    """
+    if tok < 50:
+        return False
+    if tok >= cap:                 # truncated before answering: a real, failed attempt
+        return True
+    return not (txt is not None and not str(txt).strip())
 
 
 def valid_stats(model_files, correct_only=False, restrict_canon=False):

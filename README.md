@@ -272,7 +272,32 @@ Figure 1 always used it; the forecast path did not until 2026-09. Validity is "d
 it produce an answer", never "did it think out loud". Note the old test also *kept*
 degenerate traces that had a thinking block but no answer, which `_trial_ok` rejects.
 
-### 6. The regression drops traces below the floor
+### 6. A truncated attempt is a FAILED attempt, not an invalid one
+
+`_trial_ok` used "non-empty response text" as its validity test. A trace that spends
+its whole budget thinking and never writes an answer has empty text and
+`answer_tokens == 0`, so it was discarded — removing a genuine failure from the
+accuracy DENOMINATOR and inflating accuracy for exactly the models that hit the cap:
+
+| model | was | corrected | dropped truncations |
+| --- | --- | --- | --- |
+| Opus 4.6 | 98.0% | **90.3%** | 25 |
+| gpt-5 | 91.6% | **88.4%** | 11 |
+| Opus 4.5 | 92.1% | 90.6% | 5 |
+| o3 | 84.5% | 84.2% | 4 |
+| Opus 4.7 / 4.8 / o1 / gpt-5.1 | | −0.3 to −0.9 pts | 1–3 each |
+
+Everything from gpt-5.2 and Opus 5 onward never hits the cap and is unaffected. The
+bias therefore ran **against** the trend: it flattered the early models. `_trial_ok`
+now counts a trace as a real attempt if `tok >= 50` and (text is non-empty **or** it
+hit the cap). Token means are unaffected — those traces contribute no usable length
+either way; only the denominator changes.
+
+This was known and worked around locally in `figure1_deepseek_ft.py` before being
+fixed at source, so check whether a rule you are about to re-implement already
+exists in `figures_sept`.
+
+### 7. The regression drops traces below the floor
 
 The DV is `log(L - C_j)`, undefined when a trace is shorter than the shortest human
 solution, so those traces are silently excluded. On the 40 competition problems this
@@ -287,7 +312,7 @@ form `L = C_j + exp(a_j + b*month)` fitted on log L, which needs no drop and no 
 it gives 27.4% against the headline 29.1% pooled, i.e. censoring is worth ~0.3pp and
 the rest is functional form.
 
-### 7. Reasoning effort must match before comparing absolute lengths across models
+### 8. Reasoning effort must match before comparing absolute lengths across models
 
 Within-model-pair comparisons are safe; cross-family ones usually are not. gpt-oss
 exists **only at medium** effort (`_re-medium`), while GLM 5.2/5.3 are usable **only
@@ -296,7 +321,7 @@ case-study figure the *ratios* within each column are valid but GLM's absolute t
 lengths are not comparable to gpt-oss's. The same applies to any table that lines up
 open-source models side by side.
 
-### 8. GLM version-over-version trends are provider-confounded
+### 9. GLM version-over-version trends are provider-confounded
 
 Every GLM version was served by a **different** OpenRouter provider — 4.5 Z.AI,
 4.6/4.7 Novita, 5 StreamLake, 5.1 Baidu, 5.2 Phala, 5.3 Z.AI — and pre-5.2 GLMs
@@ -307,7 +332,7 @@ the 7-point GLM version line.** The usable comparisons are (a) GLM vs frontier
 verbosity on identical problems, which is robust, and (b) 4.5 vs 5.3, the one
 provider-matched pair (both Z.AI), giving 2.2x compression at flat accuracy.
 
-### 9. Six model clusters cannot support a 5% significance claim
+### 10. Six model clusters cannot support a 5% significance claim
 
 `Month` is constant within a model, so the bootstrap must resample over MODELS — 8
 for OpenAI, 6 for Anthropic. Two things go wrong if this is done casually, and the
