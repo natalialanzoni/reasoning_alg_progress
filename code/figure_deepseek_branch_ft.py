@@ -78,22 +78,30 @@ APR = (datetime(2026, 4, 24),
 
 
 def stat(path):
-    """Mean tokens over CORRECT traces, and accuracy — censored at CLIP."""
-    toks, nc, nt = [], 0, 0
+    """Mean tokens over CORRECT traces, accuracy, and the truncation rate — censored at CLIP.
+
+    The truncation rate matters as much as the accuracy here. Among traces that
+    COMPLETE, V4 high and max are indistinguishable (98.8% vs 98.7%); the entire
+    accuracy gap on this figure is max overrunning the ceiling more often (106 vs
+    76 of 320 trials at 32,768). So the branch shows "max costs accuracy under a
+    fixed budget", NOT "max reasons worse" -- label it accordingly.
+    """
+    toks, nc, nt, cen = [], 0, 0, 0
     for r in pf.load_rows(path):
         if str(r["task_id"]) not in KEYS:
             continue
         texts = r.get("response_texts", [None] * len(r["correct"]))
         for tok, c, txt in zip(r["total_completion_tokens"], r["correct"], texts):
             if tok >= CLIP:          # what a 32,768-capped backend would truncate
-                nt += 1
+                nt += 1; cen += 1
                 continue
             if not fs._trial_ok(tok, txt):
                 continue
             nt += 1; nc += int(c)
             if c:
                 toks.append(tok)
-    return (float(np.mean(toks)) if toks else np.nan), 100 * nc / max(1, nt)
+    return (float(np.mean(toks)) if toks else np.nan), 100 * nc / max(1, nt), \
+        100 * cen / max(1, nt)
 
 
 def main():
@@ -119,7 +127,7 @@ def main():
     for (bx_date, pathf), solid, effs in ((APR, True, ("high", "max")),):
         bx = mdates.date2num(bx_date)
         for eff in effs:
-            tok, acc = stat(pathf(eff))
+            tok, acc, trunc = stat(pathf(eff))
             col = EFF_COLOR[eff]
             if solid:
                 # dotted arms off the April spine point
@@ -130,14 +138,16 @@ def main():
             a1.annotate(f"V4 Pro\n{eff}", (bx, tok), textcoords="offset points",
                         xytext=(11, 0), va="center", fontsize=8.2, color=col,
                         fontweight="bold")
-            a0.annotate(eff, (bx, acc), textcoords="offset points",
-                        xytext=(11, 0), va="center", fontsize=8.2, color=col,
-                        fontweight="bold")
+            a0.annotate(f"{eff}\n{trunc:.0f}% truncated", (bx, acc),
+                        textcoords="offset points", xytext=(11, 0), va="center",
+                        fontsize=8.2, color=col, fontweight="bold")
 
-    a0.set_ylabel("Accuracy"); a0.set_ylim(55, 100)
+    a0.set_ylabel("Accuracy (truncation = wrong)"); a0.set_ylim(55, 100)
     a0.yaxis.set_major_formatter(unit_formatter(1, "%", "{:.0f}"))
-    a0.text(0.015, 0.05, "24% of trials censored at 32,768", transform=a0.transAxes,
-            fontsize=7.8, color="#888888")
+    a0.text(0.015, 0.05,
+            "Accuracy falls on the branch ONLY because longer traces overrun the 32,768 ceiling.\n"
+            "Among traces that complete, high and max are level: 98.8% vs 98.7%.",
+            transform=a0.transAxes, fontsize=8, color="#888888")
     a1.set_ylabel("Mean output tokens")
     a1.axhline(FLOOR, color=FLOOR_COLOR, ls="--", lw=1.4)
     a1.text(sx[0], FLOOR * 1.6, f"minimal human derivation ({FLOOR:.0f} tok)",
@@ -160,9 +170,10 @@ def main():
     fig.suptitle("DeepSeek: reasoning length and accuracy, with the V4 effort branch",
                  y=0.98, fontsize=12.5, fontweight="bold")
     fig.text(0.5, 0.005,
-             "The April build offered high and max only \u2014 a requested low came back 0.5% from high "
-             "(remapped), so it is not plotted.\nAll points OpenRouter/SiliconFlow fp8, right-censored "
-             "at 32,768 tokens, 40 competition problems.",
+             "max buys no accuracy on problems it finishes \u2014 it overruns the token budget ~40% more "
+             "often. The branch measures the budget, not reasoning quality.\nApril build offered high and "
+             "max only (a requested low came back 0.5% from high). SiliconFlow fp8, censored at 32,768, "
+             "40 competition problems.",
              ha="center", fontsize=8, color="#555555")
     fig.tight_layout(rect=(0, 0.045, 1, 0.96))
     return save_figure(fig, "fig_deepseek_branch", outdir=OUT)
