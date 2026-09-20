@@ -92,11 +92,17 @@ def load(path):
             continue
         cj = pf.CANON.get(tid, {}); mn, me = cj.get("min"), cj.get("mean")
         tt = r.get("thinking_tokens", [None] * len(r["correct"]))
-        for tok, c, th in zip(r["total_completion_tokens"], r["correct"], tt):
+        texts = r.get("response_texts", [None] * len(r["correct"]))
+        for tok, c, th, txt in zip(r["total_completion_tokens"], r["correct"], tt, texts):
+            # central rules: a cap-hit trace is a real attempt (denominator) that
+            # FAILED, so it must not contribute a "successful" L/C_j to the violin.
+            if not fs._trial_ok(tok, txt):
+                continue
+            ok = fs._trial_correct(tok, c)
             n += 1
             if th == 0:
-                latent += 1; latent_ok += int(c)
-            if mn and c:
+                latent += 1; latent_ok += int(ok)
+            if mn and ok:
                 ratios.append(tok / mn)
                 below_min += int(tok < mn)
                 below_avg += int(bool(me) and tok < me)

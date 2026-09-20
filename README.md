@@ -102,6 +102,7 @@ Currently in the paper:
 | `fig2_hard_distributions_success` | `figure2_ft.py` | Figure 2, main text |
 | `fig_mechanism` | `figure_mechanism_ft.py` | Figure 3, main text: scale vs algorithm |
 | `fig4_forecast_2panel` | `figure_forecast_ft.py` | Figure 4, main text |
+| `fig5_latent_floor` | `figure_latent_floor_ft.py` | Figure 5, main text: distance to the floor |
 | `fig1_grid_alltraces` | `figure1_grid_ft.py` | appendix: all attempts |
 | `fig4_forecast_excess_appendix` | `figure_forecast_ft.py` | appendix: excess tokens |
 | `fig4_forecast_precutoff_appendix` | `figure_forecast_ft.py` | appendix: contamination |
@@ -130,7 +131,7 @@ something about the sample or the spec changed.
 | Decay table | `table_decay.py` | same betas; N 2,609 / 1,811; 9 / 6 model clusters |
 | Thinking-only | `table_floor_robustness.py` | `thinking only` row: **33.1%** / **42.1%** (log L comparator 27.6% / 36.2%, not in the table) |
 | Fig 1 thinking | `figure1_grid_ft.py` | OpenAI 8,309 -> 649 (**12.8x**); Anthropic 7,804 -> 1,173 (**6.7x**) |
-| Fig 5 | `figure_latent_floor_ft.py` | astra 2.5% below min, 35.3% below average; Fable 5.1 0% below min, 10.1% below average, 30.0% zero-thinking |
+| Fig 5 | `figure_latent_floor_ft.py` | pooled n~630/model. astra **2.83%** below min, **25.0%** below average; Fable 5.1 **0.32%** below min, **9.2%** below average, **27.7%** zero-thinking |
 | Case study | `figure_mechanism_ft.py` | scale 7,842 -> 4,693 (**1.7x**), acc 68.4% -> 73.8%; algorithm 14,241 -> 8,539 (**1.7x**), acc 83.4% -> 85.6% |
 | Floor table | `table_floor_robustness.py` | OpenAI **31.5-34.1**%/qtr, Anthropic **41.4-43.1**%/qtr across three floor definitions |
 | Contamination | `figure_forecast_ft.py` | `fig4_forecast_precutoff_appendix`: GPT **22.0%**/qtr (7 models), Anthropic **29.5%** (4) |

@@ -24,6 +24,7 @@ ARTIFACTS=(
   "fig4_forecast_2panel:figure_forecast_ft.py"          # Fig 4, main text
   "fig2_hard_distributions_success:figure2_ft.py"       # Fig 2, main text
   "fig_mechanism:figure_mechanism_ft.py"                # Fig 3, main text: case study
+  "fig5_latent_floor:figure_latent_floor_ft.py"         # Fig 5, main text: distance to floor
   "fig1_grid_alltraces:figure1_grid_ft.py"              # appendix: all attempts
   "fig4_forecast_excess_appendix:figure_forecast_ft.py"  # appendix: same fit, excess tokens
   "fig4_forecast_precutoff_appendix:figure_forecast_ft.py"  # appendix: contamination check
