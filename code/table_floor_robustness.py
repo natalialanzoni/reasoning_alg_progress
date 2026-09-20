@@ -7,6 +7,24 @@ Re-estimates the excess-trend slope under four definitions of the floor MHD_j:
     mean          MHD_j = mean of the human solutions
     none          no floor at all: log L with problem fixed effects
 
+plus one row that changes the DEPENDENT VARIABLE:
+
+    thinking only log(thinking), no floor. Answers "is the decline just shorter
+                  ANSWERS?" -- it is not. Two things happen in the answer that are not
+                  reasoning: gpt-5.1 writes 3.1x longer answers than gpt-5 at FLAT
+                  thinking, and the series switches output format at gpt-5.1 (LaTeX
+                  goes from ~0.3-2% of answer characters to ~20-25% for every later
+                  model), which inflates L for the RECENT models. Neither touches the
+                  thinking block. Compare this row against "none (log $L$)", which
+                  holds functional form fixed and varies only the DV.
+                  NO FLOOR, for two reasons: the MHD is a human's WRITTEN derivation,
+                  the analogue of the model's answer rather than its scratch work; and
+                  log(thinking - MHD_j) would censor 38.4% of gpt-6-astra's traces and
+                  26.2% of Fable 5.1's. The milestone column is blank for that reason.
+                  Caveat running the safe way: log(thinking) is undefined at zero, so
+                  81 traces drop, all Fable 5.1 -- the newest model's shortest -- which
+                  UNDERSTATES the decline.
+
 plus one row that varies the SAMPLE rather than the floor:
 
     pre-cutoff    the headline floor, but only models whose published TRAINING-DATA
@@ -76,9 +94,13 @@ def _pre_cutoff(mfiles):
             if m[0] in pf.TRAIN_CUTOFF and pf.TRAIN_CUTOFF[m[0]] < pf.CUTOFF_MONTH]
 
 
-# (label, floor key, model subset). floor None = no floor (log L).
+THINK = "__thinking__"     # sentinel: DV is log(thinking), no floor
+
+# (label, floor key, model subset). floor None = no floor (log L);
+# floor THINK = no floor and thinking tokens instead of L.
 SPECS = [("shortest", "min", None), ("median", "median", None),
          ("mean", "mean", None), ("none (log $L$)", None, None),
+         ("thinking only", THINK, None),
          ("pre-cutoff models", "min", _pre_cutoff)]
 
 
@@ -96,7 +118,13 @@ def build(mfiles, floor):
                 # attempts and cannot count as successes (fs._trial_correct)
                 if tok < 50 or not c or tok >= 40000:
                     continue
-                if floor is None:
+                if floor is THINK:
+                    # log(thinking) is undefined at zero, so zero-thinking traces
+                    # drop out here -- all of them Fable 5.1, the newest model's
+                    # SHORTEST traces, so their loss understates the decline.
+                    if th and th > 0:
+                        rows.append((tid, month, label, math.log(th)))
+                elif floor is None:
                     rows.append((tid, month, label, math.log(tok / FLOORS[tid]["min"])))
                 else:
                     h = tok / FLOORS[tid][floor]
@@ -133,12 +161,17 @@ for fam, mf in FAMILIES:
         # No floor is subtracted in the "none" row, so it has no MHD_j to report.
         # log(L/C_min) is used there only so the scale matches: with problem FE a
         # per-problem constant is fully absorbed, so beta equals that of plain log L.
-        cbar = np.mean([FLOORS[t][fl] for t in KEYS]) if fl else None
-        target = math.log(0.10) if fl else math.log(1.10)
+        has_floor = fl is not None and fl is not THINK
+        cbar = np.mean([FLOORS[t][fl] for t in KEYS]) if has_floor else None
+        target = math.log(0.10) if has_floor else math.log(1.10)
         res[(fam, name)] = dict(
             b=b, se=se, lo=lo, hi=hi, n=n, G=G, drop=n_correct - n, cbar=cbar,
             q=(1 - math.exp(3 * b)) * 100, hl=-math.log(2) / b,
-            date=pf.ORIGIN + timedelta(days=((target - a) / b) * 30.44))
+            # thinking tokens have no floor, so there is no target to converge TO
+            # and the milestone column is left blank rather than filled with a
+            # number that looks like a forecast.
+            date=None if fl is THINK
+                 else pf.ORIGIN + timedelta(days=((target - a) / b) * 30.44))
 
 print(f"\n{'family':<24s} {'floor':<14s} {'C (tok)':>8s} {'beta':>9s} {'SE':>7s} "
       f"{'%/qtr':>7s} {'half-life':>10s} {'N':>6s} {'drop':>5s} {'within-10%':>11s}")
@@ -148,9 +181,14 @@ for fam, _ in FAMILIES:
         cb = f"{r['cbar']:.0f}" if r["cbar"] else "--"
         print(f"  {fam:<22s} {name:<14s} {cb:>8s} {r['b']:>+9.4f} {r['se']:>7.4f} "
               f"{r['q']:>6.1f}% {r['hl']:>9.1f}m {r['n']:>6d} {r['drop']:>5d} "
-              f"{r['date']:%Y-%m}".rjust(0))
-    qs = [res[(fam, n)]["q"] for n, _, sub in SPECS if sub is None]
-    ds = [res[(fam, n)]["date"] for n, _, sub in SPECS if sub is None]
+              f"{r['date']:%Y-%m}" if r["date"] else
+              f"  {fam:<22s} {name:<14s} {cb:>8s} {r['b']:>+9.4f} {r['se']:>7.4f} "
+              f"{r['q']:>6.1f}% {r['hl']:>9.1f}m {r['n']:>6d} {r['drop']:>5d} "
+              f"{'--':>7s}")
+    qs = [res[(fam, n)]["q"] for n, fl, sub in SPECS
+          if sub is None and fl is not THINK]
+    ds = [res[(fam, n)]["date"] for n, fl, sub in SPECS
+          if sub is None and fl is not THINK]
     print(f"  {'':<22s} {'-> spread':<14s} {min(qs):.1f}-{max(qs):.1f}%/qtr "
           f"({max(qs)-min(qs):.1f} pts);  dates {min(ds):%Y-%m} to {max(ds):%Y-%m}\n")
 
@@ -170,10 +208,11 @@ for fi, (fam, _) in enumerate(FAMILIES):
         lead = fam if si == 0 else ""
         cb = f"{r['cbar']:.0f}" if r["cbar"] else r"---"
         # set the sample-restriction row apart: it varies the SAMPLE, not the floor
-        if _sub is not None and si:
+        if (_sub is not None or _fl is THINK) and si:
             _emit(r"\addlinespace[2pt]")
         _emit(f"{lead} & {name} & {cb} & ${r['b']:.3f}$ ({r['se']:.3f}) & "
-              f"{r['q']:.1f}\\% & {r['hl']:.1f} & {r['date']:%Y-%m} \\\\")
+              f"{r['q']:.1f}\\% & {r['hl']:.1f} & "
+              + (f"{r['date']:%Y-%m}" if r["date"] else "---") + r" \\")
     if fi == 0:
         _emit(r"\addlinespace")
 _emit(r"\bottomrule")

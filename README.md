@@ -104,10 +104,8 @@ Currently in the paper:
 | `fig1_grid_alltraces` | `figure1_grid_ft.py` | appendix: all attempts |
 | `fig4_forecast_excess_appendix` | `figure_forecast_ft.py` | appendix: excess tokens |
 | `fig1_grid_thinking` | `figure1_grid_ft.py` | appendix: thinking tokens only |
-| `fig4_thinking_only` | `figure_thinking_only_ft.py` | appendix: thinking-only trend |
 | `table_decay.tex` | `table_decay.py` | main regression table |
-| `table_floor_robustness.tex` | `table_floor_robustness.py` | appendix robustness + contamination row |
-| `table_thinking_only.tex` | `table_thinking_only.py` | appendix: thinking-only regression |
+| `table_floor_robustness.tex` | `table_floor_robustness.py` | appendix robustness + thinking-only + contamination rows |
 
 Everything reads `data/` directly and writes to `figures/figs_sept/`. The canonical
 human solutions are pulled from the
@@ -128,7 +126,7 @@ something about the sample or the spec changed.
 | Fig 1 | `figure1_grid_ft.py` | OpenAI 9,547 -> 1,121 tok (**8.5x**), acc 70.0% -> 99.4%; Anthropic 8,617 -> 1,799 (**4.8x**), acc 90.6% -> 97.8% |
 | Fig 4 | `figure_forecast_ft.py` | beta **-0.126** (31.5%/qtr, CI 24-37) and **-0.178** (41.4%/qtr, CI 31-50); within-10% **2029-02** / **2028-06** |
 | Decay table | `table_decay.py` | same betas; N 2,609 / 1,811; 9 / 6 model clusters |
-| Thinking-only | `table_thinking_only.py` | thinking **33.1%** / **42.1%** vs log L 27.6% / 36.2% |
+| Thinking-only | `table_floor_robustness.py` | `thinking only` row: **33.1%** / **42.1%** vs `none (log L)` 27.6% / 36.2% |
 | Fig 1 thinking | `figure1_grid_ft.py` | OpenAI 8,309 -> 649 (**12.8x**); Anthropic 7,804 -> 1,173 (**6.7x**) |
 | Fig 5 | `figure_latent_floor_ft.py` | astra 2.5% below min, 35.3% below average; Fable 5.1 0% below min, 10.1% below average, 30.0% zero-thinking |
 | Case study | `figure_mechanism_ft.py` | scale 7,842 -> 4,693 (**1.7x**), acc 68.4% -> 73.8%; algorithm 14,241 -> 8,539 (**1.7x**), acc 83.4% -> 85.6% |
@@ -395,7 +393,7 @@ astra because answers are 42% of its `L`. The o1 -> astra compression would read
 markup is genuinely emitted output.
 
 **This motivated a thinking-only robustness check, now a paper artifact** —
-`table_thinking_only.py` / `figure_thinking_only_ft.py`, same wild cluster bootstrap
+the `thinking only` row of `table_floor_robustness.py`, same wild cluster bootstrap
 as the main table. Thinking takes NO floor (see below), so `log L` is the
 like-for-like comparison:
 
