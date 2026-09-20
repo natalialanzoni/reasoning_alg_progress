@@ -84,7 +84,7 @@ def shallowA(path):
         for tok, c in zip(r["total_completion_tokens"], r["correct"]):
             if tok < 50:
                 continue
-            ok = bool(c) and tok <= CAP
+            ok = bool(c) and tok < CAP        # AT the cap = truncated = wrong
             nt += 1; nc += int(ok)
             if ok:
                 toks.append(tok)
@@ -98,7 +98,7 @@ def hardA(path):
         if pid not in KEYS:
             continue
         toks = [tok for tok, c in zip(r["total_completion_tokens"], r["correct"])
-                if bool(c) and 50 <= tok <= CAP]
+                if bool(c) and 50 <= tok < CAP]
         if toks:
             prob[pid] = toks
     return prob
@@ -114,7 +114,7 @@ def shallowB(path):
             tok = c.get("n_tokens", 0)
             if tok < 50:
                 continue
-            ok = bool(c.get("is_correct")) and tok <= CAP
+            ok = bool(c.get("is_correct")) and tok < CAP   # AT the cap = truncated
             nt += 1; nc += int(ok)
             if ok:
                 toks.append(tok)
@@ -128,7 +128,7 @@ def hardB(path):
         if pid not in KEYS:
             continue
         toks = [c["n_tokens"] for c in e.get("completions", [])
-                if c.get("is_correct") and 50 <= c.get("n_tokens", 0) <= CAP]
+                if c.get("is_correct") and 50 <= c.get("n_tokens", 0) < CAP]
         if toks:
             prob[pid] = toks
     return prob

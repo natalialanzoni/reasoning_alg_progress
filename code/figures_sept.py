@@ -128,6 +128,28 @@ def _trial_ok(tok, txt, cap=CAP):
     return not (txt is not None and not str(txt).strip())
 
 
+def _trial_correct(tok, c, cap=CAP):
+    """Did this trial deliver a correct answer? A cap-hit trial scores WRONG.
+
+    _trial_ok only fixed the DENOMINATOR -- it made truncated attempts count. This
+    fixes the NUMERATOR, which is a separate thing and was still wrong: a truncated
+    response is not a delivered answer, so it cannot be right, whatever the grader
+    extracted from the fragment.
+
+    It bites because the grader falls back to "text after the last `=`" when there is
+    no \\boxed{}. On a truncated trace that fallback is fishing in incomplete work. One
+    real case, gpt-5 on aime_2026_ii_15: 38,720 thinking + 1,280 answer, cut off
+    mid-sentence at "...the number of ordered 7", but an earlier working line read
+    "= 393." -- the gold answer -- so it was scored CORRECT. The model never delivered
+    it. Exactly 1 of the 56 cap-hit traces in the corpus is affected today (all 56 sit
+    at exactly 40,000, none overshoot), so this moves gpt-5 by 0.3pp and nothing else,
+    but the rule belongs in one place rather than in each figure script.
+
+    Use with _trial_ok: `if not _trial_ok(...): continue` then `_trial_correct(...)`.
+    """
+    return bool(c) and tok < cap
+
+
 def valid_stats(model_files, correct_only=False, restrict_canon=False):
     """Per-model (mean tokens, accuracy) over the shared problem set, using the
     corrected valid-trial filter. If correct_only, token means use correct
@@ -150,8 +172,9 @@ def valid_stats(model_files, correct_only=False, restrict_canon=False):
             for tok, c, txt in zip(r["total_completion_tokens"], r["correct"], texts):
                 if not _trial_ok(tok, txt):
                     continue
-                corr.append(int(c))
-                if (not correct_only) or c:
+                ok = _trial_correct(tok, c)
+                corr.append(int(ok))
+                if (not correct_only) or ok:
                     toks.append(tok)
             if toks:
                 mb[tid] = float(np.mean(toks))

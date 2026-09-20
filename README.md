@@ -297,6 +297,21 @@ This was known and worked around locally in `figure1_deepseek_ft.py` before bein
 fixed at source, so check whether a rule you are about to re-implement already
 exists in `figures_sept`.
 
+**The denominator and the numerator are two separate fixes.** `_trial_ok` only made
+truncated attempts *count*; they were still scored on the grader's verdict. But a
+truncated response never delivered an answer, so it cannot be right whatever the
+grader extracted from the fragment — and the grader falls back to "text after the
+last `=`" when there is no `\boxed{}`, which on a truncated trace is fishing in
+incomplete work. One real case: gpt-5 on `aime_2026_ii_15`, 38,720 thinking + 1,280
+answer, cut off mid-sentence at *"...the number of ordered 7"*, but an earlier working
+line read `= 393.` — the gold answer — so it scored **correct**. Use
+`fs._trial_correct(tok, c)` for the numerator alongside `fs._trial_ok(tok, txt)` for
+the denominator. All 56 cap-hit traces sit at exactly 40,000 (none overshoot) and only
+that one was scored correct, so this moved gpt-5 88.4% -> **88.1%** and nothing else.
+
+Watch the comparison operator: `tok <= CAP` counts a trace sitting exactly at the cap
+as fine. It must be `tok < CAP`. `figure_mechanism_ft.py` had `<=` in four places.
+
 ### 7. The regression drops traces below the floor
 
 The DV is `log(L - C_j)`, undefined when a trace is shorter than the shortest human

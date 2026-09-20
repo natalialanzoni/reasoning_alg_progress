@@ -135,8 +135,11 @@ def shallow_dist(model_files, successes_only=True):
             for tok, c, txt in zip(r["total_completion_tokens"], r["correct"], texts):
                 if not fs._trial_ok(tok, txt):
                     continue
-                nt += 1; nc += int(c)
-                if c or not successes_only:
+                # a cap-hit trace is a real attempt (denominator) that FAILED
+                # (numerator) -- see fs._trial_correct
+                ok = fs._trial_correct(tok, c)
+                nt += 1; nc += int(ok)
+                if ok or not successes_only:
                     toks.append(tok)
         dates.append(date); mean.append(np.mean(toks))
         acc.append(100 * nc / max(1, nt))

@@ -212,16 +212,29 @@ def per_task_mean_lengths(path, correct_only, restrict_to_keys=True):
 
 
 def accuracy_on_set(path, restrict_to_keys=True):
+    """DEPRECATED -- has no callers, and carries two filters now known to be wrong.
+
+    Kept only so an old notebook does not break. Do NOT use it for anything in the
+    paper; use figures_sept._trial_ok + _trial_correct, which are the single source of
+    truth. Two bugs, both already fixed there:
+
+      * `th == 0` discarded zero-thinking traces. Those are valid answers; the filter
+        threw away 81 correct Fable 5.1 traces (25.3% of its sample, and its shortest).
+      * a cap-hit trace was scored on the grader's verdict, but a truncated response
+        never delivered an answer and must score wrong.
+    """
+    import warnings
+    warnings.warn("accuracy_on_set is deprecated; use figures_sept._trial_ok + "
+                  "_trial_correct", DeprecationWarning, stacklevel=2)
     rows = load_rows(path)
     nc = nt = 0
     for r in rows:
         if restrict_to_keys and str(r["task_id"]) not in CANON_KEYS:
             continue
-        tt = r.get("thinking_tokens", [1] * len(r["correct"]))
-        for c, th in zip(r["correct"], tt):
-            if th == 0:
+        for c, tok in zip(r["correct"], r["total_completion_tokens"]):
+            if tok < 50:
                 continue
-            nt += 1; nc += int(c)
+            nt += 1; nc += int(bool(c) and tok < 40000)
     return nc / max(1, nt)
 
 
