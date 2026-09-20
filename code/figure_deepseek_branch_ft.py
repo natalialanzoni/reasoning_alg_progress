@@ -110,7 +110,7 @@ def stat(path):
 
 def main():
     use_style()
-    fig, (a0, a1) = plt.subplots(2, 1, figsize=(11.2, 8.8), sharex=True)
+    fig, (a0, a1) = plt.subplots(2, 1, figsize=(10.6, 8.0), sharex=True)
 
     sx = mdates.date2num([d for _, d, _ in SPINE_PTS])
     svals = [stat(p) for _, _, p in SPINE_PTS]
@@ -118,8 +118,6 @@ def main():
     scomp = [v[3] for v in svals]
 
     # spine
-    a0.plot(sx, scomp, "--", color=SPINE, lw=1.6, alpha=0.55, zorder=2)
-    a0.plot(sx, scomp, "s", color=SPINE, ms=5, alpha=0.55, zorder=2)
     a0.plot(sx, sacc, "-", color=SPINE, lw=2.4, zorder=3)
     a1.plot(sx, stok, "-", color=SPINE, lw=2.4, zorder=3)
     for ax, ys in ((a0, sacc), (a1, stok)):
@@ -138,9 +136,6 @@ def main():
             col = EFF_COLOR[eff]
             if solid:
                 # dotted arms off the April spine point
-                a0.plot([sx[-1], bx], [scomp[-1], compacc], "--", color=col, lw=1.4,
-                        alpha=0.55, zorder=1)
-                a0.plot([bx], [compacc], "s", color=col, ms=5, alpha=0.55, zorder=2)
                 a0.plot([sx[-1], bx], [sacc[-1], acc], ":", color=col, lw=2.2, zorder=2)
                 a1.plot([sx[-1], bx], [stok[-1], tok], ":", color=col, lw=2.2, zorder=2)
                 a0.plot([bx], [acc], "o", color=col, ms=8, mec="white", mew=1.3, zorder=5)
@@ -148,14 +143,12 @@ def main():
             a1.annotate(f"V4 Pro\n{eff}", (bx, tok), textcoords="offset points",
                         xytext=(11, 0), va="center", fontsize=8.2, color=col,
                         fontweight="bold")
-            a0.annotate(f"{eff}\n{trunc:.0f}% truncated", (bx, acc),
-                        textcoords="offset points", xytext=(11, 0), va="center",
-                        fontsize=8.2, color=col, fontweight="bold")
+            a0.annotate(eff, (bx, acc), textcoords="offset points", xytext=(11, 0),
+                        va="center", fontsize=8.5, color=col, fontweight="bold")
 
     a0.set_ylabel("Accuracy"); a0.set_ylim(55, 101)
     a0.yaxis.set_major_formatter(unit_formatter(1, "%", "{:.0f}"))
-    a0.set_title("Capability keeps rising; accuracy under a fixed token budget does not",
-                 fontsize=10, pad=8, color="#333333", fontweight="normal")
+
     a1.set_ylabel("Mean output tokens")
     a1.axhline(FLOOR, color=FLOOR_COLOR, ls="--", lw=1.4)
     a1.text(sx[0], FLOOR * 1.6, f"minimal human derivation ({FLOOR:.0f} tok)",
@@ -167,8 +160,6 @@ def main():
 
     handles = [mlines.Line2D([], [], color=EFF_COLOR[e], lw=2.4, marker="o", ms=7,
                              mec="white", label=f"{e} effort") for e in ("high", "max")]
-    handles += [mlines.Line2D([], [], color="#666666", lw=1.6, ls="--", marker="s", ms=5,
-                              alpha=0.7, label="accuracy among traces that finish")]
     handles += [
         mlines.Line2D([], [], color=SPINE, lw=2.4, marker="o", ms=7, mec="white",
                       label="spine: default setting (SiliconFlow fp8)"),
@@ -181,14 +172,12 @@ def main():
     fig.suptitle("DeepSeek: reasoning length and accuracy, with the V4 effort branch",
                  y=0.98, fontsize=12.5, fontweight="bold")
     fig.text(0.5, 0.005,
-             "SOLID = accuracy under a 32,768-token budget (an overrun scores wrong).  DASHED = accuracy "
-             "among traces that FINISH, i.e. capability unconstrained by the budget.\n"
-             "They diverge because V4 overruns the budget far more often: R1 and V3.2 were never cut at "
-             "32,768 by the provider (they ran to 66k and 83k), V4 was, on 41 of 320 trials.\n"
-             "So V4 scoring below V3.2 on the solid line is a budget effect, not lower capability \u2014 on "
-             "traces that finish V4 leads 98.8% to 92.7%. April build offered high and max only.",
+             "All models right-censored at 32,768 tokens: a trace needing more is scored wrong and clamped. "
+             "OpenRouter/SiliconFlow fp8, 40 competition problems.\n"
+             "April build offered high and max only \u2014 a requested low came back 0.5% from high, so it is "
+             "not plotted.",
              ha="center", fontsize=8, color="#555555")
-    fig.tight_layout(rect=(0, 0.075, 1, 0.955))
+    fig.tight_layout(rect=(0, 0.055, 1, 0.955))
     return save_figure(fig, "fig_deepseek_branch", outdir=OUT)
 
 
