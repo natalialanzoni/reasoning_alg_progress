@@ -1,0 +1,16 @@
+{
+  "model": "gpt-5.1",
+  "effort": "medium",
+  "n_samples": 8,
+  "max_output_tokens": 40000,
+  "endpoint": "/v1/responses",
+  "dataset": "tyrtleli/thinking-benchmark-90",
+  "split": "test",
+  "tag": "thinking_bench",
+  "run_name": "gpt5.1_shallow_pass",
+  "task_ids_file": "code/canon45_ids.txt",
+  "n_task_ids": 45,
+  "settings_verified_against": "data/o3_shallow_pass/o3_medium_thinking_bench_requests.jsonl",
+  "git_commit": "494be4d1778c88dd985860691b4da820ad71adf1",
+  "utc": "2026-09-20T14:49:47.339945Z"
+}

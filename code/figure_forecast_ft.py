@@ -475,6 +475,15 @@ def build_decay_2panel(fname, exclude_earliest=True, successes_only=True):
 
     ar.set_yscale("log"); _floor_ratio(ar)
     ar.set_ylim(0.9, ymax2 * 1.5); ar.set_xlim(xlo, xhi)
+    # Same curve, second reading: multiples of the floor on the left, absolute
+    # tokens on the right. tokens = multiple x MHD, so this is a pure rescale --
+    # identical dots, identical fit, no second estimator to explain.
+    ar_tok = ar.twinx()
+    ar_tok.set_yscale("log")
+    ar_tok.set_ylim(ar.get_ylim()[0] * REF, ar.get_ylim()[1] * REF)
+    ar_tok.set_ylabel("Output tokens", fontsize=13)
+    ar_tok.yaxis.set_major_formatter(unit_formatter(1e3, "k"))
+    ar_tok.grid(False)
     _sep(ar, tlast, ymax2 * 1.4, labels=False)
     ar.set_ylabel("Multiple of the floor  (L / MHD)")
 
@@ -495,53 +504,83 @@ def build_decay_2panel(fname, exclude_earliest=True, successes_only=True):
     print("wrote", *paths, sep="\n  ")
 
 
-def build_arith_mean(fname, exclude_earliest=True, successes_only=True):
-    """Appendix: same decay but plotted as the ARITHMETIC MEAN token count per model
-    (problem-weighted), so the trend is readable in absolute token space. Forecast is a
-    simple OLS of log(mean_L - floor) on month across the model means."""
-    panels = [("OpenAI (GPT)", pf.MAIN_K8, exclude_earliest),
-              ("Anthropic (Opus + Fable)", ANTH, False)]
-    print(f"\n########## {fname}  (arithmetic mean) ##########")
-    fig, axes = plt.subplots(1, 2, figsize=(16, 6.5), gridspec_kw={"wspace": 0.22})
-    for ax, (title, mfiles, excl) in zip(axes, panels):
-        base = mfiles[0][0]
-        pts = [p for p in model_amean(mfiles, successes_only) if not (excl and p[0] == base)]
-        odates = [p[1] for p in pts]; oy = [p[2] for p in pts]
-        m = np.array([(d - pf.ORIGIN).days / 30.44 for d in odates])
-        yv = np.log(np.array(oy) - REF)                     # excess over floor
-        b1, b0 = np.polyfit(m, yv, 1)                       # slope, intercept
-        t_last = odates[-1]
-        end = t_last + timedelta(days=30.44 * 14)
-        full = [odates[0] + timedelta(days=30.44 * k) for k in
-                range(0, int((end - odates[0]).days / 30.44) + 1)]
-        fm = np.array([(d - pf.ORIGIN).days / 30.44 for d in full])
-        fc = np.exp(b0 + b1 * fm) + REF
-        sd = [(d, c) for d, c in zip(full, fc) if d <= t_last]
-        dd = [(d, c) for d, c in zip(full, fc) if d >= t_last]
-        ax.plot([d for d, _ in sd], [c for _, c in sd], "-", color=TOK, lw=2.6, zorder=4)
-        ax.plot([d for d, _ in dd], [c for _, c in dd], "--", color=TOK, lw=2.6, zorder=4)
-        ax.plot(odates, oy, "o", color=TOK, ms=10, zorder=6)
-        ymax = max(max(oy), max(fc)) * 1.06
-        _floor(ax, full[-1]); _sep(ax, t_last, ymax * 0.98)
-        ax.set_ylim(0, ymax)
-        ax.set_xlim(odates[0] - timedelta(days=40), full[-1] + timedelta(days=20))
-        ax.set_title(title); ax.set_xlabel("Date")
-        ax.yaxis.set_major_formatter(unit_formatter(1e3, "k"))
-        ax.xaxis.set_major_locator(mdates.YearLocator())
-        ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
-        q = (1 - math.exp(3 * b1)) * 100
-        ax.annotate(f"{q:.0f}% fewer tokens\n/ quarter (mean)", xy=(0.96, 0.82),
-                    xycoords="axes fraction", ha="right", va="center",
-                    fontsize=15, fontweight="bold", color=TOK)
-    axes[0].set_ylabel(f"Mean output tokens: reasoning + answer ({'correct' if successes_only else 'all'} traces)")
-    handles = [
-        mlines.Line2D([], [], color=TOK, lw=2.6, marker="o", ms=9, label="Arithmetic mean + fit"),
-        mlines.Line2D([], [], color=TOK, lw=2.6, ls="--", label="Forecast (extrapolated)"),
-        mlines.Line2D([], [], color=SEP_C, lw=1.6, ls="--", label="Forecast start"),
-        mlines.Line2D([], [], color=FLOOR_C, lw=2.4, label="Minimal human derivation"),
-    ]
-    fig.legend(handles=handles, loc="upper center", ncol=4, fontsize=13,
-               frameon=True, framealpha=0.95, bbox_to_anchor=(0.5, -0.01))
+def build_excess_appendix(fname, successes_only=True):
+    """APPENDIX — the same fit as Figure 4, read in absolute tokens.
+
+    Panel B of Figure 4 with the units swapped: dots are the plain ARITHMETIC MEAN
+    of the excess over the floor (L - MHD_j) per model, and the y axis is tokens on
+    a log scale, so a constant decay rate is a straight line.
+
+    NO SECOND REGRESSION. The curve is the same per-family fit the main figure and
+    the decay table use, multiplied by Duan's smearing factor mean(exp(residual)) --
+    1.12 for OpenAI, 1.14 for Anthropic. That factor is needed because the DV is log
+    excess, so exp(fitted) is a GEOMETRIC mean; the smearing constant converts it to
+    an arithmetic one to match the dots. It is a rescale of the fitted line, not a
+    re-estimate: beta, the quarterly rate and the CI are untouched.
+
+    The line still will not pass exactly through the dots, and does not in Figure 4
+    either: the curve is the fitted value for the AVERAGE problem, while each dot
+    averages over the problems that model actually solved. o1 solved 36 of 40, and
+    the easier ones, so its dot sits below the curve.
+    """
+    fams = [("OpenAI (GPT)", pf.MAIN_K8, OAI_C), ("Anthropic (Opus + Fable)", ANTH, ANT_C)]
+    print(f"\n########## {fname}  (excess tokens, same fit) ##########")
+    fig, ax = plt.subplots(figsize=(11, 6.8))
+    lo_y = 1e9
+    handles = []
+    for name, mfiles, col in fams:
+        fit = pf._fit_headroom_forecast(mfiles, exclude_baseline=False,
+                                        successes_only=successes_only)
+        res = fit["res"]
+        smear = float(np.mean(np.exp(res.resid)))     # Duan (1983)
+        # arithmetic mean excess per model, over the problems that model solved
+        pts = []
+        for label, date, path in mfiles:
+            ex = []
+            for r in pf.load_rows(path):
+                tid = str(r["task_id"])
+                if tid not in pf.CANON_KEYS:
+                    continue
+                mn = pf.CANON[tid]["min"]
+                for tok, c in zip(r["total_completion_tokens"], r["correct"]):
+                    if tok < 50 or (successes_only and not c):
+                        continue
+                    if tok > mn:
+                        ex.append(tok - mn)
+            if ex:
+                pts.append((date, float(np.mean(ex))))
+        pts.sort()
+        dx = mdates.date2num([d for d, _ in pts]); ys = [v for _, v in pts]
+        # fitted curve, smeared to an arithmetic mean, in excess tokens
+        t0, t1 = pts[0][0], fit["mile"][MILE_P]
+        n_mo = int((t1 - t0).days / 30.44) + 1
+        cd = [t0 + timedelta(days=30.44 * k) for k in range(n_mo + 1)]
+        cy = [(fit["hhat"](d) - 1.0) * REF * smear for d in cd]
+        t_last = mfiles[-1][1]
+        sd = [(d, v) for d, v in zip(cd, cy) if d <= t_last]
+        dd = [(d, v) for d, v in zip(cd, cy) if d >= t_last]
+        ax.plot([d for d, _ in sd], [v for _, v in sd], "-", color=col, lw=2.6, zorder=4)
+        ax.plot([d for d, _ in dd], [v for _, v in dd], ":", color=col, lw=2.6, zorder=4)
+        ax.plot(dx, ys, "o", color=col, ms=10, zorder=6)
+        lo_y = min(lo_y, min(ys), min(cy))
+        handles.append(mlines.Line2D([], [], color=col, lw=2.6, marker="o", ms=9,
+                                     # en dash: Helvetica Neue has no U+2192
+                                     label=f"{name} — {ys[0]:,.0f} to {ys[-1]:,.0f} tok "
+                                           f"({ys[0]/ys[-1]:.1f}×)"))
+        print(f"  {name:<26s} smearing {smear:.2f}   "
+              f"{ys[0]:.0f} -> {ys[-1]:.0f} excess tok = {ys[0]/ys[-1]:.1f}x")
+
+    _sep(ax, max(f[1][-1][1] for f in fams), max(ys) * 4, labels=True)
+    ax.set_yscale("log"); ax.set_ylim(lo_y * 0.45, 40000)
+    ax.set_ylabel("Mean excess over the floor  (output tokens)")
+    ax.set_xlabel("Date")
+    ax.yaxis.set_major_formatter(unit_formatter(1e3, "k"))
+    ax.xaxis.set_major_locator(mdates.YearLocator())
+    ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
+    handles += [mlines.Line2D([], [], color="#888888", lw=2.6, ls=":", label="Forecast"),
+                mlines.Line2D([], [], color=SEP_C, lw=1.6, ls="--", label="Forecast start")]
+    ax.legend(handles=handles, loc="upper right", fontsize=11.5, frameon=True,
+              framealpha=0.95)
     plt.tight_layout(pad=0.5)
     paths = save_figure(fig, fname, outdir=OUT)
     print("wrote", *paths, sep="\n  ")
@@ -671,7 +710,7 @@ def build_contamination(fname, successes_only=True):
 
 # PRIMARY: include the full GPT series incl. o1 (earliest anchor, 2024-12).
 build_decay_2panel("fig4_forecast_2panel", exclude_earliest=False, successes_only=True)
-build_arith_mean("fig4_forecast_arith_mean_appendix", exclude_earliest=False, successes_only=True)
+build_excess_appendix("fig4_forecast_excess_appendix", successes_only=True)
 # fig4_forecast (single-panel, absolute tokens only) is RETIRED -- fig4_forecast_2panel
 # is the primary forecast figure. Archived to archive/stale_figures/. build() is kept
 # because the all-traces and no-o1 variants below still use it.

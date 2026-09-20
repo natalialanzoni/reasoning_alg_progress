@@ -52,6 +52,7 @@ print(f"fig_effort: floor = {REF:.0f} tok over {len(CANON_KEYS)} competition pro
       f"(all-45 floor was {pf.canon_short:.0f})")
 
 DATES = {"o3": datetime(2025, 4, 16), "gpt-5": datetime(2025, 8, 7),
+         "gpt-5.1": datetime(2025, 11, 13),
          "gpt-5.2": datetime(2025, 12, 11), "gpt-5.4": datetime(2026, 3, 5),
          "gpt-5.5": datetime(2026, 4, 23), "gpt-5.6-sol": datetime(2026, 7, 9),
          "gpt-6-astra": datetime(2026, 9, 1)}

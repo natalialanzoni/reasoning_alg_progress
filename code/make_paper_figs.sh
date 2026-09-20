@@ -24,6 +24,7 @@ ARTIFACTS=(
   "fig4_forecast_2panel:figure_forecast_ft.py"          # Fig 4, main text
   "fig2_hard_distributions_success:figure2_ft.py"       # Fig 2, main text
   "fig1_grid_alltraces:figure1_grid_ft.py"              # appendix: all attempts
+  "fig4_forecast_excess_appendix:figure_forecast_ft.py"  # appendix: same fit, excess tokens
 )
 TABLES=(
   "table_decay:table_decay.py"                          # main regression table

@@ -1,0 +1,13 @@
+{
+  "model": "gpt-5.1",
+  "effort": "medium",
+  "n_samples": 32,
+  "max_output_tokens": 40000,
+  "endpoint": "/v1/responses",
+  "dataset": "tyrtleli/thinking-benchmark-hard-but-doable-10",
+  "split": "test",
+  "run_name": "hard_but_doable_10q_k32",
+  "settings_verified_against": "data/hard_but_doable_10q_k32/*_requests.jsonl",
+  "git_commit": "616bb704c177ff3ee8a07f77d484a816e0487b15",
+  "utc": "2026-09-20T15:11:12.250033Z"
+}
