@@ -59,7 +59,10 @@ pf = fs.pf
 
 OUT = os.path.join(os.path.dirname(HERE), "figures", "figs_sept")
 _D = pf.RESULTS_DIR
-_R = os.path.join(os.path.dirname(HERE), "code", "results")
+# see figure_deepseek_branch_ft.py: data/ is tracked, code/results/ is not
+_R = str(pf.RESULTS_DIR)
+if not os.path.exists(os.path.join(_R, "deepseek_r1_0528_shallow_pass")):
+    _R = os.path.join(os.path.dirname(HERE), "code", "results")
 
 TOK = PRIMARY
 ACC = "#0E8A8A"

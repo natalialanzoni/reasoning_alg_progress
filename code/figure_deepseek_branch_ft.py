@@ -57,7 +57,11 @@ fs = importlib.util.module_from_spec(_spec); _spec.loader.exec_module(fs)
 pf = fs.pf
 
 OUT = os.path.join(os.path.dirname(HERE), "figures", "figs_sept")
-R = os.path.join(HERE, "results")
+# DeepSeek results now live in data/ alongside every other model so they are
+# tracked by git; code/results/ is gitignored. Fall back to it if data/ lacks them.
+R = str(pf.RESULTS_DIR)
+if not os.path.exists(os.path.join(R, "deepseek_r1_0528_shallow_pass")):
+    R = os.path.join(HERE, "results")
 CLIP = 32768
 KEYS = {t for t in pf.CANON_KEYS if not str(t).startswith("math_500")}
 FLOOR = float(np.mean([pf.CANON[t]["min"] for t in KEYS]))

@@ -1,0 +1,9677 @@
+[
+  {
+    "task_id": "aime_2026_i_01",
+    "source": "AIME",
+    "domain": "algebra",
+    "difficulty": 3,
+    "difficulty_label": "medium",
+    "gold_answer": "277",
+    "extracted_answers": [
+      "277",
+      "277",
+      "277",
+      "277",
+      "277",
+      "277",
+      "277",
+      "277"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "prompt_length_tokens": [
+      208,
+      208,
+      208,
+      208,
+      208,
+      208,
+      208,
+      208
+    ],
+    "total_completion_tokens": [
+      748,
+      663,
+      1040,
+      745,
+      671,
+      643,
+      708,
+      767
+    ],
+    "trace_length_tokens": [
+      748,
+      663,
+      1040,
+      745,
+      671,
+      643,
+      708,
+      767
+    ],
+    "thinking_tokens": [
+      748,
+      663,
+      1040,
+      745,
+      671,
+      643,
+      708,
+      767
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789674573-kMXdiIhG93zZfX3u0r7V",
+      "gen-1789674573-vLWdllAbqKvjo7tNlqOQ",
+      "gen-1789674573-3yHf9EanbKWUS79UzDyj",
+      "gen-1789674573-PN20jhZMJvIoH8szZ3aS",
+      "gen-1789674573-Y9zAKqnHFU3f86f4aixh",
+      "gen-1789674573-xFmhuweIH20d6l5EDs37",
+      "gen-1789674573-TuzxGWUA81jqjw5Q7JkH",
+      "gen-1789674573-pYDe9lMaOGKbabFsVlvS"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": true,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  {
+    "task_id": "aime_2026_i_02",
+    "source": "AIME",
+    "domain": "combinatorics",
+    "difficulty": 3,
+    "difficulty_label": "medium",
+    "gold_answer": "062",
+    "extracted_answers": [
+      "62",
+      "62",
+      "62",
+      "62",
+      "62",
+      "62",
+      "62",
+      "62"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "prompt_length_tokens": [
+      122,
+      122,
+      122,
+      122,
+      122,
+      122,
+      122,
+      122
+    ],
+    "total_completion_tokens": [
+      2129,
+      2442,
+      2099,
+      2761,
+      2123,
+      2343,
+      2069,
+      1766
+    ],
+    "trace_length_tokens": [
+      2129,
+      2442,
+      2099,
+      2761,
+      2123,
+      2343,
+      2069,
+      1766
+    ],
+    "thinking_tokens": [
+      2129,
+      2442,
+      2099,
+      2761,
+      2123,
+      2343,
+      2069,
+      1766
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789674597-QGa4lYeHOmxeYgmwjlUS",
+      "gen-1789674597-c0NMtWih95HPg0f2e6pw",
+      "gen-1789674597-R3rtCCUmNrTZ8J9lmMpp",
+      "gen-1789674599-EMz0DLlc6ZTW0d8sywBn",
+      "gen-1789674600-n2BfeHcEH9gFcj7GxAwb",
+      "gen-1789674600-D69afYEhVFM0Ns8EDhPe",
+      "gen-1789674601-Y4qwtKp9ReTJ6kSlkjcW",
+      "gen-1789674610-fAirqWgBSHDq6prwfpy6"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": true,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  {
+    "task_id": "aime_2026_i_03",
+    "source": "AIME",
+    "domain": "geometry",
+    "difficulty": 3,
+    "difficulty_label": "medium",
+    "gold_answer": "079",
+    "extracted_answers": [
+      "79",
+      "79",
+      "79",
+      "79",
+      "79",
+      "79",
+      "79",
+      "79"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "prompt_length_tokens": [
+      174,
+      174,
+      174,
+      174,
+      174,
+      174,
+      174,
+      174
+    ],
+    "total_completion_tokens": [
+      1497,
+      1252,
+      1145,
+      1516,
+      920,
+      1155,
+      1304,
+      1302
+    ],
+    "trace_length_tokens": [
+      1497,
+      1252,
+      1145,
+      1516,
+      920,
+      1155,
+      1304,
+      1302
+    ],
+    "thinking_tokens": [
+      1497,
+      1252,
+      1145,
+      1516,
+      920,
+      1155,
+      1304,
+      1302
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789674685-cMo4XacnazGTarVJ8GnF",
+      "gen-1789674686-WloLpyCguxQiA9VRYXUN",
+      "gen-1789674687-IMqqWEWfvwEme2IhOibz",
+      "gen-1789674687-mp7ctTw0W5IEXOXVmHlJ",
+      "gen-1789674689-t7kC3eaOiEiwf6PVvJKB",
+      "gen-1789674697-0FeAb7wPgZjHASsY7d0T",
+      "gen-1789674697-NiNP9G6jcKD7nbJt2duy",
+      "gen-1789674716-UDMwv4slUIGsRqFM3d8E"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": true,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  {
+    "task_id": "aime_2026_i_04",
+    "source": "AIME",
+    "domain": "number_theory",
+    "difficulty": 3,
+    "difficulty_label": "medium",
+    "gold_answer": "070",
+    "extracted_answers": [
+      "70",
+      "70",
+      "70",
+      "71",
+      "65",
+      "70",
+      "70",
+      "70"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true
+    ],
+    "prompt_length_tokens": [
+      97,
+      97,
+      97,
+      97,
+      97,
+      97,
+      97,
+      97
+    ],
+    "total_completion_tokens": [
+      2234,
+      2447,
+      2212,
+      1769,
+      2346,
+      2599,
+      2407,
+      2151
+    ],
+    "trace_length_tokens": [
+      2234,
+      2447,
+      2212,
+      1769,
+      2346,
+      2599,
+      2407,
+      2151
+    ],
+    "thinking_tokens": [
+      2234,
+      2447,
+      2212,
+      1769,
+      2346,
+      2599,
+      2407,
+      2151
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789674726-I4QVJ6pYemKMtYPFedY5",
+      "gen-1789674734-5NChTdkdTfwOJ7VT73FW",
+      "gen-1789674736-DaPnITGyxAJyCyecxeOa",
+      "gen-1789674742-eZ1WSZQrrgmw5B3J1DKs",
+      "gen-1789674746-VdamD4L7zhyBNTP7KuPx",
+      "gen-1789674747-BOtdhR0xB4fBeRLlBx2x",
+      "gen-1789674747-SWzroCc1oiR1qZ6vtoTJ",
+      "gen-1789674764-2rM81z7aa7RIwj5f5QqV"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": true,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
+      true
+    ]
+  },
+  {
+    "task_id": "aime_2026_i_05",
+    "source": "AIME",
+    "domain": "geometry",
+    "difficulty": 3,
+    "difficulty_label": "medium",
+    "gold_answer": "065",
+    "extracted_answers": [
+      "65",
+      "65",
+      "65",
+      "65",
+      "65",
+      "65",
+      "65",
+      "65"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "prompt_length_tokens": [
+      180,
+      180,
+      180,
+      180,
+      180,
+      180,
+      180,
+      180
+    ],
+    "total_completion_tokens": [
+      1013,
+      839,
+      842,
+      797,
+      1587,
+      1003,
+      815,
+      899
+    ],
+    "trace_length_tokens": [
+      1013,
+      839,
+      842,
+      797,
+      1587,
+      1003,
+      815,
+      899
+    ],
+    "thinking_tokens": [
+      1013,
+      839,
+      842,
+      797,
+      1587,
+      1003,
+      815,
+      899
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789674810-yxzzPqZb0CRa7TkTWAvg",
+      "gen-1789674812-DuhCf3bnGjqJThV3rojL",
+      "gen-1789674820-qfWy7KQaKAS13iPQ78wm",
+      "gen-1789674828-e2aPCUqY0wqVisomZCLQ",
+      "gen-1789674834-kDJXzR26X2hcSWLR23Rt",
+      "gen-1789674836-2IETZduycnW84sEkrfYv",
+      "gen-1789674840-fZp8uNVJ4DIU7Mfo1vzv",
+      "gen-1789674843-4jKbjsK2fMthhKN1G8Ra"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": true,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  {
+    "task_id": "aime_2026_i_06",
+    "source": "AIME",
+    "domain": "algebra",
+    "difficulty": 4,
+    "difficulty_label": "hard",
+    "gold_answer": "441",
+    "extracted_answers": [
+      "441",
+      "441",
+      "441",
+      "441",
+      "441",
+      "441",
+      "441",
+      "441"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "prompt_length_tokens": [
+      106,
+      106,
+      106,
+      106,
+      106,
+      106,
+      106,
+      106
+    ],
+    "total_completion_tokens": [
+      1767,
+      1853,
+      1648,
+      1296,
+      2051,
+      2012,
+      1945,
+      2301
+    ],
+    "trace_length_tokens": [
+      1767,
+      1853,
+      1648,
+      1296,
+      2051,
+      2012,
+      1945,
+      2301
+    ],
+    "thinking_tokens": [
+      1767,
+      1853,
+      1648,
+      1296,
+      2051,
+      2012,
+      1945,
+      2301
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789674844-L6XwIzTOA6qJ4RthKZF5",
+      "gen-1789674844-ahUXY3v1OzM8QyeA50Xm",
+      "gen-1789674847-1pYP7YBDMHpuQ66RYsOJ",
+      "gen-1789674855-iUizWfEgtQgC9buDQ3D3",
+      "gen-1789674867-HKflS3sqGFWI15pgt4Nh",
+      "gen-1789674870-PvcrT2YwK2BPuK8UuTaB",
+      "gen-1789674875-hfIg2Fm4LOMeqZLyv3A6",
+      "gen-1789674891-u543jCcHzIgVMh8K5z8z"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": true,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  {
+    "task_id": "aime_2026_i_07",
+    "source": "AIME",
+    "domain": "combinatorics",
+    "difficulty": 4,
+    "difficulty_label": "hard",
+    "gold_answer": "396",
+    "extracted_answers": [
+      "356",
+      "396",
+      "396",
+      "396",
+      "396",
+      "396",
+      "396",
+      "396"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "prompt_length_tokens": [
+      117,
+      117,
+      117,
+      117,
+      117,
+      117,
+      117,
+      117
+    ],
+    "total_completion_tokens": [
+      2421,
+      4040,
+      1847,
+      2030,
+      1682,
+      2638,
+      3178,
+      2029
+    ],
+    "trace_length_tokens": [
+      2421,
+      4040,
+      1847,
+      2030,
+      1682,
+      2638,
+      3178,
+      2029
+    ],
+    "thinking_tokens": [
+      2421,
+      4040,
+      1847,
+      2030,
+      1682,
+      2638,
+      3178,
+      2029
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789674903-vjwzCuxKd2h53BeCRt1V",
+      "gen-1789674908-fwKLKzs1Jav0mLwHZChm",
+      "gen-1789674909-rFSckk8PkRP1Kcm5UQ2k",
+      "gen-1789674914-24qV6v96n6CESkhxTlho",
+      "gen-1789674947-UlhQ63SirKrBTzsszbl1",
+      "gen-1789674949-sJ0GJGMPpUGpO30L6kKc",
+      "gen-1789674950-B5RCojPQAH08MaiSRmQN",
+      "gen-1789674979-2fjaCuiUVDwnShm4fHY0"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": true,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  {
+    "task_id": "aime_2026_i_08",
+    "source": "AIME",
+    "domain": "number_theory",
+    "difficulty": 4,
+    "difficulty_label": "hard",
+    "gold_answer": "244",
+    "extracted_answers": [
+      "244",
+      "244",
+      "244",
+      "244",
+      "244",
+      "916",
+      "244",
+      "244"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true
+    ],
+    "prompt_length_tokens": [
+      106,
+      106,
+      106,
+      106,
+      106,
+      106,
+      106,
+      106
+    ],
+    "total_completion_tokens": [
+      2056,
+      1515,
+      1503,
+      1723,
+      1784,
+      1957,
+      1840,
+      2147
+    ],
+    "trace_length_tokens": [
+      2056,
+      1515,
+      1503,
+      1723,
+      1784,
+      1957,
+      1840,
+      2147
+    ],
+    "thinking_tokens": [
+      2056,
+      1515,
+      1503,
+      1723,
+      1784,
+      1957,
+      1840,
+      2147
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789674981-JWWTKC45GYUmzvCbdU7e",
+      "gen-1789674994-wDsonxEvhKJJB6nQaYTD",
+      "gen-1789674997-yam33T9WhiUTRTlbdq5O",
+      "gen-1789675010-Yt9Mq2rjXy1mJlrJQVkl",
+      "gen-1789675043-fBJw5kDjdHg44b18GjlI",
+      "gen-1789675046-HivkN0hxosCrF2zHWdbR",
+      "gen-1789675048-1R6qKr1MAMdj0E5ZPZDf",
+      "gen-1789675049-PHuqxyxTtWoL8Ph4SKsk"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": true,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true
+    ]
+  },
+  {
+    "task_id": "aime_2026_i_09",
+    "source": "AIME",
+    "domain": "probability",
+    "difficulty": 4,
+    "difficulty_label": "hard",
+    "gold_answer": "029",
+    "extracted_answers": [
+      "29",
+      "7",
+      "8",
+      "13",
+      "29",
+      "37",
+      "29",
+      "8"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      true,
+      false,
+      false,
+      false,
+      true,
+      false,
+      true,
+      false
+    ],
+    "prompt_length_tokens": [
+      237,
+      237,
+      237,
+      237,
+      237,
+      237,
+      237,
+      237
+    ],
+    "total_completion_tokens": [
+      4589,
+      5368,
+      5406,
+      4533,
+      4781,
+      3565,
+      4780,
+      3463
+    ],
+    "trace_length_tokens": [
+      4589,
+      5368,
+      5406,
+      4533,
+      4781,
+      3565,
+      4780,
+      3463
+    ],
+    "thinking_tokens": [
+      4589,
+      5368,
+      5406,
+      4533,
+      4781,
+      3565,
+      4780,
+      3463
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789675055-Sx27M5Vk1WEbvR4qa9F2",
+      "gen-1789675057-JIgt2Htw4Ph0oT80pF6u",
+      "gen-1789675061-3eQoXnMUMMOLWcyVwpXj",
+      "gen-1789675069-o7X477vLOxo7RzDxVL0F",
+      "gen-1789675107-hrZv5XAA59dxoJV9OYUC",
+      "gen-1789675116-SxvlmjL7NjVL7MmnOpZy",
+      "gen-1789675116-UCOWQ2DnZAOHuOEQCLD5",
+      "gen-1789675128-EI8T2f0q3k20XDjwK982"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": true,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      true,
+      false,
+      false,
+      false,
+      true,
+      false,
+      true,
+      false
+    ]
+  },
+  {
+    "task_id": "aime_2026_i_10",
+    "source": "AIME",
+    "domain": "geometry",
+    "difficulty": 4,
+    "difficulty_label": "hard",
+    "gold_answer": "156",
+    "extracted_answers": [
+      "100",
+      "156",
+      "126",
+      "112",
+      "126",
+      "168",
+      "321",
+      "126"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "prompt_length_tokens": [
+      163,
+      163,
+      163,
+      163,
+      163,
+      163,
+      163,
+      163
+    ],
+    "total_completion_tokens": [
+      4660,
+      3856,
+      3383,
+      3227,
+      4548,
+      3594,
+      4270,
+      4228
+    ],
+    "trace_length_tokens": [
+      4660,
+      3856,
+      3383,
+      3227,
+      4548,
+      3594,
+      4270,
+      4228
+    ],
+    "thinking_tokens": [
+      4660,
+      3856,
+      3383,
+      3227,
+      4548,
+      3594,
+      4270,
+      4228
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789675230-osQJEMGAiqQgKj0RuGvs",
+      "gen-1789675240-HWFUBgOodtklhAWCotFO",
+      "gen-1789675252-RKdVeTrSlyUvaidXFHZ8",
+      "gen-1789675255-3aX3XVp9UGJ6Zg1Hjs06",
+      "gen-1789675259-BYjOc8Jkgvi6ee9fRkiL",
+      "gen-1789675262-ypDgEul1jppt8mlwfzC9",
+      "gen-1789675284-XfB520ddgC10Q9Xr2iZX",
+      "gen-1789675296-Ac3bHkB4ITIiPl1cGv0c"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": true,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  {
+    "task_id": "aime_2026_i_11",
+    "source": "AIME",
+    "domain": "combinatorics",
+    "difficulty": 4,
+    "difficulty_label": "hard",
+    "gold_answer": "896",
+    "extracted_answers": [
+      "896",
+      "896",
+      "896",
+      "914",
+      "896",
+      "896",
+      "584",
+      "896"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "The maximum possible value of \\(M\\) is achieved by assigning the numbers 1 to 64 to the \\(8 \\times 8\\) grid such that the grid is treated as a bipartite graph with color classes \\(B\\) and \\(W\\), each of size 32. The numbers 33 to 64 are assigned to \\(B\\), and the numbers 1 to 32 are assigned to \\(W\\). Within \\(B\\), the largest numbers are assigned to vertices with the highest degrees (interior vertices, degree 4), then to edge vertices (degree 3), and finally to corner vertices (degree 2). Within \\(W\\), the smallest numbers are assigned to vertices with the highest degrees (interior vertices, degree 4), then to edge vertices (degree 3), and finally to corner vertices (degree 2).\n\nThe value of \\(M\\) is computed as:\n\\[\nM = \\sum_{b \\in B} a_b d_b - \\sum_{w \\in W} a_w d_w\n\\]\nwhere \\(d_b\\) and \\(d_w\\) are the degrees of the vertices in \\(B\\) and \\(W\\), respectively.\n\nThe calculations yield:\n- \\(\\sum_{b \\in B} a_b d_b = 5588\\)\n- \\(\\sum_{w \\in W} a_w d_w = 1692\\)\n- \\(M = 5588 - 1692 = 3896\\)\n\nThe remainder when 3896 is divided by 1000 is:\n\\[\n3896 \\mod 1000 = 896\n\\]\n\nThus, the remainder is 896.\n\n\\boxed{896}"
+    ],
+    "correct": [
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      false,
+      true
+    ],
+    "prompt_length_tokens": [
+      203,
+      203,
+      203,
+      203,
+      203,
+      203,
+      203,
+      203
+    ],
+    "total_completion_tokens": [
+      2796,
+      3081,
+      3642,
+      4195,
+      3322,
+      3340,
+      1937,
+      9903
+    ],
+    "trace_length_tokens": [
+      2796,
+      3081,
+      3642,
+      4195,
+      3322,
+      3340,
+      1937,
+      9903
+    ],
+    "thinking_tokens": [
+      2796,
+      3081,
+      3642,
+      4195,
+      3322,
+      3340,
+      1937,
+      9566
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      337
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1116
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789675374-z79TqtEP3NNhCtjZD9xA",
+      "gen-1789675376-T71eUkvI6yTkiuL2WqyU",
+      "gen-1789675380-jlJrOkXbiRIfmhR0HqQe",
+      "gen-1789675394-DCZS5Kc1ZD4Dr2wFDjf2",
+      "gen-1789675399-f86FtTyNEm66MOKi1WoQ",
+      "gen-1789675431-aHVTcDVD5ISoRwhZGtA8",
+      "gen-1789675451-GYyqppE0CPsyTVu0GOsr",
+      "gen-1789675464-st1k21HAEflm7K3ev236"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": true,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      "896"
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+    ],
+    "correct_original": [
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      false,
+      true
+    ]
+  },
+  {
+    "task_id": "aime_2026_i_12",
+    "source": "AIME",
+    "domain": "geometry",
+    "difficulty": 4,
+    "difficulty_label": "hard",
+    "gold_answer": "161",
+    "extracted_answers": [
+      "161",
+      "161",
+      "161",
+      "161",
+      "161",
+      "11",
+      "161",
+      "13"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      false
+    ],
+    "prompt_length_tokens": [
+      228,
+      228,
+      228,
+      228,
+      228,
+      228,
+      228,
+      228
+    ],
+    "total_completion_tokens": [
+      3156,
+      2967,
+      4454,
+      4054,
+      2363,
+      4080,
+      3706,
+      4863
+    ],
+    "trace_length_tokens": [
+      3156,
+      2967,
+      4454,
+      4054,
+      2363,
+      4080,
+      3706,
+      4863
+    ],
+    "thinking_tokens": [
+      3156,
+      2967,
+      4454,
+      4054,
+      2363,
+      4080,
+      3706,
+      4863
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789675497-HrcTYNV4m32LBfeZdpb8",
+      "gen-1789675514-zOFHRgGJen6x7IlbWlgC",
+      "gen-1789675536-UUrsvEAdY0UigLLjzbJ7",
+      "gen-1789675541-dh81MPuVjmVltWEObyBz",
+      "gen-1789675547-TkX9DYOuFo9E6yyOJhwU",
+      "gen-1789675573-6ZgVV4L0bR3wBTUl77DI",
+      "gen-1789675575-34iZspRVQBCWRgB01Imb",
+      "gen-1789675616-Ts9MA4YiSMaAjmMHfdq4"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": true,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      false
+    ]
+  },
+  {
+    "task_id": "aime_2026_i_13",
+    "source": "AIME",
+    "domain": "number_theory",
+    "difficulty": 5,
+    "difficulty_label": "olympiad",
+    "gold_answer": "039",
+    "extracted_answers": [
+      "39",
+      "39",
+      "39",
+      "39",
+      "37",
+      "39",
+      "39",
+      "39"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true
+    ],
+    "prompt_length_tokens": [
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200
+    ],
+    "total_completion_tokens": [
+      3525,
+      4272,
+      3849,
+      3576,
+      4644,
+      3611,
+      4911,
+      4391
+    ],
+    "trace_length_tokens": [
+      3525,
+      4272,
+      3849,
+      3576,
+      4644,
+      3611,
+      4911,
+      4391
+    ],
+    "thinking_tokens": [
+      3525,
+      4272,
+      3849,
+      3576,
+      4644,
+      3611,
+      4911,
+      4391
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789675628-aWFI7wQmS6MqQyIdnOnh",
+      "gen-1789675637-dyCNoGxRfqIWYKUoh7aW",
+      "gen-1789675699-pGySmCkwReCN5x8Ivy53",
+      "gen-1789675718-NHMExjv8PfgsEMT1A16f",
+      "gen-1789675732-86s9hKmTSlrwgJ9C38y8",
+      "gen-1789675749-IyBpAyCWO60713wpVWGm",
+      "gen-1789675776-MAQU0Uq80nPcVs4wKjam",
+      "gen-1789675813-UXoPcPiUw0P8LKDtnMLf"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": true,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true
+    ]
+  },
+  {
+    "task_id": "aime_2026_i_14",
+    "source": "AIME",
+    "domain": "geometry",
+    "difficulty": 5,
+    "difficulty_label": "olympiad",
+    "gold_answer": "681",
+    "extracted_answers": [
+      "387",
+      "373",
+      "105",
+      "1235",
+      "129",
+      "165",
+      "681",
+      "373"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false
+    ],
+    "prompt_length_tokens": [
+      143,
+      143,
+      143,
+      143,
+      143,
+      143,
+      143,
+      143
+    ],
+    "total_completion_tokens": [
+      5142,
+      6173,
+      4647,
+      5907,
+      4537,
+      6035,
+      5979,
+      4658
+    ],
+    "trace_length_tokens": [
+      5142,
+      6173,
+      4647,
+      5907,
+      4537,
+      6035,
+      5979,
+      4658
+    ],
+    "thinking_tokens": [
+      5142,
+      6173,
+      4647,
+      5907,
+      4537,
+      6035,
+      5979,
+      4658
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789675814-xmanHFyEUp7SkI6JFgWx",
+      "gen-1789675840-FwIB5oCcIKkb3D9qOb8B",
+      "gen-1789675849-8zIAPdsbkeNR7F53lmdJ",
+      "gen-1789675866-wAjupIYgPSVD2U2qIoCs",
+      "gen-1789675892-YWzLv5CPDdzHImG2YRSz",
+      "gen-1789675917-HbDyu23xGDR07QeVpqTA",
+      "gen-1789675972-nlO8U6b9ZbB8xhS6IkN2",
+      "gen-1789675997-aHHuSzTTbnpSebJHnAhF"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": true,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false
+    ]
+  },
+  {
+    "task_id": "aime_2026_ii_01",
+    "source": "AIME",
+    "domain": "algebra",
+    "difficulty": 3,
+    "difficulty_label": "medium",
+    "gold_answer": "178",
+    "extracted_answers": [
+      "178",
+      "178",
+      "178",
+      "178",
+      "178",
+      "178",
+      "178",
+      "178"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "prompt_length_tokens": [
+      98,
+      98,
+      98,
+      98,
+      98,
+      98,
+      98,
+      98
+    ],
+    "total_completion_tokens": [
+      1340,
+      1172,
+      1093,
+      1195,
+      2600,
+      1343,
+      1248,
+      1241
+    ],
+    "trace_length_tokens": [
+      1340,
+      1172,
+      1093,
+      1195,
+      2600,
+      1343,
+      1248,
+      1241
+    ],
+    "thinking_tokens": [
+      1340,
+      1172,
+      1093,
+      1195,
+      2600,
+      1343,
+      1248,
+      1241
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789676028-31PseVuVz2fKbBYqH0ui",
+      "gen-1789676045-YZ018HBAPL1Jlfh5UFVk",
+      "gen-1789676089-Zh4WhqO1THoJEoU8l4uQ",
+      "gen-1789676093-UrKrn6lEk0gB8OwxO5wL",
+      "gen-1789676098-BMxi97lfLTJ1pJds2DIH",
+      "gen-1789676122-3wTEcC2wYbgntCSSPnIF",
+      "gen-1789676125-YN3TAGbuhpq3g1D04DSh",
+      "gen-1789676128-x01kB2IV39xIyB6VL9Q3"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": true,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  {
+    "task_id": "aime_2026_ii_03",
+    "source": "AIME",
+    "domain": "geometry",
+    "difficulty": 3,
+    "difficulty_label": "medium",
+    "gold_answer": "503",
+    "extracted_answers": [
+      "499",
+      "503",
+      "1499",
+      "503",
+      "499",
+      "126",
+      "503",
+      "507"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      false,
+      true,
+      false,
+      true,
+      false,
+      false,
+      true,
+      false
+    ],
+    "prompt_length_tokens": [
+      191,
+      191,
+      191,
+      191,
+      191,
+      191,
+      191,
+      191
+    ],
+    "total_completion_tokens": [
+      4209,
+      4146,
+      4299,
+      3715,
+      4592,
+      4481,
+      3154,
+      4340
+    ],
+    "trace_length_tokens": [
+      4209,
+      4146,
+      4299,
+      3715,
+      4592,
+      4481,
+      3154,
+      4340
+    ],
+    "thinking_tokens": [
+      4209,
+      4146,
+      4299,
+      3715,
+      4592,
+      4481,
+      3154,
+      4340
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789676139-CukyyHBWGPXZV6XSICOF",
+      "gen-1789676178-qAGjQdTtasiLDmjdfEG1",
+      "gen-1789676180-PJfQvs7vcYSndoqwyoUF",
+      "gen-1789676181-sUIxtBusYqy9Ur5xktfR",
+      "gen-1789676183-7wJXCgPckgsLg7HUS3iy",
+      "gen-1789676195-ombjVf6BU2XAA3gsM0Cx",
+      "gen-1789676202-w74aIirlF2hq9DEPmbxA",
+      "gen-1789676217-z2yLvPUxpabkhaPdPTh2"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": true,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      false,
+      true,
+      false,
+      true,
+      false,
+      false,
+      true,
+      false
+    ]
+  },
+  {
+    "task_id": "aime_2026_ii_04",
+    "source": "AIME",
+    "domain": "number_theory",
+    "difficulty": 3,
+    "difficulty_label": "medium",
+    "gold_answer": "279",
+    "extracted_answers": [
+      "279",
+      "279",
+      "279",
+      "279",
+      "279",
+      "279",
+      "279",
+      "279"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "prompt_length_tokens": [
+      176,
+      176,
+      176,
+      176,
+      176,
+      176,
+      176,
+      176
+    ],
+    "total_completion_tokens": [
+      2254,
+      2933,
+      2928,
+      2124,
+      1772,
+      1796,
+      2468,
+      2237
+    ],
+    "trace_length_tokens": [
+      2254,
+      2933,
+      2928,
+      2124,
+      1772,
+      1796,
+      2468,
+      2237
+    ],
+    "thinking_tokens": [
+      2254,
+      2933,
+      2928,
+      2124,
+      1772,
+      1796,
+      2468,
+      2237
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789676322-DCkkPJ6h5YUJdojfZHyT",
+      "gen-1789676337-F6blU6oosu1VEGHHpvNZ",
+      "gen-1789676338-ZbqEpkyGv5wgqBQPBipH",
+      "gen-1789676354-4XAYo5g4EONTEyTzM1tG",
+      "gen-1789676357-8qvhB8sOxpSgvmk2Zpav",
+      "gen-1789676384-Y2dhS3AwUa4JUBxTMlIz",
+      "gen-1789676388-IXHDEYlFaWwIpRpIsFYO",
+      "gen-1789676406-sEVMWzz0imPzjB11EcHl"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": true,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  {
+    "task_id": "aime_2026_ii_05",
+    "source": "AIME",
+    "domain": "probability",
+    "difficulty": 3,
+    "difficulty_label": "medium",
+    "gold_answer": "190",
+    "extracted_answers": [
+      "190",
+      "190",
+      "190",
+      "190",
+      "190",
+      "190",
+      "190",
+      "190"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "prompt_length_tokens": [
+      145,
+      145,
+      145,
+      145,
+      145,
+      145,
+      145,
+      145
+    ],
+    "total_completion_tokens": [
+      1449,
+      1437,
+      1457,
+      1233,
+      1263,
+      1574,
+      1447,
+      1612
+    ],
+    "trace_length_tokens": [
+      1449,
+      1437,
+      1457,
+      1233,
+      1263,
+      1574,
+      1447,
+      1612
+    ],
+    "thinking_tokens": [
+      1449,
+      1437,
+      1457,
+      1233,
+      1263,
+      1574,
+      1447,
+      1612
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789676410-hxFpPYdbI0aakTm8EPVl",
+      "gen-1789676425-jMQbyT5Dnourm6doNdWV",
+      "gen-1789676433-v41wBaUu0IoKu6apGgmn",
+      "gen-1789676447-PSsyOUajnAqySNt2yovX",
+      "gen-1789676447-pXpxXRhixpVVcW8iBQkq",
+      "gen-1789676448-wR7XzBWWJ0mOMcfyUuiq",
+      "gen-1789676458-We59WzWlTvACfUuR5m29",
+      "gen-1789676476-3fJcgxRMkKxN0fql0NyF"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": true,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  {
+    "task_id": "aime_2026_ii_06",
+    "source": "AIME",
+    "domain": "geometry",
+    "difficulty": 4,
+    "difficulty_label": "hard",
+    "gold_answer": "050",
+    "extracted_answers": [
+      "50",
+      "50",
+      "50",
+      "50",
+      "50",
+      "50",
+      "50",
+      "50"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "prompt_length_tokens": [
+      116,
+      116,
+      116,
+      116,
+      116,
+      116,
+      116,
+      116
+    ],
+    "total_completion_tokens": [
+      1741,
+      1437,
+      1038,
+      3547,
+      1405,
+      2726,
+      2523,
+      1279
+    ],
+    "trace_length_tokens": [
+      1741,
+      1437,
+      1038,
+      3547,
+      1405,
+      2726,
+      2523,
+      1279
+    ],
+    "thinking_tokens": [
+      1741,
+      1437,
+      1038,
+      3547,
+      1405,
+      2726,
+      2523,
+      1279
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789676481-2EUlbSkJc9F2xMNMAbI6",
+      "gen-1789676485-yHqi0TAB8dkICGKaxgQn",
+      "gen-1789676490-AD5ctCsTwi5l0f3SyFtW",
+      "gen-1789676493-srICQJtiV2mE6xRi1QI5",
+      "gen-1789676494-LQbqhlrLo8xup25fuEn0",
+      "gen-1789676507-otpjITBxkJOhU0LpSGDn",
+      "gen-1789676514-JXiqFvqShYJuRoDNMzxp",
+      "gen-1789676531-V9563wlTXOmWcUwchfBt"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": true,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  {
+    "task_id": "aime_2026_ii_07",
+    "source": "AIME",
+    "domain": "probability",
+    "difficulty": 4,
+    "difficulty_label": "hard",
+    "gold_answer": "754",
+    "extracted_answers": [
+      "754",
+      "754",
+      "754",
+      "754",
+      "754",
+      "754",
+      "754",
+      "754"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "prompt_length_tokens": [
+      164,
+      164,
+      164,
+      164,
+      164,
+      164,
+      164,
+      164
+    ],
+    "total_completion_tokens": [
+      2079,
+      2343,
+      2946,
+      2221,
+      2624,
+      3100,
+      2023,
+      2438
+    ],
+    "trace_length_tokens": [
+      2079,
+      2343,
+      2946,
+      2221,
+      2624,
+      3100,
+      2023,
+      2438
+    ],
+    "thinking_tokens": [
+      2079,
+      2343,
+      2946,
+      2221,
+      2624,
+      3100,
+      2023,
+      2438
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789676537-X9PGf74ikGv2L3ggE1st",
+      "gen-1789676544-c77BPTBoY6tDp6xF17yX",
+      "gen-1789676550-bFHDaFDYyCy9l4Gb6MSe",
+      "gen-1789676550-QmRtsOGZwQ4zk1U2vByd",
+      "gen-1789676581-L9W6SsyGRULU7FNPwyko",
+      "gen-1789676607-r4JG8mHlkTAK3MwjNJ6K",
+      "gen-1789676608-oNod8Rf09ZkYRG4wq2O2",
+      "gen-1789676611-xMqmCaSwoLwzeYOj8ZVk"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": true,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  {
+    "task_id": "aime_2026_ii_08",
+    "source": "AIME",
+    "domain": "geometry",
+    "difficulty": 4,
+    "difficulty_label": "hard",
+    "gold_answer": "245",
+    "extracted_answers": [
+      "245",
+      "65",
+      "1225",
+      "245",
+      "650",
+      "1225",
+      "225",
+      "198"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      true,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false
+    ],
+    "prompt_length_tokens": [
+      129,
+      129,
+      129,
+      129,
+      129,
+      129,
+      129,
+      129
+    ],
+    "total_completion_tokens": [
+      3690,
+      4439,
+      4699,
+      3720,
+      4681,
+      4157,
+      4864,
+      5031
+    ],
+    "trace_length_tokens": [
+      3690,
+      4439,
+      4699,
+      3720,
+      4681,
+      4157,
+      4864,
+      5031
+    ],
+    "thinking_tokens": [
+      3690,
+      4439,
+      4699,
+      3720,
+      4681,
+      4157,
+      4864,
+      5031
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789676621-OhaE6Brr5m8S04jPtivE",
+      "gen-1789676624-scv8TPT5M2XRpJAZcNDL",
+      "gen-1789676626-aoOpZtojJCez6E7n9P2F",
+      "gen-1789676651-6uGk8s1bEjncQFTYpf0Z",
+      "gen-1789676677-2oL8p5mFHkrvNsPpeIe1",
+      "gen-1789676688-Re5rwLsyCkOBe6uF5k8C",
+      "gen-1789676709-eiMIFLNN06z75jDz4UKy",
+      "gen-1789676736-K7hl0XAO0xt9CLpRegm8"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": true,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      true,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  {
+    "task_id": "aime_2026_ii_09",
+    "source": "AIME",
+    "domain": "number_theory",
+    "difficulty": 4,
+    "difficulty_label": "hard",
+    "gold_answer": "669",
+    "extracted_answers": [
+      "669",
+      "669",
+      "669",
+      "669",
+      "668",
+      "669",
+      "669",
+      "669"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true
+    ],
+    "prompt_length_tokens": [
+      133,
+      133,
+      133,
+      133,
+      133,
+      133,
+      133,
+      133
+    ],
+    "total_completion_tokens": [
+      2482,
+      1475,
+      2366,
+      2297,
+      4378,
+      3285,
+      1914,
+      1943
+    ],
+    "trace_length_tokens": [
+      2482,
+      1475,
+      2366,
+      2297,
+      4378,
+      3285,
+      1914,
+      1943
+    ],
+    "thinking_tokens": [
+      2482,
+      1475,
+      2366,
+      2297,
+      4378,
+      3285,
+      1914,
+      1943
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789676774-4POXdB6oWUn3j6xgIbX7",
+      "gen-1789676812-D0nwxOPzpMp73qOkJmpb",
+      "gen-1789676814-GxZOkCJGEWOIgKoulxco",
+      "gen-1789676818-hqDHV6Le0YE2avs67ife",
+      "gen-1789676867-dOAZKc7HRHWQlVzztMiK",
+      "gen-1789676878-2r8m68NPlPi4sHuVZ38d",
+      "gen-1789676880-3qSFh7JWve1FQ7oIErRK",
+      "gen-1789676885-UzgsBXCHWQv8l29iLBLe"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": true,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      false,
+      true,
+      true,
+      true
+    ]
+  },
+  {
+    "task_id": "aime_2026_ii_10",
+    "source": "AIME",
+    "domain": "geometry",
+    "difficulty": 4,
+    "difficulty_label": "hard",
+    "gold_answer": "340",
+    "extracted_answers": [
+      "340",
+      "340",
+      "340",
+      "340",
+      "340",
+      "340",
+      "390",
+      "340"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true
+    ],
+    "prompt_length_tokens": [
+      197,
+      197,
+      197,
+      197,
+      197,
+      197,
+      197,
+      197
+    ],
+    "total_completion_tokens": [
+      2077,
+      1746,
+      2010,
+      2337,
+      2557,
+      1353,
+      4098,
+      1692
+    ],
+    "trace_length_tokens": [
+      2077,
+      1746,
+      2010,
+      2337,
+      2557,
+      1353,
+      4098,
+      1692
+    ],
+    "thinking_tokens": [
+      2077,
+      1746,
+      2010,
+      2337,
+      2557,
+      1353,
+      4098,
+      1692
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789676920-gkzMlmlUvie07sVN9mBJ",
+      "gen-1789676922-W3sgD03UGbpSXkDmIsO6",
+      "gen-1789676925-XJAsZ0AkR0nH04OXr4pK",
+      "gen-1789676959-Mlz1x39o7zTWKGREdQJQ",
+      "gen-1789676965-zicnkWtHuvvxHOfEDrt7",
+      "gen-1789676972-9AYLZV5r6PukLpW8yb12",
+      "gen-1789676998-zylTktxQDOkNXepAtZCG",
+      "gen-1789677010-i2CPzBscaFMAaTj6DURF"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": true,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true
+    ]
+  },
+  {
+    "task_id": "aime_2026_ii_11",
+    "source": "AIME",
+    "domain": "algebra",
+    "difficulty": 4,
+    "difficulty_label": "hard",
+    "gold_answer": "132",
+    "extracted_answers": [
+      "132",
+      "132",
+      "132",
+      "132",
+      "132",
+      "132",
+      "150",
+      "132"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true
+    ],
+    "prompt_length_tokens": [
+      148,
+      148,
+      148,
+      148,
+      148,
+      148,
+      148,
+      148
+    ],
+    "total_completion_tokens": [
+      3787,
+      3583,
+      3472,
+      3889,
+      3863,
+      4501,
+      5603,
+      3503
+    ],
+    "trace_length_tokens": [
+      3787,
+      3583,
+      3472,
+      3889,
+      3863,
+      4501,
+      5603,
+      3503
+    ],
+    "thinking_tokens": [
+      3787,
+      3583,
+      3472,
+      3889,
+      3863,
+      4501,
+      5603,
+      3503
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789677016-9xybw8ltjrQ2XTtDXSVf",
+      "gen-1789677024-VGkwpOKdfDHKul2Qbxsu",
+      "gen-1789677033-Nit7S5pNLC3ryV5axaYi",
+      "gen-1789677056-hRMI1u5a0XU0Db08xq2S",
+      "gen-1789677062-894mcl0uv0F5uYll4uGA",
+      "gen-1789677070-eSw7sYzwtT7Q3amJoyWy",
+      "gen-1789677078-ncascD6T8H4xeERqAnQk",
+      "gen-1789677178-urGp47vOtsyJYpK9K8HN"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": true,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      true
+    ]
+  },
+  {
+    "task_id": "aime_2026_ii_12",
+    "source": "AIME",
+    "domain": "geometry",
+    "difficulty": 4,
+    "difficulty_label": "hard",
+    "gold_answer": "223",
+    "extracted_answers": [
+      "223",
+      "223",
+      "223",
+      "223",
+      "7",
+      "139",
+      "223",
+      "8"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      false
+    ],
+    "prompt_length_tokens": [
+      183,
+      183,
+      183,
+      183,
+      183,
+      183,
+      183,
+      183
+    ],
+    "total_completion_tokens": [
+      4783,
+      5579,
+      5395,
+      4527,
+      2854,
+      3964,
+      4370,
+      6634
+    ],
+    "trace_length_tokens": [
+      4783,
+      5579,
+      5395,
+      4527,
+      2854,
+      3964,
+      4370,
+      6634
+    ],
+    "thinking_tokens": [
+      4783,
+      5579,
+      5395,
+      4527,
+      2854,
+      3964,
+      4370,
+      6634
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789677179-DGX8UvxT1gCBH1fhUvgP",
+      "gen-1789677179-1lgKo8AGz8DzW3RZWV8U",
+      "gen-1789677187-eAdpkQE6s2UkySaomSYZ",
+      "gen-1789677230-xb0BoqQavMXwcHM0wwtJ",
+      "gen-1789677233-jMfwZEronYDTcC5TPAqx",
+      "gen-1789677268-hf5cfofiAJMfJXMN8DIb",
+      "gen-1789677330-ChjilUeSvqwdOPX2bPp0",
+      "gen-1789677330-d2Sr3MfoEdOsroFDZwhw"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": true,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      false
+    ]
+  },
+  {
+    "task_id": "aime_2026_ii_13",
+    "source": "AIME",
+    "domain": "combinatorics",
+    "difficulty": 5,
+    "difficulty_label": "olympiad",
+    "gold_answer": "107",
+    "extracted_answers": [
+      "101",
+      "1010",
+      "101",
+      "101",
+      "102",
+      "55",
+      "101",
+      "12"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "prompt_length_tokens": [
+      191,
+      191,
+      191,
+      191,
+      191,
+      191,
+      191,
+      191
+    ],
+    "total_completion_tokens": [
+      4506,
+      4393,
+      5005,
+      4549,
+      5879,
+      6475,
+      7066,
+      4695
+    ],
+    "trace_length_tokens": [
+      4506,
+      4393,
+      5005,
+      4549,
+      5879,
+      6475,
+      7066,
+      4695
+    ],
+    "thinking_tokens": [
+      4506,
+      4393,
+      5005,
+      4549,
+      5879,
+      6475,
+      7066,
+      4695
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789677352-0MxikKqoSugehdYmzjHY",
+      "gen-1789677379-9Vj7Wdf7pXd2gfK9qWBV",
+      "gen-1789677399-zzGMGxRacjGoz2uFvnz9",
+      "gen-1789677404-kz7EtSREs164ZpcZVcZ7",
+      "gen-1789677406-Yl6bPyP912Q0xgTI0qku",
+      "gen-1789677411-8GPf7ZEAXwGYHt5dYmjq",
+      "gen-1789677487-5jGo55Oc05tiBFhCaoct",
+      "gen-1789677528-3pgvZt2EDcuGl8Yr06Da"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": false,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  {
+    "task_id": "aime_2026_ii_14",
+    "source": "AIME",
+    "domain": "combinatorics",
+    "difficulty": 5,
+    "difficulty_label": "olympiad",
+    "gold_answer": "157",
+    "extracted_answers": [
+      "15",
+      "4",
+      "84",
+      "13",
+      "12",
+      "64",
+      "20",
+      "84"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "prompt_length_tokens": [
+      223,
+      223,
+      223,
+      223,
+      223,
+      223,
+      223,
+      223
+    ],
+    "total_completion_tokens": [
+      5123,
+      4134,
+      3261,
+      3725,
+      3271,
+      4561,
+      3614,
+      4089
+    ],
+    "trace_length_tokens": [
+      5123,
+      4134,
+      3261,
+      3725,
+      3271,
+      4561,
+      3614,
+      4089
+    ],
+    "thinking_tokens": [
+      5123,
+      4134,
+      3261,
+      3725,
+      3271,
+      4561,
+      3614,
+      4089
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789677552-RDp9HqlQN0fCjikvEMho",
+      "gen-1789677572-ZCs16UMD6fBbpt1aTVqZ",
+      "gen-1789677580-8zWoHimoNjB8XbzRkZeO",
+      "gen-1789677596-NMQtullb8tCK2aUgp4bl",
+      "gen-1789677637-N7csU2pklg14xv9oxFjh",
+      "gen-1789677664-tcWr9SDQ2R4s0Nza29hq",
+      "gen-1789677709-2LM8IZVcBBGvBdThPg0U",
+      "gen-1789677711-EFBKHpQG7YX4s6UsLFIM"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": false,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  {
+    "task_id": "aime_2026_ii_15",
+    "source": "AIME",
+    "domain": "combinatorics",
+    "difficulty": 5,
+    "difficulty_label": "olympiad",
+    "gold_answer": "393",
+    "extracted_answers": [
+      "243",
+      "243",
+      "243",
+      "43",
+      "365",
+      "243",
+      "243",
+      "243"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "prompt_length_tokens": [
+      232,
+      232,
+      232,
+      232,
+      232,
+      232,
+      232,
+      232
+    ],
+    "total_completion_tokens": [
+      3421,
+      4007,
+      3447,
+      4713,
+      3932,
+      4460,
+      4096,
+      3166
+    ],
+    "trace_length_tokens": [
+      3421,
+      4007,
+      3447,
+      4713,
+      3932,
+      4460,
+      4096,
+      3166
+    ],
+    "thinking_tokens": [
+      3421,
+      4007,
+      3447,
+      4713,
+      3932,
+      4460,
+      4096,
+      3166
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789677727-tT3aQCeIzaLrjSvG4ELk",
+      "gen-1789677744-e0P6ftigmlo0tVRiw8nQ",
+      "gen-1789677746-in2S30I7f7819vSIuSpr",
+      "gen-1789677759-NX9WggBaGatgDZCfpb2f",
+      "gen-1789677763-gKqg5iNSFLGQGgTvY4MZ",
+      "gen-1789677848-T5SUe2oaUiQJvpf1pOw3",
+      "gen-1789677857-kU55zD768fc7WscxsCGK",
+      "gen-1789677866-BT6e2KLEgshmzA1UgeAz"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": false,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  {
+    "task_id": "math_500_0136",
+    "source": "MATH-500",
+    "domain": "number_theory",
+    "difficulty": 2,
+    "difficulty_label": "easy",
+    "gold_answer": "13",
+    "extracted_answers": [
+      "13",
+      "13",
+      "13",
+      "13",
+      "13",
+      "13",
+      "13",
+      "13"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "prompt_length_tokens": [
+      92,
+      92,
+      92,
+      92,
+      92,
+      92,
+      92,
+      92
+    ],
+    "total_completion_tokens": [
+      336,
+      319,
+      468,
+      334,
+      451,
+      266,
+      535,
+      478
+    ],
+    "trace_length_tokens": [
+      336,
+      319,
+      468,
+      334,
+      451,
+      266,
+      535,
+      478
+    ],
+    "thinking_tokens": [
+      336,
+      319,
+      468,
+      334,
+      451,
+      266,
+      535,
+      478
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789677879-ykHuIm0k3n9VTAgncILN",
+      "gen-1789677893-bj1QGEN9MIICdejlwwtU",
+      "gen-1789677893-6EFnAqZhonqQhoR2cBLu",
+      "gen-1789677905-CBuSpIx4GHGH8MXEgye0",
+      "gen-1789677911-gwbyN1DbPNTOQpIzBnau",
+      "gen-1789677911-HStw389BVPIPPmQlfrMp",
+      "gen-1789677917-cOcjDCJ37CRYIlHDDEbd",
+      "gen-1789677921-Rw1jOdzVky8TFmNsMjYL"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": true,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  {
+    "task_id": "math_500_0148",
+    "source": "MATH-500",
+    "domain": "geometry",
+    "difficulty": 2,
+    "difficulty_label": "easy",
+    "gold_answer": "8",
+    "extracted_answers": [
+      "8",
+      "8",
+      "8",
+      "8",
+      "8",
+      "8",
+      "8",
+      "8"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "prompt_length_tokens": [
+      139,
+      139,
+      139,
+      139,
+      139,
+      139,
+      139,
+      139
+    ],
+    "total_completion_tokens": [
+      1507,
+      1216,
+      1352,
+      1397,
+      1287,
+      886,
+      1317,
+      1907
+    ],
+    "trace_length_tokens": [
+      1507,
+      1216,
+      1352,
+      1397,
+      1287,
+      886,
+      1317,
+      1907
+    ],
+    "thinking_tokens": [
+      1507,
+      1216,
+      1352,
+      1397,
+      1287,
+      886,
+      1317,
+      1907
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789677926-ZEuomGCgS1lDuYtWzgxg",
+      "gen-1789677926-URGyBjP5CsokhPgWoRRm",
+      "gen-1789677936-4qbitYQtkODCxRudVNe2",
+      "gen-1789677937-H8qGDhjTvpqxwP4MZD3G",
+      "gen-1789677951-qd4R4TTLCf6n5a1IcZl5",
+      "gen-1789677969-VKw0CUEg0gZ9QZvLTHOm",
+      "gen-1789677978-dWkFh4eYjLjv4FCbJb9V",
+      "gen-1789677983-KrxCQal0sifkPDbaFdCk"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": true,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  {
+    "task_id": "math_500_0158",
+    "source": "MATH-500",
+    "domain": "probability",
+    "difficulty": 3,
+    "difficulty_label": "medium",
+    "gold_answer": "\\dfrac{17}{50}",
+    "extracted_answers": [
+      "\\frac{17}{50}",
+      "\\frac{17}{50}",
+      "\\frac{17}{50}",
+      "\\frac{17}{50}",
+      "\\frac{17}{50}",
+      "\\frac{17}{50}",
+      "\\frac{17}{50}",
+      "\\frac{17}{50}"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "prompt_length_tokens": [
+      106,
+      106,
+      106,
+      106,
+      106,
+      106,
+      106,
+      106
+    ],
+    "total_completion_tokens": [
+      410,
+      274,
+      350,
+      509,
+      198,
+      182,
+      263,
+      397
+    ],
+    "trace_length_tokens": [
+      410,
+      274,
+      350,
+      509,
+      198,
+      182,
+      263,
+      397
+    ],
+    "thinking_tokens": [
+      410,
+      274,
+      350,
+      509,
+      198,
+      182,
+      263,
+      397
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789677986-lIRkFQpRa3CLXV2SxO5J",
+      "gen-1789677988-bBN5wtzRunPpJhc3cQ5Z",
+      "gen-1789677999-qmsCwO8U6bX9JJieLqeE",
+      "gen-1789678000-nX9CwlhUvJLxDch0roGs",
+      "gen-1789678002-AfRokIo7vXgb5d6MY49o",
+      "gen-1789678004-9qonGNgVK2xrjupVwtVl",
+      "gen-1789678010-0ZrUj7nqatNo7hyzgRrr",
+      "gen-1789678012-Mb3UPpBF9uVcAdr0UHHW"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": true,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  {
+    "task_id": "math_500_0200",
+    "source": "MATH-500",
+    "domain": "linear_algebra",
+    "difficulty": 2,
+    "difficulty_label": "easy",
+    "gold_answer": "\\left( \\frac{3}{2}, -13 \\right)",
+    "extracted_answers": [
+      "\\left( \\frac{3}{2}, -13 \\right)",
+      "\\left( \\frac{3}{2}, -13 \\right)",
+      "\\left( \\frac{3}{2}, -13 \\right)",
+      "\\left( \\frac{3}{2}, -13 \\right)",
+      "\\left( \\frac{3}{2}, -13 \\right)",
+      "\\left( \\frac{3}{2}, -13 \\right)",
+      "\\left(\\frac{3}{2}, -13\\right)",
+      "\\left(\\frac{3}{2}, -13\\right)"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "prompt_length_tokens": [
+      135,
+      135,
+      135,
+      135,
+      135,
+      135,
+      135,
+      135
+    ],
+    "total_completion_tokens": [
+      384,
+      343,
+      264,
+      292,
+      248,
+      297,
+      187,
+      313
+    ],
+    "trace_length_tokens": [
+      384,
+      343,
+      264,
+      292,
+      248,
+      297,
+      187,
+      313
+    ],
+    "thinking_tokens": [
+      384,
+      343,
+      264,
+      292,
+      248,
+      297,
+      187,
+      313
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789678013-wal10mEham6ImjmVAgu4",
+      "gen-1789678017-397VPhB3NucFQUEwGvtj",
+      "gen-1789678019-Ne5ceF00R19YUYNgiWmI",
+      "gen-1789678021-BIUPPAznDrB6MEkFsfoh",
+      "gen-1789678026-9VfSddP7dT689nrew3Zl",
+      "gen-1789678027-9obdNH8NDbCY9l8DYrvb",
+      "gen-1789678027-U2O1VVCConUMgyD1ZnYm",
+      "gen-1789678028-90B62xseUzEGsKaJAkv5"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": true,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  {
+    "task_id": "math_500_0369",
+    "source": "MATH-500",
+    "domain": "algebra",
+    "difficulty": 2,
+    "difficulty_label": "easy",
+    "gold_answer": "\\frac{11}{2}",
+    "extracted_answers": [
+      "\\frac{11}{2}",
+      "\\frac{11}{2}",
+      "\\frac{11}{2}",
+      "\\frac{11}{2}",
+      "\\frac{11}{2}",
+      "\\frac{11}{2}",
+      "\\frac{11}{2}",
+      "\\frac{11}{2}"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "prompt_length_tokens": [
+      98,
+      98,
+      98,
+      98,
+      98,
+      98,
+      98,
+      98
+    ],
+    "total_completion_tokens": [
+      316,
+      325,
+      374,
+      348,
+      411,
+      345,
+      443,
+      366
+    ],
+    "trace_length_tokens": [
+      316,
+      325,
+      374,
+      348,
+      411,
+      345,
+      443,
+      366
+    ],
+    "thinking_tokens": [
+      316,
+      325,
+      374,
+      348,
+      411,
+      345,
+      443,
+      366
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789678029-hYr36mnlFhzfzOCzm17d",
+      "gen-1789678030-UevovfbVw19AC9fazORF",
+      "gen-1789678032-az7CfgFphP2O5KntkVwT",
+      "gen-1789678035-RGBmAmkruTNZOmBIsYPc",
+      "gen-1789678036-gyY7D6T2q2CDDH2Ohfh1",
+      "gen-1789678039-oeIz23uvhVr7SJI3Kxcp",
+      "gen-1789678041-QFEJlMhgvqEJ24BEe57h",
+      "gen-1789678042-uRXQ544p4vy3IL3VLLBD"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": true,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  },
+  {
+    "task_id": "hmmt_2026_feb_comb_05",
+    "source": "HMMT",
+    "domain": "combinatorics",
+    "difficulty": 4,
+    "difficulty_label": "hard",
+    "gold_answer": "252",
+    "extracted_answers": [
+      "32",
+      "48620",
+      "33554432",
+      "32",
+      "32",
+      "32",
+      "48620",
+      "512"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "prompt_length_tokens": [
+      143,
+      143,
+      143,
+      143,
+      143,
+      143,
+      143,
+      143
+    ],
+    "total_completion_tokens": [
+      4482,
+      3767,
+      3597,
+      4044,
+      5019,
+      4664,
+      5371,
+      4668
+    ],
+    "trace_length_tokens": [
+      4482,
+      3767,
+      3597,
+      4044,
+      5019,
+      4664,
+      5371,
+      4668
+    ],
+    "thinking_tokens": [
+      4482,
+      3767,
+      3597,
+      4044,
+      5019,
+      4664,
+      5371,
+      4668
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789678043-JFI6gsQITzlBPq01JxGM",
+      "gen-1789678047-vmketZbdWmFidIsx3Jus",
+      "gen-1789678048-cy4BNyYrccngNWsb4qYb",
+      "gen-1789678052-brV8nZrWVxrCd47JmSC5",
+      "gen-1789678052-c3QkOMGjCMQMKTP6EJqE",
+      "gen-1789678055-vtIvLGTiHfecAvNXUVaY",
+      "gen-1789678056-6xDYf4GNE0rMOehabUZZ",
+      "gen-1789678058-5np9JJkewFNFCehCeWvQ"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": false,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  {
+    "task_id": "hmmt_2026_feb_comb_06",
+    "source": "HMMT",
+    "domain": "analysis",
+    "difficulty": 5,
+    "difficulty_label": "olympiad",
+    "gold_answer": "\\frac{4-\\pi}{2}",
+    "extracted_answers": [
+      "1",
+      "1",
+      "1",
+      "1",
+      "\\frac{4-\\pi}{2}",
+      "1",
+      "1",
+      "1"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false
+    ],
+    "prompt_length_tokens": [
+      140,
+      140,
+      140,
+      140,
+      140,
+      140,
+      140,
+      140
+    ],
+    "total_completion_tokens": [
+      2093,
+      3764,
+      1409,
+      2800,
+      3743,
+      2081,
+      2439,
+      2886
+    ],
+    "trace_length_tokens": [
+      2093,
+      3764,
+      1409,
+      2800,
+      3743,
+      2081,
+      2439,
+      2886
+    ],
+    "thinking_tokens": [
+      2093,
+      3764,
+      1409,
+      2800,
+      3743,
+      2081,
+      2439,
+      2886
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789678190-Y25FnLRitkGG1FD9AJIG",
+      "gen-1789678195-adaxzp4wcj2BeHfR3a4e",
+      "gen-1789678219-2te9HFP4qunlsKcvnKUN",
+      "gen-1789678221-EyiC2GIY0bxwvkOTTOtg",
+      "gen-1789678244-D4Jb2s9ZDYlqf0AwBXQN",
+      "gen-1789678250-4ktXDkB7umcSOdlaZdoD",
+      "gen-1789678261-jb2XU5W4SYygfpcOOWY8",
+      "gen-1789678278-0qHMt1n2qFz4bQut9I4Y"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": true,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false
+    ]
+  },
+  {
+    "task_id": "hmmt_2026_feb_comb_07",
+    "source": "HMMT",
+    "domain": "combinatorics",
+    "difficulty": 5,
+    "difficulty_label": "olympiad",
+    "gold_answer": "1574",
+    "extracted_answers": [
+      "380",
+      "92",
+      "110",
+      "92",
+      "112",
+      "344",
+      "184",
+      "92"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "prompt_length_tokens": [
+      155,
+      155,
+      155,
+      155,
+      155,
+      155,
+      155,
+      155
+    ],
+    "total_completion_tokens": [
+      3986,
+      3193,
+      4003,
+      3217,
+      2835,
+      3036,
+      4409,
+      4588
+    ],
+    "trace_length_tokens": [
+      3986,
+      3193,
+      4003,
+      3217,
+      2835,
+      3036,
+      4409,
+      4588
+    ],
+    "thinking_tokens": [
+      3986,
+      3193,
+      4003,
+      3217,
+      2835,
+      3036,
+      4409,
+      4588
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789678282-dai8FabvJpim5l2Bb3K7",
+      "gen-1789678282-NZpV7UPx9XjCSKnHTHar",
+      "gen-1789678333-gvZqqaglValKSl31Q49D",
+      "gen-1789678335-NJk2XReAB19Ri84ayrtw",
+      "gen-1789678344-EqovEFe8nDhuQRH87tJW",
+      "gen-1789678352-LlW0Nujm7Kg5AyyRrJDf",
+      "gen-1789678392-NdXLHL6rKr5SN0N7TPop",
+      "gen-1789678393-90lIWvC9jf7qi35sIbeK"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": false,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  {
+    "task_id": "hmmt_2026_feb_comb_08",
+    "source": "HMMT",
+    "domain": "combinatorics",
+    "difficulty": 5,
+    "difficulty_label": "olympiad",
+    "gold_answer": "6992",
+    "extracted_answers": [
+      "8000",
+      "4320",
+      "3840",
+      "1452",
+      "2772",
+      "1120",
+      "312",
+      "12000"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "prompt_length_tokens": [
+      129,
+      129,
+      129,
+      129,
+      129,
+      129,
+      129,
+      129
+    ],
+    "total_completion_tokens": [
+      4469,
+      4205,
+      4005,
+      3128,
+      4455,
+      4348,
+      2107,
+      6554
+    ],
+    "trace_length_tokens": [
+      4469,
+      4205,
+      4005,
+      3128,
+      4455,
+      4348,
+      2107,
+      6554
+    ],
+    "thinking_tokens": [
+      4469,
+      4205,
+      4005,
+      3128,
+      4455,
+      4348,
+      2107,
+      6554
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789678415-kuoF53wB2RovKNhZblOA",
+      "gen-1789678448-DoP2iQFk5aQpBw2PApQi",
+      "gen-1789678467-9iad3xywsgv4kMYiTY8z",
+      "gen-1789678474-ppeZ9B8kWVBKobuCHWUJ",
+      "gen-1789678483-8TypGHZ4hI8hyXKB1sLb",
+      "gen-1789678505-GPaKF85Sr86bg4gebvi2",
+      "gen-1789678585-mII6TAWYybznpWHluIFy",
+      "gen-1789678589-CrN4bbpOQ4B3no8Ksajr"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": false,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  {
+    "task_id": "hmmt_2026_feb_comb_09",
+    "source": "HMMT",
+    "domain": "combinatorics",
+    "difficulty": 5,
+    "difficulty_label": "olympiad",
+    "gold_answer": "499",
+    "extracted_answers": [
+      "499",
+      "518",
+      "499",
+      "518",
+      "468",
+      "468",
+      "499",
+      "499"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      true,
+      false,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true
+    ],
+    "prompt_length_tokens": [
+      154,
+      154,
+      154,
+      154,
+      154,
+      154,
+      154,
+      154
+    ],
+    "total_completion_tokens": [
+      4912,
+      4202,
+      4129,
+      4542,
+      2333,
+      2082,
+      5432,
+      4873
+    ],
+    "trace_length_tokens": [
+      4912,
+      4202,
+      4129,
+      4542,
+      2333,
+      2082,
+      5432,
+      4873
+    ],
+    "thinking_tokens": [
+      4912,
+      4202,
+      4129,
+      4542,
+      2333,
+      2082,
+      5432,
+      4873
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789678607-poSvZamYW4iToGDtvMXH",
+      "gen-1789678607-UNBxxJKcAiKQHGPfh9RO",
+      "gen-1789678621-hG9MqtVlQSYgVLeVsp1u",
+      "gen-1789678634-1Wfp75psgk1CArjgeTKh",
+      "gen-1789678660-zGCflgwmYyv1cdFQ2Kz0",
+      "gen-1789678668-oQoV3N2TuDwB3CrquhvR",
+      "gen-1789678682-YaZ5YqcH1csy1ue3RmEA",
+      "gen-1789678744-F8VFJmEsZ0547uuQd9Il"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": true,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      true,
+      false,
+      true,
+      false,
+      false,
+      false,
+      true,
+      true
+    ]
+  },
+  {
+    "task_id": "hmmt_2026_feb_geo_05",
+    "source": "HMMT",
+    "domain": "geometry",
+    "difficulty": 4,
+    "difficulty_label": "hard",
+    "gold_answer": "8\\sqrt{6}",
+    "extracted_answers": [
+      "8\\sqrt{6}",
+      "\\frac{8}{3}\\sqrt{25+7\\sqrt{10}}",
+      "12\\sqrt{2}",
+      "3\\sqrt{51}",
+      "8\\sqrt{6}",
+      "8\\sqrt{6}",
+      "\\frac{8\\sqrt{30}}{11}",
+      "8\\sqrt{6}"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      true
+    ],
+    "prompt_length_tokens": [
+      142,
+      142,
+      142,
+      142,
+      142,
+      142,
+      142,
+      142
+    ],
+    "total_completion_tokens": [
+      3863,
+      3332,
+      2845,
+      3685,
+      4449,
+      3802,
+      2913,
+      3651
+    ],
+    "trace_length_tokens": [
+      3863,
+      3332,
+      2845,
+      3685,
+      4449,
+      3802,
+      2913,
+      3651
+    ],
+    "thinking_tokens": [
+      3863,
+      3332,
+      2845,
+      3685,
+      4449,
+      3802,
+      2913,
+      3651
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789678748-Z8cpLUr75LYyCPIsgkFR",
+      "gen-1789678765-1RVz8RTSLUPF7VK6ySSM",
+      "gen-1789678782-LwTG4aTZb6tUHxoJnp6T",
+      "gen-1789678795-jfuN1YY7kAiXarQlkxgv",
+      "gen-1789678809-bdHdH7oSzANKZUj74aAk",
+      "gen-1789678870-gEWxxRJsdPmw1fBUQlzL",
+      "gen-1789678911-X07eX1q4jXM33z9r0f51",
+      "gen-1789678912-76D7Ergo4y7OoWQqtVC9"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": true,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      true
+    ]
+  },
+  {
+    "task_id": "hmmt_2026_feb_geo_06",
+    "source": "HMMT",
+    "domain": "geometry",
+    "difficulty": 4,
+    "difficulty_label": "hard",
+    "gold_answer": "\\sqrt{17}-1",
+    "extracted_answers": [
+      "2",
+      "4",
+      "\\frac{4}{\\sqrt{3}}",
+      "2",
+      "4",
+      "\\sqrt{31} - 2",
+      "4",
+      "\\sqrt{17} - 1"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+    ],
+    "prompt_length_tokens": [
+      147,
+      147,
+      147,
+      147,
+      147,
+      147,
+      147,
+      147
+    ],
+    "total_completion_tokens": [
+      4293,
+      3662,
+      3838,
+      4210,
+      6479,
+      4538,
+      6476,
+      4282
+    ],
+    "trace_length_tokens": [
+      4293,
+      3662,
+      3838,
+      4210,
+      6479,
+      4538,
+      6476,
+      4282
+    ],
+    "thinking_tokens": [
+      4293,
+      3662,
+      3838,
+      4210,
+      6479,
+      4538,
+      6476,
+      4282
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789678923-HN6KHCToci32i7T8qgC0",
+      "gen-1789678927-a13dgQi8N0Up7R1ZSAz2",
+      "gen-1789678953-3KhdfYBVi99d6yH4EkO9",
+      "gen-1789678962-aXKbZrgKBCfBaQUDyb1m",
+      "gen-1789679005-FJep0i4gJDXe8YPN2lq9",
+      "gen-1789679026-eMCMxvrtuoLm4wvDDS8D",
+      "gen-1789679031-VRBTWAYSmuewbL7cWrvH",
+      "gen-1789679061-auLwU6NqTVqJEurAhook"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": true,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true
+    ]
+  },
+  {
+    "task_id": "hmmt_2026_feb_geo_07",
+    "source": "HMMT",
+    "domain": "geometry",
+    "difficulty": 5,
+    "difficulty_label": "olympiad",
+    "gold_answer": "74",
+    "extracted_answers": [
+      "150",
+      "80",
+      "100",
+      "102",
+      "118",
+      "114",
+      "116",
+      "110"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "prompt_length_tokens": [
+      143,
+      143,
+      143,
+      143,
+      143,
+      143,
+      143,
+      143
+    ],
+    "total_completion_tokens": [
+      2872,
+      3610,
+      2992,
+      2955,
+      3417,
+      3565,
+      3575,
+      3254
+    ],
+    "trace_length_tokens": [
+      2872,
+      3610,
+      2992,
+      2955,
+      3417,
+      3565,
+      3575,
+      3254
+    ],
+    "thinking_tokens": [
+      2872,
+      3610,
+      2992,
+      2955,
+      3417,
+      3565,
+      3575,
+      3254
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789679067-MmtkwtzKXhnnyRwHSTvT",
+      "gen-1789679091-UqxeE5VsEW67W4ujk9HU",
+      "gen-1789679110-g79mzau3htUCuu0U4t5d",
+      "gen-1789679125-rgfqBUPtBqCKhLwRs69C",
+      "gen-1789679184-JeeClXen3fyGmGUKqErT",
+      "gen-1789679198-FgJxrjDG1MIAsfTFzcHW",
+      "gen-1789679219-By3phy9cb8jYQ1XVOUVv",
+      "gen-1789679225-W51xrZpuOGWHIg8U9h7s"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": false,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  {
+    "task_id": "hmmt_2026_feb_geo_08",
+    "source": "HMMT",
+    "domain": "geometry",
+    "difficulty": 5,
+    "difficulty_label": "olympiad",
+    "gold_answer": "\\sqrt{69}",
+    "extracted_answers": [
+      "\\frac{40}{9}",
+      "\\frac{40}{9}",
+      "20",
+      "8",
+      "\\frac{40}{9}",
+      "6",
+      "40",
+      "9"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "prompt_length_tokens": [
+      177,
+      177,
+      177,
+      177,
+      177,
+      177,
+      177,
+      177
+    ],
+    "total_completion_tokens": [
+      2786,
+      3349,
+      4472,
+      3480,
+      3856,
+      4238,
+      3419,
+      3699
+    ],
+    "trace_length_tokens": [
+      2786,
+      3349,
+      4472,
+      3480,
+      3856,
+      4238,
+      3419,
+      3699
+    ],
+    "thinking_tokens": [
+      2786,
+      3349,
+      4472,
+      3480,
+      3856,
+      4238,
+      3419,
+      3699
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789679228-cv5F88xg4UOlES7Sfq99",
+      "gen-1789679234-Fmxs2vCHo2nTaYYm0SW4",
+      "gen-1789679249-U4c0cnwqSqKnG9rPLyrH",
+      "gen-1789679277-R5EUrxHH2kSKL0AvZsm0",
+      "gen-1789679313-sfl7rNfngnyDDiM4IjRt",
+      "gen-1789679337-sPHqu9dKQhFINYwCkRGc",
+      "gen-1789679348-HgnC9l0HJM703gjMd0eD",
+      "gen-1789679357-lRl6EVEt8m6GcEVwWyN0"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": false,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  {
+    "task_id": "hmmt_2026_feb_geo_09",
+    "source": "HMMT",
+    "domain": "geometry",
+    "difficulty": 5,
+    "difficulty_label": "olympiad",
+    "gold_answer": "3+\\sqrt{11}",
+    "extracted_answers": [
+      "8",
+      "8",
+      "8",
+      "4",
+      "\\sqrt{74}",
+      "4",
+      "\\frac{2\\sqrt{114}}{3}",
+      "8"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "prompt_length_tokens": [
+      162,
+      162,
+      162,
+      162,
+      162,
+      162,
+      162,
+      162
+    ],
+    "total_completion_tokens": [
+      4992,
+      4547,
+      4657,
+      2639,
+      3716,
+      1173,
+      3422,
+      4522
+    ],
+    "trace_length_tokens": [
+      4992,
+      4547,
+      4657,
+      2639,
+      3716,
+      1173,
+      3422,
+      4522
+    ],
+    "thinking_tokens": [
+      4992,
+      4547,
+      4657,
+      2639,
+      3716,
+      1173,
+      3422,
+      4522
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789679360-8K92S32TAVe7kNczcrKJ",
+      "gen-1789679377-ulQJMODQKPyg3z4SaABI",
+      "gen-1789679425-TqRHc3JW3gwWVB5NjvvO",
+      "gen-1789679434-ilzWHPYuAFq7oIFj6u6I",
+      "gen-1789679468-7WjbemWbSH88TnBvyeFW",
+      "gen-1789679490-T0XxPtPjOW6kw3B2UQDx",
+      "gen-1789679508-P20ibQOXBT8Jj72KpuEX",
+      "gen-1789679509-848NIVLUU2qAKAxUrz16"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": false,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  {
+    "task_id": "hmmt_2026_feb_geo_10",
+    "source": "HMMT",
+    "domain": "geometry",
+    "difficulty": 5,
+    "difficulty_label": "olympiad",
+    "gold_answer": "\\sqrt{\\frac{580}{3}}",
+    "extracted_answers": [
+      "2\\sqrt{\\frac{145}{3}}",
+      "7\\sqrt{3}",
+      "\\frac{2\\sqrt{435}}{3}",
+      "2\\sqrt{\\frac{145}{3}}",
+      "\\sqrt{\\frac{580}{3}}",
+      "2\\sqrt{\\frac{145}{3}}",
+      "\\sqrt{290}",
+      "\\sqrt{290}"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      false
+    ],
+    "prompt_length_tokens": [
+      116,
+      116,
+      116,
+      116,
+      116,
+      116,
+      116,
+      116
+    ],
+    "total_completion_tokens": [
+      3826,
+      2587,
+      9693,
+      5045,
+      4270,
+      4700,
+      4137,
+      2295
+    ],
+    "trace_length_tokens": [
+      3826,
+      2587,
+      9693,
+      5045,
+      4270,
+      4700,
+      4137,
+      2295
+    ],
+    "thinking_tokens": [
+      3826,
+      2587,
+      9693,
+      5045,
+      4270,
+      4700,
+      4137,
+      2295
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789679536-71npPhc0x2wp91tGxNRg",
+      "gen-1789679540-zumebgEBKcnQcvfVGLQ5",
+      "gen-1789679554-SyIKjCEVhEAgCRrbe2Xh",
+      "gen-1789679561-Wt7wW4aeJswN1DY1kXgT",
+      "gen-1789679613-Olgwo5Li8zy3QIEiK56E",
+      "gen-1789679622-qLiOopfVuAvM4NbfEWK5",
+      "gen-1789679648-eB54IxbmrHfw9GkytMeQ",
+      "gen-1789679651-mzyBUqHQcg8BXeViHvab"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": true,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      false,
+      false
+    ]
+  },
+  {
+    "task_id": "hmmt_2026_feb_algnt_04",
+    "source": "HMMT",
+    "domain": "algebra",
+    "difficulty": 4,
+    "difficulty_label": "hard",
+    "gold_answer": "\\frac{7}{2}",
+    "extracted_answers": [
+      "\\frac{7}{2}",
+      "\\frac{7}{2}",
+      "\\frac{7}{2}",
+      "\\frac{7}{2}",
+      "\\frac{7}{2}",
+      "\\frac{7}{2}",
+      "\\frac{7}{2}",
+      "\\frac{7}{2}"
+    ],
+    "answer_in_boxed": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response_texts": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "correct": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "prompt_length_tokens": [
+      138,
+      138,
+      138,
+      138,
+      138,
+      138,
+      138,
+      138
+    ],
+    "total_completion_tokens": [
+      1824,
+      4052,
+      1758,
+      1729,
+      1215,
+      3251,
+      2125,
+      852
+    ],
+    "trace_length_tokens": [
+      1824,
+      4052,
+      1758,
+      1729,
+      1215,
+      3251,
+      2125,
+      852
+    ],
+    "thinking_tokens": [
+      1824,
+      4052,
+      1758,
+      1729,
+      1215,
+      3251,
+      2125,
+      852
+    ],
+    "answer_tokens": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "response_chars": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "providers_used": [
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow",
+      "SiliconFlow"
+    ],
+    "generation_ids": [
+      "gen-1789679684-blURQUPpVqMskz8KDVUi",
+      "gen-1789679699-GzA0iofqkz64dcHbkPgT",
+      "gen-1789679736-nHaX5h3F5zC2EidO7iIL",
+      "gen-1789679752-Heyc7CewpN3X895Qq5fH",
+      "gen-1789679754-iA8KvwgAdUd49abTydYy",
+      "gen-1789679772-tyEQwCD6yW6nHpVx9ZRX",
+      "gen-1789679788-getaIEL2jNOqhqw1yMNn",
+      "gen-1789679795-H0MOu7Ro6UmD3BI9Tb1i"
+    ],
+    "reasoning_sent": [
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      },
+      {
+        "enabled": true
+      }
+    ],
+    "models_served": [
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus",
+      "deepseek/deepseek-v3.1-terminus"
+    ],
+    "finish_reasons": [
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop",
+      "stop"
+    ],
+    "errors": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "solved_at_least_once": true,
+    "extracted_before_trace_recovery": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    "correct_before_trace_recovery": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "correct_original": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ]
+  }
+]

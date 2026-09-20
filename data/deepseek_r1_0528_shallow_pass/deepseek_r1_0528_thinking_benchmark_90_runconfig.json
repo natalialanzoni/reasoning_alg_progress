@@ -1,0 +1,25 @@
+{
+  "run_started": "2026-09-17T15:18:47-0400",
+  "label": "DeepSeek R1 0528",
+  "or_model": "deepseek/deepseek-r1-0528",
+  "provider_pin": {
+    "only": [
+      "siliconflow"
+    ],
+    "allow_fallbacks": false,
+    "quantizations": [
+      "fp8"
+    ]
+  },
+  "reasoning_sent": {
+    "enabled": true
+  },
+  "effort_override": null,
+  "max_tokens_requested": 40000,
+  "cap_applied": 40000,
+  "n_samples": 8,
+  "dataset": "tyrtleli/thinking-benchmark-90",
+  "split": "test",
+  "n_problems": 45,
+  "tag": "thinking_benchmark_90"
+}
