@@ -6,10 +6,18 @@ problems), faint per-problem lines behind, the minimal human derivation floor,
 and the per-effort decay rate (same excess-over-floor FE spec as the forecast,
 MHD = shortest canonical, o3 included) shown in the legend.
 
-Coverage differs by effort (whatever runs exist):
-  low   : o3, gpt-5, 5.2, 5.4, 5.5, 5.6-sol            (k=8)
-  medium: o3, gpt-5, 5.2, 5.4, 5.5, 5.6-sol, 6-astra   (k=32)
-  high  : gpt-5, 5.4, 5.6-sol, 6-astra                 (k=8/32)
+Coverage differs by effort -- gather() silently skips a model with no run file, so
+check the matrix below before reading a gap as a finding. Every model except gpt-5.1
+now has all three arms; gpt-5.1 has medium only until its low/high runs land:
+
+  low   : o3, gpt-5, 5.2, 5.4, 5.5, 5.6-sol, 6-astra   (k=8)
+  medium: o3, gpt-5, 5.1, 5.2, 5.4, 5.5, 5.6-sol, 6-astra  (k=32, the hard-but-doable dir)
+  high  : o3, gpt-5, 5.2, 5.4, 5.5, 5.6-sol, 6-astra   (k=8)
+
+To add a model's low/high arms:  bash code/run_openai_effort.sh <model> low|high
+That script pins k=8 -- note the medium arm comes from the k=32 runs, so the efforts
+are NOT matched on k. DATES already lists gpt-5.1, and files are discovered by path,
+so nothing here needs editing once the runs are in data/<effort>_reasoning_effort/.
 
     MPLBACKEND=Agg ./venv/bin/python code/figure_effort_ft.py
 Output -> figures/figs_sept/fig_effort.{png,pdf}
