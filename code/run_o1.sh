@@ -37,7 +37,9 @@ cfg = {
     "max_output_tokens": $MAXTOK, "endpoint": "/v1/responses",
     "dataset": "$DATASET", "split": "$SPLIT", "tag": "$TAG",
     "run_name": "$RUN_NAME", "task_ids_file": "$IDS", "n_task_ids": 45,
-    "matches": "data/o3_shallow_pass/o3_medium_thinking_bench_requests.jsonl",
+    # not what we ran -- the reference run whose saved requests these
+    # settings were checked against, field by field
+    "settings_verified_against": "data/o3_shallow_pass/o3_medium_thinking_bench_requests.jsonl",
     "git_commit": subprocess.getoutput("git rev-parse HEAD"),
     "utc": datetime.datetime.utcnow().isoformat() + "Z",
 }
