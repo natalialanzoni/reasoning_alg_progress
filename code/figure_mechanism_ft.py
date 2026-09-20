@@ -81,10 +81,13 @@ def shallowA(path):
     for r in pf.load_rows(path):
         if str(r["task_id"]) not in KEYS:
             continue
-        for tok, c in zip(r["total_completion_tokens"], r["correct"]):
-            if tok < 50:
+        texts = r.get("response_texts", [None] * len(r["correct"]))
+        for tok, c, txt in zip(r["total_completion_tokens"], r["correct"], texts):
+            # central rules, not a local copy: duplicating them is what let the cap
+            # bug survive in four scripts at once (README run-hygiene 6)
+            if not fs._trial_ok(tok, txt, cap=CAP):
                 continue
-            ok = bool(c) and tok < CAP        # AT the cap = truncated = wrong
+            ok = fs._trial_correct(tok, c, cap=CAP)
             nt += 1; nc += int(ok)
             if ok:
                 toks.append(tok)
@@ -97,8 +100,10 @@ def hardA(path):
         pid = str(r["task_id"])
         if pid not in KEYS:
             continue
-        toks = [tok for tok, c in zip(r["total_completion_tokens"], r["correct"])
-                if bool(c) and 50 <= tok < CAP]
+        texts = r.get("response_texts", [None] * len(r["correct"]))
+        toks = [tok for tok, c, txt in zip(r["total_completion_tokens"],
+                                           r["correct"], texts)
+                if fs._trial_ok(tok, txt, cap=CAP) and fs._trial_correct(tok, c, cap=CAP)]
         if toks:
             prob[pid] = toks
     return prob
@@ -176,7 +181,9 @@ for col, (title, labels, (accs, means, hards), xlabel) in enumerate(COLS):
     a0 = axes[0][col]                                   # Row 1 — accuracy
     a0.plot(x, accs, "-o", color=ACC, lw=2.6, ms=12, zorder=5)
     a0.set_title(title, fontweight="bold")
-    a0.set_ylim(40, 104)
+    # data spans 68-86%; 40-104 left half the row empty and flattened both
+    # lines into near-horizontal segments, hiding the accuracy gain
+    a0.set_ylim(60, 96)
     a0.yaxis.set_major_formatter(unit_formatter(1, "%", "{:.0f}"))
     for xi, yi in zip(x, accs):
         a0.annotate(f"{yi:.0f}%", (xi, yi), textcoords="offset points", xytext=(0, 13),

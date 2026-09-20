@@ -100,6 +100,7 @@ Currently in the paper:
 | --- | --- | --- |
 | `fig1_grid` | `figure1_grid_ft.py` | Figure 1, main text |
 | `fig2_hard_distributions_success` | `figure2_ft.py` | Figure 2, main text |
+| `fig_mechanism` | `figure_mechanism_ft.py` | Figure 3, main text: scale vs algorithm |
 | `fig4_forecast_2panel` | `figure_forecast_ft.py` | Figure 4, main text |
 | `fig1_grid_alltraces` | `figure1_grid_ft.py` | appendix: all attempts |
 | `fig4_forecast_excess_appendix` | `figure_forecast_ft.py` | appendix: excess tokens |
@@ -130,7 +131,7 @@ something about the sample or the spec changed.
 | Thinking-only | `table_floor_robustness.py` | `thinking only` row: **33.1%** / **42.1%** (log L comparator 27.6% / 36.2%, not in the table) |
 | Fig 1 thinking | `figure1_grid_ft.py` | OpenAI 8,309 -> 649 (**12.8x**); Anthropic 7,804 -> 1,173 (**6.7x**) |
 | Fig 5 | `figure_latent_floor_ft.py` | astra 2.5% below min, 35.3% below average; Fable 5.1 0% below min, 10.1% below average, 30.0% zero-thinking |
-| Case study | `figure_mechanism_ft.py` | scale 7,842 -> 4,693 (**1.7x**), acc 68.4% -> 73.8%; algorithm 14,241 -> 8,539 (**1.7x**), acc 83.4% -> 85.6%. NOT in `paper_figs/`. |
+| Case study | `figure_mechanism_ft.py` | scale 7,842 -> 4,693 (**1.7x**), acc 68.4% -> 73.8%; algorithm 14,241 -> 8,539 (**1.7x**), acc 83.4% -> 85.6% |
 | Floor table | `table_floor_robustness.py` | OpenAI **31.5-34.1**%/qtr, Anthropic **41.4-43.1**%/qtr across three floor definitions |
 | Contamination | `figure_forecast_ft.py` | `fig4_forecast_precutoff_appendix`: GPT **22.0%**/qtr (7 models), Anthropic **29.5%** (4) |
 
@@ -464,7 +465,18 @@ gpt-5, 5.2, 5.4, 5.5 are all zero). Longer answers, hedging language and slightl
 weaker competition math are one coherent signature of an instruction-tuned release,
 not a measurement fault.
 
-### 12. Six model clusters cannot support a 5% significance claim
+### 12. The case-study columns are at DIFFERENT reasoning efforts
+
+`fig_mechanism` compares gpt-oss 20B->120B against GLM 5.2->5.3. The gpt-oss runs are
+**medium** effort; the GLM runs are **high** (their medium runs were silently remapped
+by the provider and are archived in `data/archive/effort_medium_invalid/`).
+
+So the WITHIN-column comparisons are clean — each pair is matched on effort, which is
+what the 1.7x ratios measure — but the token LEVELS are not comparable across columns.
+GLM's 14.2k against gpt-oss's 7.8k is partly the effort setting, not the model. The
+caption should say the figure compares ratios, not levels. See failure mode 8.
+
+### 13. Six model clusters cannot support a 5% significance claim
 
 `Month` is constant within a model, so the bootstrap must resample over MODELS — 8
 for OpenAI, 6 for Anthropic. Two things go wrong if this is done casually, and the
