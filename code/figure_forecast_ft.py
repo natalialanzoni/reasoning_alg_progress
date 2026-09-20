@@ -22,10 +22,14 @@ Versions written (PRIMARY includes the full GPT series incl. o1, the earliest an
   fig4_forecast_all_traces   ALL traces
   fig4_forecast_combined     both families on one axis
   fig4_forecast_*_no_o1      SENSITIVITY: drop the earliest point (o1)
-  fig4_forecast_arith_mean_appendix   arithmetic-mean token space
-  fig4_forecast_precutoff_appendix    CONTAMINATION CHECK: same fit on only the
-                             models released on/before 2026-02-05, which cannot
-                             have trained on the AIME/HMMT 2026 problems.
+  fig4_forecast_excess_appendix       excess tokens above the floor, arithmetic mean
+                             (this REPLACED the old fig4_forecast_arith_mean_appendix,
+                             whose builder no longer exists -- do not expect that file)
+  fig4_forecast_precutoff_appendix    CONTAMINATION CHECK: two panels, one per family,
+                             refit on only the models whose published TRAINING-DATA
+                             cutoff predates 2026-02-05 and which therefore cannot
+                             have trained on the AIME/HMMT 2026 problems. Keyed on the
+                             training cutoff, NOT the release date -- see TRAIN_CUTOFF.
 
 SAMPLE: the 40 competition problems. MATH-500 is dropped and the floor is recomputed
 over the same 40 (316 tok, vs 303 over all 45) -- matching figure1_grid_ft.py.
@@ -90,10 +94,42 @@ MILE_P = 0.10            # the ONLY milestone drawn: within 10% of the floor
 #   AIME 2026 II  administered 2026-02-11
 #   HMMT February 2026  held   2026-02-14
 # (the other 5 are MATH-500, which long predates every model here). The earliest
-# public release of any benchmark problem is therefore 2026-02-05, so a model
-# released on or before that date cannot have been trained on them. Refitting on
-# only those models gives a contamination-free beta to compare with the full fit.
+# public release of any benchmark problem is therefore 2026-02-05.
 CUTOFF = datetime(2026, 2, 5)
+
+# WHICH DATE DECIDES CONTAMINATION. The RELEASE date is the wrong test: what
+# determines whether a model could have memorised a problem is whether the problem
+# existed inside its TRAINING DATA, not whether the model shipped afterwards. Several
+# models released well after February 2026 were trained on data ending before it and
+# therefore cannot have seen these problems either. Keying on the training cutoff
+# roughly doubles the usable sample (GPT 5 -> 7 models, Anthropic 2 -> 4) and, more
+# importantly, extends the pre-cutoff window from Dec 2025 to Apr/May 2026 -- which
+# matters because a shortened window was the main thing making the old refit
+# ambiguous.
+#
+# Published cutoffs, read off the vendors' own model pages on 2026-09-20.
+# OpenAI states one "knowledge cutoff" per model; Anthropic states both a "reliable
+# knowledge cutoff" and a broader "training data cutoff" -- we take the BROADER one,
+# which is the conservative choice for a contamination test.
+TRAIN_CUTOFF = {
+    # OpenAI — developers.openai.com/api/docs/models/<id>
+    "o1":               datetime(2023, 10, 1),
+    "o3":               datetime(2024, 6, 1),
+    "gpt-5":            datetime(2024, 9, 30),
+    "gpt-5.1":          datetime(2024, 9, 30),
+    "gpt-5.2":          datetime(2025, 8, 31),
+    "gpt-5.4":          datetime(2025, 8, 31),
+    "gpt-5.5":          datetime(2025, 12, 1),   # released 2026-04-23, still clean
+    "gpt-5.6-sol":      datetime(2026, 2, 16),   # 2 days AFTER HMMT Feb -> excluded
+    "gpt-6-astra":      datetime(2026, 4, 30),
+    # Anthropic — platform.claude.com/docs/en/models/<id>/overview, "training data cutoff"
+    "claude-opus-4-5":  datetime(2025, 8, 31),
+    "claude-opus-4-6":  datetime(2025, 8, 31),
+    "claude-opus-4-7":  datetime(2026, 1, 31),   # released 2026-04-16, still clean
+    "claude-opus-4-8":  datetime(2026, 1, 31),   # released 2026-05-28, still clean
+    "claude-opus-5":    datetime(2026, 5, 31),
+    "Fable 5.1":        datetime(2026, 6, 30),
+}
 
 ANTH = list(pf.OPUS_MODELS) + [
     ("Fable 5.1", datetime(2026, 9, 1),
@@ -587,15 +623,29 @@ def build_excess_appendix(fname, successes_only=True):
 
 
 def _pre_cutoff(mfiles):
-    """Models released on or before the first benchmark problem went public."""
+    """Models whose TRAINING DATA ends before the first benchmark problem went public.
+
+    A model missing from TRAIN_CUTOFF is dropped rather than assumed clean -- if a new
+    model is added to the series without its published cutoff, this check must get
+    smaller, never silently larger.
+    """
+    return [m for m in mfiles
+            if m[0] in TRAIN_CUTOFF and TRAIN_CUTOFF[m[0]] < CUTOFF]
+
+
+def _pre_cutoff_release(mfiles):
+    """Stricter variant: models RELEASED before the problems existed. Airtight (it
+    needs no vendor claim at all), but small. Reported alongside as a lower bound."""
     return [m for m in mfiles if m[1] <= CUTOFF]
 
 
-def _cutoff_band(ax, ytop):
+def _cutoff_band(ax, ytop, label=True):
     """Shade AIME-I -> HMMT-Feb publication window and mark the cutoff."""
     ax.axvspan(datetime(2026, 2, 5), datetime(2026, 2, 14), color=CUT_C, alpha=0.16,
                lw=0, zorder=1)
     ax.axvline(CUTOFF, color=CUT_C, lw=1.8, zorder=2)
+    if not label:
+        return
     ax.annotate("benchmark problems\npublished (Feb 2026)", (CUTOFF, ytop),
                 textcoords="offset points", xytext=(9, 0), ha="left", va="top",
                 fontsize=11.5, fontweight="bold", color=CUT_C, zorder=9,
@@ -619,20 +669,27 @@ def build_contamination(fname, successes_only=True):
     The problem-vintage difference-in-differences (gamma) is still computed and
     printed for the caption, but is no longer a panel -- panel 2 shows it more directly.
     """
-    gpt_pre = _pre_cutoff(pf.MAIN_K8)
-    pooled_full = sorted(list(pf.MAIN_K8) + list(ANTH), key=lambda t: t[1])
-    panels = [("OpenAI (GPT) — pre-cutoff models only", gpt_pre, list(pf.MAIN_K8))]
+    panels = [("OpenAI (GPT)", _pre_cutoff(pf.MAIN_K8), list(pf.MAIN_K8)),
+              ("Anthropic (Opus + Fable)", _pre_cutoff(ANTH), list(ANTH))]
 
     print(f"\n########## {fname}  (CONTAMINATION CHECK) ##########")
     print(f"  cutoff = {CUTOFF:%Y-%m-%d}  (AIME 2026 I administered; AIME II 02-11, HMMT 02-14)")
-    summary = []
-    fig, _ax0 = plt.subplots(1, 1, figsize=(9.2, 6.6))
-    axes = [_ax0]
+    print("  selection = published TRAINING-DATA cutoff < benchmark publication")
+    summary, ymaxes = [], []
+    fig, axes = plt.subplots(1, 2, figsize=(16.4, 6.8), sharey=True)
+    axes = list(axes)
     for ax, (title, pre, full_set) in zip(axes, panels):
+        kept = {l for l, _, _ in pre}
         print(f"\n  --- {title} ---")
-        print(f"      kept  ({len(pre)}): " + ", ".join(f"{l} {d:%Y-%m}" for l, d, _ in pre))
-        print(f"      dropped ({len(full_set) - len(pre)}): " +
-              ", ".join(f"{l} {d:%Y-%m}" for l, d, _ in full_set if d > CUTOFF))
+        for l, d, _ in full_set:
+            tc = TRAIN_CUTOFF.get(l)
+            mark = "keep" if l in kept else "DROP"
+            print(f"      {mark}  {l:<16s} released {d:%Y-%m}  train-cutoff "
+                  f"{tc:%Y-%m}" if tc else f"      DROP  {l:<16s} (no published cutoff)")
+        # the stricter release-date rule, for the lower-bound row in the summary
+        rel = _pre_cutoff_release(full_set)
+        print(f"      [release-date rule would keep {len(rel)}: "
+              + ", ".join(l for l, _, _ in rel) + "]")
 
         # The pre-cutoff fit is slower, so its within-10% date is 2031-2033; letting
         # that set the x-range would squeeze the observed points into the left tenth.
@@ -663,20 +720,28 @@ def build_contamination(fname, successes_only=True):
 
         ymax = max(ymax, max(gy) * 1.06)
         _floor(ax)
-        _cutoff_band(ax, ymax * 0.98)
-        ax.set_ylim(0, ymax)
+        _cutoff_band(ax, 0, label=False)     # rule marked on both; labelled once below
         ax.set_xlim(pre[0][1] - timedelta(days=40), span_end + timedelta(days=20))
         ax.set_title(title, fontsize=15)
         ax.set_xlabel("Date")
         ax.yaxis.set_major_formatter(unit_formatter(1e3, "k"))
         ax.xaxis.set_major_locator(mdates.YearLocator())
         ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y"))
+        ymaxes.append(ymax)
         summary.append((title, fit, fit_full, len(pre), len(full_set)))
+
+    # The axes share y, so the LAST set_ylim would otherwise win and silently clip the
+    # other panel's tallest model (o1, off the top of the OpenAI panel). Set one common
+    # limit after both panels are drawn, then place the cutoff label against it.
+    ytop = max(ymaxes)
+    for ax in axes:
+        ax.set_ylim(0, ytop)
+    _cutoff_band(axes[0], ytop * 0.98)   # label once; the rule is the same in both
 
     axes[0].set_ylabel(f"Output tokens: reasoning + answer "
                        f"({'correct' if successes_only else 'all'} traces)")
-    axes[0].set_title("Contamination check — models released before the benchmark\n"
-                      "OpenAI (GPT), pre-cutoff models only", fontsize=15)
+    fig.suptitle("Contamination check — models whose training data predates the benchmark",
+                 fontsize=16, fontweight="bold", y=1.005)
     handles = [
         mlines.Line2D([], [], color=TOK, lw=2.6, marker="o", ms=9,
                       label="Pre-cutoff fit + models (cannot be contaminated)"),
@@ -703,8 +768,23 @@ def build_contamination(fname, successes_only=True):
             pct = f.get("quarterly_pct", f.get("pct"))
             mile = f"{f['mile'][MILE_P]:%Y-%m}" if "mile" in f else "-"
             print(f"  {tag:<44s} {n:>3d} {beta:>9.4f} {se:>7.4f} {pct:>6.1f}% {mile:>11s}")
-    print("  NOTE: the pre-cutoff refit also SHORTENS the window, so a flatter beta")
-    print("        there is ambiguous (contamination vs. genuine recent acceleration).")
+
+    # The stricter release-date rule, refitted, as a lower bound for the appendix text.
+    print("\n  ----- stricter variant: RELEASE date before the benchmark -----")
+    for title, full_set in (("OpenAI (GPT)", list(pf.MAIN_K8)),
+                            ("Anthropic (Opus + Fable)", list(ANTH))):
+        rel = _pre_cutoff_release(full_set)
+        if len(rel) < 3:
+            print(f"  {title:<44s} {len(rel):>3d}   too few models to fit")
+            continue
+        f = pf._fit_headroom_forecast(rel, exclude_baseline=False,
+                                      successes_only=successes_only)
+        print(f"  {title + ': release-rule':<44s} {len(rel):>3d} {f['beta']:>9.4f} "
+              f"{f.get('beta_se', float('nan')):>7.4f} {f['quarterly_pct']:>6.1f}% "
+              f"{f['mile'][MILE_P]:%Y-%m}")
+    print("\n  NOTE: keying on the TRAINING cutoff rather than the release date is what")
+    print("        makes this informative -- it keeps the window long enough that a")
+    print("        flatter beta would mean contamination rather than just less data.")
     print("wrote", *paths, sep="\n  ")
 
 

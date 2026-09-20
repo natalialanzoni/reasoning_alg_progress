@@ -380,6 +380,26 @@ still.
   such problem.
 - Competition dates, needed for the contamination cutoff: **AIME 2026 I 2026-02-05**,
   **AIME 2026 II 2026-02-11**, **HMMT February 2026 2026-02-14**.
+- **The contamination check keys on the TRAINING-DATA cutoff, not the release date.**
+  What decides whether a model could have memorised a problem is whether the problem
+  was inside its training data — not whether the model shipped afterwards. gpt-5.5
+  (released 2026-04-23) and Opus 4.7/4.8 (2026-04/05) all have cutoffs before
+  February 2026 and are therefore clean. Published cutoffs, read off the vendors'
+  model pages 2026-09-20 and hard-coded in `TRAIN_CUTOFF` in `figure_forecast_ft.py`:
+
+  | | o1 | o3 | gpt-5 | gpt-5.1 | gpt-5.2 | gpt-5.4 | gpt-5.5 | gpt-5.6-sol | gpt-6-astra |
+  | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+  | cutoff | 2023-10 | 2024-06 | 2024-09 | 2024-09 | 2025-08 | 2025-08 | 2025-12 | **2026-02-16** | 2026-04-30 |
+
+  | | Opus 4.5 | Opus 4.6 | Opus 4.7 | Opus 4.8 | Opus 5 | Fable 5.1 |
+  | --- | --- | --- | --- | --- | --- | --- |
+  | training-data cutoff | 2025-08 | 2025-08 | 2026-01 | 2026-01 | 2026-05 | 2026-06 |
+
+  Anthropic publishes both a "reliable knowledge cutoff" and a broader "training data
+  cutoff"; take the **broader** one — it is the conservative choice here. gpt-5.6-sol
+  misses by two days (cutoff 2026-02-16 vs HMMT 2026-02-14), so it is excluded.
+  A model absent from `TRAIN_CUTOFF` is **dropped**, never assumed clean, so adding a
+  model without its cutoff shrinks this check rather than silently widening it.
 
 ### Conventions
 
