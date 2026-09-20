@@ -332,7 +332,43 @@ the 7-point GLM version line.** The usable comparisons are (a) GLM vs frontier
 verbosity on identical problems, which is robust, and (b) 4.5 vs 5.3, the one
 provider-matched pair (both Z.AI), giving 2.2x compression at flat accuracy.
 
-### 10. Six model clusters cannot support a 5% significance claim
+### 10. `L` conflates reasoning length with answer verbosity — gpt-5.1 exposes it
+
+gpt-5.1 looks like a broken point in Figure 4: it sits **above** the fit (9,496 tok vs
+gpt-5's 8,372) while scoring **worse** (84.7% vs 88.4%). Both halves were checked and
+the run is sound — all 360 requests carry `model=gpt-5.1`, `reasoning.effort=medium`,
+`max_output_tokens=40000`, structurally identical to every other OpenAI run.
+
+**Its reasoning did not grow. Its answers did.** On the paper sample, correct traces:
+
+| | thinking | answer | L |
+| --- | --- | --- | --- |
+| gpt-5 | 7,829 | 543 | 8,372 |
+| gpt-5.1 | **7,798** | **1,698** | 9,496 |
+
+Thinking is flat to within 0.4%; the whole +1,124 is a 3.1x longer written answer.
+Since `L = thinking + answer`, a purely presentational change registers as an
+efficiency regression. gpt-5.1 is the one model in the series where the two diverge
+sharply, so treat it as a caveat on the metric, not as a bad data point.
+
+Decomposing the OpenAI trend (problem-FE OLS on log of each component, no floor
+subtraction, so these are not the headline 31.5%):
+
+| DV | %/quarter |
+| --- | --- |
+| thinking only | **32.7%** |
+| L = thinking + answer | 27.3% |
+| answer only | 11.5% |
+
+The decline is overwhelmingly a reasoning-length phenomenon; answers barely shrink.
+Keeping answers in `L` therefore makes the headline **conservative**. Dropping gpt-5.1
+entirely moves the OpenAI slope only 27.3% -> 26.7%, so it is not distorting anything.
+
+**Its accuracy drop is real, not a grading artifact.** 94% of its wrong traces contain
+a `\boxed` value, so extraction is not failing — it boxes wrong answers. (gpt-5's wrong
+set is only 70% boxed because 12 of its 37 are cap truncations with no answer at all.)
+
+### 11. Six model clusters cannot support a 5% significance claim
 
 `Month` is constant within a model, so the bootstrap must resample over MODELS — 8
 for OpenAI, 6 for Anthropic. Two things go wrong if this is done casually, and the
