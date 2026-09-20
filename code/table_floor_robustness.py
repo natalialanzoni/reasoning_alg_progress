@@ -15,8 +15,11 @@ plus one row that changes the DEPENDENT VARIABLE:
                   thinking, and the series switches output format at gpt-5.1 (LaTeX
                   goes from ~0.3-2% of answer characters to ~20-25% for every later
                   model), which inflates L for the RECENT models. Neither touches the
-                  thinking block. Compare this row against "none (log $L$)", which
-                  holds functional form fixed and varies only the DV.
+                  thinking block. Its like-for-like comparator is plain log L
+                  (27.6% OpenAI, 36.2% Anthropic), which holds functional form fixed
+                  and varies only the DV. That row is not in the table, so do NOT read
+                  33.1% against the 31.5% "shortest" row as though the gap were all
+                  DV -- subtracting a floor steepens the implied decay by itself.
                   NO FLOOR, for two reasons: the MHD is a human's WRITTEN derivation,
                   the analogue of the model's answer rather than its scratch work; and
                   log(thinking - MHD_j) would censor 38.4% of gpt-6-astra's traces and
@@ -25,13 +28,8 @@ plus one row that changes the DEPENDENT VARIABLE:
                   81 traces drop, all Fable 5.1 -- the newest model's shortest -- which
                   UNDERSTATES the decline.
 
-plus one row that varies the SAMPLE rather than the floor:
-
-    pre-cutoff    the headline floor, but only models whose published TRAINING-DATA
-                  cutoff precedes the February 2026 benchmark, so they cannot have
-                  memorised it. This replaced a standalone appendix figure -- it is
-                  one number per family and reads more simply as a row. It is
-                  excluded from the "spread" summary, which is about the FLOOR.
+The contamination check (pre-cutoff models only) is NOT here: it is the appendix
+figure fig4_forecast_precutoff_appendix, built by figure_forecast_ft.py.
 
 Everything else is held fixed: the 40 competition problems (MATH-500 excluded),
 correct traces, problem fixed effects, per family, and the same wild-cluster
@@ -81,27 +79,15 @@ ANTH = list(pf.OPUS_MODELS) + [
     ("Fable 5.1", datetime(2026, 9, 1),
      pf.RESULTS_DIR / "fable5.1_shallow_pass" / "claude-fable-5-1_medium_thinking_benchmark.json")]
 FAMILIES = [("OpenAI (GPT)", list(pf.MAIN_K8)), ("Anthropic (Opus + Fable)", ANTH)]
-def _pre_cutoff(mfiles):
-    """Models whose published TRAINING-DATA cutoff month precedes the benchmark.
-
-    The contamination check used to be its own appendix figure. It is one number per
-    family, so it is a row here instead. NOTE this row varies the SAMPLE, not the
-    floor: it keeps the headline "shortest" floor and drops the models that could have
-    trained on the AIME/HMMT 2026 problems. A model with no published cutoff is
-    dropped rather than assumed clean. See pf.TRAIN_CUTOFF and the README.
-    """
-    return [m for m in mfiles
-            if m[0] in pf.TRAIN_CUTOFF and pf.TRAIN_CUTOFF[m[0]] < pf.CUTOFF_MONTH]
-
-
 THINK = "__thinking__"     # sentinel: DV is log(thinking), no floor
 
 # (label, floor key, model subset). floor None = no floor (log L);
 # floor THINK = no floor and thinking tokens instead of L.
-SPECS = [("shortest", "min", None), ("median", "median", None),
-         ("mean", "mean", None), ("none (log $L$)", None, None),
-         ("thinking only", THINK, None),
-         ("pre-cutoff models", "min", _pre_cutoff)]
+SPECS = [("shortest", "min"), ("median", "median"), ("mean", "mean"),
+         ("thinking only", THINK)]
+# The no-floor row ("none (log L)", floor=None) was dropped from the table. build()
+# still supports floor=None, because the log L slope is the like-for-like comparator
+# for the thinking-only row and is quoted in the README: 27.6% OpenAI, 36.2% Anthropic.
 
 
 def build(mfiles, floor):
@@ -156,8 +142,8 @@ def fit(rows, B=9999, seed=0):
 res = {}
 for fam, mf in FAMILIES:
     n_correct = len(build(mf, None))          # every correct trace: the no-floor N
-    for name, fl, sub in SPECS:
-        b, se, lo, hi, a, n, G = fit(build(sub(mf) if sub else mf, fl))
+    for name, fl in SPECS:
+        b, se, lo, hi, a, n, G = fit(build(mf, fl))
         # No floor is subtracted in the "none" row, so it has no MHD_j to report.
         # log(L/C_min) is used there only so the scale matches: with problem FE a
         # per-problem constant is fully absorbed, so beta equals that of plain log L.
@@ -176,7 +162,7 @@ for fam, mf in FAMILIES:
 print(f"\n{'family':<24s} {'floor':<14s} {'C (tok)':>8s} {'beta':>9s} {'SE':>7s} "
       f"{'%/qtr':>7s} {'half-life':>10s} {'N':>6s} {'drop':>5s} {'within-10%':>11s}")
 for fam, _ in FAMILIES:
-    for name, _fl, _sub in SPECS:
+    for name, _fl in SPECS:
         r = res[(fam, name)]
         cb = f"{r['cbar']:.0f}" if r["cbar"] else "--"
         print(f"  {fam:<22s} {name:<14s} {cb:>8s} {r['b']:>+9.4f} {r['se']:>7.4f} "
@@ -185,10 +171,8 @@ for fam, _ in FAMILIES:
               f"  {fam:<22s} {name:<14s} {cb:>8s} {r['b']:>+9.4f} {r['se']:>7.4f} "
               f"{r['q']:>6.1f}% {r['hl']:>9.1f}m {r['n']:>6d} {r['drop']:>5d} "
               f"{'--':>7s}")
-    qs = [res[(fam, n)]["q"] for n, fl, sub in SPECS
-          if sub is None and fl is not THINK]
-    ds = [res[(fam, n)]["date"] for n, fl, sub in SPECS
-          if sub is None and fl is not THINK]
+    qs = [res[(fam, n)]["q"] for n, fl in SPECS if fl is not THINK]
+    ds = [res[(fam, n)]["date"] for n, fl in SPECS if fl is not THINK]
     print(f"  {'':<22s} {'-> spread':<14s} {min(qs):.1f}-{max(qs):.1f}%/qtr "
           f"({max(qs)-min(qs):.1f} pts);  dates {min(ds):%Y-%m} to {max(ds):%Y-%m}\n")
 
@@ -203,18 +187,21 @@ _emit(r"Family & Floor $\mathrm{MHD}_j$ & $\overline{\mathrm{MHD}}_j$ & $\hat\be
 _emit(r" & & (tok) & (SE) & reduction & (months) & of floor \\")
 _emit(r"\midrule")
 for fi, (fam, _) in enumerate(FAMILIES):
-    for si, (name, _fl, _sub) in enumerate(SPECS):
+    for si, (name, _fl) in enumerate(SPECS):
         r = res[(fam, name)]
         lead = fam if si == 0 else ""
         cb = f"{r['cbar']:.0f}" if r["cbar"] else r"---"
         # set the sample-restriction row apart: it varies the SAMPLE, not the floor
-        if (_sub is not None or _fl is THINK) and si:
-            _emit(r"\addlinespace[2pt]")
+        if _fl is THINK and si:
+            # default 0.5em, NOT [2pt]: booktabs accepts the optional dimen, but 2pt is
+            # about a third of the default and is invisible in print, which is why
+            # the earlier [2pt] separators looked like they were not applied.
+            _emit(r"\addlinespace")
         _emit(f"{lead} & {name} & {cb} & ${r['b']:.3f}$ ({r['se']:.3f}) & "
               f"{r['q']:.1f}\\% & {r['hl']:.1f} & "
               + (f"{r['date']:%Y-%m}" if r["date"] else "---") + r" \\")
     if fi == 0:
-        _emit(r"\addlinespace")
+        _emit(r"\midrule")
 _emit(r"\bottomrule")
 _emit(r"\end{tabular}")
 
