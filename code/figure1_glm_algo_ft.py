@@ -72,7 +72,7 @@ def shallow_acc_mean(path):
         for tok, c in zip(r["total_completion_tokens"], r["correct"]):
             if tok < 50:
                 continue
-            ok = bool(c) and tok <= CLIP
+            ok = bool(c) and tok < CLIP
             nt += 1; nc += int(ok)
             if ok:
                 toks.append(tok)
@@ -84,7 +84,7 @@ def hard_perproblem(path):
     for r in pf.load_rows(path):
         pid = str(r["task_id"])
         toks = [tok for tok, c in zip(r["total_completion_tokens"], r["correct"])
-                if bool(c) and 50 <= tok <= CLIP]
+                if bool(c) and 50 <= tok < CLIP]
         if toks:
             prob[pid] = toks
     return prob

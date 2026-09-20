@@ -75,7 +75,7 @@ def oss_shallow(path):
             tok = c.get("n_tokens", 0)
             if tok < 50:
                 continue
-            ok = bool(c.get("is_correct")) and tok <= CLIP
+            ok = bool(c.get("is_correct")) and tok < CLIP
             nt += 1; nc += int(ok)
             if ok:
                 toks.append(tok)
@@ -86,7 +86,7 @@ def oss_hard(path):
     d = json.load(open(path)); prob = {}
     for e in d["results"]:
         toks = [c["n_tokens"] for c in e.get("completions", [])
-                if c.get("is_correct") and 50 <= c.get("n_tokens", 0) <= CLIP]
+                if c.get("is_correct") and 50 <= c.get("n_tokens", 0) < CLIP]
         if toks:
             prob[str(e["id"])] = toks
     return prob

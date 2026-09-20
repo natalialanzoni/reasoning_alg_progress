@@ -59,14 +59,16 @@ def model_samples(path):
     old `thinking_tokens>0` filter wrongly dropped, and (b) removes empty/0-token
     glitches and sub-100-token degenerate runs.
     """
-    MIN_TOK = 50
+    # Use the central rule rather than re-implementing it: fs._trial_ok decides
+    # whether the trial happened, fs._trial_correct whether it succeeded (a cap-hit
+    # trace is a real attempt that FAILED, so it can never be a "success" length).
     pooled, pmean = [], {}
     for r in pf.load_rows(path):
         n = len(r["correct"])
         texts = r.get("response_texts", [None] * n)
         toks = [tok for tok, c, txt in zip(r["total_completion_tokens"], r["correct"], texts)
-                if tok >= MIN_TOK and not (txt is not None and not str(txt).strip())
-                and ((not CORRECT_ONLY) or c)]
+                if fs._trial_ok(tok, txt)
+                and ((not CORRECT_ONLY) or fs._trial_correct(tok, c))]
         if toks:
             pooled.extend(toks)
             pmean[str(r["task_id"])] = float(np.mean(toks))

@@ -107,7 +107,7 @@ def shallow_dist(model_files, successes_only=True):
             for tok, c in zip(r["total_completion_tokens"], r["correct"]):
                 if tok < 50:                       # degenerate / API failure -> exclude
                     continue
-                ok = bool(c) and tok <= CLIP        # over-cap => truncated before answering => wrong
+                ok = bool(c) and tok < CLIP        # over-cap => truncated before answering => wrong
                 nt += 1; nc += int(ok)
                 if successes_only:
                     if ok:
@@ -128,7 +128,7 @@ def hard_perproblem(hard_files, successes_only=True):
             pid = str(r["task_id"])
             if successes_only:
                 toks = [tok for tok, c in zip(r["total_completion_tokens"], r["correct"])
-                        if bool(c) and 50 <= tok <= CLIP]
+                        if bool(c) and 50 <= tok < CLIP]
             else:
                 toks = [min(tok, CLIP) for tok in r["total_completion_tokens"] if tok >= 50]
             if toks:
