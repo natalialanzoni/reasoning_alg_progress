@@ -25,7 +25,6 @@ ARTIFACTS=(
   "fig2_hard_distributions_success:figure2_ft.py"       # Fig 2, main text
   "fig1_grid_alltraces:figure1_grid_ft.py"              # appendix: all attempts
   "fig4_forecast_excess_appendix:figure_forecast_ft.py"  # appendix: same fit, excess tokens
-  "fig4_forecast_precutoff_appendix:figure_forecast_ft.py"  # appendix: contamination check
   "fig1_grid_thinking:figure1_grid_ft.py"               # appendix: thinking tokens only
   "fig4_thinking_only:figure_thinking_only_ft.py"       # appendix: thinking-only trend
 )

@@ -211,6 +211,47 @@ def per_task_mean_lengths(path, correct_only, restrict_to_keys=True):
     return out
 
 
+# ---- benchmark contamination: which models can be ruled out ----------------
+CUTOFF_MONTH = datetime(2026, 2, 1)     # benchmark problems published in Feb 2026
+RELEASE_CUTOFF = datetime(2026, 2, 5)   # first problem public; used ONLY by the
+                                        # release-date variant, where days are known
+
+# WHICH DATE DECIDES CONTAMINATION. The RELEASE date is the wrong test: what
+# determines whether a model could have memorised a problem is whether the problem
+# existed inside its TRAINING DATA, not whether the model shipped afterwards. Several
+# models released well after February 2026 were trained on data ending before it and
+# therefore cannot have seen these problems either. Keying on the training cutoff
+# roughly doubles the usable sample (GPT 5 -> 7 models, Anthropic 2 -> 4) and, more
+# importantly, extends the pre-cutoff window from Dec 2025 to Apr/May 2026 -- which
+# matters because a shortened window was the main thing making the old refit
+# ambiguous.
+#
+# Published cutoffs, read off the vendors' own model pages on 2026-09-20, recorded as
+# the FIRST OF THE STATED MONTH so no day precision is implied. OpenAI states one
+# "knowledge cutoff" per model; Anthropic states both a "reliable knowledge cutoff" and
+# a broader "training data cutoff" -- we take the BROADER one, which is the
+# conservative choice for a contamination test.
+TRAIN_CUTOFF = {
+    # OpenAI — developers.openai.com/api/docs/models/<id>
+    "o1":               datetime(2023, 10, 1),
+    "o3":               datetime(2024, 6, 1),
+    "gpt-5":            datetime(2024, 9, 1),
+    "gpt-5.1":          datetime(2024, 9, 1),
+    "gpt-5.2":          datetime(2025, 8, 1),
+    "gpt-5.4":          datetime(2025, 8, 1),
+    "gpt-5.5":          datetime(2025, 12, 1),   # released 2026-04, still clean
+    "gpt-5.6-sol":      datetime(2026, 2, 1),    # Feb 2026 -> NOT strictly before
+    "gpt-6-astra":      datetime(2026, 4, 1),
+    # Anthropic — platform.claude.com/docs/en/models/<id>/overview, "training data cutoff"
+    "claude-opus-4-5":  datetime(2025, 8, 1),
+    "claude-opus-4-6":  datetime(2025, 8, 1),
+    "claude-opus-4-7":  datetime(2026, 1, 1),    # released 2026-04, still clean
+    "claude-opus-4-8":  datetime(2026, 1, 1),    # released 2026-05, still clean
+    "claude-opus-5":    datetime(2026, 5, 1),
+    "Fable 5.1":        datetime(2026, 6, 1),
+}
+
+
 def accuracy_on_set(path, restrict_to_keys=True):
     """DEPRECATED -- has no callers, and carries two filters now known to be wrong.
 

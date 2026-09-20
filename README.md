@@ -103,11 +103,10 @@ Currently in the paper:
 | `fig4_forecast_2panel` | `figure_forecast_ft.py` | Figure 4, main text |
 | `fig1_grid_alltraces` | `figure1_grid_ft.py` | appendix: all attempts |
 | `fig4_forecast_excess_appendix` | `figure_forecast_ft.py` | appendix: excess tokens |
-| `fig4_forecast_precutoff_appendix` | `figure_forecast_ft.py` | appendix: contamination |
 | `fig1_grid_thinking` | `figure1_grid_ft.py` | appendix: thinking tokens only |
 | `fig4_thinking_only` | `figure_thinking_only_ft.py` | appendix: thinking-only trend |
 | `table_decay.tex` | `table_decay.py` | main regression table |
-| `table_floor_robustness.tex` | `table_floor_robustness.py` | appendix robustness |
+| `table_floor_robustness.tex` | `table_floor_robustness.py` | appendix robustness + contamination row |
 | `table_thinking_only.tex` | `table_thinking_only.py` | appendix: thinking-only regression |
 
 Everything reads `data/` directly and writes to `figures/figs_sept/`. The canonical
@@ -134,7 +133,7 @@ something about the sample or the spec changed.
 | Fig 5 | `figure_latent_floor_ft.py` | astra 2.5% below min, 35.3% below average; Fable 5.1 0% below min, 10.1% below average, 30.0% zero-thinking |
 | Case study | `figure_mechanism_ft.py` | scale 7,842 -> 4,693 (**1.7x**), acc 68.4% -> 73.8%; algorithm 14,241 -> 8,539 (**1.7x**), acc 83.4% -> 85.6% |
 | Floor table | `table_floor_robustness.py` | OpenAI 27.6-34.0%/qtr, Anthropic 36.2-43.1%/qtr across four floor definitions |
-| Contamination | `figure_forecast_ft.py` | training-cutoff rule: GPT **22.0%**/qtr (7 models), Anthropic **29.5%** (4); release-date rule GPT 12.9% (5) |
+| Contamination | `table_floor_robustness.py` | `pre-cutoff models` row: GPT **22.0%**/qtr (7 models), Anthropic **29.5%** (4). No longer a figure. |
 
 ### Which scripts are on the paper's sample
 

@@ -103,44 +103,10 @@ MILE_P = 0.10            # the ONLY milestone drawn: within 10% of the floor
 # No model sits in the ambiguous same-month case under this rule -- the nearest is
 # gpt-5.6-sol at Feb 2026, which is excluded either way -- so nothing turns on it. But
 # the rule holds up if a future model lands there, whereas a day comparison would not.
-CUTOFF_MONTH = datetime(2026, 2, 1)     # benchmark problems published in Feb 2026
-RELEASE_CUTOFF = datetime(2026, 2, 5)   # first problem public; used ONLY by the
-                                        # release-date variant, where days are known
-
-# WHICH DATE DECIDES CONTAMINATION. The RELEASE date is the wrong test: what
-# determines whether a model could have memorised a problem is whether the problem
-# existed inside its TRAINING DATA, not whether the model shipped afterwards. Several
-# models released well after February 2026 were trained on data ending before it and
-# therefore cannot have seen these problems either. Keying on the training cutoff
-# roughly doubles the usable sample (GPT 5 -> 7 models, Anthropic 2 -> 4) and, more
-# importantly, extends the pre-cutoff window from Dec 2025 to Apr/May 2026 -- which
-# matters because a shortened window was the main thing making the old refit
-# ambiguous.
-#
-# Published cutoffs, read off the vendors' own model pages on 2026-09-20, recorded as
-# the FIRST OF THE STATED MONTH so no day precision is implied. OpenAI states one
-# "knowledge cutoff" per model; Anthropic states both a "reliable knowledge cutoff" and
-# a broader "training data cutoff" -- we take the BROADER one, which is the
-# conservative choice for a contamination test.
-TRAIN_CUTOFF = {
-    # OpenAI — developers.openai.com/api/docs/models/<id>
-    "o1":               datetime(2023, 10, 1),
-    "o3":               datetime(2024, 6, 1),
-    "gpt-5":            datetime(2024, 9, 1),
-    "gpt-5.1":          datetime(2024, 9, 1),
-    "gpt-5.2":          datetime(2025, 8, 1),
-    "gpt-5.4":          datetime(2025, 8, 1),
-    "gpt-5.5":          datetime(2025, 12, 1),   # released 2026-04, still clean
-    "gpt-5.6-sol":      datetime(2026, 2, 1),    # Feb 2026 -> NOT strictly before
-    "gpt-6-astra":      datetime(2026, 4, 1),
-    # Anthropic — platform.claude.com/docs/en/models/<id>/overview, "training data cutoff"
-    "claude-opus-4-5":  datetime(2025, 8, 1),
-    "claude-opus-4-6":  datetime(2025, 8, 1),
-    "claude-opus-4-7":  datetime(2026, 1, 1),    # released 2026-04, still clean
-    "claude-opus-4-8":  datetime(2026, 1, 1),    # released 2026-05, still clean
-    "claude-opus-5":    datetime(2026, 5, 1),
-    "Fable 5.1":        datetime(2026, 6, 1),
-}
+# TRAIN_CUTOFF / CUTOFF_MONTH live in paper_figures_71226 so that
+# table_floor_robustness.py can use the same table. One copy only.
+CUTOFF_MONTH = pf.CUTOFF_MONTH
+TRAIN_CUTOFF = pf.TRAIN_CUTOFF
 
 ANTH = list(pf.OPUS_MODELS) + [
     ("Fable 5.1", datetime(2026, 9, 1),
@@ -682,7 +648,7 @@ def build_contamination(fname, successes_only=True):
     print("  benchmark problems published Feb 2026 (AIME I/II, HMMT Feb)")
     print(f"  clean iff training cutoff month < {CUTOFF_MONTH:%Y-%m}")
     print("  selection = published TRAINING-DATA cutoff < benchmark publication")
-    summary, ymaxes = [], []
+    summary, ymaxes, xlims = [], [], []
     fig, axes = plt.subplots(1, 2, figsize=(16.4, 6.8), sharey=True)
     axes = list(axes)
     for ax, (title, pre, full_set) in zip(axes, panels):
@@ -718,16 +684,10 @@ def build_contamination(fname, successes_only=True):
         ax.annotate(f"Full sample: {fit_full['quarterly_pct']:.0f}% / quarter",
                     xy=(0.97, 0.54), xycoords="axes fraction", ha="right", va="center",
                     fontsize=14, fontweight="bold", color=FULL_C)
-        ax.annotate(f"within {int(MILE_P * 100)}% of floor —  pre-cutoff "
-                    f"{fit['mile'][MILE_P]:%Y-%m}  ·  full {fit_full['mile'][MILE_P]:%Y-%m}",
-                    xy=(0.97, 0.43), xycoords="axes fraction", ha="right", va="center",
-                    fontsize=11, color="#333333", zorder=8,
-                    bbox=dict(boxstyle="round,pad=0.22", fc="white", ec="#BBBBBB",
-                              lw=0.8, alpha=0.95))
 
         ymax = max(ymax, max(gy) * 1.06)
         _floor(ax)
-        ax.set_xlim(pre[0][1] - timedelta(days=40), span_end + timedelta(days=20))
+        xlims.append((pre[0][1] - timedelta(days=40), span_end + timedelta(days=20)))
         ax.set_title(title, fontsize=15)
         ax.set_xlabel("Date")
         ax.yaxis.set_major_formatter(unit_formatter(1e3, "k"))
@@ -740,13 +700,19 @@ def build_contamination(fname, successes_only=True):
     # other panel's tallest model (o1, off the top of the OpenAI panel). Set one common
     # limit after both panels are drawn, then place the cutoff label against it.
     ytop = max(ymaxes)
+    # ONE x range for both panels. The families start 11 months apart, so per-panel
+    # limits silently plot them at different date scales and the two decay curves stop
+    # being visually comparable -- which is the point of putting them side by side.
+    xlo = min(a for a, _ in xlims); xhi = max(b for _, b in xlims)
     for ax in axes:
         ax.set_ylim(0, ytop)
+        ax.set_xlim(xlo, xhi)
 
     axes[0].set_ylabel(f"Output tokens: reasoning + answer "
                        f"({'correct' if successes_only else 'all'} traces)")
-    fig.suptitle("Contamination check — models whose training data predates the benchmark",
-                 fontsize=16, fontweight="bold", y=1.005)
+    # no figure title -- captions live in the paper (same convention as figure2_ft.py).
+    # The panel headings stay: they identify which family each axes is, which a caption
+    # cannot do as directly.
     handles = [
         mlines.Line2D([], [], color=TOK, lw=2.6, marker="o", ms=9,
                       label="Pre-cutoff fit + models (cannot be contaminated)"),

@@ -7,6 +7,14 @@ Re-estimates the excess-trend slope under four definitions of the floor MHD_j:
     mean          MHD_j = mean of the human solutions
     none          no floor at all: log L with problem fixed effects
 
+plus one row that varies the SAMPLE rather than the floor:
+
+    pre-cutoff    the headline floor, but only models whose published TRAINING-DATA
+                  cutoff precedes the February 2026 benchmark, so they cannot have
+                  memorised it. This replaced a standalone appendix figure -- it is
+                  one number per family and reads more simply as a row. It is
+                  excluded from the "spread" summary, which is about the FLOOR.
+
 Everything else is held fixed: the 40 competition problems (MATH-500 excluded),
 correct traces, problem fixed effects, per family, and the same wild-cluster
 bootstrap over models used in the main decay table.
@@ -55,7 +63,23 @@ ANTH = list(pf.OPUS_MODELS) + [
     ("Fable 5.1", datetime(2026, 9, 1),
      pf.RESULTS_DIR / "fable5.1_shallow_pass" / "claude-fable-5-1_medium_thinking_benchmark.json")]
 FAMILIES = [("OpenAI (GPT)", list(pf.MAIN_K8)), ("Anthropic (Opus + Fable)", ANTH)]
-SPECS = [("shortest", "min"), ("median", "median"), ("mean", "mean"), ("none (log $L$)", None)]
+def _pre_cutoff(mfiles):
+    """Models whose published TRAINING-DATA cutoff month precedes the benchmark.
+
+    The contamination check used to be its own appendix figure. It is one number per
+    family, so it is a row here instead. NOTE this row varies the SAMPLE, not the
+    floor: it keeps the headline "shortest" floor and drops the models that could have
+    trained on the AIME/HMMT 2026 problems. A model with no published cutoff is
+    dropped rather than assumed clean. See pf.TRAIN_CUTOFF and the README.
+    """
+    return [m for m in mfiles
+            if m[0] in pf.TRAIN_CUTOFF and pf.TRAIN_CUTOFF[m[0]] < pf.CUTOFF_MONTH]
+
+
+# (label, floor key, model subset). floor None = no floor (log L).
+SPECS = [("shortest", "min", None), ("median", "median", None),
+         ("mean", "mean", None), ("none (log $L$)", None, None),
+         ("pre-cutoff models", "min", _pre_cutoff)]
 
 
 def build(mfiles, floor):
@@ -104,8 +128,8 @@ def fit(rows, B=9999, seed=0):
 res = {}
 for fam, mf in FAMILIES:
     n_correct = len(build(mf, None))          # every correct trace: the no-floor N
-    for name, fl in SPECS:
-        b, se, lo, hi, a, n, G = fit(build(mf, fl))
+    for name, fl, sub in SPECS:
+        b, se, lo, hi, a, n, G = fit(build(sub(mf) if sub else mf, fl))
         # No floor is subtracted in the "none" row, so it has no MHD_j to report.
         # log(L/C_min) is used there only so the scale matches: with problem FE a
         # per-problem constant is fully absorbed, so beta equals that of plain log L.
@@ -119,14 +143,14 @@ for fam, mf in FAMILIES:
 print(f"\n{'family':<24s} {'floor':<14s} {'C (tok)':>8s} {'beta':>9s} {'SE':>7s} "
       f"{'%/qtr':>7s} {'half-life':>10s} {'N':>6s} {'drop':>5s} {'within-10%':>11s}")
 for fam, _ in FAMILIES:
-    for name, _fl in SPECS:
+    for name, _fl, _sub in SPECS:
         r = res[(fam, name)]
         cb = f"{r['cbar']:.0f}" if r["cbar"] else "--"
         print(f"  {fam:<22s} {name:<14s} {cb:>8s} {r['b']:>+9.4f} {r['se']:>7.4f} "
               f"{r['q']:>6.1f}% {r['hl']:>9.1f}m {r['n']:>6d} {r['drop']:>5d} "
               f"{r['date']:%Y-%m}".rjust(0))
-    qs = [res[(fam, n)]["q"] for n, _ in SPECS]
-    ds = [res[(fam, n)]["date"] for n, _ in SPECS]
+    qs = [res[(fam, n)]["q"] for n, _, sub in SPECS if sub is None]
+    ds = [res[(fam, n)]["date"] for n, _, sub in SPECS if sub is None]
     print(f"  {'':<22s} {'-> spread':<14s} {min(qs):.1f}-{max(qs):.1f}%/qtr "
           f"({max(qs)-min(qs):.1f} pts);  dates {min(ds):%Y-%m} to {max(ds):%Y-%m}\n")
 
@@ -141,10 +165,13 @@ _emit(r"Family & Floor $\mathrm{MHD}_j$ & $\overline{\mathrm{MHD}}_j$ & $\hat\be
 _emit(r" & & (tok) & (SE) & reduction & (months) & of floor \\")
 _emit(r"\midrule")
 for fi, (fam, _) in enumerate(FAMILIES):
-    for si, (name, _fl) in enumerate(SPECS):
+    for si, (name, _fl, _sub) in enumerate(SPECS):
         r = res[(fam, name)]
         lead = fam if si == 0 else ""
         cb = f"{r['cbar']:.0f}" if r["cbar"] else r"---"
+        # set the sample-restriction row apart: it varies the SAMPLE, not the floor
+        if _sub is not None and si:
+            _emit(r"\addlinespace[2pt]")
         _emit(f"{lead} & {name} & {cb} & ${r['b']:.3f}$ ({r['se']:.3f}) & "
               f"{r['q']:.1f}\\% & {r['hl']:.1f} & {r['date']:%Y-%m} \\\\")
     if fi == 0:
