@@ -364,9 +364,35 @@ The decline is overwhelmingly a reasoning-length phenomenon; answers barely shri
 Keeping answers in `L` therefore makes the headline **conservative**. Dropping gpt-5.1
 entirely moves the OpenAI slope only 27.3% -> 26.7%, so it is not distorting anything.
 
-**Its accuracy drop is real, not a grading artifact.** 94% of its wrong traces contain
-a `\boxed` value, so extraction is not failing — it boxes wrong answers. (gpt-5's wrong
-set is only 70% boxed because 12 of its 37 are cap truncations with no answer at all.)
+**Its accuracy drop is real. The grader was ruled out four ways:**
+
+1. `_find_boxed` returns the **last** `\boxed{}` with proper brace nesting, so the
+   usual first-vs-last bug cannot apply. Multi-boxing is rare anyway: 46 of the 49
+   wrong traces contain exactly one.
+2. Zero-padded AIME golds are handled — `is_correct("29", "029")` is `True`.
+3. A deliberately **lenient** re-grade (strip `\text{}`/braces/`$`, then numeric
+   compare with tolerance) flips **0 of 256** wrong traces — across all nine GPT
+   models, not just gpt-5.1. There is no extraction slack left to recover.
+4. It reproduces on an **independent run**: hard-but-doable k=32 gives gpt-5 96.2% /
+   7,798 tok vs gpt-5.1 95.9% / 9,805 tok — same direction on both axes, different
+   problems, different k.
+
+Known grader gaps, none of which any trace hits: `29.0` vs `029`, `\text{29}` vs
+`029`, and an unbalanced `29}` all score wrong.
+
+**The two models fail differently**, which is the actual finding:
+
+| | wrong | committed wrong value | hedged box | no box (cap truncation) |
+| --- | --- | --- | --- | --- |
+| gpt-5 | 37 | 26 | 0 | 11 |
+| gpt-5.1 | 49 | 40 | **7** | 2 |
+
+gpt-5 fails by running out of budget; gpt-5.1 fails by committing to a wrong value or
+by **declining to commit** — boxing `\text{Not determined}`, `\text{Cannot reliably
+determine}`. gpt-5.1 is the only mid-series model that does this at all (o1, o3,
+gpt-5, 5.2, 5.4, 5.5 are all zero). Longer answers, hedging language and slightly
+weaker competition math are one coherent signature of an instruction-tuned release,
+not a measurement fault.
 
 ### 11. Six model clusters cannot support a 5% significance claim
 
