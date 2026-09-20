@@ -363,8 +363,29 @@ the run is sound — all 360 requests carry `model=gpt-5.1`, `reasoning.effort=m
 
 Thinking is flat to within 0.4%; the whole +1,124 is a 3.1x longer written answer.
 Since `L = thinking + answer`, a purely presentational change registers as an
-efficiency regression. gpt-5.1 is the one model in the series where the two diverge
-sharply, so treat it as a caveat on the metric, not as a bad data point.
+efficiency regression.
+
+**The longer answer is LaTeX markup, and it is a series-wide format switch, not a
+gpt-5.1 quirk.** The tokens are real text — 2.35 chars per answer token, in line with
+every other model (2.23–2.70) — so this is not an accounting artifact. But reading the
+answers side by side on the same problem, gpt-5 writes plain-text math
+(`x^2 + y^2`, `√`, `⇒`) while gpt-5.1 wraps everything in `\(...\)` and `\[...\]`
+display blocks with `\quad\Longrightarrow\quad` spacing. Same argument, same steps:
+
+| | o1 | o3 | gpt-5 | **gpt-5.1** | 5.2 | 5.4 | 5.5 | 5.6-sol | astra |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| LaTeX command chars | 0.3% | 2.0% | 0.6% | **22.5%** | 25.4% | 22.9% | 22.5% | 22.2% | 19.5% |
+| display equations | 0.1 | 0.3 | 0.0 | **23.4** | 14.0 | 19.7 | 14.3 | 11.1 | 8.1 |
+
+gpt-5.1 is simply the first model to switch and the most verbose *within* the new
+format. Every model after it keeps the format.
+
+**Which way it biases the headline: against recent models, so the result is
+conservative.** Stripping markup-only control sequences leaves pre-5.1 models
+unchanged (0.0 to -0.1%) and shortens post-5.1 models by 1.8-4.4%, the largest being
+astra because answers are 42% of its `L`. The o1 -> astra compression would read
+**8.9x instead of 8.5x**. Small, and in the safe direction — but quote 8.5x, since
+markup is genuinely emitted output.
 
 Decomposing the OpenAI trend (problem-FE OLS on log of each component, no floor
 subtraction, so these are not the headline 31.5%):
