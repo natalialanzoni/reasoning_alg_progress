@@ -107,6 +107,7 @@ Currently in the paper:
 | `fig4_forecast_excess_appendix` | `figure_forecast_ft.py` | appendix: excess tokens |
 | `fig4_forecast_precutoff_appendix` | `figure_forecast_ft.py` | appendix: contamination |
 | `fig1_grid_thinking` | `figure1_grid_ft.py` | appendix: thinking tokens only |
+| `fig_effort` | `figure_effort_ft.py` | appendix: low / medium / high reasoning effort |
 | `table_decay.tex` | `table_decay.py` | main regression table |
 | `table_floor_robustness.tex` | `table_floor_robustness.py` | appendix robustness + thinking-only row |
 
@@ -134,6 +135,7 @@ something about the sample or the spec changed.
 | Fig 5 | `figure_latent_floor_ft.py` | pooled n~630/model. astra **2.83%** below min, **25.0%** below average; Fable 5.1 **0.32%** below min, **9.2%** below average, **27.7%** zero-thinking |
 | Case study | `figure_mechanism_ft.py` | scale 7,842 -> 4,693 (**1.7x**), acc 68.4% -> 73.8%; algorithm 14,241 -> 8,539 (**1.7x**), acc 83.4% -> 85.6% |
 | Floor table | `table_floor_robustness.py` | OpenAI **31.5-34.1**%/qtr, Anthropic **41.4-43.1**%/qtr across three floor definitions |
+| Effort | `figure_effort_ft.py` | 8 GPT models x 3 efforts, **k truncated to 8** (`K_CAP`); **low 33.5%**, **medium 35.6%**, **high 36.3%**/qtr |
 | Contamination | `figure_forecast_ft.py` | `fig4_forecast_precutoff_appendix`: GPT **22.0%**/qtr (7 models), Anthropic **29.5%** (4) |
 
 ### Which scripts are on the paper's sample
@@ -466,7 +468,32 @@ gpt-5, 5.2, 5.4, 5.5 are all zero). Longer answers, hedging language and slightl
 weaker competition math are one coherent signature of an instruction-tuned release,
 not a measurement fault.
 
-### 12. The case-study columns are at DIFFERENT reasoning efforts
+### 12. One model was run at a different k, which faked an effort effect
+
+`fig_effort` compares low / medium / high. The raw runs are **not** on a common k:
+
+| | low | medium | high |
+| --- | --- | --- | --- |
+| o3 ... gpt-5.6-sol | k=8 | k=32 | k=8 |
+| **gpt-6-astra** | **k=32** | k=32 | **k=32** |
+
+gpt-6-astra is the newest and **shortest** model, so it carried four times the weight
+of every other model in the low and high regressions but not in medium — unequal
+weighting across the very arms being compared, concentrated on the most extreme point.
+
+`K_CAP = 8` truncates every problem to its first 8 attempts. What it changes:
+
+| | uncapped | k=8 |
+| --- | --- | --- |
+| low | 37.7% | **33.5%** |
+| medium | 36.3% | **35.6%** |
+| high | 40.1% | **36.3%** |
+
+Uncapped, low (37.7%) appeared to beat medium (36.3%), which is backwards for an
+effort story. Capped, the three are close and ordered in effort. **Check k before
+comparing any two lines**: `Counter(len(r["correct"]) for r in rows)`.
+
+### 13. The case-study columns are at DIFFERENT reasoning efforts
 
 `fig_mechanism` compares gpt-oss 20B->120B against GLM 5.2->5.3. The gpt-oss runs are
 **medium** effort; the GLM runs are **high** (their medium runs were silently remapped
@@ -477,7 +504,7 @@ what the 1.7x ratios measure — but the token LEVELS are not comparable across 
 GLM's 14.2k against gpt-oss's 7.8k is partly the effort setting, not the model. The
 caption should say the figure compares ratios, not levels. See failure mode 8.
 
-### 13. Six model clusters cannot support a 5% significance claim
+### 14. Six model clusters cannot support a 5% significance claim
 
 `Month` is constant within a model, so the bootstrap must resample over MODELS — 8
 for OpenAI, 6 for Anthropic. Two things go wrong if this is done casually, and the
