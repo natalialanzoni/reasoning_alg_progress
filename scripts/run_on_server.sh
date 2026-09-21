@@ -9,7 +9,7 @@
 #   bash run_on_server.sh    # edit MODELS/flags below first if you like
 #
 set -euo pipefail
-cd "$(dirname "$0")"
+cd "$(dirname "$0")/.."   # repo root (script moved into scripts/)
 
 # ---- config (edit to taste) ------------------------------------------------
 MODELS=(glm-4 glm-5)

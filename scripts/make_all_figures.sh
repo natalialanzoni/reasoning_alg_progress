@@ -2,8 +2,8 @@
 # ---------------------------------------------------------------------------
 # Regenerate every figure and table in the paper, in order.
 #
-#   bash code/make_all_figures.sh          # everything
-#   bash code/make_all_figures.sh main     # only the main-text artifacts
+#   bash scripts/make_all_figures.sh          # everything
+#   bash scripts/make_all_figures.sh main     # only the main-text artifacts
 #
 # Each script prints its sample size and floor on startup. Every one that uses
 # the paper's sample must say "40 competition problems ... floor = 316 tok".
@@ -54,4 +54,4 @@ echo "reports 40 competition problems and a 316-token floor. The DeepSeek script
 echo "additionally report a 32,768 ceiling -- see README run-hygiene item 13."
 echo
 echo "This regenerates figures/figs_sept/ (the working directory, variants included)."
-echo "For the curated set the paper actually uses, run: bash code/make_paper_figs.sh"
+echo "For the curated set the paper actually uses, run: bash scripts/make_paper_figs.sh"

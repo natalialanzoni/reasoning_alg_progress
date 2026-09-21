@@ -1,45 +1,57 @@
 #!/usr/bin/env bash
 # ---------------------------------------------------------------------------
-# Hard-but-doable sweep (k=32) for one OpenAI model, pinned to the settings every
-# other model in that set was run at.
+# Reasoning-effort robustness sweep: one OpenAI model at LOW or HIGH effort,
+# pinned to the settings every other model in that appendix figure was run at.
 #
-#   bash code/run_openai_hard.sh gpt-5.1
+#   bash scripts/run_openai_effort.sh gpt-5.1 low
+#   bash scripts/run_openai_effort.sh gpt-5.1 high
 #
-# Companion to code/run_openai_shallow.sh (k=8 over the 45 canonical problems).
-# This one is the 10-problem hard-but-doable slice at k=32, which is what Figure 1
-# row 3, Figure 2 and the pooled Figure 5 violins read.
+# Feeds figure_effort_ft.py -> fig_effort (appendix: trace length by effort).
+# Companions: run_openai_shallow.sh (k=8, 45 problems, medium)
+#             run_openai_hard.sh    (k=32, hard-but-doable-10, medium)
 #
-# Settings, matching data/hard_but_doable_10q_k32/*_requests.jsonl:
-#   endpoint /v1/responses | reasoning.effort = medium | max_output_tokens = 40000
-#   dataset tyrtleli/thinking-benchmark-hard-but-doable-10 | split test | k = 32
+# Settings, verified against data/low_reasoning_effort/*_requests.jsonl and
+# data/high_reasoning_effort/*_requests.jsonl (all 80 requests each, checked
+# field by field on 2026-09-20):
+#   endpoint /v1/responses | reasoning.effort = low|high | max_output_tokens = 40000
+#   dataset tyrtleli/thinking-benchmark-hard-but-doable-10 | split test | k = 8
 #
-# No --task-ids-file: the dataset IS the 10 problems. No --tag: the output name is
-# derived from the dataset, giving <model>_medium_thinking_benchmark_hard_but_doable_10.json
-# which is what the figure scripts expect.
+# NOTE THE k. This is k=8, NOT the k=32 used by run_openai_hard.sh. The effort
+# figure's runs are 80 requests = 10 problems x 8 samples. Using 32 here would
+# make the new model incomparable with every other point on that figure.
 #
 # --max-tokens DEFAULTS TO 100000 in benchmark_math_dist.py. Every published run
 # used 40000. Pinned below; do not drop the flag.
+#
+# The medium arm of that figure comes from the k=32 hard-but-doable runs, so do
+# NOT run medium here -- it already exists via run_openai_hard.sh.
 # ---------------------------------------------------------------------------
 set -euo pipefail
 cd "$(dirname "$0")/.."
 PY=./venv/bin/python
 
-MODEL="${1:?usage: bash code/run_openai_hard.sh <model-id>}"
-EFFORT="medium"
-K=32
+MODEL="${1:?usage: bash scripts/run_openai_effort.sh <model-id> <low|high>}"
+EFFORT="${2:?usage: bash scripts/run_openai_effort.sh <model-id> <low|high>}"
+case "$EFFORT" in
+  low|high) ;;
+  medium) echo "medium already exists via run_openai_hard.sh (k=32); refusing"; exit 1 ;;
+  *) echo "effort must be low or high (got '$EFFORT')"; exit 1 ;;
+esac
+
+K=8
 MAXTOK=40000                                 # <-- comparability cap
 DATASET="tyrtleli/thinking-benchmark-hard-but-doable-10"
 SPLIT="test"
-RUN_NAME="hard_but_doable_10q_k32"           # shared dir: every model lands here
+RUN_NAME="${EFFORT}_reasoning_effort"        # shared dir, one per effort level
 RUN_DIR="code/results/${RUN_NAME}"
 DEST="data/${RUN_NAME}"
 mkdir -p "$RUN_DIR"
 
 echo "model=$MODEL  effort=$EFFORT  k=$K  max_tokens=$MAXTOK"
-echo "dataset=$DATASET"
+echo "dataset=$DATASET  ->  $DEST/"
 echo
 
-"$PY" - "$RUN_DIR/${MODEL}_run_config_hard.json" <<PYEOF
+"$PY" - "$RUN_DIR/${MODEL}_run_config_${EFFORT}.json" <<PYEOF
 import json, subprocess, sys, datetime
 cfg = {
     "model": "$MODEL", "effort": "$EFFORT", "n_samples": $K,
@@ -47,7 +59,7 @@ cfg = {
     "dataset": "$DATASET", "split": "$SPLIT", "run_name": "$RUN_NAME",
     # not what we ran -- the reference runs whose saved requests these settings
     # were checked against, field by field
-    "settings_verified_against": "data/hard_but_doable_10q_k32/*_requests.jsonl",
+    "settings_verified_against": "data/${EFFORT}_reasoning_effort/*_requests.jsonl",
     "git_commit": subprocess.getoutput("git rev-parse HEAD"),
     "utc": datetime.datetime.utcnow().isoformat() + "Z",
 }
@@ -70,8 +82,8 @@ echo
 echo "=== verifying the run ==="
 "$PY" code/verify_run.py "$RESULT" --cap "$MAXTOK" || true
 
-# Copy ONLY this model's files. The run dir is shared across every model in the
-# hard-but-doable set, so a blanket cp would re-copy (and could clobber) others.
+# Copy ONLY this model's files: the effort dirs are shared across models, so a
+# blanket cp would re-copy (and could clobber) the others.
 mkdir -p "$DEST"
 cp "$RUN_DIR/${MODEL}"_* "$DEST"/ 2>/dev/null || {
   echo "  no files matched ${MODEL}_* -- check the output name above"; exit 1; }
@@ -85,5 +97,5 @@ read -r -p "apply the regrade to data/ ? [y/N] " ok
 
 echo
 echo "Done. -> $DEST/"
-echo "Next: add the model to OPUS_HARD10_K32 / fs.GPT_HARD as appropriate, then"
-echo "rerun bash code/make_paper_figs.sh."
+echo "Next: add \"$MODEL\" to the ${EFFORT} list in code/figure_effort_ft.py, then"
+echo "rerun: MPLBACKEND=Agg ./venv/bin/python code/figure_effort_ft.py"

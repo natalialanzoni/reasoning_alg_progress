@@ -9,7 +9,7 @@
 #
 # Review, then run:  bash run_max_reasoning.sh
 set -euo pipefail
-cd "$(dirname "$0")"
+cd "$(dirname "$0")/.."   # repo root (script moved into scripts/)
 
 # ---- config ---------------------------------------------------------------
 PY=./venv/bin/python

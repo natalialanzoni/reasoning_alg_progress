@@ -9,7 +9,7 @@
 # Restricted to the 45 canonical problems (code/canon45_ids.txt) — the set the
 # figures actually use.
 #
-#   bash code/run_o1.sh
+#   bash scripts/run_o1.sh
 # ---------------------------------------------------------------------------
 set -euo pipefail
 cd "$(dirname "$0")/.."                      # repo root

@@ -3,7 +3,7 @@
 # "high" is natively supported by BOTH models, unlike the "medium" the
 # 2026-09-05/06 run sent (which each vendor silently remapped differently).
 set -u
-cd "$(dirname "$0")"
+cd "$(dirname "$0")/.."   # repo root (script moved into scripts/)
 LOG=hard_glm_high_driver.log
 echo "START $(date '+%F %T')" >> $LOG
 ./venv/bin/python code/benchmark_math_open_source.py \

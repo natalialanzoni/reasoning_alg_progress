@@ -1,27 +1,22 @@
 #!/usr/bin/env bash
-# Submit hard-but-doable-10 at HIGH reasoning effort for a set of GPT models.
-# Every current GPT model accepts "high" (unlike "max", which older models
-# reject). Each model = one Batch API job (10 problems x k samples), run in
+# Submit hard-but-doable-10 at MEDIUM reasoning effort for a set of GPT models.
+# Each model = one Batch API job (10 problems x k samples). Runs them in
 # parallel; each polls to completion and writes results into OUTDIR.
 #
-# Review, then run:  bash run_high_reasoning.sh
+# Review, then run:  bash run_medium_reasoning.sh
 set -euo pipefail
-cd "$(dirname "$0")"
+cd "$(dirname "$0")/.."   # repo root (script moved into scripts/)
 
 # ---- config ---------------------------------------------------------------
 PY=./venv/bin/python
 SCRIPT=code/benchmark_math_dist.py
 DATASET=tyrtleli/thinking-benchmark-hard-but-doable-10
-EFFORT=high
+EFFORT=medium
 K=8
 MAX_TOKENS=40000
-OUTDIR="$(pwd)/data/high_reasoning_effort"
-MODELS=(o3 gpt-5 gpt-5.2 gpt-5.4 gpt-5.5 gpt-5.6-sol)
+OUTDIR="$(pwd)/data/medium_reasoning_effort"
+MODELS=(gpt-5 gpt-5.4 gpt-5.6-sol)
 # ---------------------------------------------------------------------------
-# Resume-safe: any model whose result json already exists is skipped
-# ("Nothing new to run"); only missing models/problems are (re)submitted.
-# NOTE: gpt-5.6-sol high has an IN-FLIGHT batch with no json yet — collect it
-# first (--from-batch) or it will be submitted a second time here.
 
 mkdir -p "$OUTDIR"
 echo "Effort=$EFFORT  k=$K  max_tokens=$MAX_TOKENS  ->  $OUTDIR"

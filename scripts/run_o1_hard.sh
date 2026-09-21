@@ -8,7 +8,7 @@
 #   dataset tyrtleli/thinking-benchmark-hard-but-doable-10 | k=32
 # (10 problems, no id filter — the dataset IS the hard-but-doable set.)
 #
-#   bash code/run_o1_hard.sh
+#   bash scripts/run_o1_hard.sh
 # ---------------------------------------------------------------------------
 set -euo pipefail
 cd "$(dirname "$0")/.."

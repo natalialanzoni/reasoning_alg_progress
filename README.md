@@ -25,8 +25,8 @@ solutions are pulled from Hugging Face and tokenized with `tiktoken`).
 ```bash
 python3 -m venv venv && ./venv/bin/pip install -r requirements.txt
 
-bash code/make_paper_figs.sh     # the paper's figures + tables -> paper_figs/
-bash code/make_all_figures.sh    # everything, variants included -> figures/figs_sept/
+bash scripts/make_paper_figs.sh     # the paper's figures + tables -> paper_figs/
+bash scripts/make_all_figures.sh    # everything, variants included -> figures/figs_sept/
 ```
 
 `make_paper_figs.sh` is the one that matters: **`paper_figs/` is the paper.** If an
@@ -76,12 +76,13 @@ spec changed:
 | path | what it is |
 | --- | --- |
 | `paper_figs/` | **the curated set — this is the paper** |
-| `figures/figs_sept/` | working output: everything the live scripts emit, variants included |
-| `figures/archive_figs/` | superseded figures, not regenerated — see its README |
+| `scripts/` | shell entry points: the two build scripts and the run launchers — see its README |
 | `code/` | live analysis and plotting scripts |
 | `code/archive/` | superseded scripts, kept not deleted — see its README |
 | `data/` | benchmark results, one JSON per run |
 | `data/archive/` | invalidated runs, each with a `WHY_ARCHIVED.md` |
+| `figures/figs_sept/` | build intermediate, gitignored, recreated by every run |
+| `archive/figures/` | snapshot of the old working output + superseded figures |
 
 Before changing anything, read **Sample definition** immediately below and the
 **Run hygiene** section near the end. The run-hygiene items are all real bugs that
@@ -113,13 +114,14 @@ HMMT February 2026 (12). The five MATH-500 problems in the benchmark are
 ## Repository layout
 
 ```
-paper_figs/           THE PAPER: curated figures + tables (make_paper_figs.sh)
+paper_figs/           THE PAPER: curated figures + tables (scripts/make_paper_figs.sh)
+scripts/              shell entry points: build scripts + run launchers
 code/                 live analysis + plotting scripts
 code/archive/         superseded scripts (see its README)
 data/                 benchmark results, one JSON per run
 data/archive/         invalidated runs, each with a WHY_ARCHIVED.md
-figures/figs_sept/    working output: everything live scripts emit, variants included
-figures/archive_figs/ superseded figures, not regenerated (see its README)
+figures/figs_sept/    build intermediate -- gitignored, recreated on every run
+archive/figures/      snapshot of the old working output + superseded figures
 ```
 
 ### `code/`
@@ -252,7 +254,7 @@ Only needed if adding a model; the committed `data/` is sufficient to rebuild ev
 figure.
 
 ```bash
-bash code/run_o1.sh                       # OpenAI, pinned to the comparable settings
+bash scripts/run_o1.sh                       # OpenAI, pinned to the comparable settings
 ./venv/bin/python code/benchmark_math_open_source.py --help
 ./venv/bin/python code/apply_regrade.py   # ALWAYS regrade a new run before plotting
 ```
@@ -353,7 +355,7 @@ backs off on 429s honoring `Retry-After` (setting it to 0 raised Kimi K3's
 failures from 115 to 174), and `timeout=900` to cover a full 40k-token
 generation. Reduce `--workers` before anything else when 429s appear.
 
-### 4. The grader penalised terse models — fixed, but check before trusting old numbers
+### 4. The grader penalised terse models — fixed, and there is now only ONE grader
 
 The original grader marked correct answers wrong on formatting alone (answer
 prefixes, work inside `\boxed{}`, units, leading zeros, equivalent radicals).
@@ -363,6 +365,19 @@ paper is about: gpt-6-astra read **85.3%** when its true accuracy was **99.5%**.
 original preserved in `correct_original`. **Never read `correct_original`.** Full
 write-up in `archive/README.md`; outputs produced before the fix are in
 `archive/pre_grader_fix_figures/`.
+
+
+**There is one grader: `code/regrade.py::is_correct`.** `benchmark_math_dist.py`,
+`benchmark_claude_opus.py` and `benchmark_math_open_source.py` each used to carry
+their own independent implementation, so a run was scored by whichever one its driver
+happened to call. All three now delegate to `regrade.py`; verified to agree with it
+case-for-case, and `apply_regrade.py` still reports the same 517 historical flips
+after the change.
+
+The delegating import is deliberately **lazy**, because `regrade.py` loads
+`benchmark_math_dist` for `extract_boxed` — importing it at module level from there
+would be circular, and an earlier attempt at this consolidation recursed on exactly
+that.
 
 ### 5. A zero-length thinking block does not make a trace invalid
 

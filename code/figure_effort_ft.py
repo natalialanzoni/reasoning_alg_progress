@@ -32,7 +32,7 @@ Capped, the three rates are close and ordered in effort; uncapped, low appeared 
 beat medium. Attempts are independent samples, so the leading 8 is an unbiased
 subsample, and taking the FIRST 8 is deterministic where a random draw would not be.
 
-To add a model's low/high arms:  bash code/run_openai_effort.sh <model> low|high
+To add a model's low/high arms:  bash scripts/run_openai_effort.sh <model> low|high
 That script pins k=8 -- note the medium arm comes from the k=32 runs, so the efforts
 are NOT matched on k. DATES already lists gpt-5.1, and files are discovered by path,
 so nothing here needs editing once the runs are in data/<effort>_reasoning_effort/.

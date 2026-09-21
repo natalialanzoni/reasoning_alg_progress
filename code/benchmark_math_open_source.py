@@ -283,19 +283,30 @@ def _sympy_equivalent(extracted, gold):
 
 
 def is_correct(extracted, gold):
-    a, b = normalize(extracted), normalize(gold)
-    if a is None or b is None:
-        return False
-    if a == b:
-        return True
-    ai, bi = _try_int(a), _try_int(b)
-    if ai is not None and bi is not None:
-        return ai == bi
-    af, bf = _try_float(a), _try_float(b)
-    if af is not None and bf is not None:
-        return abs(af - bf) < 1e-9
-    return bool(_sympy_equivalent(extracted, gold))
+    """Grade one answer. DELEGATES to code/regrade.py -- the single grader.
 
+    There used to be a second, independent implementation here, and it was the source
+    of a systematic bias: it under-counted terse models because it failed on answer
+    prefixes, work shown inside \\boxed{{}}, units, leading zeros and equivalent
+    radicals. Having two graders in the tree meant a run could be scored by whichever
+    one its driver happened to call. Now there is one.
+
+    The import is deliberately LAZY. regrade.py loads this module (for extract_boxed),
+    so importing it at module level here would be circular -- an earlier attempt at
+    this consolidation did exactly that and recursed. By the time this function is
+    called both modules exist, so the cycle cannot form. This module is import-safe
+    (everything executable sits behind __main__), so loading it from regrade costs
+    nothing.
+    """
+    import importlib.util as _i, os as _o
+    global _RG
+    try:
+        _RG
+    except NameError:
+        _s = _i.spec_from_file_location(
+            "_rg_grader", _o.path.join(_o.path.dirname(_o.path.abspath(__file__)), "regrade.py"))
+        _RG = _i.module_from_spec(_s); _s.loader.exec_module(_RG)
+    return _RG.is_correct(extracted, gold)
 
 # ======================= live requests =======================
 def one_request(client, m, problem, max_tokens, max_attempts=4):

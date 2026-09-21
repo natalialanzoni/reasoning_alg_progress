@@ -4,8 +4,8 @@
 # other model in the paper was run at, so the result drops straight into the
 # figures without a caveat.
 #
-#   bash code/run_openai_shallow.sh gpt-5.1
-#   bash code/run_openai_shallow.sh o4-mini
+#   bash scripts/run_openai_shallow.sh gpt-5.1
+#   bash scripts/run_openai_shallow.sh o4-mini
 #
 # Settings, verified against data/o3_shallow_pass/o3_medium_thinking_bench_requests.jsonl:
 #   endpoint /v1/responses | reasoning.effort = medium | max_output_tokens = 40000
@@ -26,7 +26,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 PY=./venv/bin/python
 
-MODEL="${1:?usage: bash code/run_openai_shallow.sh <model-id>}"
+MODEL="${1:?usage: bash scripts/run_openai_shallow.sh <model-id>}"
 EFFORT="medium"
 K=8
 MAXTOK=40000                                 # <-- comparability cap
@@ -99,4 +99,4 @@ read -r -p "apply the regrade to data/ ? [y/N] " ok
 echo
 echo "Done. -> $DEST/"
 echo "Next: add the model to MAIN_K8 in code/paper_figures_71226.py with its release"
-echo "date, then rerun bash code/make_paper_figs.sh."
+echo "date, then rerun bash scripts/make_paper_figs.sh."

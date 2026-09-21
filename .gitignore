@@ -17,6 +17,11 @@ reprocess.log
 # OS
 .DS_Store
 
+# Build intermediate: every figure script writes here and save_figure recreates it.
+# The curated set lives in paper_figs/ (committed); a snapshot of the old working
+# directory is in archive/figures/figs_sept/.
+figures/
+
 # Backups / archives of result files (large, redundant)
 *.bak
 *.bak_before_fix
