@@ -13,10 +13,24 @@ a line ever loses a point, look for a missing file before reading it as a findin
   low / high : o3, gpt-5, 5.1, 5.2, 5.4, 5.5, 5.6-sol, 6-astra   (k=8)
   medium     : the same 8                                        (k=32, hard-but-doable dir)
 
-THE EFFORTS ARE NOT MATCHED ON k: low and high are k=8, medium is k=32, because the
-medium arm reuses the existing hard-but-doable runs rather than a dedicated sweep.
-That does not bias a per-model mean, but it does mean the medium line rests on 4x the
-attempts, so its points are steadier. Worth a caption line.
+k IS MATCHED AT K_CAP=8 BY TRUNCATION, and it has to be. The raw runs are:
+
+    o3 .. gpt-5.6-sol    low k=8    medium k=32   high k=8
+    gpt-6-astra          low k=32   medium k=32   high k=32
+
+so gpt-6-astra -- the newest and SHORTEST model -- carried four times the weight of
+every other model in the low and high regressions, but not in medium. That is a
+weighting artifact masquerading as an effort effect, and it inflated the low and high
+rates. Truncating every problem to its first 8 attempts removes it:
+
+                   uncapped        k=8
+    low             37.7%         33.5%
+    medium          36.3%         35.6%
+    high            40.1%         36.3%
+
+Capped, the three rates are close and ordered in effort; uncapped, low appeared to
+beat medium. Attempts are independent samples, so the leading 8 is an unbiased
+subsample, and taking the FIRST 8 is deterministic where a random draw would not be.
 
 To add a model's low/high arms:  bash code/run_openai_effort.sh <model> low|high
 That script pins k=8 -- note the medium arm comes from the k=32 runs, so the efforts
@@ -74,6 +88,7 @@ DATES = {"o3": datetime(2025, 4, 16), "gpt-5": datetime(2025, 8, 7),
 ALL = list(DATES)
 # low -> high uses a light->dark crest ramp (more effort = darker)
 _c = sns.color_palette("crest", 3)
+K_CAP = 8          # attempts per problem per model, matched across efforts
 EFFORTS = {"low": ("low_reasoning_effort", _c[0]),
            "medium": ("hard_but_doable_10q_k32", _c[1]),
            "high": ("high_reasoning_effort", _c[2])}
@@ -95,6 +110,19 @@ def gather(eff):
             tid = str(r["task_id"])
             if tid not in CANON_KEYS:      # competition problems only (no MATH-500)
                 continue
+            # MATCH k ACROSS EFFORTS. low/high were run at k=8, medium reuses the
+            # k=32 hard-but-doable runs, so medium rested on 4x the attempts and its
+            # points were steadier for a reason that has nothing to do with effort.
+            # Truncating to the first K_CAP attempts puts every line on the same
+            # sample size. Attempts are independent samples, so the leading 8 is an
+            # unbiased subsample; taking the first is deterministic, which a random
+            # draw would not be.
+            n_keep = min(K_CAP, len(r["correct"]))
+            r = dict(r)
+            r["correct"] = r["correct"][:n_keep]
+            r["total_completion_tokens"] = r["total_completion_tokens"][:n_keep]
+            if r.get("response_texts") is not None:
+                r["response_texts"] = r["response_texts"][:n_keep]
             texts = r.get("response_texts", [None] * len(r["correct"]))
             # central rules (figures_sept): zero-thinking traces are valid, and a
             # cap-hit trace is a real attempt that FAILED -- it must not supply a
