@@ -36,8 +36,14 @@ import matplotlib.lines as mlines
 import matplotlib.patches as mpatches
 
 sys.path.insert(0, os.path.expanduser("~/.claude/skills/futuretech-charts/python"))
-from futuretech_helpers import use_style, unit_formatter, save_figure
-from futuretech_palette import PRIMARY
+try:                                    # house style from the skill, if present
+    from futuretech_helpers import use_style, unit_formatter, save_figure
+    from futuretech_palette import PRIMARY
+    STYLE_SRC = "futuretech-charts skill"
+except ModuleNotFoundError:             # replication machines: local stand-in
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from _ft_style_local import use_style, unit_formatter, save_figure, PRIMARY
+    STYLE_SRC = "LOCAL RECONSTRUCTION (_ft_style_local.py)"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 _spec = importlib.util.spec_from_file_location("fs", os.path.join(HERE, "figures_sept.py"))

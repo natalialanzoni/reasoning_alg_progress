@@ -38,8 +38,14 @@ import matplotlib.lines as mlines
 import seaborn as sns
 
 sys.path.insert(0, os.path.expanduser("~/.claude/skills/futuretech-charts/python"))
-from futuretech_helpers import use_style, save_figure
-from futuretech_palette import PRIMARY, CATEGORICAL
+try:                                    # house style from the skill, if present
+    from futuretech_helpers import use_style, save_figure
+    from futuretech_palette import PRIMARY, CATEGORICAL
+    STYLE_SRC = "futuretech-charts skill"
+except ModuleNotFoundError:             # replication machines: local stand-in
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from _ft_style_local import use_style, save_figure, PRIMARY, CATEGORICAL
+    STYLE_SRC = "LOCAL RECONSTRUCTION (_ft_style_local.py)"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 _spec = importlib.util.spec_from_file_location("fs", os.path.join(HERE, "figures_sept.py"))

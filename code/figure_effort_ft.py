@@ -55,7 +55,13 @@ import seaborn as sns
 import statsmodels.formula.api as smf
 
 sys.path.insert(0, os.path.expanduser("~/.claude/skills/futuretech-charts/python"))
-from futuretech_helpers import use_style, unit_formatter, save_figure
+try:                                    # house style from the skill, if present
+    from futuretech_helpers import use_style, unit_formatter, save_figure
+    STYLE_SRC = "futuretech-charts skill"
+except ModuleNotFoundError:             # replication machines: local stand-in
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from _ft_style_local import use_style, unit_formatter, save_figure
+    STYLE_SRC = "LOCAL RECONSTRUCTION (_ft_style_local.py)"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 _fsspec = importlib.util.spec_from_file_location(

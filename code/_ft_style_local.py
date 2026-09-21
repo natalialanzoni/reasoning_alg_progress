@@ -17,6 +17,9 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import FuncFormatter
 
 PRIMARY = "#002896"     # sampled from paper_figs/fig1_grid.png
+# Copied verbatim from the skill's futuretech_palette.CATEGORICAL on 2026-09-21, so
+# a machine without the skill produces byte-identical colours.
+CATEGORICAL = ["#1966FF", "#750014", "#00AD00", "#9933FF", "#ED7700", "#FF14F0"]
 ACCENT_ACC = "#0E8A8A"  # accuracy, from figure1_glm_algo_ft.py
 ACCENT_FLOOR = "#E07A3F"
 

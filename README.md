@@ -11,8 +11,83 @@ The headline finding (Figure 1) is that across generations — OpenAI
 `Opus 4.5 → 4.6 → 4.7 → 4.8 → Opus 5 → Fable 5.1` — mean trace length falls
 steadily toward the minimal-human-derivation floor while accuracy rises.
 Mean tokens per correct solution fall **8.5x** for OpenAI (20 months) and **4.8x**
-for Anthropic (9 months); the excess over the floor decays **31%/quarter** and
-**38%/quarter** respectively.
+for Anthropic (9 months); the excess over the floor decays **31.5%/quarter** and
+**41.4%/quarter** respectively.
+
+---
+
+## Replication — start here
+
+Everything in the paper is rebuilt from `data/` by two scripts. No API keys, no model
+calls, no GPU. You need **network access on the first run** (the canonical human
+solutions are pulled from Hugging Face and tokenized with `tiktoken`).
+
+```bash
+python3 -m venv venv && ./venv/bin/pip install -r requirements.txt
+
+bash code/make_paper_figs.sh     # the paper's figures + tables -> paper_figs/
+bash code/make_all_figures.sh    # everything, variants included -> figures/figs_sept/
+```
+
+`make_paper_figs.sh` is the one that matters: **`paper_figs/` is the paper.** If an
+artifact is not in there, it is not cited. The script also writes
+`paper_figs/MANIFEST.md` recording the commit and which script produced each file.
+
+### Did it work?
+
+Each script prints its sample on startup. Every one must say:
+
+```
+40 competition problems (MATH-500 excluded), floor = 316 tok
+```
+
+A script reporting **45 problems** or a **303-token floor** is on the wrong sample and
+its output must not be used. The two DeepSeek scripts additionally report a
+**32,768-token ceiling** — that is correct and required (run-hygiene item 13).
+
+Then check these against the "Verification anchors" table further down. If a change
+was meant to be cosmetic and one of these moved, something about the sample or the
+spec changed:
+
+| | OpenAI | Anthropic |
+| --- | --- | --- |
+| Fig 1 mean tokens | 9,547 -> 1,121 (**8.5x**) | 8,617 -> 1,799 (**4.8x**) |
+| Fig 1 accuracy | 70.0% -> 99.4% | 90.6% -> 97.8% |
+| Decay rate | **31.5%**/qtr (p = 0.022) | **41.4%**/qtr (p = 0.066) |
+| Within 10% of floor | **2029-02** | **2028-06** |
+
+### Two things that will bite a fresh machine
+
+1. **The house style is an external dependency.** The figure scripts look for the
+   `futuretech-charts` skill at `~/.claude/skills/futuretech-charts/python`. If it is
+   absent they fall back to `code/_ft_style_local.py`, which reproduces the same
+   palette and helpers, and print `STYLE_SRC = LOCAL RECONSTRUCTION`. Figures render
+   either way — this was tested by hiding the skill and rebuilding everything — but
+   the fallback is a reconstruction, so treat small typographic differences as
+   expected and colours as exact.
+2. **`data/` must be regraded before anything is plotted.** It already is in this
+   repo: a file is regraded when it carries `correct_original` (or
+   `is_correct_original` for the gpt-oss schema). If you add a run, do
+   `./venv/bin/python code/apply_regrade.py --write` first. See run-hygiene items 4
+   and 10.
+
+### Layout
+
+| path | what it is |
+| --- | --- |
+| `paper_figs/` | **the curated set — this is the paper** |
+| `figures/figs_sept/` | working output: everything the live scripts emit, variants included |
+| `figures/archive_figs/` | superseded figures, not regenerated — see its README |
+| `code/` | live analysis and plotting scripts |
+| `code/archive/` | superseded scripts, kept not deleted — see its README |
+| `data/` | benchmark results, one JSON per run |
+| `data/archive/` | invalidated runs, each with a `WHY_ARCHIVED.md` |
+
+Before changing anything, read **Sample definition** immediately below and the
+**Run hygiene** section near the end. The run-hygiene items are all real bugs that
+were found in this codebase, each with the numbers it moved.
+
+---
 
 ## Sample definition — read this before touching a figure
 
@@ -38,9 +113,13 @@ HMMT February 2026 (12). The five MATH-500 problems in the benchmark are
 ## Repository layout
 
 ```
-code/        Analysis + plotting scripts (Python)
-data/        Benchmark result files (per-model JSON, k=8 / k=32 runs)
-figures/     Generated plots (figure1/ and time_series/)
+paper_figs/           THE PAPER: curated figures + tables (make_paper_figs.sh)
+code/                 live analysis + plotting scripts
+code/archive/         superseded scripts (see its README)
+data/                 benchmark results, one JSON per run
+data/archive/         invalidated runs, each with a WHY_ARCHIVED.md
+figures/figs_sept/    working output: everything live scripts emit, variants included
+figures/archive_figs/ superseded figures, not regenerated (see its README)
 ```
 
 ### `code/`
@@ -51,14 +130,34 @@ figures/     Generated plots (figure1/ and time_series/)
 | `figure_forecast_ft.py` | **Figure 4**: one row, two panels, both families overlaid — tokens and multiple-of-floor — plus the forecast, the pre-cutoff contamination appendix, and sensitivity variants. |
 | `figure_latent_floor_ft.py` | **Figure 5**: distance to the floor by family, violins of L/C_j with the minimum and average human solution drawn. |
 | `figure_mechanism_ft.py` | Case study: scale (gpt-oss 20B->120B) vs algorithm (GLM 5.2->5.3), in Figure 1 style. |
-| `figure_effort_ft.py` | Appendix: trace length over generations by reasoning effort (low/medium/high). |
-| `table_floor_robustness.py` | Appendix table: beta re-estimated under four floor definitions (shortest / median / mean / none). |
-| `regrade.py`, `apply_regrade.py` | The corrected answer grader and the script that bakes it into `correct`. See `archive/README.md`. |
-| `censor_over_cap.py` | Right-censors runs whose provider ignored `max_tokens`. |
+| `figure2_ft.py` | **Figure 2**: within-problem distributions on the hard-but-doable-10 (k=32). |
+| `figure_effort_ft.py` | Appendix: trace length by reasoning effort (low/medium/high), k matched at 8. |
+| `figure1_deepseek_ft.py` | Appendix: the DeepSeek open-source timeline, censored at 32,768. |
+| `figure_deepseek_branch_ft.py` | Appendix: the DeepSeek effort branch (GA build). |
+| `table_decay.py` | **Main regression table**: per-family excess-trend slope, WCR bootstrap-t. |
+| `table_floor_robustness.py` | Appendix table: beta under three floor definitions plus a thinking-only row. |
 
-Legacy `plot_figure1.py` / `analyze_time_series_*.py` live in `code/archive/` and
-still expect the old `code/results/` layout. The `_ft` scripts above read `data/`
-directly and run end-to-end.
+Shared libraries, imported by the above rather than run directly:
+
+| Module | Role |
+| --- | --- |
+| `figures_sept.py` | `_trial_ok` (validity) and `_trial_correct` (success) — the single source of truth for both. Also `valid_stats`. |
+| `paper_figures_71226.py` | data loading (`load_rows`), the canonical floor (`CANON`), model lists and dates, `_fit_headroom_forecast`, `TRAIN_CUTOFF`. |
+| `_ft_style_local.py` | stand-in for the `futuretech-charts` house style when the skill is absent. |
+
+Infrastructure:
+
+| Script | Role |
+| --- | --- |
+| `regrade.py`, `apply_regrade.py` | the corrected answer grader, and the script that bakes it into `correct`. Run `apply_regrade.py --write` after adding any run. |
+| `benchmark_math_dist.py` and friends | the sweep drivers. `--max-tokens` defaults to 100000; every published run used 40000. |
+| `run_openai_shallow.sh`, `run_openai_hard.sh`, `run_openai_effort.sh` | new runs pinned to the published settings. Read the header before using one. |
+| `verify_run.py` | post-run checks, including `--cap` for cap compliance. |
+| `censor_over_cap.py` | right-censors runs whose provider ignored `max_tokens`. |
+
+`code/archive/` holds superseded scripts and a README explaining each. The oldest of
+them (`plot_figure1.py`, `analyze_time_series_*.py`) expect the pre-`data/` layout and
+do not run as-is.
 
 ### `data/`
 
@@ -72,8 +171,11 @@ Each model run is a JSON array of per-task records. Key fields per record:
 Subdirectories:
 
 - `*_shallow_pass/` — main k=8 thinking-benchmark runs per model
-- `edge_of_capability_k32/` — k=32 runs on the harder problem slice
-- `hard_but_doable_k32/` — k=32 runs on the "hard but doable" slice
+- `hard_but_doable_10q_k32/` — k=32 runs on the 10-problem hard slice (Figure 2)
+- `low_reasoning_effort/`, `high_reasoning_effort/` — k=8 effort arms (the medium arm
+  reuses `hard_but_doable_10q_k32/`)
+- `edge_of_capability_k32/` — earlier k=32 slice, not used by any current figure
+- `archive/` — invalidated runs, each with a `WHY_ARCHIVED.md` saying what killed it
 
 The canonical-solution floor in Figure 1 is computed from the
 [`tyrtleli/thinking-benchmark-90`](https://huggingface.co/datasets/tyrtleli/thinking-benchmark-90)
@@ -81,18 +183,8 @@ dataset on the Hugging Face Hub, tokenized with `tiktoken` (`o200k_base`).
 
 ## Reproducing the paper
 
-```bash
-python3 -m venv venv && ./venv/bin/pip install -r requirements.txt
-bash code/make_paper_figs.sh             # <- ONLY what the paper includes -> paper_figs/
-bash code/make_all_figures.sh all        # everything, incl. variants -> figures/figs_sept/
-```
-
-`paper_figs/` is the curated set: **if it is not in there, it is not in the paper.**
-It is rebuilt from scratch by `make_paper_figs.sh`, which also writes
-`paper_figs/MANIFEST.md` recording the commit and which script produced each file.
-`figures/figs_sept/` remains the working directory where scripts drop everything
-they make, including sensitivities and variants. To retire a figure, remove its line
-from `ARTIFACTS` in `make_paper_figs.sh`.
+The commands are in **Replication — start here** at the top. This section is the
+artifact inventory and the verification anchors.
 
 Currently in the paper:
 
@@ -168,33 +260,38 @@ bash code/run_o1.sh                       # OpenAI, pinned to the comparable set
 Read the run-hygiene section below first — all three original failure modes complete
 with zero errors.
 
-## Setup
+## Running one script at a time
 
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-```
-
-## Running
+Setup and the full rebuild are in **Replication — start here** at the top. The venv
+must be called `venv`, not `.venv`: every script and runner invokes
+`./venv/bin/python` by that exact path.
 
 ```bash
 MPLBACKEND=Agg ./venv/bin/python code/figure1_grid_ft.py
-MPLBACKEND=Agg ./venv/bin/python code/figure_forecast_ft.py
-./venv/bin/python code/table_floor_robustness.py
+./venv/bin/python code/table_decay.py
 ```
 
-Each figure script prints its sample size and floor on startup — check that line
+`MPLBACKEND=Agg` is needed for the figure scripts on a headless machine; the table
+scripts do not plot. Each script prints its sample and floor on startup — check it
 says `40 competition problems ... floor = 316 tok` before trusting the output.
 
-## Notes
+## Conventions that are easy to get wrong
 
-- DeepSeek **V3.2** is excluded from length analyses: the provider imposed a
-  16,384-token output cap that pinned ~56% of trials at exactly that value,
-  biasing mean/SD/CV downward.
-- "Damaged" trials (`thinking_tokens == 0`) are dropped from statistics.
-- Analyses use a consistent problem set — the intersection of `task_id`s present
-  across all included models, after removing `removed_from_dataset` tasks.
+- **A trace is valid if it produced >= 50 tokens.** A zero-length *thinking* block
+  does **not** invalidate it — Fable 5.1 answers correctly with no thinking block on a
+  quarter of problems, and those are its shortest traces. An older version of this
+  file said `thinking_tokens == 0` trials were dropped; that filter was a bug and is
+  gone. See run-hygiene item 5.
+- **A cap-truncated trace is a real attempt that FAILED.** It counts in the accuracy
+  denominator and scores wrong. Use `figures_sept._trial_ok` for validity and
+  `figures_sept._trial_correct` for success rather than re-implementing either — that
+  duplication is what let the same bug live in four scripts at once. Items 6 and 10.
+- **Analyses use the intersection of `task_id`s present across all included models,**
+  after removing `removed_from_dataset` tasks.
+- **DeepSeek runs must be compared at a common 32,768-token ceiling.** Item 13. (An
+  older note here said V3.2 was excluded for a 16,384-token provider cap pinning ~56%
+  of trials — that is not true of the current data: V3.2 has **zero** trials at 16,384
+  and runs to 82,918. The note predates the re-run and has been removed.)
 
 ## Run hygiene — read before launching a sweep
 

@@ -18,27 +18,18 @@ PY="./venv/bin/python"
 export MPLBACKEND=Agg
 
 MAIN=(
-  figure1_grid_ft.py          # Fig 1 (+ _fulldiff, + _alltraces appendix)
+  figure1_grid_ft.py          # Fig 1 (+ _thinking, + _alltraces, + _fulldiff)
+  figure2_ft.py               # Fig 2 hard-problem distributions
+  figure_mechanism_ft.py      # Fig 3 case study: scale vs algorithm
   figure_forecast_ft.py       # Fig 4 two-panel (+ contamination + sensitivities)
-  figure_latent_floor_ft.py   # Fig 5 distance to floor: 2x2, samples x families
-  figure_mechanism_ft.py      # case study: scale vs algorithm
-  table_floor_robustness.py   # appendix table: four floor definitions
+  figure_latent_floor_ft.py   # Fig 5 distance to the floor
+  table_decay.py              # main regression table
 )
 APPENDIX=(
   figure_effort_ft.py         # trace length by reasoning effort
-  figure2_ft.py               # hard-problem distributions
-  figure3_pareto_ft.py        # accuracy/token pareto
-  figure_cv_ft.py             # coefficient of variation over generations
-  figures_sept_ft.py          # fig1_ft_frontier variants
-)
-# Open-source GLM figures. PARKED: the cross-version GLM line is provider
-# confounded (see README failure mode 7) and these still use the OLD difficulty
-# tiering and include MATH-500. Do not put their output in the paper without
-# bringing them onto the 40-problem sample first.
-PARKED=(
-  figure1_grid_glm_ft.py
-  figure1_glm_algo_ft.py
-  figure1_oss_ft.py
+  table_floor_robustness.py   # floors, thinking-only row
+  figure1_deepseek_ft.py      # open-source: DeepSeek timeline
+  figure_deepseek_branch_ft.py  # open-source: DeepSeek effort branch
 )
 
 run() {
@@ -53,13 +44,14 @@ run() {
 case "${1:-all}" in
   main)     run "${MAIN[@]}" ;;
   appendix) run "${APPENDIX[@]}" ;;
-  parked)   run "${PARKED[@]}" ;;
   all)      run "${MAIN[@]}" "${APPENDIX[@]}" ;;
-  *) echo "usage: $0 [main|appendix|parked|all]"; exit 2 ;;
+  *) echo "usage: $0 [main|appendix|all]"; exit 2 ;;
 esac
 
 echo
-echo "Done. Sanity-check the startup lines above: scripts on the paper's sample"
-echo "report 40 competition problems and a 316-token floor. NOT every script is --"
-echo "figure3_pareto_ft.py and figures_sept_ft.py still include MATH-500. See the"
-echo "\"Which scripts are on the paper's sample\" table in README.md."
+echo "Done. Sanity-check the startup lines above: every script on the paper's sample"
+echo "reports 40 competition problems and a 316-token floor. The DeepSeek scripts"
+echo "additionally report a 32,768 ceiling -- see README run-hygiene item 13."
+echo
+echo "This regenerates figures/figs_sept/ (the working directory, variants included)."
+echo "For the curated set the paper actually uses, run: bash code/make_paper_figs.sh"

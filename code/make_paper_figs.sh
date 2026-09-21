@@ -30,6 +30,7 @@ ARTIFACTS=(
   "fig4_forecast_precutoff_appendix:figure_forecast_ft.py"  # appendix: contamination check
   "fig1_grid_thinking:figure1_grid_ft.py"               # appendix: thinking tokens only
   "fig_effort:figure_effort_ft.py"                      # appendix: low/medium/high effort
+  "fig1_grid_deepseek:figure1_deepseek_ft.py"           # appendix: open-source (DeepSeek)
 )
 TABLES=(
   "table_decay:table_decay.py"                          # main regression table
