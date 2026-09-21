@@ -1,0 +1,26 @@
+{
+  "run_started": "2026-09-17T17:18:18-0400",
+  "label": "DeepSeek V3.2",
+  "or_model": "deepseek/deepseek-v3.2",
+  "provider_pin": {
+    "only": [
+      "siliconflow"
+    ],
+    "allow_fallbacks": false,
+    "quantizations": [
+      "fp8"
+    ]
+  },
+  "reasoning_sent": {
+    "enabled": true
+  },
+  "effort_override": null,
+  "max_tokens_requested": 40000,
+  "cap_applied": 40000,
+  "key_env": "ERA_OPENROUTER_V2",
+  "n_samples": 8,
+  "dataset": "tyrtleli/thinking-benchmark-90",
+  "split": "test",
+  "n_problems": 45,
+  "tag": "thinking_benchmark_90"
+}
