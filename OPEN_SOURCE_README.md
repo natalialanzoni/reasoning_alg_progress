@@ -267,144 +267,118 @@ This was nearly missed: the run had zero errors, zero zero-token trials, reasoni
 tokens present, one provider, one snapshot, and every trial `finish: stop`.
 `reasoning_tokens > 0` is **not** sufficient evidence that thinking is on.
 
-## 7d. Results, and why there are two groups
+## 7d. Results
 
-**Compare only within provider.** Measured 2026-09-18: after censoring both to a
-common 32,768 ceiling, the same V4 Pro family scored **6-14 points** differently
-across endpoints, so truncation is not the explanation. Three things differ between
-the groups at once - model version (Apr vs GA build), quantization (SiliconFlow
-fp8 vs DeepSeek native), and serving behaviour - and this data cannot decompose
-them. Running `deepseek/deepseek-v4-pro-0813` (the GA build at fp8) would isolate
-quantization from version; not done.
+### The rule: compare DeepSeek at a common 32,768-token ceiling
 
-**Group 1 - timeline.** OpenRouter -> SiliconFlow, fp8, censored @32,768:
+The three timeline models were **not served under the same budget**. All three
+requested `max_tokens=40000`; SiliconFlow honoured it only on V4 Pro and ignored it
+outright on the other two, which ran to natural completion:
 
-| model | released | accuracy | median tokens |
+| run | trials stopped at exactly 32,768 | at exactly 40,000 | longest trace |
 |---|---|---|---|
-| R1-0528 | May 2025 | **66.1%** | 21,535 |
-| V3.2 | Dec 2025 | **85.6%** | 11,572 |
-| V4 Pro (Apr build) | Apr 2026 | 78.1% | 8,518 |
+| R1-0528 | 0 | 0 | 66,106 |
+| V3.2 | 0 | 0 | 82,918 |
+| V4 Pro (Apr) `high` | 41 | 27 | 40,000 |
 
-Trace length falls monotonically, 21,535 -> 8,518, a 2.5x reduction. Raw
-(uncensored) accuracies were 76.9 / 91.1 / 80.3; R1 loses **10 points** to
-censoring because SiliconFlow let it run to 66,106 tokens. Never quote raw numbers
-across models with different cap compliance.
+A hard ceiling shows up as a spike at an exact value, which is how you tell truncation
+from a genuinely long answer. R1 and V3.2 have no spike anywhere. V4 hit two ceilings,
+and all 68 of those trials grade wrong with 66 carrying empty response text — the
+model was still thinking when it was cut off.
 
-> **Accuracy column corrected 2026-09-21.** It previously read 63.9 / 84.4 / 78.1,
-> which are the **PRE-REGRADE** grades (verified: `correct_original` reproduces those
-> three figures exactly). The regrade flips 8 R1 trials and 4 V3.2 trials and **none**
-> for V4 — which is why V4 alone looked consistent. Note the direction: regrading
-> raises the two EARLIER models only, so the true V4 dip is **larger** than the old
-> table implied, 85.6 -> 78.1 (-7.5 points) rather than 84.4 -> 78.1 (-6.3).
-> Medians are unaffected and reproduce exactly (all 45 problems, all traces, clamped
-> at 32,768 — that is the sample definition for this table).
+**So score every model as if capped at 32,768: an over-ceiling trial is WRONG and its
+length clamps to the ceiling.** Use 32,768 — the lowest ceiling any model actually hit
+— because it is the only budget at which nothing is unknown:
 
-The **V4 dip to 78.1% is partly artifact**: censoring penalises whichever model hits
-the ceiling most, and V4 Pro April had 76 trials >=32,768 against V3.2's 43.
+- R1 and V3.2 never truncated, so their full lengths are known; anything over 32,768
+  would have been cut off.
+- V4 either stopped **at** 32,768 (it needed more) or ran past it (it needed more).
+  Either way it fails at that ceiling.
 
-**But censoring is not the whole story, and two further confounds sit on this line.**
+At 40,000 the comparison is **not defined**: V4's 41 trials cut at 32,768 are censored,
+and nothing in the data says whether they would have finished by 40,000.
 
-*The requested cap bound on V4 and not on its predecessors.* All three runs asked for
-`max_tokens=40000`. SiliconFlow enforced it exactly on V4 (max token count exactly
-40,000, zero trials above) and **ignored it** on R1 (ran to 66,106; 76 trials >40k, 24
-of them correct) and V3.2 (82,918; 25 trials >40k, 7 correct). So the earlier models
-were allowed to keep thinking past the budget and got credit for answers V4 was cut
-off before reaching. Scoring everything at the cap that was actually requested, on the
-40 competition problems: R1 **69.1%**, V3.2 **89.1%**, V4 **77.8%**. The dip shrinks
-but does not vanish, so it is not purely a ceiling artifact.
+Two ways of handling this that do NOT work, both tried:
 
-*The timeline is not effort-matched, but this is unavoidable rather than an error.*
-From the runconfigs, R1 and V3.2 were sent `{"enabled": true}` with
-`effort_override: null` — no effort at all, i.e. the provider default — while V4 was
-sent `{"effort": "high"}`. **The April V4 build has no `low`**, only `high` and `max`
-(Natalia), so `high` is the lowest available arm and there is no setting that matches
-an unspecified-effort run. Worth stating in any caption; it cannot be fixed by
-re-running.
+- **A 40,000 ceiling** (gives 69.1 / 89.1 / 77.8) — guesses about 41 of V4's 320 trials.
+- **Dropping truncated trials from the denominator** (puts V4 at 98.8%) — asymmetric,
+  it discards V4's hard cases while keeping R1's and V3.2's long trials as successes.
 
-*The `_low` V4 file is not evidence about effort.* `low` does not exist on that build,
-so the request was silently remapped: its median lands on `high` (10,745 vs 11,862),
-not below it. Archived to `data/archive/deepseek_v4_apr_low_unsupported/`. A real
-low-effort arm looks like the GA build's 4,812 against high's 12,129. So the earlier
-reading that "SiliconFlow collapses low and high" was wrong — nothing was collapsed,
-an unsupported value was substituted.
+### Group 1 — timeline (OpenRouter -> SiliconFlow, fp8, @32,768)
 
-**USE A COMMON CEILING OF 32,768, AND THE DIP SURVIVES.**
+40 competition problems, the paper's sample:
 
-This section has been wrong twice. The resolution: cutting every model off at one
-ceiling IS the right comparable sample (Natalia's point), and the ceiling has to be
-**32,768**, not the 40,000 that was requested.
-
-*Why 32,768 and not 40,000.* At 32,768 nothing is unknown for any model. R1 and V3.2
-never truncated, so their full lengths are known and anything over 32,768 would have
-been cut -> wrong. V4 either stopped AT 32,768 (so it needed more -> wrong) or ran past
-it (needed more -> wrong). At 40,000, by contrast, V4's 41 trials that the provider cut
-at 32,768 are **censored**: we cannot tell whether they would have finished by 40,000.
-A 40,000 comparison therefore requires guessing about 41 of V4's 320 trials, and the
-earlier table in this file that quoted 69.1 / 89.1 / 77.8 at a 40k ceiling was doing
-exactly that.
-
-*Where the truncation actually is.* Trials at an exact ceiling value, 40 competition
-problems:
-
-| run | @32,768 | @40,000 | max | over 32,768 |
+| model | released | accuracy | median tokens | over ceiling |
 |---|---|---|---|---|
-| R1-0528 | 0 | 0 | 66,106 | 108 (33.8%) |
-| V3.2 | 0 | 0 | 82,918 | 43 (13.4%) |
-| V4 Pro Apr `high` | 41 | 27 | 40,000 | 76 (23.8%) |
+| R1-0528 | May 2025 | 61.9% | 23,554 | 108 (33.8%) |
+| V3.2 | Dec 2025 | **83.8%** | 13,946 | 43 (13.4%) |
+| V4 Pro (Apr) `high` | Apr 2026 | **75.3%** | 11,862 | 76 (23.8%) |
+| V4 Pro (Apr) `max` | Apr 2026 | 65.3% | 19,599 | 106 (33.1%) |
 
-R1 and V3.2 have no spike anywhere: `max_tokens=40000` was ignored and they always ran
-to completion. V4 hit two hard ceilings, and all 68 of those trials grade wrong with 66
-carrying empty response text.
+Trace length falls monotonically across the timeline, 23,554 -> 11,862.
 
-*The answer, at a common 32,768 ceiling:*
+**The V3.2 -> V4 accuracy dip is ~8.5 points and it is real at this matched budget.**
+But the mechanism is the **tail**, not typical verbosity: V4 has the **shortest median**
+of the three while running over the ceiling nearly **twice as often** as V3.2 (23.8% vs
+13.4%; p75 31,717 vs 25,412). V4 is more concise on a typical problem and blows up more
+often on a hard one, so a fixed budget costs it more. Report that — it is a different
+claim from "V4 reasons worse".
 
-| run | accuracy | median tokens |
-|---|---|---|
-| R1-0528 | 61.9% | 23,554 |
-| V3.2 | **83.8%** | 13,946 |
-| V4 Pro Apr `high` | **75.3%** | 11,862 |
+`max` is worse and much longer than `high`, so on this build more reasoning hurts.
 
-**The V3.2 -> V4 dip is about 8.5 points and it is real at a matched budget.**
+*On the all-45 sample (this section's older convention) the same ceiling gives 66.1 /
+85.6 / 78.1 with medians 21,535 / 11,572 / 8,518. Same ordering, same conclusion. Pick
+one sample and say which.*
 
-*But the mechanism is the tail, not typical verbosity.* V4 has the SHORTEST median of
-the three (11,862 against V3.2's 13,946) while running over 32,768 nearly twice as
-often (23.8% against 13.4%). p75 tells the same story: 31,717 against 25,412. V4 is
-more concise on a typical problem and blows up more often on a hard one, so under a
-fixed budget it fails more. That is a real and reportable property, and it is a
-different claim from "V4 reasons worse".
+### Effort is not matched along the timeline, and cannot be
 
-*Retracted:* an earlier version of this section led with V4 at **98.8%** (249/252),
-computed by dropping V4's provider-truncated trials from the denominator. That is an
-asymmetric selection — it discards V4's hard cases while keeping R1's and V3.2's long
-trials and counting them as successes. Do not quote it.
+R1 and V3.2 were sent `{"enabled": true}` with `effort_override: null` — no effort, so
+the provider default. V4 was sent `{"effort": "high"}`. **The April V4 build has no
+`low`**, only `high` and `max`, so `high` is its lowest arm and no setting matches an
+unspecified-effort run. State it in the caption; re-running cannot fix it.
 
-Whatever ceiling a figure uses, use the same one for every model — but for DeepSeek,
-also say how many trials each model lost to it.
+The `_low` V4 file is **not** evidence about effort: `low` does not exist on that build,
+so the request was silently substituted and its median lands on `high` (10,745 vs
+11,862) rather than below it. Archived to
+`data/archive/deepseek_v4_apr_low_unsupported/`. A genuine low-effort arm looks like
+the GA build's 4,812 against high's 12,129.
 
-*Cross-endpoint gap, for reference only:* V4 Pro at nominally the same effort scores
-SiliconFlow 77.8% against DeepSeek-direct GA 85.9%. GA is a different build AND a
-different provider AND native precision, so this does not belong on the timeline; it
-only bounds how much of V4's level is serving-specific.
+### Group 2 — the effort branch (GA build)
 
-**Group 2 - effort branch.** DeepSeek direct API, GA build, censored @32,768. Zero
-trials cut at 32,768:
+**Compare only within provider and build.** Measured 2026-09-18: at a common 32,768
+ceiling the same V4 Pro family scored **6-14 points** differently across endpoints, so
+truncation is not the explanation there either. Three things differ between the groups
+at once — build (Apr vs GA), quantization (SiliconFlow fp8 vs DeepSeek native) and
+serving behaviour — and this data cannot decompose them. Running
+`deepseek/deepseek-v4-pro-0813` (the GA build at fp8) would isolate quantization from
+build; not done. For reference only: V4 at nominally the same effort scores
+SiliconFlow 75.3% against DeepSeek-direct GA 82.5% at this ceiling.
+
+DeepSeek direct API, GA build, @32,768, all 45 problems. Zero trials cut at the
+ceiling, so censoring does nothing here:
 
 | effort | accuracy | median tokens |
 |---|---|---|
-| low | **92.5%** | **3,963** |
+| low | **95.8%** | **3,963** |
 | high | 84.4% | 9,901 |
-| max | 81.4% | 8,325 |
+| max | 81.7% | 8,325 |
 
-`low` dominates - best accuracy on ~40% of `high`'s tokens - and `max` is both
-worse and shorter than `high`. Unusual shape; verify before publishing.
+`low` dominates — best accuracy on ~40% of `high`'s tokens — and `max` is both worse
+and shorter than `high`. Unusual shape; verify before publishing.
 
-**Effort control is build-dependent.** The Apr-2026 build collapses `low` and
-`high` (9,098 vs 8,518 median, 80.6% vs 80.3%); only `max` differs (15,268). Effort
-arrived with the GA release. So the effort branch must come from GA, and it is
-reported as its own panel rather than hung off the timeline's V4 point.
+**Why the branch must come from GA, not from the timeline's V4 point.** Effort control
+arrived with the GA release: the April build has no `low` at all, so an effort sweep on
+it is impossible (an April `low` request is silently served as something else — see
+above). GA is the only build where the three arms mean what they say, which is why this
+is its own panel rather than hung off the timeline.
 
 **Single-problem probes lie about effort.** n=1 and n=5 samples showed `low` >
 `high`; at 360 trials the ordering was clean. Judge effort response only at scale.
+
+**Every accuracy in this section is post-regrade.** Both tables here previously
+carried pre-regrade numbers — `correct_original` reproduces the old 63.9 / 84.4 / 78.1
+and 92.5 / 84.4 / 81.4 exactly. `apply_regrade.py` must be run before any of these are
+quoted; a file is regraded when it carries `correct_original`.
 
 ## 8. Known gaps
 
