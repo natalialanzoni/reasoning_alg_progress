@@ -281,17 +281,51 @@ quantization from version; not done.
 
 | model | released | accuracy | median tokens |
 |---|---|---|---|
-| R1-0528 | May 2025 | 63.9% | 21,535 |
-| V3.2 | Dec 2025 | 84.4% | 11,572 |
+| R1-0528 | May 2025 | **66.1%** | 21,535 |
+| V3.2 | Dec 2025 | **85.6%** | 11,572 |
 | V4 Pro (Apr build) | Apr 2026 | 78.1% | 8,518 |
 
 Trace length falls monotonically, 21,535 -> 8,518, a 2.5x reduction. Raw
-(uncensored) accuracies were 76.9 / 91.1 / 80.3; R1 loses **13 points** to
+(uncensored) accuracies were 76.9 / 91.1 / 80.3; R1 loses **10 points** to
 censoring because SiliconFlow let it run to 66,106 tokens. Never quote raw numbers
 across models with different cap compliance.
 
+> **Accuracy column corrected 2026-09-21.** It previously read 63.9 / 84.4 / 78.1,
+> which are the **PRE-REGRADE** grades (verified: `correct_original` reproduces those
+> three figures exactly). The regrade flips 8 R1 trials and 4 V3.2 trials and **none**
+> for V4 — which is why V4 alone looked consistent. Note the direction: regrading
+> raises the two EARLIER models only, so the true V4 dip is **larger** than the old
+> table implied, 85.6 -> 78.1 (-7.5 points) rather than 84.4 -> 78.1 (-6.3).
+> Medians are unaffected and reproduce exactly (all 45 problems, all traces, clamped
+> at 32,768 — that is the sample definition for this table).
+
 The **V4 dip to 78.1% is partly artifact**: censoring penalises whichever model hits
 the ceiling most, and V4 Pro April had 76 trials >=32,768 against V3.2's 43.
+
+**But censoring is not the whole story, and two further confounds sit on this line.**
+
+*The requested cap bound on V4 and not on its predecessors.* All three runs asked for
+`max_tokens=40000`. SiliconFlow enforced it exactly on V4 (max token count exactly
+40,000, zero trials above) and **ignored it** on R1 (ran to 66,106; 76 trials >40k, 24
+of them correct) and V3.2 (82,918; 25 trials >40k, 7 correct). So the earlier models
+were allowed to keep thinking past the budget and got credit for answers V4 was cut
+off before reaching. Scoring everything at the cap that was actually requested, on the
+40 competition problems: R1 **69.1%**, V3.2 **89.1%**, V4 **77.8%**. The dip shrinks
+but does not vanish, so it is not purely a ceiling artifact.
+
+*The timeline is not effort-matched.* From the runconfigs: R1 and V3.2 were sent
+`{"enabled": true}` with `effort_override: null` — **no effort at all** — while V4 was
+sent an explicit `{"effort": "high"}`. The timeline therefore compares two
+default-effort runs against one nominally-high-effort run, which violates the rule in
+section 10 and in README run-hygiene item 8.
+
+*And the same model disagrees 8 points across endpoints.* V4 Pro at nominally the same
+effort: SiliconFlow 77.8% against DeepSeek-direct GA 85.9% (40 competition problems,
+uncensored). Whatever V4's true accuracy is, the SiliconFlow number is not it alone.
+
+Confirming the build-dependent effort finding below with the 40-problem medians:
+SiliconFlow Apr gives low 10,745 / high 11,862 (a 10% spread — no real gradient),
+while GA gives low 4,812 / high 12,129 (2.5x — a genuine one).
 
 **Group 2 - effort branch.** DeepSeek direct API, GA build, censored @32,768. Zero
 trials cut at 32,768:
