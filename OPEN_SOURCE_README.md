@@ -313,19 +313,46 @@ off before reaching. Scoring everything at the cap that was actually requested, 
 40 competition problems: R1 **69.1%**, V3.2 **89.1%**, V4 **77.8%**. The dip shrinks
 but does not vanish, so it is not purely a ceiling artifact.
 
-*The timeline is not effort-matched.* From the runconfigs: R1 and V3.2 were sent
-`{"enabled": true}` with `effort_override: null` — **no effort at all** — while V4 was
-sent an explicit `{"effort": "high"}`. The timeline therefore compares two
-default-effort runs against one nominally-high-effort run, which violates the rule in
-section 10 and in README run-hygiene item 8.
+*The timeline is not effort-matched, but this is unavoidable rather than an error.*
+From the runconfigs, R1 and V3.2 were sent `{"enabled": true}` with
+`effort_override: null` — no effort at all, i.e. the provider default — while V4 was
+sent `{"effort": "high"}`. **The April V4 build has no `low`**, only `high` and `max`
+(Natalia), so `high` is the lowest available arm and there is no setting that matches
+an unspecified-effort run. Worth stating in any caption; it cannot be fixed by
+re-running.
 
-*And the same model disagrees 8 points across endpoints.* V4 Pro at nominally the same
-effort: SiliconFlow 77.8% against DeepSeek-direct GA 85.9% (40 competition problems,
-uncensored). Whatever V4's true accuracy is, the SiliconFlow number is not it alone.
+*The `_low` V4 file is not evidence about effort.* `low` does not exist on that build,
+so the request was silently remapped: its median lands on `high` (10,745 vs 11,862),
+not below it. Archived to `data/archive/deepseek_v4_apr_low_unsupported/`. A real
+low-effort arm looks like the GA build's 4,812 against high's 12,129. So the earlier
+reading that "SiliconFlow collapses low and high" was wrong — nothing was collapsed,
+an unsupported value was substituted.
 
-Confirming the build-dependent effort finding below with the 40-problem medians:
-SiliconFlow Apr gives low 10,745 / high 11,862 (a 10% spread — no real gradient),
-while GA gives low 4,812 / high 12,129 (2.5x — a genuine one).
+**THE DIP IS REAL.** Provider is held fixed (SiliconFlow/fp8 for all three timeline
+models — Natalia ran only SiliconFlow for the DeepSeek family), so once the budget is
+matched the comparison stands. At the 40,000 budget every run actually requested, on
+the 40 competition problems, scoring an over-budget trial WRONG and clamping its
+length:
+
+| run | accuracy | over budget | mean tokens (correct) | median (all, clamped) |
+|---|---|---|---|---|
+| R1-0528 | 69.1% | 76 | 19,454 | 23,554 |
+| V3.2 | **89.1%** | 25 | 14,286 | 13,946 |
+| V4 Pro Apr `high` | **77.8%** | 27 | 11,241 | 11,862 |
+| V4 Pro Apr `max` | 69.1% | 45 | 13,605 | 19,599 |
+
+V3.2 -> V4 `high` is an **11.3-point accuracy drop** with length still falling
+(13,946 -> 11,862 median). Not a ceiling artifact and not a provider artifact.
+Also note `max` is both **worse and much longer** than `high` — 69.1% at 19,599
+against 77.8% at 11,862 — so on this build more reasoning actively hurts.
+
+At the figure's 32,768 ceiling the same ordering holds: 61.9 / 83.8 / 75.3 / 65.3.
+Quote whichever ceiling the figure uses, but quote the same one for every model.
+
+*Cross-endpoint gap, for reference only:* V4 Pro at nominally the same effort scores
+SiliconFlow 77.8% against DeepSeek-direct GA 85.9%. GA is a different build AND a
+different provider AND native precision, so this does not belong on the timeline; it
+only bounds how much of V4's level is serving-specific.
 
 **Group 2 - effort branch.** DeepSeek direct API, GA build, censored @32,768. Zero
 trials cut at 32,768:

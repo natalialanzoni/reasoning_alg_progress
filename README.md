@@ -493,7 +493,35 @@ Uncapped, low (37.7%) appeared to beat medium (36.3%), which is backwards for an
 effort story. Capped, the three are close and ordered in effort. **Check k before
 comparing any two lines**: `Counter(len(r["correct"]) for r in rows)`.
 
-### 13. The case-study columns are at DIFFERENT reasoning efforts
+### 13. Compare accuracy only at a COMMON token budget
+
+A provider that ignores `max_tokens` for one model and honours it for another makes
+accuracy incomparable across those models, and the bias always favours the model that
+was allowed to overrun. The DeepSeek timeline is the clean example: all three runs
+requested **40,000**, and SiliconFlow enforced it exactly on V4 Pro (max token count
+exactly 40,000, zero trials above) while ignoring it on R1-0528 (ran to **66,106**; 76
+trials over budget, 24 of them correct) and V3.2 (**82,918**; 25 over, 7 correct). The
+earlier models kept thinking past the budget and were credited for answers V4 was cut
+off before reaching.
+
+Fix: pick one budget, score an over-budget trial **wrong**, and clamp its length —
+that is what a backend enforcing that budget would have produced. On the 40
+competition problems at 40,000:
+
+| run | raw accuracy | at a common 40k |
+| --- | --- | --- |
+| R1-0528 | 76.6% | **69.1%** |
+| V3.2 | 91.2% | **89.1%** |
+| V4 Pro Apr `high` | 77.8% | 77.8% (unchanged — it never overran) |
+
+R1 loses 7.5 points, V3.2 loses 2.1, V4 loses nothing. Quoting raw accuracies here
+would have made V4's decline look like a 13-point collapse from V3.2 instead of 11.3,
+and R1 look 7.5 points better than a 40k-capped backend would have shown.
+
+`verify_run.py --cap` reports cap compliance per run; check it before comparing.
+See `OPEN_SOURCE_README.md` 7d, and failure modes 2 and 6.
+
+### 14. The case-study columns are at DIFFERENT reasoning efforts
 
 `fig_mechanism` compares gpt-oss 20B->120B against GLM 5.2->5.3. The gpt-oss runs are
 **medium** effort; the GLM runs are **high** (their medium runs were silently remapped
@@ -504,7 +532,7 @@ what the 1.7x ratios measure — but the token LEVELS are not comparable across 
 GLM's 14.2k against gpt-oss's 7.8k is partly the effort setting, not the model. The
 caption should say the figure compares ratios, not levels. See failure mode 8.
 
-### 14. Six model clusters cannot support a 5% significance claim
+### 15. Six model clusters cannot support a 5% significance claim
 
 `Month` is constant within a model, so the bootstrap must resample over MODELS — 8
 for OpenAI, 6 for Anthropic. Two things go wrong if this is done casually, and the
