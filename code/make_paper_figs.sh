@@ -29,6 +29,7 @@ ARTIFACTS=(
   "fig4_forecast_excess_appendix:figure_forecast_ft.py"  # appendix: same fit, excess tokens
   "fig4_forecast_precutoff_appendix:figure_forecast_ft.py"  # appendix: contamination check
   "fig1_grid_thinking:figure1_grid_ft.py"               # appendix: thinking tokens only
+  "fig_effort:figure_effort_ft.py"                      # appendix: low/medium/high effort
 )
 TABLES=(
   "table_decay:table_decay.py"                          # main regression table

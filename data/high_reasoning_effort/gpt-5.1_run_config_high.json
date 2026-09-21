@@ -1,0 +1,13 @@
+{
+  "model": "gpt-5.1",
+  "effort": "high",
+  "n_samples": 8,
+  "max_output_tokens": 40000,
+  "endpoint": "/v1/responses",
+  "dataset": "tyrtleli/thinking-benchmark-hard-but-doable-10",
+  "split": "test",
+  "run_name": "high_reasoning_effort",
+  "settings_verified_against": "data/high_reasoning_effort/*_requests.jsonl",
+  "git_commit": "e7235a4b5dadb28500801344c435c37ab250a8e4",
+  "utc": "2026-09-20T20:15:44.380325Z"
+}

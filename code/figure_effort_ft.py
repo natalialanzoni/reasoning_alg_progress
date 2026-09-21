@@ -6,13 +6,17 @@ problems), faint per-problem lines behind, the minimal human derivation floor,
 and the per-effort decay rate (same excess-over-floor FE spec as the forecast,
 MHD = shortest canonical, o3 included) shown in the legend.
 
-Coverage differs by effort -- gather() silently skips a model with no run file, so
-check the matrix below before reading a gap as a finding. Every model except gpt-5.1
-now has all three arms; gpt-5.1 has medium only until its low/high runs land:
+COVERAGE IS NOW COMPLETE: all 8 GPT models have all three arms (gpt-5.1's low/high
+runs landed 2026-09-20). gather() still skips a model with no run file SILENTLY, so if
+a line ever loses a point, look for a missing file before reading it as a finding.
 
-  low   : o3, gpt-5, 5.2, 5.4, 5.5, 5.6-sol, 6-astra   (k=8)
-  medium: o3, gpt-5, 5.1, 5.2, 5.4, 5.5, 5.6-sol, 6-astra  (k=32, the hard-but-doable dir)
-  high  : o3, gpt-5, 5.2, 5.4, 5.5, 5.6-sol, 6-astra   (k=8)
+  low / high : o3, gpt-5, 5.1, 5.2, 5.4, 5.5, 5.6-sol, 6-astra   (k=8)
+  medium     : the same 8                                        (k=32, hard-but-doable dir)
+
+THE EFFORTS ARE NOT MATCHED ON k: low and high are k=8, medium is k=32, because the
+medium arm reuses the existing hard-but-doable runs rather than a dedicated sweep.
+That does not bias a per-model mean, but it does mean the medium line rests on 4x the
+attempts, so its points are steadier. Worth a caption line.
 
 To add a model's low/high arms:  bash code/run_openai_effort.sh <model> low|high
 That script pins k=8 -- note the medium arm comes from the k=32 runs, so the efforts
@@ -40,6 +44,9 @@ sys.path.insert(0, os.path.expanduser("~/.claude/skills/futuretech-charts/python
 from futuretech_helpers import use_style, unit_formatter, save_figure
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+_fsspec = importlib.util.spec_from_file_location(
+    "fs", os.path.join(HERE, "figures_sept.py"))
+fs = importlib.util.module_from_spec(_fsspec); _fsspec.loader.exec_module(fs)
 _spec = importlib.util.spec_from_file_location("pf", os.path.join(HERE, "paper_figures_71226.py"))
 pf = importlib.util.module_from_spec(_spec); _spec.loader.exec_module(pf)
 CANON, load_rows, ORIGIN = pf.CANON, pf.load_rows, pf.ORIGIN
@@ -88,12 +95,16 @@ def gather(eff):
             tid = str(r["task_id"])
             if tid not in CANON_KEYS:      # competition problems only (no MATH-500)
                 continue
-            tt = r.get("thinking_tokens", [1] * len(r["correct"]))
-            toks = [t for t in r["total_completion_tokens"] if t >= 50]
+            texts = r.get("response_texts", [None] * len(r["correct"]))
+            # central rules (figures_sept): zero-thinking traces are valid, and a
+            # cap-hit trace is a real attempt that FAILED -- it must not supply a
+            # "successful" length to the regression.
+            toks = [t for t, x in zip(r["total_completion_tokens"], texts)
+                    if fs._trial_ok(t, x)]
             if toks:
                 by_id[tid] = float(np.mean(toks))
-            for tok, c, th in zip(r["total_completion_tokens"], r["correct"], tt):
-                if tok < 50 or not c:      # zero-thinking traces are valid
+            for tok, c, txt in zip(r["total_completion_tokens"], r["correct"], texts):
+                if not fs._trial_ok(tok, txt) or not fs._trial_correct(tok, c):
                     continue
                 if tok > CANON[tid]["min"]:
                     reg.append({"problem": tid, "month": month,
