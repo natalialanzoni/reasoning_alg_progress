@@ -328,26 +328,47 @@ low-effort arm looks like the GA build's 4,812 against high's 12,129. So the ear
 reading that "SiliconFlow collapses low and high" was wrong — nothing was collapsed,
 an unsupported value was substituted.
 
-**THE DIP IS REAL.** Provider is held fixed (SiliconFlow/fp8 for all three timeline
-models — Natalia ran only SiliconFlow for the DeepSeek family), so once the budget is
-matched the comparison stands. At the 40,000 budget every run actually requested, on
-the 40 competition problems, scoring an over-budget trial WRONG and clamping its
-length:
+**THE DIP IS AN ARTIFACT: V4 IS THE ONLY MODEL THAT WAS TRUNCATED AT ALL.**
 
-| run | accuracy | over budget | mean tokens (correct) | median (all, clamped) |
+This corrects an earlier note in this file (and in commit ddc2dba) that called the dip
+real. It is not. Look at where the token counts pile up, on the 40 competition
+problems:
+
+| run | trials at exactly 32,768 | at exactly 40,000 | truncated total | max token count |
 |---|---|---|---|---|
-| R1-0528 | 69.1% | 76 | 19,454 | 23,554 |
-| V3.2 | **89.1%** | 25 | 14,286 | 13,946 |
-| V4 Pro Apr `high` | **77.8%** | 27 | 11,241 | 11,862 |
-| V4 Pro Apr `max` | 69.1% | 45 | 13,605 | 19,599 |
+| R1-0528 | **0** | **0** | **0** | 66,106 |
+| V3.2 | **0** | **0** | **0** | 82,918 |
+| V4 Pro Apr `high` | 41 | 27 | **68 of 320 (21.3%)** | 40,000 |
+| V4 Pro Apr `max` | 49 | 45 | **94 of 320 (29.4%)** | 40,000 |
 
-V3.2 -> V4 `high` is an **11.3-point accuracy drop** with length still falling
-(13,946 -> 11,862 median). Not a ceiling artifact and not a provider artifact.
-Also note `max` is both **worse and much longer** than `high` — 69.1% at 19,599
-against 77.8% at 11,862 — so on this build more reasoning actively hurts.
+R1 and V3.2 have **no truncation spike anywhere** — smooth distributions running to
+66,106 and 82,918, i.e. `max_tokens=40000` was ignored outright and they always ran to
+natural completion. V4 hits *two* hard ceilings, 32,768 and 40,000. All 68 of `high`'s
+truncated trials are graded wrong and 66 of them have empty response text, which is
+exactly what a cut-off mid-thinking trace looks like. The grader is fine; the serving
+was not.
 
-At the figure's 32,768 ceiling the same ordering holds: 61.9 / 83.8 / 75.3 / 65.3.
-Quote whichever ceiling the figure uses, but quote the same one for every model.
+So V4's as-run 77.8% already contains **68 automatic zeros** that its predecessors
+never had to absorb. Three readings of the same data:
+
+| run | as-run | common ceiling @32,768 | excluding truncated trials |
+|---|---|---|---|
+| R1-0528 | 76.6% | 61.9% | 76.6% (nothing to drop) |
+| V3.2 | 91.2% | 83.8% | 91.2% (nothing to drop) |
+| V4 Pro Apr `high` | 77.8% | 75.3% | **98.8%** (n=252) |
+
+On the 79% of trials V4 was allowed to finish it got **249 of 252 right**. It is the
+most accurate model in the family, not the least. The 98.8% is an upper bound —
+completion is selected on the easier problems — and 75.3% is a lower bound that
+charges V4 for truncation the others escaped. **The true value is somewhere between,
+and the data cannot say the dip exists.** Do not report it as a capability regression.
+
+`max` is both worse and much longer than `high` (65.3% vs 75.3% at the common ceiling,
+19,599 vs 11,862 median), but note it is also truncated on 29.4% of trials, so the
+same caveat applies with more force.
+
+Whatever ceiling a figure uses, use the same one for every model — but for DeepSeek,
+also say how many trials each model lost to it.
 
 *Cross-endpoint gap, for reference only:* V4 Pro at nominally the same effort scores
 SiliconFlow 77.8% against DeepSeek-direct GA 85.9%. GA is a different build AND a

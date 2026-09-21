@@ -498,25 +498,39 @@ comparing any two lines**: `Counter(len(r["correct"]) for r in rows)`.
 A provider that ignores `max_tokens` for one model and honours it for another makes
 accuracy incomparable across those models, and the bias always favours the model that
 was allowed to overrun. The DeepSeek timeline is the clean example: all three runs
-requested **40,000**, and SiliconFlow enforced it exactly on V4 Pro (max token count
-exactly 40,000, zero trials above) while ignoring it on R1-0528 (ran to **66,106**; 76
-trials over budget, 24 of them correct) and V3.2 (**82,918**; 25 over, 7 correct). The
-earlier models kept thinking past the budget and were credited for answers V4 was cut
-off before reaching.
+requested **40,000**, and SiliconFlow honoured it only on V4 Pro while ignoring it
+entirely on R1-0528 (ran to **66,106**) and V3.2 (**82,918**). The earlier models kept
+thinking past the budget and were credited for answers V4 was cut off before
+reaching.
 
-Fix: pick one budget, score an over-budget trial **wrong**, and clamp its length —
-that is what a backend enforcing that budget would have produced. On the 40
-competition problems at 40,000:
+**And check WHERE the token counts pile up, not just the maximum.** A hard ceiling
+shows as a spike at an exact value. On the 40 competition problems:
 
-| run | raw accuracy | at a common 40k |
-| --- | --- | --- |
-| R1-0528 | 76.6% | **69.1%** |
-| V3.2 | 91.2% | **89.1%** |
-| V4 Pro Apr `high` | 77.8% | 77.8% (unchanged — it never overran) |
+| run | @ exactly 32,768 | @ exactly 40,000 | truncated | max |
+| --- | --- | --- | --- | --- |
+| R1-0528 | 0 | 0 | **0** | 66,106 |
+| V3.2 | 0 | 0 | **0** | 82,918 |
+| V4 Pro Apr `high` | 41 | 27 | **68 of 320 (21.3%)** | 40,000 |
 
-R1 loses 7.5 points, V3.2 loses 2.1, V4 loses nothing. Quoting raw accuracies here
-would have made V4's decline look like a 13-point collapse from V3.2 instead of 11.3,
-and R1 look 7.5 points better than a 40k-capped backend would have shown.
+R1 and V3.2 were **never truncated** — smooth distributions, `max_tokens` ignored
+outright. V4 hit two ceilings. So V4's as-run accuracy carries 68 automatic zeros its
+predecessors never absorbed, and any single common ceiling still charges V4 for
+truncation the others escaped:
+
+| run | as-run | common @32,768 | excluding truncated |
+| --- | --- | --- | --- |
+| R1-0528 | 76.6% | 61.9% | 76.6% |
+| V3.2 | 91.2% | 83.8% | 91.2% |
+| V4 Pro Apr `high` | 77.8% | 75.3% | **98.8%** (n=252) |
+
+On the 79% of trials it was allowed to finish, V4 got **249 of 252 right**. Its
+apparent accuracy dip below V3.2 is a **serving artifact, not a capability
+regression** — report a range (75.3% lower bound, 98.8% upper bound), never the
+as-run number alone.
+
+The general rule: report accuracy with the ceiling named AND the number of trials each
+model lost to it. A model that overran is being flattered; a model that was truncated
+is being penalised, and the two never appear in the same column honestly.
 
 `verify_run.py --cap` reports cap compliance per run; check it before comparing.
 See `OPEN_SOURCE_README.md` 7d, and failure modes 2 and 6.
