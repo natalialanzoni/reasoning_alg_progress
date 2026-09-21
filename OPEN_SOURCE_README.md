@@ -328,44 +328,55 @@ low-effort arm looks like the GA build's 4,812 against high's 12,129. So the ear
 reading that "SiliconFlow collapses low and high" was wrong — nothing was collapsed,
 an unsupported value was substituted.
 
-**THE DIP IS AN ARTIFACT: V4 IS THE ONLY MODEL THAT WAS TRUNCATED AT ALL.**
+**USE A COMMON CEILING OF 32,768, AND THE DIP SURVIVES.**
 
-This corrects an earlier note in this file (and in commit ddc2dba) that called the dip
-real. It is not. Look at where the token counts pile up, on the 40 competition
+This section has been wrong twice. The resolution: cutting every model off at one
+ceiling IS the right comparable sample (Natalia's point), and the ceiling has to be
+**32,768**, not the 40,000 that was requested.
+
+*Why 32,768 and not 40,000.* At 32,768 nothing is unknown for any model. R1 and V3.2
+never truncated, so their full lengths are known and anything over 32,768 would have
+been cut -> wrong. V4 either stopped AT 32,768 (so it needed more -> wrong) or ran past
+it (needed more -> wrong). At 40,000, by contrast, V4's 41 trials that the provider cut
+at 32,768 are **censored**: we cannot tell whether they would have finished by 40,000.
+A 40,000 comparison therefore requires guessing about 41 of V4's 320 trials, and the
+earlier table in this file that quoted 69.1 / 89.1 / 77.8 at a 40k ceiling was doing
+exactly that.
+
+*Where the truncation actually is.* Trials at an exact ceiling value, 40 competition
 problems:
 
-| run | trials at exactly 32,768 | at exactly 40,000 | truncated total | max token count |
+| run | @32,768 | @40,000 | max | over 32,768 |
 |---|---|---|---|---|
-| R1-0528 | **0** | **0** | **0** | 66,106 |
-| V3.2 | **0** | **0** | **0** | 82,918 |
-| V4 Pro Apr `high` | 41 | 27 | **68 of 320 (21.3%)** | 40,000 |
-| V4 Pro Apr `max` | 49 | 45 | **94 of 320 (29.4%)** | 40,000 |
+| R1-0528 | 0 | 0 | 66,106 | 108 (33.8%) |
+| V3.2 | 0 | 0 | 82,918 | 43 (13.4%) |
+| V4 Pro Apr `high` | 41 | 27 | 40,000 | 76 (23.8%) |
 
-R1 and V3.2 have **no truncation spike anywhere** — smooth distributions running to
-66,106 and 82,918, i.e. `max_tokens=40000` was ignored outright and they always ran to
-natural completion. V4 hits *two* hard ceilings, 32,768 and 40,000. All 68 of `high`'s
-truncated trials are graded wrong and 66 of them have empty response text, which is
-exactly what a cut-off mid-thinking trace looks like. The grader is fine; the serving
-was not.
+R1 and V3.2 have no spike anywhere: `max_tokens=40000` was ignored and they always ran
+to completion. V4 hit two hard ceilings, and all 68 of those trials grade wrong with 66
+carrying empty response text.
 
-So V4's as-run 77.8% already contains **68 automatic zeros** that its predecessors
-never had to absorb. Three readings of the same data:
+*The answer, at a common 32,768 ceiling:*
 
-| run | as-run | common ceiling @32,768 | excluding truncated trials |
-|---|---|---|---|
-| R1-0528 | 76.6% | 61.9% | 76.6% (nothing to drop) |
-| V3.2 | 91.2% | 83.8% | 91.2% (nothing to drop) |
-| V4 Pro Apr `high` | 77.8% | 75.3% | **98.8%** (n=252) |
+| run | accuracy | median tokens |
+|---|---|---|
+| R1-0528 | 61.9% | 23,554 |
+| V3.2 | **83.8%** | 13,946 |
+| V4 Pro Apr `high` | **75.3%** | 11,862 |
 
-On the 79% of trials V4 was allowed to finish it got **249 of 252 right**. It is the
-most accurate model in the family, not the least. The 98.8% is an upper bound —
-completion is selected on the easier problems — and 75.3% is a lower bound that
-charges V4 for truncation the others escaped. **The true value is somewhere between,
-and the data cannot say the dip exists.** Do not report it as a capability regression.
+**The V3.2 -> V4 dip is about 8.5 points and it is real at a matched budget.**
 
-`max` is both worse and much longer than `high` (65.3% vs 75.3% at the common ceiling,
-19,599 vs 11,862 median), but note it is also truncated on 29.4% of trials, so the
-same caveat applies with more force.
+*But the mechanism is the tail, not typical verbosity.* V4 has the SHORTEST median of
+the three (11,862 against V3.2's 13,946) while running over 32,768 nearly twice as
+often (23.8% against 13.4%). p75 tells the same story: 31,717 against 25,412. V4 is
+more concise on a typical problem and blows up more often on a hard one, so under a
+fixed budget it fails more. That is a real and reportable property, and it is a
+different claim from "V4 reasons worse".
+
+*Retracted:* an earlier version of this section led with V4 at **98.8%** (249/252),
+computed by dropping V4's provider-truncated trials from the denominator. That is an
+asymmetric selection — it discards V4's hard cases while keeping R1's and V3.2's long
+trials and counting them as successes. Do not quote it.
 
 Whatever ceiling a figure uses, use the same one for every model — but for DeepSeek,
 also say how many trials each model lost to it.

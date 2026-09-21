@@ -503,37 +503,40 @@ entirely on R1-0528 (ran to **66,106**) and V3.2 (**82,918**). The earlier model
 thinking past the budget and were credited for answers V4 was cut off before
 reaching.
 
-**And check WHERE the token counts pile up, not just the maximum.** A hard ceiling
-shows as a spike at an exact value. On the 40 competition problems:
+**Fix: cut every model off at ONE ceiling, and pick the LOWEST ceiling any model
+actually hit.** Score an over-ceiling trial wrong and clamp its length — that is what a
+backend enforcing that ceiling would have produced.
 
-| run | @ exactly 32,768 | @ exactly 40,000 | truncated | max |
-| --- | --- | --- | --- | --- |
-| R1-0528 | 0 | 0 | **0** | 66,106 |
-| V3.2 | 0 | 0 | **0** | 82,918 |
-| V4 Pro Apr `high` | 41 | 27 | **68 of 320 (21.3%)** | 40,000 |
+For DeepSeek that ceiling is **32,768**, not the 40,000 that was requested, because at
+32,768 nothing is unknown for any model:
 
-R1 and V3.2 were **never truncated** — smooth distributions, `max_tokens` ignored
-outright. V4 hit two ceilings. So V4's as-run accuracy carries 68 automatic zeros its
-predecessors never absorbed, and any single common ceiling still charges V4 for
-truncation the others escaped:
+- R1 and V3.2 never truncated, so their full lengths are known and anything over
+  32,768 would have been cut.
+- V4 either stopped **at** 32,768 (so it needed more) or ran past it (needed more).
+  Either way it fails at that ceiling.
 
-| run | as-run | common @32,768 | excluding truncated |
+At 40,000 instead, V4's 41 trials that the provider cut at 32,768 are **censored** — we
+cannot tell whether they would have finished by 40,000. A 40k comparison has to guess
+about 41 of V4's 320 trials, so it is not well defined.
+
+| run | @32,768 accuracy | median tokens | over 32,768 |
 | --- | --- | --- | --- |
-| R1-0528 | 76.6% | 61.9% | 76.6% |
-| V3.2 | 91.2% | 83.8% | 91.2% |
-| V4 Pro Apr `high` | 77.8% | 75.3% | **98.8%** (n=252) |
+| R1-0528 | 61.9% | 23,554 | 108 (33.8%) |
+| V3.2 | **83.8%** | 13,946 | 43 (13.4%) |
+| V4 Pro Apr `high` | **75.3%** | 11,862 | 76 (23.8%) |
 
-On the 79% of trials it was allowed to finish, V4 got **249 of 252 right**. Its
-apparent accuracy dip below V3.2 is a **serving artifact, not a capability
-regression** — report a range (75.3% lower bound, 98.8% upper bound), never the
-as-run number alone.
+The V3.2 -> V4 dip is ~8.5 points and **survives a matched budget**. But the mechanism
+is the tail, not typical verbosity: V4 has the **shortest median** of the three while
+running over 32,768 nearly **twice as often**. It is more concise on a typical problem
+and blows up more often on a hard one, so a fixed budget costs it more. Report that,
+not "V4 reasons worse".
 
-The general rule: report accuracy with the ceiling named AND the number of trials each
-model lost to it. A model that overran is being flattered; a model that was truncated
-is being penalised, and the two never appear in the same column honestly.
+**Do not instead drop the truncated trials from the denominator.** That is asymmetric:
+it discards V4's hard cases while keeping R1's and V3.2's long trials and scoring them
+as successes. It puts V4 at 98.8% and is meaningless.
 
-`verify_run.py --cap` reports cap compliance per run; check it before comparing.
-See `OPEN_SOURCE_README.md` 7d, and failure modes 2 and 6.
+The general rule: name the ceiling, pick the lowest one any model actually hit, and
+report how many trials each model lost to it.
 
 ### 14. The case-study columns are at DIFFERENT reasoning efforts
 
