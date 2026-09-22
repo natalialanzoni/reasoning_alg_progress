@@ -33,7 +33,7 @@ USAGE
   python code/llm_judge/judge_traces.py --show-one     # print a real payload
   python code/llm_judge/judge_traces.py --limit 6 --send   # pilot (spread over problems)
   python code/llm_judge/judge_traces.py --send            # full run (~$7, ~40 min)
-  python code/llm_judge/aggregate.py code/llm_judge/out/judge_whole_gemini.jsonl
+  python code/llm_judge/behaviour_table.py --tex paper_figs/table_behaviours.tex
 
   Needs ERA_OPENROUTER_V2 (or OPENROUTER_API_KEY) in the environment.
   NOTHING IS SENT without --send.
@@ -62,7 +62,10 @@ MAX_OUT = 12000          # The template puts "## Thoughts" FIRST and <count> LAS
                         # clears it. Costs nothing for replies that finish early.
 OPENROUTER = "https://openrouter.ai/api/v1"
 OUT_DIR = os.path.join(HERE, "out")
-BEHAVIOURS = ("backtracking", "verification", "subgoal_setting", "backward_chaining")
+# Gandhi et al. define four behaviours; we run only these two. The other two
+# templates are not in this folder because we never used them -- fetch them from
+# kanishkg/cognitive-behaviors if you want them.
+BEHAVIOURS = ("backtracking", "verification")
 
 # Whitespace-tolerant on purpose: the templates write "<count> [1/2/...] </count>"
 # with spaces, so upstream's own r"<count>(\d+)</count>" would miss a spaced count

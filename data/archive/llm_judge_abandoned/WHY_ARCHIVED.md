@@ -1,4 +1,9 @@
-# Abandoned LLM-judge runs — do not use these numbers
+# Abandoned LLM-judge runs — DO NOT USE. Nothing here feeds the paper.
+
+The paper uses exactly two files: `paper_figs/table_behaviours.tex` and the
+`code/llm_judge/out/judge_whole_gemini.jsonl` it is built from. Everything in this
+directory is a method that was tested and rejected, kept only so the rejection is
+auditable. If you are replicating, you can ignore this whole folder.
 
 All of these come from methods that were tested and rejected on 2026-09-21.
 They are kept only so the rejection is auditable. The live pipeline is

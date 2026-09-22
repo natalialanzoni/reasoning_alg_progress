@@ -1,5 +1,10 @@
 # LLM judge — counting backtracking and verification in reasoning traces
 
+**The deliverable is `paper_figs/table_behaviours.tex`, built by
+`behaviour_table.py` from `out/judge_whole_gemini.jsonl`. Nothing else in this
+folder feeds the paper.** Everything else is either the script that produced that
+JSONL, documentation of how we got there, or the RA adjudication pack.
+
 Counts two of Gandhi et al.'s cognitive behaviours in the traces behind
 `fig_mechanism`, to ask what actually changes when a model gets more efficient:
 does it verify less, backtrack less, or just write less?
@@ -9,7 +14,7 @@ python code/llm_judge/judge_traces.py --estimate            # volume + cost, sen
 python code/llm_judge/judge_traces.py --show-one            # print one real payload
 python code/llm_judge/judge_traces.py --limit 6 --send      # pilot, spread over problems
 python code/llm_judge/judge_traces.py --send                # full run, ~$6, ~40 min
-python code/llm_judge/aggregate.py code/llm_judge/out/judge_whole_gemini.jsonl
+python code/llm_judge/behaviour_table.py --tex paper_figs/table_behaviours.tex
 ```
 
 Needs `ERA_OPENROUTER_V2` (or `OPENROUTER_API_KEY`). **Nothing is sent without
@@ -19,10 +24,10 @@ Needs `ERA_OPENROUTER_V2` (or `OPENROUTER_API_KEY`). **Nothing is sent without
 
 | File | Role |
 | --- | --- |
-| `*_v0.txt` | the four prompt templates, from `kanishkg/cognitive-behaviors` |
+| `backtracking_v0.txt`, `verification_v0.txt` | the two prompts, from `kanishkg/cognitive-behaviors` |
 | `load_traces.py` | loads the CoT for the four fig_mechanism models, normalised |
 | `judge_traces.py` | sends each whole trace to the judge, parses `<count>` |
-| `aggregate.py` | per-model counts, raw and per-10k-token |
+| `behaviour_table.py` | **builds `paper_figs/table_behaviours.tex`** |
 | `out/judge_whole_gemini.jsonl` | the run; one record per trace per behaviour |
 
 ## The prompts
@@ -103,7 +108,7 @@ cheaper, so it is the judge. Temperature 0, recorded per record.
 `<count>` last, so a verbose judge is cut off before it emits the number — an
 unparsable record, not a zero. At 600 this lost 7/96 replies, all from the
 longest-trace model; at 2000 it lost 81/766 on Gemini. Now 4000. If you change
-judges, check the unparsable rate first, and note that `aggregate.py` DROPS
+judges, check the unparsable rate first, and note that `behaviour_table.py` DROPS
 unparsable records rather than counting them as zero.
 
 **`--limit N` must spread across problems.** Taking the first N traces takes N
@@ -112,7 +117,7 @@ zero backtracking everywhere. It now walks distinct problems.
 
 ## Reading the output
 
-`aggregate.py` prints per-trace counts and per-10k-token rates. Use the **rate**
+`behaviour_table.py` prints per-trace counts and per-10k-token rates. Use the **rate**
 when comparing models of different verbosity: GLM 5.2's traces are ~3.4x longer
 than 5.3's, so a per-trace difference partly just restates a length difference.
 "Verifies less" and "writes less" are different claims and the two columns
