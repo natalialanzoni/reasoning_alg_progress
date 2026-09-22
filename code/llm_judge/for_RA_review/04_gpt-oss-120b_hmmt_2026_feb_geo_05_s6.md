@@ -1,17 +1,22 @@
 # gpt-oss-120b — hmmt_2026_feb_geo_05 sample 6
 
-Trace: `traces/04_gpt-oss-120b_hmmt_2026_feb_geo_05_s6.txt` (41,887 chars, 13,278 tokens)
-
 | | count |
 |---|---:|
 | LLM judge (gemini-2.5-flash) | **0** |
 | string markers | **3** |
 
+**FULL CHAIN OF THOUGHT: [`traces/04_gpt-oss-120b_hmmt_2026_feb_geo_05_s6.txt`](traces/04_gpt-oss-120b_hmmt_2026_feb_geo_05_s6.txt)** — 41,887 chars, 13,278 tokens. This is the complete trace the
+judge scored; nothing is truncated. Open it alongside this sheet.
+
+## The problem being solved
+
+> In the figure, three circles of radius $2$ are internally tangent to a circle $\Omega$ centered at $O$ of radius $11$, and three chords of $\Omega$ are each tangent to two of the three circles. Given that $O$ lies inside the triangle formed by the three chords and two of the chords have length $4\sqrt{30}$, compute the length of the third chord.
+
 ---
 
-## 1. What the judge said
+## 1. What the judge said (complete, 1,295 chars)
 
-Verify each instance it names against the trace.
+Verify each numbered instance against the trace.
 
 ```
 ## Thoughts
@@ -31,8 +36,9 @@ no
 **Your count of GENUINE backtracking the judge named:** ____ of 0
 
 Backtracking = the writer realises a path will not work and explicitly
-abandons it to try a different approach. A routine arithmetic re-check,
-a clarification, or re-reading the problem is NOT backtracking.
+abandons it to try a different approach. A routine arithmetic re-check, a
+clarification, expressing uncertainty ('Hmm'), or re-reading the problem is
+NOT backtracking.
 
 ---
 
@@ -56,7 +62,8 @@ a clarification, or re-reading the problem is NOT backtracking.
 
 ## 3. Did either instrument MISS anything?
 
-Skim the trace for abandonment the judge did not name and no marker caught.
+Skim the full trace for abandonment the judge did not name and no marker
+caught. This is the most valuable part of the review.
 
 **Missed instances (quote them):**
 

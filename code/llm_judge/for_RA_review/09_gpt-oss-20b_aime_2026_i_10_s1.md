@@ -1,17 +1,22 @@
 # gpt-oss-20b — aime_2026_i_10 sample 1
 
-Trace: `traces/09_gpt-oss-20b_aime_2026_i_10_s1.txt` (93,933 chars, 32,492 tokens)
-
 | | count |
 |---|---:|
 | LLM judge (gemini-2.5-flash) | **3** |
 | string markers | **5** |
 
+**FULL CHAIN OF THOUGHT: [`traces/09_gpt-oss-20b_aime_2026_i_10_s1.txt`](traces/09_gpt-oss-20b_aime_2026_i_10_s1.txt)** — 93,933 chars, 32,492 tokens. This is the complete trace the
+judge scored; nothing is truncated. Open it alongside this sheet.
+
+## The problem being solved
+
+> Let $\triangle ABC$ have side lengths $AB=13$, $BC=14$, and $CA=15$. Triangle $\triangle A'B'C'$ is obtained by rotating $\triangle ABC$ about its circumcenter so that $\overline{A'C'}$ is perpendicular to $\overline{BC}$, with $A'$ and $B$ not on the same side of line $B'C'$. Find the integer closest to the area of hexagon $AA'CC'BB'$.
+
 ---
 
-## 1. What the judge said
+## 1. What the judge said (complete, 4,622 chars)
 
-Verify each instance it names against the trace.
+Verify each numbered instance against the trace.
 
 ```
 ## Thoughts
@@ -50,8 +55,9 @@ yes
 **Your count of GENUINE backtracking the judge named:** ____ of 3
 
 Backtracking = the writer realises a path will not work and explicitly
-abandons it to try a different approach. A routine arithmetic re-check,
-a clarification, or re-reading the problem is NOT backtracking.
+abandons it to try a different approach. A routine arithmetic re-check, a
+clarification, expressing uncertainty ('Hmm'), or re-reading the problem is
+NOT backtracking.
 
 ---
 
@@ -83,7 +89,8 @@ a clarification, or re-reading the problem is NOT backtracking.
 
 ## 3. Did either instrument MISS anything?
 
-Skim the trace for abandonment the judge did not name and no marker caught.
+Skim the full trace for abandonment the judge did not name and no marker
+caught. This is the most valuable part of the review.
 
 **Missed instances (quote them):**
 

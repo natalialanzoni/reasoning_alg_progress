@@ -45,7 +45,8 @@ That is not backtracking either. Marker hits in that context are flagged
 
 ## How to review
 
-Each `NN_model_task_sN.md` has four sections:
+Each `NN_model_task_sN.md` opens with the counts, a link to the **complete
+chain of thought** in `traces/`, and the problem being solved. Then four sections:
 
 1. **What the judge said** — its reasoning names specific instances. Check each
    against the trace and count how many are genuine.
@@ -54,9 +55,20 @@ Each `NN_model_task_sN.md` has four sections:
    the part that decides the recall question, and it is the most valuable.
 4. **Your total** — how many genuine instances are in this trace.
 
-Full traces are in `traces/`. They are long (up to 116k chars); you do not have to
-read every word — sections 1 and 2 point you at the places that matter, and
-section 3 only needs a skim.
+Full traces are in `traces/`, byte-identical to what the judge scored and not
+truncated anywhere. They are long (up to 116k chars); you do not have to read
+every word — sections 1 and 2 point you at the places that matter, and section 3
+only needs a skim. Note these are **chain of thought only**: for gpt-oss that is
+everything before `assistantfinal`, for GLM it is the thinking block with the
+answer write-up stored separately. That is deliberate — it is exactly the text the
+judge saw — so a trace ending without a boxed answer is expected.
+
+**One thing to watch for.** Across all 1,253 traces the judge's count correlates
+more strongly with the number of times the model writes "wait" (r = +0.50) than
+with explicit abandonment language (r = +0.35). Its own justifications sometimes
+read *"expresses uncertainty ('Hmm.')"* or *"proposes an idea then immediately
+questions it"* — which is self-interruption, not abandoning a path. Whether that
+is over-counting is the central question here.
 
 Record results in `verdicts.csv`. If you only have time for some, **do the ones
 with the largest judge-vs-marker gap first** (01, 02, 05, 07, 11, 19) — they carry

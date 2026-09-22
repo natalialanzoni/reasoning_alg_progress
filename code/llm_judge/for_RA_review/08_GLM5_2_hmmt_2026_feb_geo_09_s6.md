@@ -1,17 +1,22 @@
 # GLM 5.2 — hmmt_2026_feb_geo_09 sample 6
 
-Trace: `traces/08_GLM5_2_hmmt_2026_feb_geo_09_s6.txt` (88,317 chars, 40,000 tokens)
-
 | | count |
 |---|---:|
 | LLM judge (gemini-2.5-flash) | **26** |
 | string markers | **6** |
 
+**FULL CHAIN OF THOUGHT: [`traces/08_GLM5_2_hmmt_2026_feb_geo_09_s6.txt`](traces/08_GLM5_2_hmmt_2026_feb_geo_09_s6.txt)** — 88,317 chars, 40,000 tokens. This is the complete trace the
+judge scored; nothing is truncated. Open it alongside this sheet.
+
+## The problem being solved
+
+> Let $ABC$ be a triangle with incenter $I$ and incircle $\omega$. The circumcircle of triangle $BIC$ intersects $\omega$ at points $E$ and $F$. Suppose that $\Gamma \neq \omega$ is a circle passing through $E$ and $F$ and tangent to lines $AB$ and $AC$. If $AB = 5$, $AC = 7$, and $\Gamma$ has twice the radius of $\omega$, compute $BC$.
+
 ---
 
-## 1. What the judge said
+## 1. What the judge said (complete, 5,360 chars)
 
-Verify each instance it names against the trace.
+Verify each numbered instance against the trace.
 
 ```
 ## Thoughts
@@ -56,8 +61,9 @@ yes
 **Your count of GENUINE backtracking the judge named:** ____ of 26
 
 Backtracking = the writer realises a path will not work and explicitly
-abandons it to try a different approach. A routine arithmetic re-check,
-a clarification, or re-reading the problem is NOT backtracking.
+abandons it to try a different approach. A routine arithmetic re-check, a
+clarification, expressing uncertainty ('Hmm'), or re-reading the problem is
+NOT backtracking.
 
 ---
 
@@ -93,7 +99,8 @@ a clarification, or re-reading the problem is NOT backtracking.
 
 ## 3. Did either instrument MISS anything?
 
-Skim the trace for abandonment the judge did not name and no marker caught.
+Skim the full trace for abandonment the judge did not name and no marker
+caught. This is the most valuable part of the review.
 
 **Missed instances (quote them):**
 
