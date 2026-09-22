@@ -723,6 +723,12 @@ Two traps this exposed, both now handled:
    C_j))`. Using the arithmetic mean moved OpenAI's date two months even though its
    floor never changed.
 
+A knock-on in Figure 4: panel B's twin token axis was **removed**. It converted
+multiples of the floor into tokens using one floor, which was fine while every model
+shared one; with 316 for OpenAI and 441 for Anthropic 4.7+, a single token scale
+cannot serve both curves and mislabelled every Anthropic point by ~40%. Panel A shows
+tokens for both, correctly.
+
 OpenAI is unchanged throughout (o200k is already its tokenizer) — that is the check
 that the wiring is isolated. **Every family is now covered**: gpt-oss, GLM and DeepSeek
 are resolved from their real tokenizers (`tokenizers` + `huggingface_hub`, pulled as

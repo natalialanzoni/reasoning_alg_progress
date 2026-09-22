@@ -51,6 +51,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import matplotlib.lines as mlines
 import matplotlib.patches as mpatches
+import matplotlib.ticker as mticker
 
 sys.path.insert(0, os.path.expanduser("~/.claude/skills/futuretech-charts/python"))
 try:                                    # house style from the skill, if present
@@ -511,15 +512,22 @@ def build_decay_2panel(fname, exclude_earliest=True, successes_only=True):
 
     ar.set_yscale("log"); _floor_ratio(ar)
     ar.set_ylim(0.9, ymax2 * 1.5); ar.set_xlim(xlo, xhi)
-    # Same curve, second reading: multiples of the floor on the left, absolute
-    # tokens on the right. tokens = multiple x MHD, so this is a pure rescale --
-    # identical dots, identical fit, no second estimator to explain.
-    ar_tok = ar.twinx()
-    ar_tok.set_yscale("log")
-    ar_tok.set_ylim(ar.get_ylim()[0] * REF, ar.get_ylim()[1] * REF)
-    ar_tok.set_ylabel("Output tokens", fontsize=13)
-    ar_tok.yaxis.set_major_formatter(unit_formatter(1e3, "k"))
-    ar_tok.grid(False)
+
+    # Plain numbers on a log axis, and enough of them to read between 1 and 10.
+    # Matplotlib's default gives 10^0 / 10^1 / 10^2 and nothing in between, which on
+    # a panel whose whole story happens between 1x and 40x is close to unreadable.
+    ticks = [1, 2, 3, 4, 5, 7, 10, 15, 20, 30, 50, 70, 100]
+    lo_, hi_ = ar.get_ylim()
+    ticks = [t for t in ticks if lo_ <= t <= hi_]
+    ar.yaxis.set_major_locator(mticker.FixedLocator(ticks))
+    ar.yaxis.set_major_formatter(mticker.FixedFormatter([f"{t:g}x" for t in ticks]))
+    ar.yaxis.set_minor_locator(mticker.NullLocator())   # the majors are already dense
+
+    # NO twin token axis here any more. It converted multiples to tokens with a single
+    # floor, which was fine while every model shared one. Now that each family is
+    # measured against its own tokenizer's floor (316 for OpenAI, 441 for Anthropic
+    # 4.7+), one token scale cannot serve both curves -- it mislabelled every
+    # Anthropic point by ~40%. Panel A already shows tokens, correctly, for both.
     _sep(ar, tlast, ymax2 * 1.4, labels=False)
     ar.set_ylabel("Multiple of the floor  (L / MHD)")
 
