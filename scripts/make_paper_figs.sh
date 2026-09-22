@@ -36,6 +36,21 @@ TABLES=(
   "table_decay:table_decay.py"                          # main regression table
   "table_floor_robustness:table_floor_robustness.py"    # appendix robustness
 )
+# Producers that write into paper_figs/ THEMSELVES and do not follow either
+# convention above: behaviour_table.py takes --tex (a flag, not a positional) and
+# make_prompt_image.py emits two files in one run. They were previously not wired in
+# at all, which meant running this script DELETED their rows from MANIFEST.md -- the
+# manifest is regenerated from these arrays, so an artifact missing here silently
+# disappears from the record even though its file survives.
+EXTRA_RUN=(
+  "llm_judge/behaviour_table.py --tex paper_figs/table_behaviours.tex"
+  "llm_judge/make_prompt_image.py"
+)
+EXTRA_ARTIFACTS=(                       # artifact : producing script, for MANIFEST
+  "table_behaviours.tex:llm_judge/behaviour_table.py"
+  "fig_judge_prompt_backtracking.pdf:llm_judge/make_prompt_image.py"
+  "fig_judge_prompt_verification.pdf:llm_judge/make_prompt_image.py"
+)
 
 mkdir -p "$DEST"
 
@@ -57,6 +72,13 @@ for t in "${TABLES[@]}"; do
   printf '\n\033[1m=== %s ===\033[0m\n' "$script"
   "$PY" "code/$script" "$DEST/$name.tex" 2>&1 | grep -vE "UserWarning|warnings.warn" || true
   [ "${PIPESTATUS[0]}" -eq 0 ] || { echo "FAILED: $script"; exit 1; }
+done
+
+for cmd in "${EXTRA_RUN[@]}"; do
+  printf '\n\033[1m=== %s ===\033[0m\n' "${cmd%% *}"
+  # shellcheck disable=SC2086
+  "$PY" code/$cmd 2>&1 | grep -vE "UserWarning|warnings.warn" || true
+  [ "${PIPESTATUS[0]}" -eq 0 ] || { echo "FAILED: $cmd"; exit 1; }
 done
 
 echo
@@ -86,6 +108,9 @@ done
   done
   for t in "${TABLES[@]}"; do
     echo "| \`${t%%:*}.tex\` | \`code/${t#*:}\` | see below |"
+  done
+  for e in "${EXTRA_ARTIFACTS[@]}"; do
+    echo "| \`${e%%:*}\` | \`code/${e#*:}\` | see below |"
   done
   echo
   echo "## Sample"
