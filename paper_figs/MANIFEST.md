@@ -21,6 +21,7 @@ a script produces stays in `figures/figs_sept/`.
 | `fig1_grid_deepseek.pdf` | `code/figure1_deepseek_ft.py` | see below |
 | `table_decay.tex` | `code/table_decay.py` | see below |
 | `table_floor_robustness.tex` | `code/table_floor_robustness.py` | see below |
+| `table_behaviours.tex` | `code/llm_judge/behaviour_table.py` | see below |
 
 ## Sample
 
@@ -28,3 +29,28 @@ All artifacts use the **40 competition problems** (AIME 2026 I/II + HMMT
 February 2026); MATH-500 is excluded and the floor is **316 tokens**.
 Validity is `tok >= 50`; a zero-length thinking block does not invalidate a
 trace. See the run-hygiene section of the top-level README.
+
+## `table_behaviours.tex` — cognitive behaviours
+
+Counts of two Gandhi et al. (2025) behaviours in the CoT of the four
+`fig_mechanism` models, same 40 competition problems, k=8.
+
+**Two instruments, deliberately.** Verification is counted by an LLM judge
+(gemini-2.5-flash, whole trace, one count per trace). Backtracking is NOT — two
+judges correlate only +0.52 on it and support opposite lever directions, so it
+uses deterministic abandonment markers instead. That asymmetry is a limitation to
+state, not to hide. Full method and rejected alternatives: `code/llm_judge/`.
+
+**Rates are per 10k TOKENS**, the same denominator for both behaviours so they
+are directly comparable. A character denominator would be wrong: GLM 5.2 writes
+heavy LaTeX (413 `$` per 10k chars) against 5.3's 7, so markup inflates one
+model's denominator only — the same trap as run-hygiene item 11. The lever ratio
+is stable across denominators (char / token / sentence / word within ~10%).
+
+**What it shows.** Scale (20B->120B) lowers both behaviours per trace AND per
+token: the bigger model needs less search. Algorithm (5.2->5.3) does not —
+verification count falls 1.38x while trace length falls 1.66x, so density rises
+1.21x, and backtracking rises 3.16x per 10k tokens (5.49x before excluding memory-recall context). Compression, not less reasoning.
+
+**Do not quote absolute counts.** Judges differ ~2.5x in magnitude even where they
+agree on ranking. The table supports comparisons within itself.

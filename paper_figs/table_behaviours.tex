@@ -1,0 +1,15 @@
+\begin{tabular}{lcccc}
+\toprule
+ & \multicolumn{2}{c}{Scale} & \multicolumn{2}{c}{Algorithm} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+ & gpt-oss-20B & gpt-oss-120B & GLM 5.2 & GLM 5.3 \\
+\midrule
+Verification, per trace & $10.53$ & $5.02$ & $13.44$ & $9.76$ \\
+Verification, per 10k tokens & $8.62$ & $7.87$ & $7.91$ & $9.53$ \\
+Backtracking, per trace & $0.65$ & $0.17$ & $0.86$ & $2.40$ \\
+Backtracking, per 10k tokens & $0.52$ & $0.27$ & $0.49$ & $2.11$ \\
+\addlinespace
+Median CoT characters & $19{,}873$ & $11{,}980$ & $31{,}566$ & $9{,}206$ \\
+Traces judged & $313$ & $318$ & $309$ & $305$ \\
+\bottomrule
+\end{tabular}
