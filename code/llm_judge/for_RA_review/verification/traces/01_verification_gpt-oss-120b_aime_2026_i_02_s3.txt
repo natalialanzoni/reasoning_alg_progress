@@ -1,0 +1,192 @@
+We need count of positive integer palindromes (in base 10) with digits all non-zero (1-9) and sum of digits = 13.
+
+We need to consider palindromes of various lengths (number of digits). Digits cannot be zero. So each digit ∈ {1,...,9}. Also leading digit cannot be zero anyway, but restriction is also zero not allowed anywhere.
+
+Palindromes: length L. For L even: digits are determined by first L/2 digits, the rest mirror. For L odd: determined by first (L+1)/2 digits, with middle digit not mirrored.
+
+Sum of digits = 13. Let's denote digits a1 a2 ... aL, with a_i = a_{L+1-i}. So sums double counts pairs, except middle if odd.
+
+Goal: count number of sequences of digits (length L) fulfilling these constraints.
+
+We need to consider all possible lengths L such that minimal sum with all digits =1 is >=? Actually minimal sum given length L with no zeros is L*1 = L. Max sum is 9L. Need sum =13, so length cannot exceed 13 obviously; also cannot be less than something? Minimum sum L, must be ≤13, so L ≤13. Also L cannot be >13 because sum would be at least L >13.
+
+Thus L ranges from 1 to 13 inclusive, but also must satisfy palindrome constraints.
+
+Let's enumerate for each possible length L, count number of palindromes with digits 1-9, sum=13.
+
+Let k = floor(L/2). For even L = 2k, sum = 2 * (sum of first k digits). For odd L = 2k+1, sum = 2 * (sum of first k digits) + middle digit.
+
+All digits >=1. So we need integer solutions.
+
+Let's define for even length: we need sum_{i=1}^k a_i = 13/2 = 6.5, not integer. Therefore no even length palindrome can have total sum 13 because sum is twice integer => even sum. So only odd lengths.
+
+Thus L must be odd: L = 2k+1, where k ≥0. Then total sum = 2 S + m =13, where S = sum of first k digits (each 1-9), and m = middle digit (1-9).
+
+Thus we need integer solutions to 2S + m =13, with constraints:
+
+- k≥0 integer,
+- S = sum of k digits each between 1 and 9,
+- m between 1 and 9.
+
+Also L = 2k+1 ≤13 => k ≤6. So k = 0..6.
+
+Now solve: m = 13 - 2S, must satisfy 1 ≤ m ≤9, and be integer.
+
+Thus S can vary such that 13 - 2S ∈ [1,9] and integer. So 1 ≤ 13 - 2S ≤9 ⇒
+
+Lower bound: 1 ≤ 13 - 2S ⇒ 2S ≤12 ⇒ S ≤6.
+
+Upper bound: 13 - 2S ≤9 ⇒ -2S ≤ -4 ⇒ S ≥2.
+
+Thus S must be integer between 2 and 6 inclusive.
+
+Also S must be achievable as sum of k digits each 1-9 (non-zero). So for each k (0..6), we need number of ways to have k digits (order matters because they correspond to positions) with sum S, each 1-9, call this N(k,S). Then for each such S we get middle digit m = 13 - 2S (which is automatically determined, and within 1-9). So each tuple (a1...ak) works with unique m.
+
+Thus total count = sum_{k=0}^{6} sum_{S=2}^{6} N(k,S) where S≤6, S≥2, but also S must be achievable for that k. Additionally note that for k=0, there are zero other digits, so S=0 (sum of empty set). But S must be between 2 and 6; thus k=0 not allowed because S=0 not in range. Actually for k=0, palindrome length 1 (single digit). Then sum = m =13. But m must be ≤9, so not allowed. So k≥1.
+
+Thus k from 1 to 6. Additionally need S between 2 and 6 inclusive. Since each digit at least 1, minimal sum for given k is k. So we need k ≤ S ≤ 6, also S ≤ 9k (but that always). So for each k, possible S are max(k,2) to 6.
+
+Now compute N(k,S): number of compositions of S into k parts each from 1 to 9.
+
+This is standard stars and bars with constraints: Let bi = ai -1, then bi ≥0, ≤8. Sum bi = S - k = t, where t ≥0. And each bi ≤8.
+
+Thus number of solutions = number of nonnegative integer solutions to sum_{i=1}^k bi = t with each bi ≤8.
+
+We can compute via inclusion-exclusion: total unrestricted solutions C(t + k -1, k-1). Subtract those where some bi ≥9 (i.e., bi' = bi-9 ≥0). Use standard formula: N = Σ_{j=0}^{k} (-1)^j C(k, j) C(t - 9j + k -1, k-1) where we interpret binomial zero when negative.
+
+Given small t (since S ≤6, and k ≤6, then t = S - k ≤ 6 -1 =5 maybe negative). Wait t = S - k can be negative if k > S, so no solutions (since each digit at least 1). So we need k ≤ S.
+
+Thus for each k, S ranges from max(k,2) to 6.
+
+Given small numbers, we can enumerate directly.
+
+Let's enumerate possibilities:
+
+k=1: length L =3? Wait L =2k+1 =3. k=1 means palindrome of length 3: digits a1 m a1.
+
+Need S = a1 sum = a1, S between 2 and 6, a1 between 1-9. So a1 can be 2..6. Then m =13 -2S =13 -2a1. Compute m must be 1..9.
+
+Let's compute for a1=2: m =13 -4 =9 (valid). a1=3: m=13-6=7 valid. a1=4: m=13-8=5 valid. a1=5: m=13-10=3 valid. a1=6: m=13-12=1 valid. So all give middle digit >=1. Also a1 cannot be 7 because S=7>6 not allowed (S max 6). So we have 5 possibilities. Each yields palindrome: a1 m a1.
+
+Thus count for k=1: 5.
+
+k=2: length L=5. Need two leading digits a1,a2 (first half). S = a1 + a2 between max(k=2,2)=2 to 6 ; also each digit 1-9. So S can be 2,3,4,5,6.
+
+For each S, number of ordered pairs (a1,a2) with each 1-9 and sum S.
+
+That's classic: for sum S, number of positive integer solutions a1 + a2 = S with a_i≥1 is (S-1) choices (since a1 can be 1..S-1). Also must be ≤9 each, but S ≤6 so okay.
+
+Thus N(2,S) = S-1 for S=2..6.
+
+Now for each S, middle digit m =13 -2S must be between 1-9.
+
+Compute m for each S:
+
+S=2 → m=13-4=9 ok.
+S=3 → m=13-6=7 ok.
+S=4 → m=13-8=5 ok.
+S=5 → m=13-10=3 ok.
+S=6 → m=13-12=1 ok.
+
+All okay.
+
+Thus total for k=2: sum_{S=2}^{6} (S-1) = (1+2+3+4+5) =15.
+
+k=3: length L=7. Need three digits a1,a2,a3 with sum S, where 3 ≤ S ≤6.
+
+Because k=3 minimal sum =3.
+
+Thus possible S =3,4,5,6.
+
+We need number of ordered triples of 1-9 summing to S.
+
+Since S small (≤6), each digit at most 6, within 1-9 constraints.
+
+Count N(3,S) = number of compositions of S into 3 positive integers.
+
+Standard formula: C(S-1, 2). Because number of ways to place 2 separators among S-1 positions.
+
+Thus for S=3: C(2,2)=1 (1+1+1). S=4: C(3,2)=3. S=5: C(4,2)=6. S=6: C(5,2)=10.
+
+Now need ensure each part ≤9 – satisfied.
+
+For each S, middle digit m=13-2S.
+
+Compute: S=3,m=7 ok; S=4,m=5; S=5,m=3; S=6,m=1 all okay.
+
+Thus total for k=3: 1+3+6+10 =20.
+
+k=4: length L=9. Need four digits sum S with 4 ≤ S ≤6.
+
+Thus S possible 4,5,6 only (since min sum 4). Need compositions of S into 4 positive integers.
+
+Number N(4,S) = C(S-1,3). Since S-1 choose 3.
+
+Compute: S=4: C(3,3)=1 (1+1+1+1). S=5: C(4,3)=4. S=6: C(5,3)=10.
+
+Check max digit ≤9 automatically.
+
+Middle digit m =13-2S:
+
+S=4 → m=5 ok.
+S=5 → m=3 ok.
+S=6 → m=1 ok.
+
+Thus total for k=4: 1+4+10=15.
+
+k=5: length L=11. Need five digits sum S, with min 5 ≤ S ≤6.
+
+Thus S =5 or 6.
+
+Count compositions of S into 5 positive integers: Number = C(S-1,4).
+
+S=5: C(4,4)=1 (all 1's). S=6: C(5,4)=5 (one 2 and rest 1's, ordered positions 5 choices).
+
+Check each digit ≤9.
+
+Corresponding middle digit: S=5,m=3; S=6,m=1 – both valid.
+
+Thus total for k=5: 1+5 =6.
+
+k=6: length L=13. Need six digits sum S, with min sum 6 ≤ S ≤6 (since ≤6). So S must be 6.
+
+Number of compositions of 6 into 6 positive integers: C(5,5)=1 (all ones). Check each digit ≤9, fine.
+
+Middle digit m =13 -2*6 =1, valid.
+
+Thus total for k=6: 1.
+
+Now sum totals across k=1..6:
+
+k=1:5
+k=2:15 -> cumulative 20
+k=3:20 -> cumulative 40
+k=4:15 -> 55
+k=5:6 -> 61
+k=6:1 -> 62
+
+Thus total number of palindromes = 62.
+
+Double-check if any lengths >13 possible? No because sum would exceed 13. Also we didn't consider length 1 which fails.
+
+Check for length 3 (k=1) we counted correctly 5.
+
+Let's maybe verify with enumeration for small lengths: length 3 digits a m a, sum 2a + m =13, a,m in 1..9, solutions (a,m) pairs: a can be 2..6, corresponding m =13-2a = 9,7,5,3,1 all valid. So 5 indeed.
+
+Length 5: a b m b a, sum 2(a+b) + m =13, with a,b ≥1. Let S = a+b = 2..6 (since total 2S+m=13). For each S there are S-1 ways for ordered (a,b). So 1+2+3+4+5 =15.
+
+Length 7: a b c m c b a, sum 2(a+b+c)+m=13. S range 3..6. Number of ordered triples positive integer sum S: C(S-1,2). Summed: (S=3)1 + (4)3 + (5)6 + (6)10 =20.
+
+Length 9: similarly 4 digits, S 4..6; counts C(S-1,3): 1+4+10=15.
+
+Length 11: 5 digits, S=5,6: counts 1+5=6.
+
+Length13: 6 digits, S=6: count 1.
+
+Thus total 62.
+
+Edge Cases: Are there any palindromes of even length with some zeros allowed to make sum 13? But the problem specifies no zero digits, so not.
+
+Thus answer is 62.
+
+Let's present reasoning stepwise.

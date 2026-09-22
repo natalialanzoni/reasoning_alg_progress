@@ -1,18 +1,25 @@
-"""The behaviour table: verification from the LLM judge, backtracking from markers.
+"""The behaviour table: BOTH behaviours from the LLM judge, with markers alongside.
 
-WHY TWO INSTRUMENTS. They are not interchangeable and the split is deliberate.
+PRIMARY INSTRUMENT: gemini-2.5-flash, whole trace, one count per trace per
+behaviour. Whole-trace because the prompts ask the judge to COUNT occurrences,
+which needs the whole chain -- a fragment cannot tell a backtrack from a first
+attempt. Chunking or marker-anchored windows over-count ~5-6x against a hand
+count.
 
-  VERIFICATION -- LLM judge (gemini-2.5-flash, whole trace, one count out).
-  Judges agree on it: on a stratified sample of 40 traces judged by both
-  gemini-2.5-flash and sonnet-4.5, the ranking is preserved (both put GLM 5.2
-  highest) even though magnitudes differ ~2.5x.
+THE STRING-MARKER COLUMN IS A CROSS-CHECK, not the headline. It counts only
+explicit abandonment language, so it is narrower by construction, and it has known
+RECALL GAPS -- the set lacks "another approach" and "step wrong", both of which
+appear in traces where the judge correctly found instances it missed.
 
-  BACKTRACKING -- deterministic string markers, NOT the judge.
-  The same two judges correlate only +0.52 on backtracking (exact agreement
-  9/40) and support OPPOSITE lever directions. An unstable instrument is worse
-  than a narrow one, so this uses explicit abandonment language, which is
-  reproducible and auditable. It measures a NARROWER construct than "backtracking"
-  -- only backtracking the writer states outright -- and that belongs in the text.
+BOTH INSTRUMENTS HAVE A KNOWN PROBLEM AND THE REVIEW IS OPEN. The judge's count
+correlates more with how often the model writes "wait" (r=+0.50) than with
+explicit abandonment language (r=+0.35), and its justifications sometimes cite
+mere uncertainty ("expresses uncertainty ('Hmm')") as backtracking -- i.e. it may
+over-count self-interruption on long traces. Two judges (gemini-2.5-flash,
+sonnet-4.5) also correlate only +0.52 with each other on backtracking, against a
+preserved ranking on verification. 20 traces are laid out in for_RA_review/ to
+settle which instrument is right. Until that lands, report backtracking with the
+marker cross-check beside it and say the effect size is instrument-dependent.
 
 MARKER PRECISION, checked by reading samples:
   reconsider / start over / try different / is wrong / made an error  -- mostly genuine
@@ -117,32 +124,40 @@ def main():
                     re.I)
     traces = load_all()
     jr = [json.loads(l) for l in open(a.judged)]
-    ok = [r for r in jr if r.get("count") is not None and r["behaviour"] == "verification"]
-    drop = sum(1 for r in jr if r["behaviour"] == "verification" and r.get("count") is None)
-
-    print(f"verification: LLM judge ({ {r.get('judge_model') for r in ok} }), "
-          f"{len(ok)} traces, {drop} unparsable dropped")
-    print(f"backtracking: string markers, contradiction "
+    J = {b: [r for r in jr if r["behaviour"] == b and r.get("count") is not None]
+         for b in ("verification", "backtracking")}
+    drop = {b: sum(1 for r in jr if r["behaviour"] == b and r.get("count") is None)
+            for b in J}
+    judges = {r.get("judge_model") for v in J.values() for r in v}
+    print(f"both behaviours: LLM judge {judges}")
+    print(f"  verification {len(J['verification'])} traces ({drop['verification']} unparsable "
+          f"dropped)   backtracking {len(J['backtracking'])} ({drop['backtracking']} dropped)")
+    print(f"  marker cross-check: explicit abandonment language, contradiction "
           f"{'INCLUDED' if a.include_contradiction else 'excluded'}\n")
+    ok = J["verification"]
 
     res = {}
-    print(f"  {'model':<15}{'traces':>7}{'verif/trace':>13}{'verif/10k tok':>15}"
-          f"{'bt/trace':>10}{'bt/10k tok':>12}{'recall-excl':>13}")
+    print(f"  {'model':<15}{'n':>5}{'verif/trace':>12}{'verif/10k':>11}"
+          f"{'bt/trace':>10}{'bt/10k':>8}{'|  marker bt/10k':>18}")
     for m in MODEL_ORDER:
         g = [r for r in ok if r["model"] == m]
         t = [r for r in traces if r["model"] == m]
         v_tr = st.mean(r["count"] for r in g)
         # pooled, not mean-of-ratios -- see the module note
         v_rt = 1e4 * sum(r["count"] for r in g) / max(1, sum(r["tokens"] for r in g))
+        # PRIMARY: the judge's backtracking counts
+        jb = [r for r in J["backtracking"] if r["model"] == m]
+        b_tr = st.mean(r["count"] for r in jb)
+        b_rt = 1e4 * sum(r["count"] for r in jb) / max(1, sum(r["tokens"] for r in jb))
+        # CROSS-CHECK: explicit abandonment markers over the same traces
         bcounts = [count_backtracking(r["cot"], rx, not a.keep_recall)[0] for r in t]
-        b_rt = 1e4 * sum(bcounts) / max(1, sum(r["tokens"] for r in t))
-        b_tr = st.mean(bcounts)
+        mk_rt = 1e4 * sum(bcounts) / max(1, sum(r["tokens"] for r in t))
         dropped = sum(count_backtracking(r["cot"], rx, not a.keep_recall)[1] for r in t)
         raw = sum(len(rx.findall(r["cot"])) for r in t)
         res[m] = (v_tr, v_rt, b_rt, st.median(len(r["cot"]) for r in t), len(g), b_tr,
-                  dropped, raw)
-        print(f"  {m:<15}{len(g):>7}{v_tr:>13.2f}{v_rt:>15.2f}{b_tr:>10.2f}{b_rt:>12.2f}"
-              f"{f'{dropped}/{raw}':>13}")
+                  dropped, raw, mk_rt)
+        print(f"  {m:<15}{len(g):>5}{v_tr:>12.2f}{v_rt:>11.2f}{b_tr:>10.2f}{b_rt:>8.2f}"
+              f"{mk_rt:>18.2f}")
 
     print("\n  the two levers")
     for lever, x, y in LEVERS:
@@ -150,7 +165,8 @@ def main():
         print(f"    {lever}")
         print(f"      verification  per trace {av:6.2f} -> {zv:6.2f} ({zv/av:5.2f}x)"
               f"   per 10k tok {ar:5.2f} -> {zr:5.2f} ({zr/ar:5.2f}x)")
-        print(f"      backtracking  per 10k tok {ab:5.2f} -> {zb:5.2f} ({zb/ab:5.2f}x)")
+        print(f"      backtracking  per 10k tok {ab:5.2f} -> {zb:5.2f} ({zb/ab:5.2f}x)"
+              f"   [markers {res[x][8]:.2f} -> {res[y][8]:.2f} ({res[y][8]/res[x][8]:.2f}x)]")
 
     if a.tex:
         latex(res, a.tex)
@@ -169,7 +185,8 @@ def latex(res, path):
     rows_spec = [("Verification, per trace", 0, "{:.2f}"),
                  ("Verification, per 10k tokens", 1, "{:.2f}"),
                  ("Backtracking, per trace", 5, "{:.2f}"),
-                 ("Backtracking, per 10k tokens", 2, "{:.2f}")]
+                 ("Backtracking, per 10k tokens", 2, "{:.2f}"),
+                 (r"\quad \emph{marker cross-check, per 10k}", 8, "{:.2f}")]
     for lab, i, f in rows_spec:
         t.append(lab + " & " + " & ".join("$" + f.format(res[m][i]) + "$" for m in names) + r" \\")
     t += [r"\addlinespace",

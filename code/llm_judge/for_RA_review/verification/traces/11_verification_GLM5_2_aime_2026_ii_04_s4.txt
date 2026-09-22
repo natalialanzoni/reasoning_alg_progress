@@ -1,0 +1,209 @@
+The problem asks for the number of positive integers $n < 1000$ such that $f(n) = n$.
+Let $n$ be a positive integer less than 1000.
+The base $b$ is defined as the least integer greater than the greatest digit in $n$.
+If $n$ is a single digit $d_0$, the greatest digit is $d_0$. The least integer greater than $d_0$ is $d_0+1$.
+So $b = d_0+1$. Then $n$ viewed in base $b$ is just $d_0$, so $f(n) = d_0 = n$.
+Thus, all single digit numbers satisfy $f(n) = n$. There are 9 such numbers (1 to 9).
+
+If $n$ is a two-digit number, let $n = d_1 d_0$ in base 10, so $n = 10d_1 + d_0$.
+The greatest digit is $D = \max(d_1, d_0)$.
+The least integer greater than $D$ is $b = D+1$.
+We need $f(n) = d_1 b + d_0 = n = 10d_1 + d_0$.
+So $d_1 b = 10d_1$.
+Since $d_1 \ge 1$ (as it's a two-digit number), we must have $b = 10$.
+Since $b = D+1 = 10$, the greatest digit $D$ must be 9.
+So either $d_1 = 9$ or $d_0 = 9$.
+If $b=10$, the digits can be anything as long as the greatest digit is 9.
+So any two-digit number containing at least one 9 will have $b=10$, and thus $f(n) = 10d_1 + d_0 = n$.
+Wait, what if $d_1=9$? Then $D = \max(9, d_0) = 9$. So $b=10$. Then $f(n) = 9 \times 10 + d_0 = 90 + d_0 = n$.
+This works for any $d_0 \in \{0, 1, \dots, 9\}$.
+So all numbers from 90 to 99 work. That's 10 numbers.
+What if $d_0 = 9$? Then $D = \max(d_1, 9) = 9$. So $b=10$. Then $f(n) = d_1 \times 10 + 9 = 10d_1 + 9 = n$.
+This works for any $d_1 \in \{1, \dots, 8\}$. (If $d_1=9$, it's already counted in 90-99).
+So numbers 19, 29, 39, 49, 59, 69, 79, 89 work. That's 8 numbers.
+Total two-digit numbers: 18.
+Let's double check.
+If $n=19$, greatest digit is 9. $b=10$. $f(19) = 1 \times 10 + 9 = 19$.
+If $n=23$, greatest digit is 3. $b=4$. $f(23) = 2 \times 4 + 3 = 11 \neq 23$.
+If $n=90$, greatest digit 9, $b=10$, $f(90) = 90$.
+Correct.
+
+If $n$ is a three-digit number, let $n = d_2 d_1 d_0$, so $n = 100d_2 + 10d_1 + d_0$.
+The greatest digit is $D = \max(d_2, d_1, d_0)$.
+The base is $b = D+1$.
+We need $f(n) = d_2 b^2 + d_1 b + d_0 = 100d_2 + 10d_1 + d_0$.
+So $d_2 b^2 + d_1 b = 100d_2 + 10d_1$.
+Since $d_2 \ge 1$ (as it's a three-digit number), $b$ must be large enough to make $b^2 \ge 100$, or if $b<10$, $d_2 b^2$ would be smaller than $100d_2$.
+Let's analyze $d_2 b^2 + d_1 b = 100d_2 + 10d_1$.
+Since $d_2 \ge 1$, if $b \le 9$, $b^2 \le 81$, so $d_2 b^2 \le 81 d_2 < 100 d_2$.
+Then $d_1 b - 10 d_1 = d_1 (b-10)$.
+So $d_2 (b^2 - 100) + d_1 (b - 10) = 0$.
+Since $b \le 9$, $b^2 - 100 < 0$ and $b - 10 < 0$.
+The sum of two negative numbers (since $d_2 \ge 1, d_1 \ge 0$) cannot be 0.
+Wait, if $b=10$, then $b^2 - 100 = 0$ and $b - 10 = 0$, so the sum is 0.
+Thus, we must have $b=10$.
+If $b=10$, then $D = 9$, meaning the maximum digit in $n$ is 9.
+Then $f(n) = d_2 10^2 + d_1 10 + d_0 = n$, which works.
+So any three-digit number with at least one digit being 9 will have $b=10$, and thus $f(n) = n$.
+Wait, is there any possibility $b > 10$?
+If $b > 10$, then $b \ge 11$.
+Since $b = D+1$, $D = b-1 \ge 10$.
+But the digits $d_2, d_1, d_0$ are in base 10, so they are at most 9.
+Thus $D$ cannot be greater than 9.
+So $b$ cannot be greater than 10.
+Hence $b$ must be exactly 10.
+This means all three-digit numbers with at least one 9 work.
+Let's check if $b$ can be less than 10.
+We already showed that if $b \le 9$, $d_2 b^2 + d_1 b < 100d_2 + 10d_1$, so $f(n) < n$.
+Thus, only numbers with $b=10$ work.
+For $n < 1000$, we need to find the number of 1-digit, 2-digit, and 3-digit numbers with $b=10$.
+For 1-digit numbers, $b = d_0+1$. We need $f(n)=n$, which is $d_0 = d_0$. This works for all 1-digit numbers!
+Wait, if $n$ is a 1-digit number $d_0$, $b = d_0+1$.
+$f(n) = d_0$. So $f(n) = n$ always for 1-digit numbers.
+There are 9 such numbers (1 to 9).
+
+For 2-digit numbers, $b=10$ is required.
+So the greatest digit must be 9.
+The number of 2-digit numbers with at least one 9:
+Total 2-digit numbers = 90.
+Numbers without 9: $d_1 \in \{1..8\}$, $d_0 \in \{0..8\}$. Number of such numbers = $8 \times 9 = 72$.
+So numbers with at least one 9 = $90 - 72 = 18$.
+
+For 3-digit numbers, $b=10$ is required.
+Total 3-digit numbers = 900.
+Numbers without 9: $d_2 \in \{1..8\}$, $d_1 \in \{0..8\}$, $d_0 \in \{0..8\}$.
+Number of such numbers = $8 \times 9 \times 9 = 648$.
+So numbers with at least one 9 = $900 - 648 = 252$.
+
+Total numbers = 9 (1-digit) + 18 (2-digit) + 252 (3-digit) = 279.
+
+Let's double check.
+Are there any 1-digit numbers that don't work?
+n=1. b=2. f(1) = 1.
+n=5. b=6. f(5) = 5.
+So all 1-digit numbers work.
+
+What about n=0? The problem says "positive integers", so n>0.
+What about numbers like 99? b=10. f(99) = 99.
+What about numbers like 999? b=10. f(999) = 999.
+What about numbers like 989? b=10. f(989) = 989.
+What about numbers like 100? b=2. f(100) in base 2 = 4.
+Wait, $100$ in base 2 would be $1 \times 2^2 + 0 \times 2 + 0 = 4$. $4 \neq 100$.
+So 100 doesn't work.
+
+What about numbers like 200? b=3. $2 \times 3^2 = 18$.
+Since $b \le 9$, $f(n)$ is always strictly less than $n$ for 3-digit numbers.
+Let's verify this.
+For 3-digit number $d_2 d_1 d_0$, $f(n) = d_2 b^2 + d_1 b + d_0$.
+Since $d_2 \ge 1$ and $b \le 9$, $d_2 b^2 \le 81 d_2 < 100 d_2$.
+Since $d_1 b \le 8 d_1 \le 10 d_1$, wait.
+Could $d_2 b^2 + d_1 b$ ever be equal to $100 d_2 + 10 d_1$ when $b \le 9$?
+We have $d_2 (b^2 - 100) + d_1 (b - 10) = 0$.
+Since $b \le 9$, $b^2 - 100 \le 81 - 100 = -19 < 0$.
+And $b - 10 \le -1 < 0$.
+Since $d_2 \ge 1$ and $d_1 \ge 0$, the left hand side is $\le -19 < 0$.
+So it can never be 0.
+Thus, $f(n)$ can never equal $n$ for 3-digit numbers with $b \le 9$.
+
+What about 2-digit numbers?
+$d_1 (b - 10) = 0$.
+Since $d_1 \ge 1$, we must have $b = 10$.
+So $b=10$ is indeed required for all 2-digit and 3-digit numbers.
+
+Is there any edge case?
+What if $n=90$? $b=10$. $f(90) = 90$. Works.
+What if $n=91$? Works.
+What if $n=99$? Works.
+What if $n=109$? Works.
+What if $n=190$? Works.
+What if $n=900$? Works.
+
+Let's recount.
+1-digit: 9
+2-digit with 9: $10 \times 1 + 8 \times 1 = 18$? Wait.
+Total 2-digit = 90.
+Without 9: $d_1 \in \{1,2,3,4,5,6,7,8\}$ (8 choices), $d_0 \in \{0,1,2,3,4,5,6,7,8\}$ (9 choices).
+$8 \times 9 = 72$.
+$90 - 72 = 18$. Correct.
+
+3-digit with 9:
+Total 3-digit = 900.
+Without 9: $d_2 \in \{1..8\}$ (8 choices), $d_1 \in \{0..8\}$ (9 choices), $d_0 \in \{0..8\}$ (9 choices).
+$8 \times 9 \times 9 = 648$.
+$900 - 648 = 252$. Correct.
+
+Sum = 9 + 18 + 252 = 279.
+
+Let's quickly check if there's any misunderstanding of the problem.
+"For each positive integer n let f(n) be the value of the base-ten numeral n viewed in base b, where b is the least integer greater than the greatest digit in n."
+Example: n=72. Greatest digit is 7. b = 8. 72 in base 8 = 7*8+2 = 58.
+If n=10. Greatest digit is 1. b=2. 10 in base 2 = 1*2+0 = 2.
+If n=19. Greatest digit is 9. b=10. 19 in base 10 = 19.
+Everything seems perfectly consistent.
+
+Is it possible that $n$ has leading zeros?
+"For each positive integer n" - base-ten numeral n usually doesn't have leading zeros.
+So 1-digit numbers are just 1..9.
+2-digit are 10..99.
+3-digit are 100..999.
+Less than 1000 means up to 999.
+So exactly 279.
+
+Let's double check if there are any other solutions.
+Could $d_2 b^2 + d_1 b = 100 d_2 + 10 d_1$ have solutions if $b$ is not an integer? No, $b$ is an integer.
+Could $b > 10$? We already said no, because $b$ is the least integer greater than the greatest digit. Greatest digit in a base-10 numeral is at most 9. So $b$ is at most 10.
+Thus $b=10$ is the maximum possible base.
+Since $b \le 10$, for 2-digit $d_1(b-10) = 0 \implies b=10$ (since $d_1 \ge 1$).
+For 3-digit $d_2(b^2-100) + d_1(b-10) = 0$. If $b \le 9$, $b^2-100 < 0$ and $b-10 < 0$, so sum is $< 0$. Thus $b=10$.
+So $b$ must be 10 for any 2-digit or 3-digit solution.
+This means the greatest digit must be 9.
+So any number $\ge 10$ with a 9 works.
+
+Number of such numbers $\le 999$:
+Total numbers = 999.
+Numbers without 9:
+1-digit: 8 (1..8)
+2-digit: 8 * 9 = 72 (10..88 without 9)
+3-digit: 8 * 9 * 9 = 648 (100..888 without 9)
+Total without 9 = 8 + 72 + 648 = 728.
+Numbers with 9 = 999 - 728 = 271.
+Plus the 1-digit number 9 itself.
+Wait, let's recount.
+If we say "any number $\ge 10$ with a 9 works", we have:
+2-digit with 9: 18
+3-digit with 9: 252
+Total with 9 (including 1-digit 9) = 1 + 18 + 252 = 271.
+But 1-digit numbers ALL work! There are 9 of them.
+So 9 + 18 + 252 = 279.
+Yes, 1-digit numbers are 1..9.
+All of them work.
+2-digit are 10..99, those with 9 work (18).
+3-digit are 100..999, those with 9 work (252).
+Total = 9 + 18 + 252 = 279.
+
+Let's quickly check the number of 1-digit numbers without 9. It is 8 (1..8).
+Number of 1-digit numbers with 9 is 1 (9).
+My logic "any number with a 9 works" is true.
+My logic "1-digit numbers all work" is also true.
+So the 8 numbers (1..8) also work.
+Total = (numbers with 9) + (numbers without 9 that work).
+Numbers with 9 = 1 (1-digit) + 18 (2-digit) + 252 (3-digit) = 271.
+Numbers without 9 that work = 8 (1-digit, 1..8).
+Total = 271 + 8 = 279.
+
+Calculation check:
+8 * 9 = 72.
+8 * 9 * 9 = 648.
+72 + 648 = 720.
+720 + 8 = 728.
+999 - 728 = 271.
+271 + 8 = 279.
+Perfect.
+
+Let me review if $n=0$ is included.
+"For each positive integer n" -> n > 0. So 0 is not included.
+"positive integers n less than 1000" -> n \in \{1, \dots, 999\}.
+So 999 numbers total.
+Everything matches.
+No other interpretations of "viewed in base b" seem likely.
+The answer is 279.
