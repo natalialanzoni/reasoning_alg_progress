@@ -185,15 +185,20 @@ print(f"fig_mechanism: {len(KEYS)} competition problems (MATH-500 excluded), "
 use_style()
 plt.rcParams.update({"axes.labelsize": 14, "xtick.labelsize": 14, "ytick.labelsize": 12,
                      "axes.titlesize": 16})
-fig, axes = plt.subplots(3, 2, figsize=(12, 13.5), sharex="col",
-                         gridspec_kw={"hspace": 0.13, "wspace": 0.22})
+# TRANSPOSED 2x3, matching Figure 1: the two levers are ROWS, the three metrics are
+# COLUMNS. 12 x 13.5 in becomes 18 x 8.4, a full-width slot instead of most of a page.
+# No sharex: each row has its OWN categories (20B/120B vs GLM 5.2/5.3), so the x axis
+# is set per panel rather than shared.
+fig, axes = plt.subplots(2, 3, figsize=(18, 8.4),
+                         gridspec_kw={"hspace": 0.26, "wspace": 0.22})
 seen = set()
-for col, (title, labels, (accs, means, hards), xlabel) in enumerate(COLS):
+for row, (title, labels, (accs, means, hards), xlabel) in enumerate(COLS):
     x = list(range(len(labels)))
 
-    a0 = axes[0][col]                                   # Row 1 — accuracy
+    a0 = axes[row][0]                                   # Col 1 — accuracy
     a0.plot(x, accs, "-o", color=ACC, lw=2.6, ms=12, zorder=5)
-    a0.set_title(title, fontweight="bold")
+    # the lever names the ROW; the metrics are titled once on the top row
+    a0.set_ylabel(title, fontweight="bold", fontsize=13, labelpad=10)
     # data spans 68-86%; 40-104 left half the row empty and flattened both
     # lines into near-horizontal segments, hiding the accuracy gain
     a0.set_ylim(60, 96)
@@ -202,7 +207,7 @@ for col, (title, labels, (accs, means, hards), xlabel) in enumerate(COLS):
         a0.annotate(f"{yi:.0f}%", (xi, yi), textcoords="offset points", xytext=(0, 13),
                     ha="center", fontsize=13, fontweight="bold", color=ACC)
 
-    a1 = axes[1][col]                                   # Row 2 — mean + floor
+    a1 = axes[row][1]                                   # Col 2 — mean + floor
     a1.plot(x, means, "-o", color=TOK, lw=3, ms=12, zorder=5)
     col_floor = floor_of(labels)
     a1.axhline(col_floor, color=FLOOR_COLOR, lw=2, zorder=3)
@@ -219,7 +224,7 @@ for col, (title, labels, (accs, means, hards), xlabel) in enumerate(COLS):
     print(f"  {labels[0]:>8s} -> {labels[-1]:<8s} acc {accs[0]:.1f}% -> {accs[-1]:.1f}%"
           f"   tokens {means[0]:.0f} -> {means[-1]:.0f} = {ratio:.1f}x")
 
-    a2 = axes[2][col]                                   # Row 3 — per-problem by tier
+    a2 = axes[row][2]                                   # Col 3 — per-problem by tier
     common = sorted(set.intersection(*[set(h) for h in hards])) if hards else []
     for pid in common:
         tier = human_tier(pid)
@@ -234,15 +239,20 @@ for col, (title, labels, (accs, means, hards), xlabel) in enumerate(COLS):
         a2.plot(x, med, color=c, lw=2.2, alpha=0.95, zorder=2)
     a2.set_ylim(0, CAP)
     a2.yaxis.set_major_formatter(unit_formatter(1e3, "k"))
-    a2.set_xticks(x); a2.set_xticklabels(labels, fontweight="bold")
-    a2.set_xlim(-0.3, len(labels) - 0.7); a2.set_xlabel(xlabel)
+    # every panel in the row carries the row's own categories; the lever description
+    # goes under the middle panel so it is not printed three times
+    for _i, _a in enumerate((a0, a1, a2)):
+        _a.set_xticks(x); _a.set_xticklabels(labels, fontweight="bold")
+        _a.set_xlim(-0.3, len(labels) - 0.7)
+        if _i == 1:
+            _a.set_xlabel(xlabel)
 
-axes[0][0].set_ylabel("Accuracy")
-axes[1][0].set_ylabel("Mean output tokens\n(correct traces)")
-axes[2][0].set_ylabel("Output tokens\n(hard-but-doable, per problem)")
+axes[0][0].set_title("Accuracy", fontsize=13)
+axes[0][1].set_title("Mean output tokens (correct traces)", fontsize=13)
+axes[0][2].set_title("Output tokens by problem (hard-but-doable)", fontsize=13)
 keys = [k for k in TIER_ORDER if k in seen]
 handles = [mlines.Line2D([], [], color=TIER_COLOR[k], lw=3, label=k) for k in keys]
-axes[2][1].legend(handles=handles, loc="upper right", fontsize=11, frameon=True,
-                  framealpha=0.95, title="difficulty")
+axes[-1][2].legend(handles=handles, loc="upper right", fontsize=10, frameon=True,
+                   framealpha=0.95, title="difficulty")
 paths = save_figure(fig, "fig_mechanism", outdir=OUT)
 print("wrote", *paths, sep="\n  ")
