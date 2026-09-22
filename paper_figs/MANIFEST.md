@@ -22,6 +22,7 @@ a script produces stays in `figures/figs_sept/`.
 | `table_decay.tex` | `code/table_decay.py` | see below |
 | `table_floor_robustness.tex` | `code/table_floor_robustness.py` | see below |
 | `table_behaviours.tex` | `code/llm_judge/behaviour_table.py` | see below |
+| `appendix_judge_prompts.tex` | `code/llm_judge/make_prompt_appendix.py` | see below |
 
 ## Sample
 
@@ -54,3 +55,9 @@ verification count falls 1.38x while trace length falls 1.66x, so density rises
 
 **Do not quote absolute counts.** Judges differ ~2.5x in magnitude even where they
 agree on ranking. The table supports comparisons within itself.
+
+## `appendix_judge_prompts.tex` — the judge prompts
+
+Both prompts verbatim in quote blocks, with the single edited line marked
+`[edited]`. Generated from the live `*_v0.txt` templates so it cannot drift from
+what was actually sent. Needs `\citet{gandhi2025cognitive}` in the bibliography.
