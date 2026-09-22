@@ -155,8 +155,14 @@ def model_points(mfiles, successes_only):
             continue
         mu = float(np.mean(pm))
         se = float(np.std(pm, ddof=1) / math.sqrt(len(pm))) if len(pm) > 1 else 0.0
-        out.append((label, date, (1 + math.exp(mu)) * REF,
-                    (1 + math.exp(mu - 1.96 * se)) * REF, (1 + math.exp(mu + 1.96 * se)) * REF))
+        # Convert back to tokens with THIS MODEL's floor, not the family's. The ratio
+        # above is already per-model; multiplying by a single family floor put Opus
+        # 4.5 and 4.6 24% too high on the token panel, because they are measured
+        # against 355 while the family reference is Fable 5.1's 441.
+        own = pf.mean_floor(label, prob.keys())
+        out.append((label, date, (1 + math.exp(mu)) * own,
+                    (1 + math.exp(mu - 1.96 * se)) * own,
+                    (1 + math.exp(mu + 1.96 * se)) * own, own))
     return out
 
 
@@ -251,13 +257,15 @@ def draw_family(ax, mfiles, excl, successes_only, color, milestones=True,
     tokens; ratio=True plots the MULTIPLE OF THE FLOOR (L/floor) — divide by REF so the
     floor sits at 1x — with a DOTTED forecast (used on the log panel underneath)."""
     REF = ref_of(mfiles)      # this family's floor, not the global default
-    norm = REF if ratio else 1.0
+    norm = REF if ratio else 1.0     # used for the fitted CURVE (one per family)
     fc_ls = ":" if ratio else "--"
     fit = pf._fit_headroom_forecast(mfiles, exclude_baseline=excl, successes_only=successes_only)
     pts = [p for p in model_points(mfiles, successes_only)
            if not (excl and p[0] == fit["baseline_label"])]
     odates = [p[1] for p in pts]
-    octr = [p[2] / norm for p in pts]
+    # Each DOT divides by its own model's floor, so panel B reads "this model's
+    # geometric mean as a multiple of the derivation IT is measured against".
+    octr = [p[2] / (p[5] if ratio else 1.0) for p in pts]
 
     # fitted trend across observed + forecast, with a continuous shaded 95% CI
     # ribbon; SOLID over the observed window, DASHED/DOTTED for the extrapolation.
@@ -285,11 +293,11 @@ def draw_family(ax, mfiles, excl, successes_only, color, milestones=True,
         # Only the ENDPOINTS: labelling every model made the overlap region
         # unreadable, and first-vs-last is the comparison the panel is making.
         _ends = {0, len(pts) - 1}
-        for _i, ((_nm, _dt, _tok, _lo, _hi), _x, _y) in enumerate(zip(pts, odates, octr)):
+        for _i, ((_nm, _dt, _tok, _lo, _hi, _own), _x, _y) in enumerate(zip(pts, odates, octr)):
             if _i not in _ends:
                 continue
-            ax.annotate(f"{_tok / REF:.0f}x" if _tok / REF >= 10 else
-                        f"{_tok / REF:.1f}x", (_x, _y),
+            _m = _tok / _own                      # that model's own multiple
+            ax.annotate(f"{_m:.0f}x" if _m >= 10 else f"{_m:.1f}x", (_x, _y),
                         textcoords="offset points", xytext=(dot_dx, dot_dy),
                         ha="center" if not dot_dx else ("right" if dot_dx < 0 else "left"),
                         va="bottom" if dot_dy > 0 else "top",
