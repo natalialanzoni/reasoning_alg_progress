@@ -23,6 +23,8 @@ a script produces stays in `figures/figs_sept/`.
 | `table_floor_robustness.tex` | `code/table_floor_robustness.py` | see below |
 | `table_behaviours.tex` | `code/llm_judge/behaviour_table.py` | see below |
 | `appendix_judge_prompts.tex` | `code/llm_judge/make_prompt_appendix.py` | see below |
+| `fig_judge_prompt_backtracking.pdf` | `code/llm_judge/make_prompt_image.py` | image form of the same prompt |
+| `fig_judge_prompt_verification.pdf` | `code/llm_judge/make_prompt_image.py` | image form of the same prompt |
 
 ## Sample
 
