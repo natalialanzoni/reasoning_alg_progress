@@ -48,6 +48,16 @@ ANTHROPIC_TOKENIZERS = {
     "anthropic_pre_4_7": "claude-opus-4-5",
     "anthropic_4_7_plus": "claude-opus-5",
 }
+# The open-weight families tokenize themselves. Pulled from the Hub as raw
+# tokenizer.json (no `transformers` needed -- just `tokenizers` + `huggingface_hub`).
+HF_TOKENIZERS = {
+    "deepseek": "deepseek-ai/DeepSeek-V3",   # R1 and V3 share this tokenizer
+    "glm": "zai-org/GLM-4.5",
+}
+# gpt-oss uses o200k_harmony. Verified identical to o200k_base on all 122 canonical
+# solutions -- harmony only adds special tokens, the ordinary-text vocabulary is the
+# same -- so it gets its own column only to make that check reproducible.
+TIKTOKEN_EXTRA = {"o200k_harmony": "o200k_harmony"}
 # Which tokenizer each model's reported counts are in. EVERY spelling a figure
 # might pass must appear: Figure 5 uses the API id, the tables use the display
 # name, and an unmapped Anthropic label silently means an OpenAI floor.
@@ -65,6 +75,13 @@ MODEL_TOKENIZER = {
     'Opus 5': 'anthropic_4_7_plus',
     'Fable 5.1': 'anthropic_4_7_plus',
     'fable5.1': 'anthropic_4_7_plus',
+    # open-weight families, each on its own tokenizer
+    'deepseek_r1_0528': 'deepseek', 'deepseek_v3_2': 'deepseek',
+    'deepseek_v4_pro': 'deepseek', 'R1-0528': 'deepseek', 'V3.2': 'deepseek',
+    'V4 Pro': 'deepseek', 'V4 high': 'deepseek', 'V4 max': 'deepseek',
+    'glm_5_2': 'glm', 'glm_5_3': 'glm', 'GLM 5.2': 'glm', 'GLM 5.3': 'glm',
+    'gpt-oss-20b': 'o200k_harmony', 'gpt-oss-120b': 'o200k_harmony',
+    '20B': 'o200k_harmony', '120B': 'o200k_harmony',
 }
 
 
@@ -89,6 +106,18 @@ def main():
     print("message framing overhead:", overhead)
 
     enc = tiktoken.get_encoding("o200k_base")
+    _extra = {k: tiktoken.get_encoding(v) for k, v in TIKTOKEN_EXTRA.items()}
+    _hf = {}
+    try:
+        from huggingface_hub import hf_hub_download
+        from tokenizers import Tokenizer
+        for k, repo in HF_TOKENIZERS.items():
+            _hf[k] = Tokenizer.from_file(
+                hf_hub_download(repo_id=repo, filename="tokenizer.json"))
+            print(f"  loaded {k} tokenizer from {repo}")
+    except Exception as e:       # the Anthropic correction still works without these
+        print(f"  WARNING: open-weight tokenizers unavailable ({type(e).__name__}); "
+              f"those models fall back to o200k")
     ds = load_dataset(HF_DATASET, split="test")
     out = {}
     for i, r in enumerate(ds):
@@ -99,6 +128,10 @@ def main():
         per = {"o200k": [len(enc.encode(s)) for s in sols]}
         for key_, model in ANTHROPIC_TOKENIZERS.items():
             per[key_] = [count(model, s) - overhead[key_] for s in sols]
+        for key_, enc2 in _extra.items():
+            per[key_] = [len(enc2.encode(s)) for s in sols]
+        for key_, tk in _hf.items():
+            per[key_] = [len(tk.encode(s).ids) for s in sols]
         # store the RAW per-solution counts as well, so min / median / mean (and any
         # future statistic, e.g. the floor-robustness table's rows) are derivable
         # without re-querying the API
@@ -114,7 +147,7 @@ def main():
     print(f"\nwrote {OUT}  ({len(out)} problems)")
     print("\nmean shortest solution over the 40 competition problems:")
     base = np.mean([out[t]["o200k"]["min"] for t in comp])
-    for k in ("o200k",) + tuple(ANTHROPIC_TOKENIZERS):
+    for k in ("o200k",) + tuple(ANTHROPIC_TOKENIZERS) + tuple(_extra) + tuple(_hf):
         v = np.mean([out[t][k]["min"] for t in comp])
         print(f"  {k:<20s} {v:7.1f} tok   ({v / base:.3f}x o200k)")
 

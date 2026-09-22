@@ -672,11 +672,19 @@ It is also not constant across the series, because **Anthropic changed tokenizer
 Opus 4.7** (their docs: 1M tokens is ~555k words on the current tokenizer, ~750k on
 the earlier one). Measured on this benchmark's own solution text, framing removed:
 
-| tokenizer | mean shortest solution, 40 problems | vs `o200k` |
-| --- | --- | --- |
-| `o200k_base` (all OpenAI) | **316** tok | 1.000 |
-| Opus 4.5, 4.6 | **355** tok | 1.123 |
-| Opus 4.7, 4.8, Opus 5, Fable 5.1 | **441** tok | 1.396 |
+| tokenizer | models | mean shortest solution | vs `o200k` |
+| --- | --- | --- | --- |
+| `o200k_base` | all OpenAI | **316** tok | 1.000 |
+| `o200k_harmony` | gpt-oss 20B / 120B | **316** tok | 1.000 |
+| GLM (`zai-org/GLM-4.5`) | GLM 5.2, 5.3 | **316** tok | 1.001 |
+| DeepSeek (`deepseek-ai/DeepSeek-V3`) | R1-0528, V3.2, V4 Pro | **303** tok | 0.958 |
+| Anthropic, pre-4.7 | Opus 4.5, 4.6 | **355** tok | 1.123 |
+| Anthropic, 4.7+ | Opus 4.7, 4.8, Opus 5, Fable 5.1 | **441** tok | 1.396 |
+
+Only Anthropic is far off, and only Anthropic changes mid-series. gpt-oss is
+`o200k_harmony`, verified identical to `o200k_base` on all 122 canonical solutions
+(harmony only adds special tokens). GLM lands within 0.1%. DeepSeek is 4% lower, which
+matters little but is now applied rather than assumed.
 
 The tell is chars-per-answer-token, which is flat for OpenAI (2.23–2.70 across nine
 models) and steps at 4.7 for Anthropic: 2.08, 2.18, then **1.71, 1.69, 1.66, 1.71**.
@@ -716,8 +724,10 @@ Two traps this exposed, both now handled:
    floor never changed.
 
 OpenAI is unchanged throughout (o200k is already its tokenizer) — that is the check
-that the wiring is isolated. gpt-oss, GLM and DeepSeek report their own tokenizers and
-are **not** covered: they keep the o200k floor and inherit the caveat. An unmapped
+that the wiring is isolated. **Every family is now covered**: gpt-oss, GLM and DeepSeek
+are resolved from their real tokenizers (`tokenizers` + `huggingface_hub`, pulled as
+raw `tokenizer.json`, no `transformers` needed), and their floors move by at most 4%.
+An unmapped
 Anthropic-looking label now prints a warning instead of silently using o200k, which is
 how `claude-fable-5-1` (Figure 5's spelling, against the tables' `Fable 5.1`) was found
 to be falling through.

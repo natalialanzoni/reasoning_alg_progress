@@ -61,7 +61,14 @@ CAP = 40000               # output cap; over-cap => truncated before answering =
 
 # Sample + floor, identical to figure1_grid_ft.py (MATH-500 excluded).
 KEYS = {t for t in pf.CANON_KEYS if not str(t).startswith("math_500")}
-FLOOR = float(np.mean([pf.CANON[t]["min"] for t in KEYS]))
+FLOOR = float(np.mean([pf.CANON[t]["min"] for t in KEYS]))   # o200k, the default
+
+
+def floor_of(labels):
+    """This column's floor in its own token units. gpt-oss is o200k_harmony (verified
+    identical to o200k on every canonical solution) and GLM is within 0.1%, so both
+    columns land on ~316 -- but resolve it rather than assume it (README item 15)."""
+    return pf.mean_floor(labels[-1], KEYS)
 
 # Difficulty tiers — same a-priori rule as figure1_grid_ft.py: HMMT is a harder
 # competition than AIME outright, so it ranks above every AIME problem.
@@ -197,7 +204,8 @@ for col, (title, labels, (accs, means, hards), xlabel) in enumerate(COLS):
 
     a1 = axes[1][col]                                   # Row 2 — mean + floor
     a1.plot(x, means, "-o", color=TOK, lw=3, ms=12, zorder=5)
-    a1.axhline(FLOOR, color=FLOOR_COLOR, lw=2, zorder=3)
+    col_floor = floor_of(labels)
+    a1.axhline(col_floor, color=FLOOR_COLOR, lw=2, zorder=3)
     a1.set_ylim(0, max(means) * 1.38)                   # headroom for the label
     a1.yaxis.set_major_formatter(unit_formatter(1e3, "k"))
     ratio = means[0] / means[-1] if means[-1] else float("nan")
@@ -205,7 +213,7 @@ for col, (title, labels, (accs, means, hards), xlabel) in enumerate(COLS):
     a1.annotate(lbl, xy=(0.96, 0.95), xycoords="axes fraction", ha="right", va="top",
                 fontsize=14.5, fontweight="bold", color=TOK, zorder=7,
                 bbox=dict(boxstyle="round,pad=0.3", fc="white", ec=TOK, alpha=0.9))
-    a1.annotate(f"minimal human derivation ≈ {FLOOR:.0f} tok", (x[-1], FLOOR),
+    a1.annotate(f"minimal human derivation ≈ {col_floor:.0f} tok", (x[-1], col_floor),
                 textcoords="offset points", xytext=(0, 6), ha="right", va="bottom",
                 fontsize=9.5, fontweight="bold", color=FLOOR_COLOR)
     print(f"  {labels[0]:>8s} -> {labels[-1]:<8s} acc {accs[0]:.1f}% -> {accs[-1]:.1f}%"

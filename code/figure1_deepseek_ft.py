@@ -70,7 +70,13 @@ FLOOR_COLOR = "#E07A3F"
 CLIP = 32768          # common ceiling; see module docstring
 
 KEYS = {t for t in pf.CANON_KEYS if not str(t).startswith("math_500")}
-FLOOR = float(np.mean([pf.CANON[t]["min"] for t in KEYS]))
+FLOOR = float(np.mean([pf.CANON[t]["min"] for t in KEYS]))   # o200k, the default
+
+
+def floor_of(models):
+    """This column's floor, in the token units its models report (README item 15).
+    DeepSeek's own tokenizer gives 303 tok against o200k's 316."""
+    return pf.mean_floor(models[-1][0], KEYS)
 
 FAB_S = [("Fable 5.1", datetime(2026, 9, 1),
           _D / "fable5.1_shallow_pass" / "claude-fable-5-1_medium_thinking_benchmark.json")]
@@ -162,12 +168,13 @@ def build(fname, successes_only=True):
         # --- row 2: mean tokens + floor --------------------------------------
         a1.plot(x, mean, "-o", color=TOK, lw=2, ms=6, zorder=3,
                 mec="white", mew=1.2)
-        a1.axhline(FLOOR, color=FLOOR_COLOR, ls="--", lw=1.4, zorder=2)
+        col_floor = floor_of(FAMILIES[col][1])
+        a1.axhline(col_floor, color=FLOOR_COLOR, ls="--", lw=1.4, zorder=2)
         a1.set_ylim(0, tok_hi)
         a1.yaxis.set_major_formatter(unit_formatter(1e3, "k"))
         if col == 0:
             a1.set_ylabel("Mean output tokens")
-            a1.text(xmin, FLOOR * 2.4, f"minimal human derivation ({FLOOR:.0f} tok)",
+            a1.text(xmin, col_floor * 2.4, f"minimal human derivation ({col_floor:.0f} tok)",
                     color=FLOOR_COLOR, fontsize=8, va="bottom")
         # earliest -> latest compression, the row's headline
         if np.isfinite(mean[0]) and np.isfinite(mean[-1]) and mean[-1] > 0:
