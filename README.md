@@ -661,7 +661,48 @@ what the 1.7x ratios measure — but the token LEVELS are not comparable across 
 GLM's 14.2k against gpt-oss's 7.8k is partly the effort setting, not the model. The
 caption should say the figure compares ratios, not levels. See failure mode 8.
 
-### 15. Six model clusters cannot support a 5% significance claim
+### 15. `L` and the floor are in DIFFERENT token units for Anthropic
+
+Trace lengths `L` come from each provider's own usage counter, so they are in that
+provider's tokens. The floor `C_j` is tokenized with tiktoken `o200k_base` for every
+model — OpenAI units. For OpenAI models that matches. **For Anthropic it does not**,
+so `L / C_j` and `L - C_j` mix two units.
+
+It is also not constant across the series, because **Anthropic changed tokenizer at
+Opus 4.7** (their docs: 1M tokens is ~555k words on the current tokenizer, ~750k on
+the earlier one). Measured on this benchmark's own solution text, framing removed:
+
+| tokenizer | mean shortest solution, 40 problems | vs `o200k` |
+| --- | --- | --- |
+| `o200k_base` (all OpenAI) | **316** tok | 1.000 |
+| Opus 4.5, 4.6 | **355** tok | 1.123 |
+| Opus 4.7, 4.8, Opus 5, Fable 5.1 | **441** tok | 1.396 |
+
+The tell is chars-per-answer-token, which is flat for OpenAI (2.23–2.70 across nine
+models) and steps at 4.7 for Anthropic: 2.08, 2.18, then **1.71, 1.69, 1.66, 1.71**.
+
+`code/build_floor_by_tokenizer.py` counts every canonical solution through each
+tokenizer and caches the result in `code/canonical_floors_by_tokenizer.json`, so the
+right floor can be used per model and reproduction needs no API key.
+
+**Direction: using 316 for Anthropic understates its floor, overstates its excess, and
+therefore UNDERSTATES its decline.** Correcting it:
+
+| | floor = 316 for all | each model's own floor |
+| --- | --- | --- |
+| OpenAI | −0.1261, 31.5%/qtr | unchanged (o200k is already correct) |
+| Anthropic | −0.1781, **41.4%**/qtr | −0.1936, **44.1%**/qtr |
+
+Anthropic's median multiple of the floor also drops — Fable 5.1 from 4.63x to 3.49x —
+and its below-floor share rises (Fable 5.1 0.64% to 4.47%), because the floor it is
+being measured against is 40% higher than the one used.
+
+**Not yet wired into the figures**, which still use 316 everywhere; the tooling and the
+numbers are here so the switch is a presentation decision, not a measurement one.
+gpt-oss, GLM and DeepSeek have their own tokenizers too and are not covered — their
+figures keep the o200k floor and inherit the same caveat.
+
+### 16. Six model clusters cannot support a 5% significance claim
 
 `Month` is constant within a model, so the bootstrap must resample over MODELS — 8
 for OpenAI, 6 for Anthropic. Two things go wrong if this is done casually, and the

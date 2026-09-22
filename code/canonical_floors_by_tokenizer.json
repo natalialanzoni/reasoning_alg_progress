@@ -1,0 +1,642 @@
+{
+  "models": {
+    "claude-opus-4-5": "anthropic_pre_4_7",
+    "claude-opus-4-6": "anthropic_pre_4_7",
+    "claude-opus-4-7": "anthropic_4_7_plus",
+    "claude-opus-4-8": "anthropic_4_7_plus",
+    "claude-opus-5": "anthropic_4_7_plus",
+    "Fable 5.1": "anthropic_4_7_plus"
+  },
+  "floors": {
+    "aime_2026_i_01": {
+      "o200k": {
+        "min": 134.0,
+        "mean": 244.66666666666666
+      },
+      "anthropic_pre_4_7": {
+        "min": 150.0,
+        "mean": 271.3333333333333
+      },
+      "anthropic_4_7_plus": {
+        "min": 174.0,
+        "mean": 337.3333333333333
+      }
+    },
+    "aime_2026_i_02": {
+      "o200k": {
+        "min": 128.0,
+        "mean": 323.0
+      },
+      "anthropic_pre_4_7": {
+        "min": 137.0,
+        "mean": 356.0
+      },
+      "anthropic_4_7_plus": {
+        "min": 167.0,
+        "mean": 456.4
+      }
+    },
+    "aime_2026_i_03": {
+      "o200k": {
+        "min": 223.0,
+        "mean": 232.0
+      },
+      "anthropic_pre_4_7": {
+        "min": 253.0,
+        "mean": 263.0
+      },
+      "anthropic_4_7_plus": {
+        "min": 332.0,
+        "mean": 342.0
+      }
+    },
+    "aime_2026_i_04": {
+      "o200k": {
+        "min": 165.0,
+        "mean": 261.25
+      },
+      "anthropic_pre_4_7": {
+        "min": 180.0,
+        "mean": 281.25
+      },
+      "anthropic_4_7_plus": {
+        "min": 215.0,
+        "mean": 345.25
+      }
+    },
+    "aime_2026_i_05": {
+      "o200k": {
+        "min": 100.0,
+        "mean": 183.66666666666666
+      },
+      "anthropic_pre_4_7": {
+        "min": 114.0,
+        "mean": 216.83333333333334
+      },
+      "anthropic_4_7_plus": {
+        "min": 142.0,
+        "mean": 279.5
+      }
+    },
+    "aime_2026_i_06": {
+      "o200k": {
+        "min": 135.0,
+        "mean": 331.3333333333333
+      },
+      "anthropic_pre_4_7": {
+        "min": 155.0,
+        "mean": 372.0
+      },
+      "anthropic_4_7_plus": {
+        "min": 182.0,
+        "mean": 432.0
+      }
+    },
+    "aime_2026_i_07": {
+      "o200k": {
+        "min": 197.0,
+        "mean": 506.75
+      },
+      "anthropic_pre_4_7": {
+        "min": 215.0,
+        "mean": 559.5
+      },
+      "anthropic_4_7_plus": {
+        "min": 288.0,
+        "mean": 690.5
+      }
+    },
+    "aime_2026_i_08": {
+      "o200k": {
+        "min": 257.0,
+        "mean": 327.75
+      },
+      "anthropic_pre_4_7": {
+        "min": 264.0,
+        "mean": 364.5
+      },
+      "anthropic_4_7_plus": {
+        "min": 324.0,
+        "mean": 428.0
+      }
+    },
+    "aime_2026_i_09": {
+      "o200k": {
+        "min": 343.0,
+        "mean": 642.125
+      },
+      "anthropic_pre_4_7": {
+        "min": 365.0,
+        "mean": 723.875
+      },
+      "anthropic_4_7_plus": {
+        "min": 470.0,
+        "mean": 896.75
+      }
+    },
+    "aime_2026_i_10": {
+      "o200k": {
+        "min": 420.0,
+        "mean": 726.2
+      },
+      "anthropic_pre_4_7": {
+        "min": 487.0,
+        "mean": 836.4
+      },
+      "anthropic_4_7_plus": {
+        "min": 647.0,
+        "mean": 1056.8
+      }
+    },
+    "aime_2026_i_11": {
+      "o200k": {
+        "min": 426.0,
+        "mean": 506.0
+      },
+      "anthropic_pre_4_7": {
+        "min": 459.0,
+        "mean": 560.5
+      },
+      "anthropic_4_7_plus": {
+        "min": 577.0,
+        "mean": 712.0
+      }
+    },
+    "aime_2026_i_12": {
+      "o200k": {
+        "min": 286.0,
+        "mean": 409.75
+      },
+      "anthropic_pre_4_7": {
+        "min": 325.0,
+        "mean": 460.75
+      },
+      "anthropic_4_7_plus": {
+        "min": 396.0,
+        "mean": 571.25
+      }
+    },
+    "aime_2026_i_13": {
+      "o200k": {
+        "min": 601.0,
+        "mean": 966.75
+      },
+      "anthropic_pre_4_7": {
+        "min": 682.0,
+        "mean": 1094.5
+      },
+      "anthropic_4_7_plus": {
+        "min": 853.0,
+        "mean": 1335.5
+      }
+    },
+    "aime_2026_i_14": {
+      "o200k": {
+        "min": 454.0,
+        "mean": 1114.0
+      },
+      "anthropic_pre_4_7": {
+        "min": 542.0,
+        "mean": 1283.25
+      },
+      "anthropic_4_7_plus": {
+        "min": 665.0,
+        "mean": 1583.5
+      }
+    },
+    "aime_2026_ii_01": {
+      "o200k": {
+        "min": 133.0,
+        "mean": 133.0
+      },
+      "anthropic_pre_4_7": {
+        "min": 142.0,
+        "mean": 142.0
+      },
+      "anthropic_4_7_plus": {
+        "min": 176.0,
+        "mean": 176.0
+      }
+    },
+    "aime_2026_ii_03": {
+      "o200k": {
+        "min": 308.0,
+        "mean": 308.0
+      },
+      "anthropic_pre_4_7": {
+        "min": 349.0,
+        "mean": 349.0
+      },
+      "anthropic_4_7_plus": {
+        "min": 453.0,
+        "mean": 453.0
+      }
+    },
+    "aime_2026_ii_04": {
+      "o200k": {
+        "min": 298.0,
+        "mean": 553.6666666666666
+      },
+      "anthropic_pre_4_7": {
+        "min": 317.0,
+        "mean": 608.0
+      },
+      "anthropic_4_7_plus": {
+        "min": 392.0,
+        "mean": 724.0
+      }
+    },
+    "aime_2026_ii_05": {
+      "o200k": {
+        "min": 245.0,
+        "mean": 425.0
+      },
+      "anthropic_pre_4_7": {
+        "min": 287.0,
+        "mean": 478.3333333333333
+      },
+      "anthropic_4_7_plus": {
+        "min": 354.0,
+        "mean": 588.6666666666666
+      }
+    },
+    "aime_2026_ii_06": {
+      "o200k": {
+        "min": 257.0,
+        "mean": 356.6666666666667
+      },
+      "anthropic_pre_4_7": {
+        "min": 294.0,
+        "mean": 396.0
+      },
+      "anthropic_4_7_plus": {
+        "min": 358.0,
+        "mean": 473.0
+      }
+    },
+    "aime_2026_ii_07": {
+      "o200k": {
+        "min": 276.0,
+        "mean": 568.0
+      },
+      "anthropic_pre_4_7": {
+        "min": 312.0,
+        "mean": 636.75
+      },
+      "anthropic_4_7_plus": {
+        "min": 395.0,
+        "mean": 779.75
+      }
+    },
+    "aime_2026_ii_08": {
+      "o200k": {
+        "min": 275.0,
+        "mean": 363.5
+      },
+      "anthropic_pre_4_7": {
+        "min": 308.0,
+        "mean": 406.0
+      },
+      "anthropic_4_7_plus": {
+        "min": 409.0,
+        "mean": 514.5
+      }
+    },
+    "aime_2026_ii_09": {
+      "o200k": {
+        "min": 178.0,
+        "mean": 326.0
+      },
+      "anthropic_pre_4_7": {
+        "min": 196.0,
+        "mean": 369.4
+      },
+      "anthropic_4_7_plus": {
+        "min": 234.0,
+        "mean": 450.8
+      }
+    },
+    "aime_2026_ii_10": {
+      "o200k": {
+        "min": 350.0,
+        "mean": 687.8
+      },
+      "anthropic_pre_4_7": {
+        "min": 387.0,
+        "mean": 761.6
+      },
+      "anthropic_4_7_plus": {
+        "min": 497.0,
+        "mean": 934.6
+      }
+    },
+    "aime_2026_ii_11": {
+      "o200k": {
+        "min": 304.0,
+        "mean": 616.0
+      },
+      "anthropic_pre_4_7": {
+        "min": 354.0,
+        "mean": 711.5
+      },
+      "anthropic_4_7_plus": {
+        "min": 424.0,
+        "mean": 907.25
+      }
+    },
+    "aime_2026_ii_12": {
+      "o200k": {
+        "min": 969.0,
+        "mean": 969.0
+      },
+      "anthropic_pre_4_7": {
+        "min": 1082.0,
+        "mean": 1082.0
+      },
+      "anthropic_4_7_plus": {
+        "min": 1403.0,
+        "mean": 1403.0
+      }
+    },
+    "aime_2026_ii_13": {
+      "o200k": {
+        "min": 361.0,
+        "mean": 618.0
+      },
+      "anthropic_pre_4_7": {
+        "min": 390.0,
+        "mean": 715.0
+      },
+      "anthropic_4_7_plus": {
+        "min": 475.0,
+        "mean": 874.0
+      }
+    },
+    "aime_2026_ii_14": {
+      "o200k": {
+        "min": 1089.0,
+        "mean": 1675.3333333333333
+      },
+      "anthropic_pre_4_7": {
+        "min": 1227.0,
+        "mean": 1867.0
+      },
+      "anthropic_4_7_plus": {
+        "min": 1448.0,
+        "mean": 2307.3333333333335
+      }
+    },
+    "aime_2026_ii_15": {
+      "o200k": {
+        "min": 1355.0,
+        "mean": 1849.3333333333333
+      },
+      "anthropic_pre_4_7": {
+        "min": 1497.0,
+        "mean": 2063.0
+      },
+      "anthropic_4_7_plus": {
+        "min": 1798.0,
+        "mean": 2478.6666666666665
+      }
+    },
+    "math_500_0136": {
+      "o200k": {
+        "min": 152.0,
+        "mean": 152.0
+      },
+      "anthropic_pre_4_7": {
+        "min": 171.0,
+        "mean": 171.0
+      },
+      "anthropic_4_7_plus": {
+        "min": 192.0,
+        "mean": 192.0
+      }
+    },
+    "math_500_0148": {
+      "o200k": {
+        "min": 345.0,
+        "mean": 345.0
+      },
+      "anthropic_pre_4_7": {
+        "min": 423.0,
+        "mean": 423.0
+      },
+      "anthropic_4_7_plus": {
+        "min": 497.0,
+        "mean": 497.0
+      }
+    },
+    "math_500_0158": {
+      "o200k": {
+        "min": 134.0,
+        "mean": 134.0
+      },
+      "anthropic_pre_4_7": {
+        "min": 157.0,
+        "mean": 157.0
+      },
+      "anthropic_4_7_plus": {
+        "min": 187.0,
+        "mean": 187.0
+      }
+    },
+    "math_500_0200": {
+      "o200k": {
+        "min": 143.0,
+        "mean": 143.0
+      },
+      "anthropic_pre_4_7": {
+        "min": 165.0,
+        "mean": 165.0
+      },
+      "anthropic_4_7_plus": {
+        "min": 186.0,
+        "mean": 186.0
+      }
+    },
+    "math_500_0369": {
+      "o200k": {
+        "min": 235.0,
+        "mean": 235.0
+      },
+      "anthropic_pre_4_7": {
+        "min": 263.0,
+        "mean": 263.0
+      },
+      "anthropic_4_7_plus": {
+        "min": 324.0,
+        "mean": 324.0
+      }
+    },
+    "hmmt_2026_feb_comb_05": {
+      "o200k": {
+        "min": 196.0,
+        "mean": 196.0
+      },
+      "anthropic_pre_4_7": {
+        "min": 211.0,
+        "mean": 211.0
+      },
+      "anthropic_4_7_plus": {
+        "min": 258.0,
+        "mean": 258.0
+      }
+    },
+    "hmmt_2026_feb_comb_06": {
+      "o200k": {
+        "min": 143.0,
+        "mean": 143.0
+      },
+      "anthropic_pre_4_7": {
+        "min": 159.0,
+        "mean": 159.0
+      },
+      "anthropic_4_7_plus": {
+        "min": 207.0,
+        "mean": 207.0
+      }
+    },
+    "hmmt_2026_feb_comb_07": {
+      "o200k": {
+        "min": 220.0,
+        "mean": 220.0
+      },
+      "anthropic_pre_4_7": {
+        "min": 240.0,
+        "mean": 240.0
+      },
+      "anthropic_4_7_plus": {
+        "min": 298.0,
+        "mean": 298.0
+      }
+    },
+    "hmmt_2026_feb_comb_08": {
+      "o200k": {
+        "min": 216.0,
+        "mean": 216.0
+      },
+      "anthropic_pre_4_7": {
+        "min": 251.0,
+        "mean": 251.0
+      },
+      "anthropic_4_7_plus": {
+        "min": 322.0,
+        "mean": 322.0
+      }
+    },
+    "hmmt_2026_feb_comb_09": {
+      "o200k": {
+        "min": 294.0,
+        "mean": 294.0
+      },
+      "anthropic_pre_4_7": {
+        "min": 330.0,
+        "mean": 330.0
+      },
+      "anthropic_4_7_plus": {
+        "min": 382.0,
+        "mean": 382.0
+      }
+    },
+    "hmmt_2026_feb_geo_05": {
+      "o200k": {
+        "min": 232.0,
+        "mean": 232.0
+      },
+      "anthropic_pre_4_7": {
+        "min": 264.0,
+        "mean": 264.0
+      },
+      "anthropic_4_7_plus": {
+        "min": 344.0,
+        "mean": 344.0
+      }
+    },
+    "hmmt_2026_feb_geo_06": {
+      "o200k": {
+        "min": 126.0,
+        "mean": 131.5
+      },
+      "anthropic_pre_4_7": {
+        "min": 158.0,
+        "mean": 158.0
+      },
+      "anthropic_4_7_plus": {
+        "min": 199.0,
+        "mean": 200.0
+      }
+    },
+    "hmmt_2026_feb_geo_07": {
+      "o200k": {
+        "min": 136.0,
+        "mean": 139.5
+      },
+      "anthropic_pre_4_7": {
+        "min": 167.0,
+        "mean": 171.5
+      },
+      "anthropic_4_7_plus": {
+        "min": 217.0,
+        "mean": 226.5
+      }
+    },
+    "hmmt_2026_feb_geo_08": {
+      "o200k": {
+        "min": 112.0,
+        "mean": 133.0
+      },
+      "anthropic_pre_4_7": {
+        "min": 130.0,
+        "mean": 154.0
+      },
+      "anthropic_4_7_plus": {
+        "min": 177.0,
+        "mean": 213.0
+      }
+    },
+    "hmmt_2026_feb_geo_09": {
+      "o200k": {
+        "min": 226.0,
+        "mean": 226.0
+      },
+      "anthropic_pre_4_7": {
+        "min": 269.0,
+        "mean": 269.0
+      },
+      "anthropic_4_7_plus": {
+        "min": 352.0,
+        "mean": 352.0
+      }
+    },
+    "hmmt_2026_feb_geo_10": {
+      "o200k": {
+        "min": 214.0,
+        "mean": 244.0
+      },
+      "anthropic_pre_4_7": {
+        "min": 248.0,
+        "mean": 277.0
+      },
+      "anthropic_4_7_plus": {
+        "min": 302.0,
+        "mean": 341.0
+      }
+    },
+    "hmmt_2026_feb_algnt_04": {
+      "o200k": {
+        "min": 259.0,
+        "mean": 259.0
+      },
+      "anthropic_pre_4_7": {
+        "min": 305.0,
+        "mean": 305.0
+      },
+      "anthropic_4_7_plus": {
+        "min": 339.0,
+        "mean": 339.0
+      }
+    }
+  }
+}
