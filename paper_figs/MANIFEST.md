@@ -36,11 +36,14 @@ trace. See the run-hygiene section of the top-level README.
 Counts of two Gandhi et al. (2025) behaviours in the CoT of the four
 `fig_mechanism` models, same 40 competition problems, k=8.
 
-**Two instruments, deliberately.** Verification is counted by an LLM judge
-(gemini-2.5-flash, whole trace, one count per trace). Backtracking is NOT — two
-judges correlate only +0.52 on it and support opposite lever directions, so it
-uses deterministic abandonment markers instead. That asymmetry is a limitation to
-state, not to hide. Full method and rejected alternatives: `code/llm_judge/`.
+**One instrument.** Both behaviours are counted by an LLM judge
+(gemini-2.5-flash, whole trace, temperature 0, one count per trace). A
+string-marker cross-check exists in `code/llm_judge/` but is deliberately not a
+row here: it measures only abandonment the writer states outright, and printing
+two definitions side by side invites reading them as one measurement. The two
+disagree on the algorithm lever (judge 1.48x, markers 4.29x) and which is right is
+unresolved — 20 traces per behaviour are laid out in
+`code/llm_judge/for_RA_review/` to settle it. Prompts: `appendix_judge_prompts.tex`.
 
 **Rates are per 10k TOKENS**, the same denominator for both behaviours so they
 are directly comparable. A character denominator would be wrong: GLM 5.2 writes
@@ -48,10 +51,11 @@ heavy LaTeX (413 `$` per 10k chars) against 5.3's 7, so markup inflates one
 model's denominator only — the same trap as run-hygiene item 11. The lever ratio
 is stable across denominators (char / token / sentence / word within ~10%).
 
-**What it shows.** Scale (20B->120B) lowers both behaviours per trace AND per
-token: the bigger model needs less search. Algorithm (5.2->5.3) does not —
-verification count falls 1.38x while trace length falls 1.66x, so density rises
-1.21x, and backtracking rises 3.16x per 10k tokens (5.49x before excluding memory-recall context). Compression, not less reasoning.
+**What it shows.** On the judge every effect is modest — nothing moves more than
+1.5x. Both levers cut counts per trace mainly by cutting trace length; per token
+the changes are small (scale: verification 0.91x, backtracking 0.88x; algorithm:
+1.21x and 1.48x). The defensible reading is that efficiency gains here come mostly
+from writing less, not from reasoning differently.
 
 **Do not quote absolute counts.** Judges differ ~2.5x in magnitude even where they
 agree on ranking. The table supports comparisons within itself.

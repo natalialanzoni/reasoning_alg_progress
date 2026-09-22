@@ -6,7 +6,11 @@ which needs the whole chain -- a fragment cannot tell a backtrack from a first
 attempt. Chunking or marker-anchored windows over-count ~5-6x against a hand
 count.
 
-THE STRING-MARKER COLUMN IS A CROSS-CHECK, not the headline. It counts only
+THE STRING-MARKER COLUMN IS A DIAGNOSTIC. It prints to the terminal but is NOT a
+row in the paper table -- it measures a narrower construct (only abandonment the
+writer states outright) and would invite readers to treat two different
+definitions as one measurement. It is here to flag instrument disagreement to us,
+not to the reader. It counts only
 explicit abandonment language, so it is narrower by construction, and it has known
 RECALL GAPS -- the set lacks "another approach" and "step wrong", both of which
 appear in traces where the judge correctly found instances it missed.
@@ -185,8 +189,7 @@ def latex(res, path):
     rows_spec = [("Verification, per trace", 0, "{:.2f}"),
                  ("Verification, per 10k tokens", 1, "{:.2f}"),
                  ("Backtracking, per trace", 5, "{:.2f}"),
-                 ("Backtracking, per 10k tokens", 2, "{:.2f}"),
-                 (r"\quad \emph{marker cross-check, per 10k}", 8, "{:.2f}")]
+                 ("Backtracking, per 10k tokens", 2, "{:.2f}")]
     for lab, i, f in rows_spec:
         t.append(lab + " & " + " & ".join("$" + f.format(res[m][i]) + "$" for m in names) + r" \\")
     t += [r"\addlinespace",
