@@ -215,15 +215,22 @@ def build(fname, full_row3, successes_only=True, thinking_only=False):
     all_dates = [d for _, sh, _ in FAMILIES for _, d, _ in sh]
     xlo, xhi = min(all_dates), max(all_dates)
     pad = (xhi - xlo).days * 0.04
-    fig, axes = plt.subplots(3, 2, figsize=(15, 13.5), sharex=True,
-                             gridspec_kw={"hspace": 0.18, "wspace": 0.22})
+    # TRANSPOSED 2x3: families are ROWS, the three metrics are COLUMNS. The 3x2
+    # version was 15 x 13.5 in and ate most of a page; this is 18 x 8.4 and sits in
+    # a full-width slot. The shared time axis is preserved -- it is now shared down
+    # each column rather than across each row.
+    fig, axes = plt.subplots(2, 3, figsize=(18, 8.4), sharex=True,
+                             gridspec_kw={"hspace": 0.16, "wspace": 0.20})
     seen = set()
-    for col, (title, shallow, hard) in enumerate(FAMILIES):
+    for row, (title, shallow, hard) in enumerate(FAMILIES):
         dx, labs, mean, acc = shallow_dist(shallow, successes_only, thinking_only)
 
-        a0 = axes[0][col]                                   # Row 1 — accuracy
+        a0 = axes[row][0]                                   # Col 1 — accuracy
         a0.plot(dx, acc, "-o", color=ACC, lw=2.6, ms=8, zorder=5)
-        a0.set_ylim(58, 103); a0.set_title(title)
+        a0.set_ylim(58, 103)
+        # family name labels the ROW; the three metrics are titled once, on the top
+        # row, so nothing is repeated
+        a0.set_ylabel(title, fontweight="bold", fontsize=13, labelpad=10)
         a0.yaxis.set_major_formatter(unit_formatter(1, "%", "{:.0f}"))
         levels = [(-16, "top"), (-32, "top"), (-48, "top")]
         for i, (xi, yi, name) in enumerate(zip(dx, acc, labs)):
@@ -234,7 +241,7 @@ def build(fname, full_row3, successes_only=True, thinking_only=False):
                         arrowprops=dict(arrowstyle="-", color=ACC, lw=0.6, alpha=0.6,
                                         shrinkA=1, shrinkB=3))
 
-        a1 = axes[1][col]                                   # Row 2 — mean falling to floor
+        a1 = axes[row][1]                                   # Col 2 — mean falling to floor
         a1.plot(dx, mean, "-o", color=TOK, lw=3, ms=8, zorder=5)
         # The floor is the shortest HUMAN-WRITTEN derivation -- exposition, which is
         # the analogue of the model's ANSWER, not of its hidden scratch work. So it is
@@ -269,7 +276,7 @@ def build(fname, full_row3, successes_only=True, thinking_only=False):
         print(f"  row2 {title:<26s} {mean[0]:.0f} -> {mean[-1]:.0f} tok = {ratio:.1f}x"
               f"  over {months} months ({d0:%Y-%m} -> {d1:%Y-%m})")
 
-        a2 = axes[2][col]                                   # Row 3 — per-problem by difficulty
+        a2 = axes[row][2]                                   # Col 3 — per-problem by difficulty
         hdx, prob, diff = hard_perproblem(shallow if full_row3 else hard, successes_only)
         cat = {p: human_tier(p) for p in prob}              # human-solve-rate tiers
         prob = {p: d for p, d in prob.items() if cat[p]}    # skip anything unlabelled
@@ -291,17 +298,19 @@ def build(fname, full_row3, successes_only=True, thinking_only=False):
             a2.plot(xs, d["med"], color=c, lw=lw, alpha=0.95, zorder=2)
         a2.set_ylim(0, 30000 if full_row3 else 34000)
         a2.yaxis.set_major_formatter(unit_formatter(1e3, "k"))
-        a2.xaxis.set_major_locator(mdates.MonthLocator(interval=4))
-        a2.xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m"))
-        a2.set_xlim(mdates.date2num(xlo) - pad, mdates.date2num(xhi) + pad)
-        a2.set_xlabel("Release date")
+        for _a in (a0, a1, a2):
+            _a.xaxis.set_major_locator(mdates.MonthLocator(interval=6))
+            _a.xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m"))
+            _a.set_xlim(mdates.date2num(xlo) - pad, mdates.date2num(xhi) + pad)
+            if row == len(FAMILIES) - 1:
+                _a.set_xlabel("Release date")
 
-    axes[0][0].set_ylabel("Accuracy")
     cond = "correct traces" if successes_only else "all attempts"
-    axes[1][0].set_ylabel(("Mean THINKING tokens\n" if thinking_only
-                           else "Mean output tokens\n") + f"({cond})")
     src = "full benchmark" if full_row3 else "hard-but-doable"
-    axes[2][0].set_ylabel(f"Output tokens\n({src}, {cond})")
+    axes[0][1].set_title(("Mean THINKING tokens " if thinking_only
+                          else "Mean output tokens ") + f"({cond})", fontsize=13)
+    axes[0][2].set_title(f"Output tokens by problem ({src}, {cond})", fontsize=13)
+    axes[0][0].set_title("Accuracy", fontsize=13)
     # MATCHED-WINDOW check: the raw per-family ratios are not comparable because the
     # families cover different spans. Recompute each family over the LATEST-COMMON
     # window (starts at the later of the two first-model dates) so the two numbers
@@ -318,7 +327,7 @@ def build(fname, full_row3, successes_only=True, thinking_only=False):
 
     keys = [k for k in TIER_ORDER if k in seen]             # human-solve-rate tiers
     handles = [mlines.Line2D([], [], color=TIER_COLOR[k], lw=3, label=k) for k in keys]
-    axes[2][1].legend(handles=handles, loc="upper right", fontsize=11, ncol=1,
+    axes[-1][2].legend(handles=handles, loc="upper right", fontsize=10, ncol=1,
                       frameon=True, framealpha=0.95, title="difficulty")
     return save_figure(fig, fname, outdir=OUT)
 
