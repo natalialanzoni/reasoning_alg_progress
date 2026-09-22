@@ -89,15 +89,28 @@ Reproduce with `python code/llm_judge/recall_check.py`. Everything below is
 restricted to claims made **before the model computes anything** — the only
 position where a number cannot have been derived.
 
-| model | attempts /10k tok | % traces attempting | claims w/ a number | matching gold |
-| --- | ---: | ---: | ---: | ---: |
-| gpt-oss-20b | 0.00 | 0% | 0 | — |
-| gpt-oss-120b | 0.01 | 1% | 0 | — |
-| GLM 5.2 | 0.00 | 0% | 0 | — |
-| GLM 5.3 | **0.50** | **30%** | **83** | **0/83 (0%)** |
+| model | traces attempting recall | traces stating a remembered number | claims correct |
+| --- | ---: | ---: | ---: |
+| gpt-oss-20b | 1/320 (0%) | 0/320 (0%) | — |
+| gpt-oss-120b | 2/320 (1%) | 0/320 (0%) | — |
+| GLM 5.2 | 1/320 (0%) | 0/320 (0%) | — |
+| **GLM 5.3** | **95/320 (30%)** | **56/320 (18%)** | **0/83 (0%)** |
 
 **Zero of 83 pre-computation claims match gold.** With n=83 that bounds a true
 recall rate at roughly 1 in 83 rather than proving it is exactly zero.
+
+**Read the two columns separately, because they support different claims.**
+
+*The behavioural finding* is about GLM 5.3 alone: it opens 30% of its traces
+reaching for memory, commits to a specific remembered number in 18%, and then
+derives the answer anyway. The other three models essentially never do this — four
+traces between them, none stating a number. This is a qualitative split, not a
+difference of degree.
+
+*The contamination finding* rests entirely on GLM 5.3 too, because all 83 scorable
+claims come from it. For the other three, "never attempts retrieval" is consistent
+with no contamination but is not a test of it — a model cannot fail a test it does
+not take.
 
 The naive test — scoring every recall claim regardless of position — returns
 16–40% and ranks GLM 5.2 highest despite GLM 5.2 making no pre-computation
