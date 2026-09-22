@@ -1,16 +1,19 @@
 """Distance to the human floor (FutureTech house style).
 
-OpenAI left, Anthropic right, on a shared log axis. Each violin POOLS both runs of
-that model -- the whole benchmark (40 competition problems, k=8) and the
-hard-but-doable subset (10 problems, k=32) -- giving ~630 correct traces per model
-instead of ~315. The extra sample matters only in the tails, which is where the
-interesting behaviour is: crossing the floor is a sub-1% event for every model
-except Astra and is barely resolvable on either run alone.
+OpenAI left, Anthropic right, on a shared log axis. Each violin is ONE run per model:
+the whole benchmark, 40 competition problems at k=8, ~300 correct traces per model.
 
-The 10 hard problems are a SUBSET of the 40, so after pooling they carry 8+32=40
-attempts each against 8 for the other 30, tilting the distribution toward the harder
-problems. `avg_ref_pooled` weights the average-human reference line the same way, so
-the line and the violins describe the same sample. Each violin is the
+This used to pool that run with the hard-but-doable k=32 run, which roughly doubled n
+and bought resolution in the tails -- where the interesting behaviour is, since
+crossing the floor is a few-percent event. It was dropped because the two samples are
+not disjoint: the 10 hard problems are a SUBSET of the 40, so pooling gave them
+8+32=40 attempts each against 8 for the other 30 and tilted every distribution toward
+the harder problems. One sample and one weighting is easier to state than a pooled
+sample with a compensating weight on the reference line. Both families cover the same
+models either way (9 and 6), so only the second run per model was lost.
+
+The tails are correspondingly noisier: a below-floor share of 2-4% now rests on ~300
+traces rather than ~630, so read those percentages as approximate. Each violin is the
 distribution of trace length divided by that problem's MINIMAL human derivation
 (L / C_j) over correct traces, so 1x means "as short as the shortest human derivation
 to this problem". Two human reference lines are drawn:
@@ -177,12 +180,16 @@ fig, axes = plt.subplots(1, 2, figsize=(16, 6.8), sharey=True,
                          gridspec_kw={"wspace": 0.06})
 
 # pair each model's two runs by label
+# WHOLE BENCHMARK ONLY (40 competition problems, k=8). This used to pool the k=8 run
+# with the hard-but-doable k=32 run, roughly doubling n per model. Pooling bought tail
+# resolution but mixed two samples: the 10 hard problems are a SUBSET of the 40, so
+# after pooling they carried 8+32=40 attempts each against 8 for the other 30, tilting
+# every distribution toward the harder problems. One sample, one weighting.
+# Both families cover the same models in either sample (9 and 6), so nothing is
+# dropped by the change -- only the second run per model.
 PAIRED = []
-for (fam, fam_c), (_, shallow, hard) in zip(FAM_COLORS,
-                                            [(None, SAMPLES[0][1], SAMPLES[1][1]),
-                                             (None, SAMPLES[0][2], SAMPLES[1][2])]):
-    hmap = {l: p for l, _, p in hard}
-    PAIRED.append((fam, fam_c, [(l, d, [p, hmap[l]]) for l, d, p in shallow if l in hmap]))
+for (fam, fam_c), shallow in zip(FAM_COLORS, [SAMPLES[0][1], SAMPLES[0][2]]):
+    PAIRED.append((fam, fam_c, [(l, d, [p]) for l, d, p in shallow]))
 
 AVG_REF = avg_ref_pooled([p for _, _, models in PAIRED for _, _, ps in models for p in ps])
 print(f"fig5 (POOLED whole benchmark k=8 + hard-but-doable k=32); "
