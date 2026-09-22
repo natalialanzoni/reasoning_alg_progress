@@ -98,7 +98,14 @@ PER_BUCKET = 3     # full-benchmark row 3: problems sampled per difficulty level
 KEYS = {t for t in pf.CANON_KEYS if not str(t).startswith("math_500")}
 # The floor must be recomputed over the SAME sample — MATH-500's canonical solutions
 # are short (~202 tok), so leaving them in canon_short would understate the floor.
-FLOOR = float(np.mean([pf.CANON[t]["min"] for t in KEYS]))
+FLOOR = float(np.mean([pf.CANON[t]["min"] for t in KEYS]))   # o200k, the default
+
+
+def floor_of(models):
+    """This family's floor, in the token units its models report (README item 15).
+    Anthropic changed tokenizer at Opus 4.7, so a family can span two; use the latest
+    model's, which is the unit the column's newest point is measured in."""
+    return pf.mean_floor(models[-1][0], KEYS)
 print(f"figure1_grid: {len(KEYS)} competition problems (MATH-500 excluded), "
       f"floor = {FLOOR:.0f} tok  (all-45 floor was {pf.canon_short:.0f})")
 
@@ -233,15 +240,16 @@ def build(fname, full_row3, successes_only=True, thinking_only=False):
         # the analogue of the model's ANSWER, not of its hidden scratch work. So it is
         # drawn only in the total-tokens view; there is no principled floor for
         # thinking alone (and subtracting one would censor 38% of astra's traces).
+        col_floor = floor_of(shallow)
         if not thinking_only:
-            a1.axhline(FLOOR, color=FLOOR_COLOR, lw=2, zorder=3)
+            a1.axhline(col_floor, color=FLOOR_COLOR, lw=2, zorder=3)
         # headroom above the curve for the compression label. Anthropic's series is
         # squeezed into the right third of the shared axis with its peak at the top,
         # so without this the label lands on the data in that column.
         a1.set_ylim(0, max(mean) * 1.38)
         a1.yaxis.set_major_formatter(unit_formatter(1e3, "k"))
         if not thinking_only:
-            a1.annotate(f"minimal human derivation ≈ {FLOOR:.0f} tok", (dx[-1], FLOOR),
+            a1.annotate(f"minimal human derivation ≈ {col_floor:.0f} tok", (dx[-1], col_floor),
                         textcoords="offset points", xytext=(0, 5), ha="right", va="bottom",
                         fontsize=10, fontweight="bold", color=FLOOR_COLOR, zorder=6)
         # earliest -> latest compression, anchored upper-RIGHT so it reads as a

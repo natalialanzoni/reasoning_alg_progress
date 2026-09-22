@@ -48,14 +48,23 @@ ANTHROPIC_TOKENIZERS = {
     "anthropic_pre_4_7": "claude-opus-4-5",
     "anthropic_4_7_plus": "claude-opus-5",
 }
-# which tokenizer each model in the paper is measured in
+# Which tokenizer each model's reported counts are in. EVERY spelling a figure
+# might pass must appear: Figure 5 uses the API id, the tables use the display
+# name, and an unmapped Anthropic label silently means an OpenAI floor.
 MODEL_TOKENIZER = {
-    "claude-opus-4-5": "anthropic_pre_4_7",
-    "claude-opus-4-6": "anthropic_pre_4_7",
-    "claude-opus-4-7": "anthropic_4_7_plus",
-    "claude-opus-4-8": "anthropic_4_7_plus",
-    "claude-opus-5": "anthropic_4_7_plus",
-    "Fable 5.1": "anthropic_4_7_plus",
+    'claude-opus-4-5': 'anthropic_pre_4_7',
+    'claude-opus-4-6': 'anthropic_pre_4_7',
+    'claude-opus-4-7': 'anthropic_4_7_plus',
+    'claude-opus-4-8': 'anthropic_4_7_plus',
+    'claude-opus-5': 'anthropic_4_7_plus',
+    'claude-fable-5-1': 'anthropic_4_7_plus',
+    'Opus 4.5': 'anthropic_pre_4_7',
+    'Opus 4.6': 'anthropic_pre_4_7',
+    'Opus 4.7': 'anthropic_4_7_plus',
+    'Opus 4.8': 'anthropic_4_7_plus',
+    'Opus 5': 'anthropic_4_7_plus',
+    'Fable 5.1': 'anthropic_4_7_plus',
+    'fable5.1': 'anthropic_4_7_plus',
 }
 
 
@@ -90,7 +99,11 @@ def main():
         per = {"o200k": [len(enc.encode(s)) for s in sols]}
         for key_, model in ANTHROPIC_TOKENIZERS.items():
             per[key_] = [count(model, s) - overhead[key_] for s in sols]
-        out[str(r["id"])] = {k: {"min": float(min(v)), "mean": float(np.mean(v))}
+        # store the RAW per-solution counts as well, so min / median / mean (and any
+        # future statistic, e.g. the floor-robustness table's rows) are derivable
+        # without re-querying the API
+        out[str(r["id"])] = {k: {"min": float(min(v)), "median": float(np.median(v)),
+                                 "mean": float(np.mean(v)), "counts": [int(x) for x in v]}
                              for k, v in per.items()}
         print(f"  [{i:3d}] {r['id']}  " +
               "  ".join(f"{k}: min={min(v)}" for k, v in per.items()))

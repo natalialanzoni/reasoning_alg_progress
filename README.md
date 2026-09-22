@@ -53,8 +53,8 @@ spec changed:
 | --- | --- | --- |
 | Fig 1 mean tokens | 9,547 -> 1,121 (**8.5x**) | 8,617 -> 1,799 (**4.8x**) |
 | Fig 1 accuracy | 70.0% -> 99.4% | 90.6% -> 97.8% |
-| Decay rate | **31.5%**/qtr (p = 0.022) | **41.4%**/qtr (p = 0.066) |
-| Within 10% of floor | **2029-02** | **2028-06** |
+| Decay rate | **31.5%**/qtr (p = 0.022) | **44.1%**/qtr (p = 0.067) |
+| Within 10% of floor | **2029-02** | **2028-02** |
 
 ### Two things that will bite a fresh machine
 
@@ -219,16 +219,16 @@ something about the sample or the spec changed.
 
 | Artifact | Script | Numbers to check |
 | --- | --- | --- |
-| sample + floor | all | **40** competition problems, floor **316** tok |
+| sample + floor | all | **40** competition problems; floor **316** tok (o200k) / **355** (Opus 4.5-4.6) / **441** (Opus 4.7+) |
 | accuracy denominator | all | **N = 320** per model (40 x k=8); o3 is 317 |
 | Fig 1 | `figure1_grid_ft.py` | OpenAI 9,547 -> 1,121 tok (**8.5x**), acc 70.0% -> 99.4%; Anthropic 8,617 -> 1,799 (**4.8x**), acc 90.6% -> 97.8% |
-| Fig 4 | `figure_forecast_ft.py` | beta **-0.126** (31.5%/qtr, CI 24-37) and **-0.178** (41.4%/qtr, CI 31-50); within-10% **2029-02** / **2028-06** |
-| Decay table | `table_decay.py` | same betas; N 2,609 / 1,811; 9 / 6 model clusters |
+| Fig 4 | `figure_forecast_ft.py` | beta **-0.126** (31.5%/qtr) and **-0.194** (44.1%/qtr); within-10% **2029-02** / **2028-02** |
+| Decay table | `table_decay.py` | same betas; N 2,609 / 1,794; 9 / 6 model clusters |
 | Thinking-only | `table_floor_robustness.py` | `thinking only` row: **33.1%** / **42.1%** (log L comparator 27.6% / 36.2%, not in the table) |
 | Fig 1 thinking | `figure1_grid_ft.py` | OpenAI 8,309 -> 649 (**12.8x**); Anthropic 7,804 -> 1,173 (**6.7x**) |
-| Fig 5 | `figure_latent_floor_ft.py` | pooled n~630/model. astra **2.83%** below min, **25.0%** below average; Fable 5.1 **0.32%** below min, **9.2%** below average, **27.7%** zero-thinking |
+| Fig 5 | `figure_latent_floor_ft.py` | pooled n~630/model. astra **2.83%** below min, **25.0%** below average; Fable 5.1 **2.38%** / **20.5%** / **27.7%** zero-thinking |
 | Case study | `figure_mechanism_ft.py` | scale 7,842 -> 4,693 (**1.7x**), acc 68.4% -> 73.8%; algorithm 14,241 -> 8,539 (**1.7x**), acc 83.4% -> 85.6% |
-| Floor table | `table_floor_robustness.py` | OpenAI **31.5-34.1**%/qtr, Anthropic **41.4-43.1**%/qtr across three floor definitions |
+| Floor table | `table_floor_robustness.py` | OpenAI **31.5-34.1**%/qtr (floor 316), Anthropic **44.1-47.8**%/qtr (floor 441) |
 | Effort | `figure_effort_ft.py` | 8 GPT models x 3 efforts, **k truncated to 8** (`K_CAP`); **low 33.5%**, **medium 35.6%**, **high 36.3%**/qtr |
 | Contamination | `figure_forecast_ft.py` | `fig4_forecast_precutoff_appendix`: GPT **22.0%**/qtr (7 models), Anthropic **29.5%** (4) |
 
@@ -697,10 +697,30 @@ Anthropic's median multiple of the floor also drops — Fable 5.1 from 4.63x to 
 and its below-floor share rises (Fable 5.1 0.64% to 4.47%), because the floor it is
 being measured against is 40% higher than the one used.
 
-**Not yet wired into the figures**, which still use 316 everywhere; the tooling and the
-numbers are here so the switch is a presentation decision, not a measurement one.
-gpt-oss, GLM and DeepSeek have their own tokenizers too and are not covered — their
-figures keep the o200k floor and inherit the same caveat.
+**Now wired through every figure and table.** `pf.floor_for(label, task_id)` returns the
+floor in that model's units and `pf.mean_floor(label, keys)` the number a floor LINE
+draws. Figures 1 and 2 draw a floor per family; Figure 4 uses each family's own; Figure
+5's `L/C_j` is per model.
+
+Two traps this exposed, both now handled:
+
+1. **The DV had to change.** The code fitted `log(headroom - 1) = log(L - C_j) -
+   log(C_j)`, justified by `-log(C_j)` being absorbed by the problem fixed effect.
+   That holds only while `C_j` depends on the problem ALONE. With per-model floors it
+   varies by model too and correlates with time, so it leaks into beta — it put
+   Anthropic at 48.6%/qtr against the correct **44.1%**. Everything now fits the
+   paper's stated equation, `log(L - MHD_j)`, in absolute tokens.
+2. **Expressing a milestone needs the GEOMETRIC mean floor.** The mean-FE intercept
+   lives in log space, so "within 10% of the floor" is `log(0.10 * exp(mean_j log
+   C_j))`. Using the arithmetic mean moved OpenAI's date two months even though its
+   floor never changed.
+
+OpenAI is unchanged throughout (o200k is already its tokenizer) — that is the check
+that the wiring is isolated. gpt-oss, GLM and DeepSeek report their own tokenizers and
+are **not** covered: they keep the o200k floor and inherit the caveat. An unmapped
+Anthropic-looking label now prints a warning instead of silently using o200k, which is
+how `claude-fable-5-1` (Figure 5's spelling, against the tables' `Fable 5.1`) was found
+to be falling through.
 
 ### 16. Six model clusters cannot support a 5% significance claim
 

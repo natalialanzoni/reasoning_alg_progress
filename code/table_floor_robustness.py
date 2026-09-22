@@ -104,6 +104,7 @@ def build(mfiles, floor):
                 # attempts and cannot count as successes (fs._trial_correct)
                 if tok < 50 or not c or tok >= 40000:
                     continue
+                C = pf.floor_for(label, tid, floor) if floor not in (None, THINK) else None
                 if floor is THINK:
                     # log(thinking) is undefined at zero, so zero-thinking traces
                     # drop out here -- all of them Fable 5.1, the newest model's
@@ -111,11 +112,14 @@ def build(mfiles, floor):
                     if th and th > 0:
                         rows.append((tid, month, label, math.log(th)))
                 elif floor is None:
-                    rows.append((tid, month, label, math.log(tok / FLOORS[tid]["min"])))
+                    rows.append((tid, month, label, math.log(tok / pf.floor_for(label, tid))))
                 else:
-                    h = tok / FLOORS[tid][floor]
-                    if h > 1:
-                        rows.append((tid, month, label, math.log(h - 1)))
+                    # the paper's DV, log(L - MHD_j), in absolute tokens and in THIS
+                    # model's own token units. Not log(h - 1): with a model-varying
+                    # floor the -log(C_j) term is no longer absorbed by the problem
+                    # FE. See README item 15.
+                    if tok > C:
+                        rows.append((tid, month, label, math.log(tok - C)))
     return rows
 
 
@@ -148,8 +152,18 @@ for fam, mf in FAMILIES:
         # log(L/C_min) is used there only so the scale matches: with problem FE a
         # per-problem constant is fully absorbed, so beta equals that of plain log L.
         has_floor = fl is not None and fl is not THINK
-        cbar = np.mean([FLOORS[t][fl] for t in KEYS]) if has_floor else None
-        target = math.log(0.10) if has_floor else math.log(1.10)
+        # report the floor in the family's own units (its newest model's tokenizer)
+        newest = mf[-1][0]
+        cbar = float(np.mean([pf.floor_for(newest, t, fl) for t in KEYS])) if has_floor else None
+        # The DV is now log(L - C_j) in absolute tokens, so "within 10% of the floor"
+        # is excess = 0.10 * C_j, and converting that to a single intercept-space
+        # target needs the GEOMETRIC mean of the per-problem floors -- the mean-FE
+        # intercept lives in log space. (Arithmetic here shifts every date by months.)
+        if has_floor:
+            geo = float(np.exp(np.mean([math.log(pf.floor_for(newest, t, fl)) for t in KEYS])))
+            target = math.log(0.10 * geo)
+        else:
+            target = math.log(1.10)
         res[(fam, name)] = dict(
             b=b, se=se, lo=lo, hi=hi, n=n, G=G, drop=n_correct - n, cbar=cbar,
             q=(1 - math.exp(3 * b)) * 100, hl=-math.log(2) / b,

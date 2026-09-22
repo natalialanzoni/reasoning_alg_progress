@@ -81,9 +81,11 @@ def model_samples(path):
     return pooled, pmean
 
 
-def canonical_floor(keys):
+def canonical_floor(keys, label=None):
     ks = [k for k in keys if k in pf.CANON_KEYS]
-    return float(np.mean([pf.CANON[k]["min"] for k in ks])) if ks else None
+    # in the panel family's own token units (README item 15); `label` is the
+    # newest model on that panel
+    return float(np.mean([pf.floor_for(label, k) for k in ks])) if ks else None
 
 
 def plot_row(ax, hard_files, title):
@@ -112,7 +114,7 @@ def plot_row(ax, hard_files, title):
     meds = [float(np.median(p)) for p in pooled_all]
     ax.plot(pos, meds, color=PRIMARY, lw=2.5, marker="o", ms=6, zorder=6)
 
-    floor = canonical_floor(keys)
+    floor = canonical_floor(keys, hard_files[-1][0])   # newest model on this panel
     if floor:
         ax.axhline(floor, ls="--", lw=1.6, color=FLOOR_C, zorder=4)
         ax.text(0.015, 0.955, f"Minimal human derivation ≈ {floor:,.0f} tokens",

@@ -145,6 +145,68 @@ for r in _ds:
     toks = [len(_enc.encode(s)) for s in json.loads(r["solutions"])]
     CANON[str(r["id"])] = {"mean": float(np.mean(toks)), "min": float(min(toks))}
 CANON_KEYS = set(CANON)
+# ---------------------------------------------------------------------------
+# PER-TOKENIZER FLOORS. `L` comes from each provider's own usage counter, so it is
+# in that provider's tokens; a floor tokenized with o200k_base for everyone makes
+# L - C_j and L / C_j mix units for non-OpenAI models. Anthropic also CHANGED
+# tokenizer at Opus 4.7, mid-series. Built by code/build_floor_by_tokenizer.py and
+# cached, so reproduction needs no API key. See README run-hygiene item 15.
+#
+#   mean shortest solution, 40 competition problems:
+#     o200k_base (OpenAI)                316 tok
+#     Opus 4.5, 4.6                      355 tok   (1.12x)
+#     Opus 4.7, 4.8, Opus 5, Fable 5.1   441 tok   (1.40x)
+_TOKFILE = Path(__file__).resolve().parent / "canonical_floors_by_tokenizer.json"
+try:
+    _tokblob = json.load(open(_TOKFILE))
+    MODEL_TOKENIZER = dict(_tokblob["models"])
+    FLOORS_BY_TOK = _tokblob["floors"]
+except FileNotFoundError:                      # fall back to o200k everywhere
+    MODEL_TOKENIZER, FLOORS_BY_TOK = {}, {}
+    print("  WARNING: canonical_floors_by_tokenizer.json missing -- every model will "
+          "use the o200k floor, which is WRONG for Anthropic (README item 15).")
+
+
+_WARNED_LABELS = set()
+
+
+def tokenizer_for(label):
+    """Which tokenizer a model's reported token counts are in.
+
+    Anything not listed falls back to o200k. That is right for OpenAI and is a KNOWN
+    approximation for gpt-oss / GLM / DeepSeek, which report their own tokenizers but
+    expose no counting endpoint here.
+    """
+    if label in MODEL_TOKENIZER:
+        return MODEL_TOKENIZER[label]
+    # A silent fallback here is dangerous: it is not an error, it just quietly
+    # measures an Anthropic model against an OpenAI floor. Figure 5 passed
+    # "claude-fable-5-1" while the tables passed "Fable 5.1", and only the tables
+    # were right. Anything that looks Anthropic and is unmapped now says so.
+    low = str(label).lower()
+    if any(k in low for k in ("claude", "opus", "fable", "sonnet", "haiku")):
+        if label not in _WARNED_LABELS:
+            _WARNED_LABELS.add(label)
+            print(f"  WARNING: no tokenizer mapping for {label!r}; falling back to "
+                  f"o200k, which is WRONG for an Anthropic model. Add it to "
+                  f"canonical_floors_by_tokenizer.json (README item 15).")
+    return "o200k"
+
+
+def floor_for(label, tid, stat="min"):
+    """The floor for problem `tid` in `label`'s own token units."""
+    ent = FLOORS_BY_TOK.get(str(tid))
+    if not ent:
+        return CANON[str(tid)][stat]
+    return ent.get(tokenizer_for(label), ent["o200k"])[stat]
+
+
+def mean_floor(label, keys, stat="min"):
+    """Mean floor over `keys`, in `label`'s units -- the number a floor LINE draws."""
+    ks = [k for k in keys if str(k) in FLOORS_BY_TOK or str(k) in CANON]
+    return float(np.mean([floor_for(label, k, stat) for k in ks])) if ks else float("nan")
+
+
 canon_avg = float(np.mean([CANON[t]["mean"] for t in CANON_KEYS]))
 canon_short = float(np.mean([CANON[t]["min"] for t in CANON_KEYS]))
 print(f"  {len(CANON_KEYS)} problems with canonical solutions; "
@@ -659,9 +721,12 @@ def _fit_headroom_forecast(model_files, exclude_baseline=True, successes_only=Tr
                 # success no matter what the grader extracted from the fragment
                 if successes_only and not (c and tok < 40000):
                     continue
-                hr = tok / CANON[tid]["min"]
-                rows.append({"problem": tid, "month": month, "headroom": hr})
-                hrs.append(hr)
+                # floor in THIS model's own token units -- L comes from its
+                # provider's counter (README item 15)
+                cj = floor_for(label, tid)
+                rows.append({"problem": tid, "month": month,
+                             "headroom": tok / cj, "excess": tok - cj})
+                hrs.append(tok / cj)
         exc = np.array([h - 1 for h in hrs if h > 1])
         geomean[label] = 1.0 + math.exp(np.mean(np.log(exc)))   # model-consistent central tendency
     df = pd.DataFrame(rows)
@@ -672,7 +737,16 @@ def _fit_headroom_forecast(model_files, exclude_baseline=True, successes_only=Tr
     if exclude_baseline:
         mask &= df["month"] > baseline_month   # drop the first model (pre-trend peak, e.g. o3)
     fitdf = df[mask].copy()
-    fitdf["y"] = np.log(fitdf["headroom"] - 1.0)
+    # DV is the PAPER'S equation, log(L - MHD_j), in absolute tokens.
+    #
+    # It used to be log(headroom - 1) = log(L - C_j) - log(C_j), on the grounds that
+    # -log(C_j) is a per-problem constant absorbed by the problem fixed effect. That
+    # was true only while C_j depended on the problem ALONE. Now that the floor is in
+    # each model's own tokenizer, C_j varies by MODEL as well, so -log(C_j) carries a
+    # model-era component that the problem FE cannot absorb -- and it correlates with
+    # time, because Anthropic's tokenizer changed mid-series. Left as headroom it put
+    # Anthropic at 48.6%/quarter against the correct 44.1%. See README item 15.
+    fitdf["y"] = np.log(fitdf["excess"])
     import statsmodels.formula.api as smf   # only needed here
     res = smf.ols("y ~ month + C(problem)", data=fitdf).fit(
         cov_type="cluster", cov_kwds={"groups": fitdf["problem"]})
@@ -684,11 +758,29 @@ def _fit_headroom_forecast(model_files, exclude_baseline=True, successes_only=Tr
     a = res.params["Intercept"] + sum(_fe) / fitdf["problem"].nunique()
     q_factor = math.exp(3 * b)
 
-    def hhat(dt):
-        m = (dt - ORIGIN).days / 30.44
-        return 1.0 + math.exp(a + b * m)
-    def reach(frac):
-        return ORIGIN + timedelta(days=((math.log(frac) - a) / b) * 30.44)
+    # The fit is in absolute excess tokens, so expressing it as a "multiple of the
+    # floor" needs a reference. Use the GEOMETRIC mean of the per-problem floors, in
+    # the latest model's units (a family can span two tokenizers; the curve is about
+    # where it is heading).
+    #
+    # Geometric, not arithmetic, and that is not cosmetic. The old DV was
+    # log((L - C_j)/C_j), whose mean-FE intercept carries -mean_j log C_j. Rewriting
+    # the same milestone in absolute-excess space therefore requires exp(mean_j log
+    # C_j), i.e. the geometric mean. Using the arithmetic mean instead silently moved
+    # OpenAI's within-10% date two months earlier even though its floor had not
+    # changed at all. With this, a family whose tokenizer did not change reproduces
+    # its previous dates exactly, and only the floor correction moves anything.
+    _pf = sorted(set(df["problem"]))
+    _lbl = model_files[-1][0]
+    ref_floor = float(np.exp(np.mean([math.log(floor_for(_lbl, t)) for t in _pf])))
+
+    def ehat(dt):                      # fitted EXCESS tokens, the quantity fitted
+        return math.exp(a + b * (dt - ORIGIN).days / 30.44)
+    def hhat(dt):                      # the same curve as a multiple of the floor
+        return 1.0 + ehat(dt) / ref_floor
+    def reach(frac):                   # when excess falls to `frac` of the floor
+        return ORIGIN + timedelta(
+            days=((math.log(frac * ref_floor) - a) / b) * 30.44)
     mile = {p: reach(p) for p in (0.25, 0.10, 0.05)}
 
     labels = [m for m, _, _ in model_files]
@@ -696,7 +788,8 @@ def _fit_headroom_forecast(model_files, exclude_baseline=True, successes_only=Tr
     gm = [geomean[m] for m in labels]
 
     return {
-        "labels": labels, "dates": dates, "gm": gm, "hhat": hhat, "reach": reach,
+        "labels": labels, "dates": dates, "gm": gm, "hhat": hhat, "ehat": ehat,
+        "ref_floor": ref_floor, "reach": reach,
         "mile": mile, "baseline_label": baseline_label,
         "quarterly_pct": (1 - q_factor) * 100, "t0": model_files[-1][1],
         "exclude_baseline": exclude_baseline, "successes_only": successes_only,

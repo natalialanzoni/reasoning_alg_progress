@@ -89,14 +89,17 @@ SAMPLES = [
 FAM_COLORS = [("OpenAI (GPT)", OAI_C), ("Anthropic (Opus + Fable)", ANT_C)]
 
 
-def load(path):
+def load(path, label=None):
     """Per model, ONE run: L/C_j over correct traces, plus crossing/latent shares."""
     ratios, latent, latent_ok, below_min, below_avg, n = [], 0, 0, 0, 0, 0
     for r in pf.load_rows(path):
         tid = str(r["task_id"])
         if tid not in KEYS:
             continue
-        cj = pf.CANON.get(tid, {}); mn, me = cj.get("min"), cj.get("mean")
+        # floor in THIS model's own token units -- L comes from its provider's
+        # counter and Anthropic changed tokenizer at 4.7 (README item 15)
+        mn = pf.floor_for(label, tid, "min") if label else pf.CANON[tid]["min"]
+        me = pf.floor_for(label, tid, "mean") if label else pf.CANON[tid]["mean"]
         tt = r.get("thinking_tokens", [None] * len(r["correct"]))
         texts = r.get("response_texts", [None] * len(r["correct"]))
         for tok, c, th, txt in zip(r["total_completion_tokens"], r["correct"], tt, texts):
@@ -127,7 +130,7 @@ def avg_ref(path):
     pids = [str(r["task_id"]) for r in pf.load_rows(path) if str(r["task_id"]) in KEYS]
     return float(np.median([pf.CANON[k]["mean"] / pf.CANON[k]["min"] for k in pids])), len(pids)
 
-def load_pooled(paths):
+def load_pooled(paths, label=None):
     """Same as load() but over SEVERAL runs of the same model, concatenated.
 
     Pooling the whole benchmark (40 problems, k=8) with the hard-but-doable subset
@@ -140,7 +143,7 @@ def load_pooled(paths):
     therefore tilted toward the harder problems; `avg_ref_pooled` is computed with the
     same weighting so the reference line and the violins describe the same sample.
     """
-    parts = [load(p) for p in paths]
+    parts = [load(p, label) for p in paths]
     ratios = np.concatenate([q["ratios"] for q in parts])
     n = sum(q["n"] for q in parts)
     latent = sum(q["latent_pct"] * q["n"] for q in parts) / max(1, n)
@@ -151,6 +154,8 @@ def load_pooled(paths):
                 below_min=100 * bmin / nc, below_avg=100 * bavg / nc)
 
 
+# NOTE avg_ref* returns mean/min, a ratio of two floors in the SAME units, so it is
+# invariant to which tokenizer measured them -- no per-model handling needed here.
 def avg_ref_pooled(paths):
     """Average human derivation as a multiple of the minimum, weighted by how many
     traces each problem actually contributes to the pooled violin."""
@@ -184,7 +189,7 @@ print(f"fig5 (POOLED whole benchmark k=8 + hard-but-doable k=32); "
       f"average human derivation = {AVG_REF:.2f}x the minimum\n")
 
 for ax, (fam, fam_c, models) in zip(axes, PAIRED):
-    stats = [load_pooled(ps) for _, _, ps in models]
+    stats = [load_pooled(ps, lbl) for lbl, _, ps in models]
     labels = [clean(l) for l, _, _ in models]
     x = np.arange(len(models))
     ramp = sns.light_palette(fam_c, n_colors=len(models) + 2)[2:]

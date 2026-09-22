@@ -89,7 +89,17 @@ SEP_C = "#8A8A8A"        # grey — observed/forecast separator
 OAI_C = CATEGORICAL[0]   # blue  — OpenAI (combined plot)
 ANT_C = CATEGORICAL[1]   # MIT red — Anthropic (combined plot)
 FULL_C = "#6E6E6E"       # grey — full-sample trend overlaid on the appendix check
-REF = pf.canon_short   # minimal human derivation, over the 40 competition problems
+REF = pf.canon_short   # o200k floor; the DEFAULT and the one OpenAI is measured in
+
+
+def ref_of(mfiles):
+    """The floor for this family, in the token units its models actually report.
+
+    A family can span two tokenizers (Anthropic changed at Opus 4.7), so this uses
+    the LATEST model's units -- the curve is about where the family is heading, and
+    that is the unit its newest member is measured in. See README item 15.
+    """
+    return pf.mean_floor(mfiles[-1][0], pf.CANON_KEYS)
 
 MILE_P = 0.10            # the ONLY milestone drawn: within 10% of the floor
 
@@ -124,6 +134,7 @@ ANTH = list(pf.OPUS_MODELS) + [
 def model_points(mfiles, successes_only):
     """Per model: (label, date, center, lo, hi) in tokens; point = between-problem
     geomean excess, error bar = 95% CI from the spread ACROSS problems (clustered)."""
+    REF = ref_of(mfiles)      # this family's floor, not the global default
     out = []
     for label, date, path in mfiles:
         prob = {}
@@ -135,7 +146,7 @@ def model_points(mfiles, successes_only):
             for tok, c, th in zip(r["total_completion_tokens"], r["correct"], tt):
                 if tok < 50 or (successes_only and not c):   # see _trial_ok
                     continue
-                h = tok / pf.CANON[tid]["min"]
+                h = tok / pf.floor_for(label, tid)
                 if h > 1:
                     prob.setdefault(tid, []).append(math.log(h - 1))
         pm = [float(np.mean(v)) for v in prob.values() if v]
@@ -172,6 +183,7 @@ def wcb_band(mfiles, excl, successes_only, dates, B=1999, seed=0):
     average-problem trend. Returns (center, lo, hi) token curves at `dates`, the
     point beta, its 95% CI, and the number of model clusters. Model is the resample
     unit because Month is constant within a model (only ~6 time points identify beta)."""
+    REF = ref_of(mfiles)      # this family's floor, not the global default
     base = mfiles[0][0]
     rows = []
     for label, date, path in mfiles:
@@ -186,7 +198,7 @@ def wcb_band(mfiles, excl, successes_only, dates, B=1999, seed=0):
             for tok, c, th in zip(r["total_completion_tokens"], r["correct"], tt):
                 if tok < 50 or (successes_only and not c):   # see _trial_ok
                     continue
-                h = tok / pf.CANON[tid]["min"]
+                h = tok / pf.floor_for(label, tid)
                 if h > 1:
                     rows.append((tid, month, label, math.log(h - 1)))
     probs = sorted({r[0] for r in rows}); pidx = {p: i for i, p in enumerate(probs)}
@@ -237,6 +249,7 @@ def draw_family(ax, mfiles, excl, successes_only, color, milestones=True,
     """Real (solid) observed line, then forecast + CI band. ratio=False plots absolute
     tokens; ratio=True plots the MULTIPLE OF THE FLOOR (L/floor) — divide by REF so the
     floor sits at 1x — with a DOTTED forecast (used on the log panel underneath)."""
+    REF = ref_of(mfiles)      # this family's floor, not the global default
     norm = REF if ratio else 1.0
     fc_ls = ":" if ratio else "--"
     fit = pf._fit_headroom_forecast(mfiles, exclude_baseline=excl, successes_only=successes_only)
@@ -308,13 +321,16 @@ def draw_family(ax, mfiles, excl, successes_only, color, milestones=True,
     return fit, t_last, full[-1], ymax
 
 
-def _floor(ax, xend=None):
+def _floor(ax, xend=None, ref=None, label=True):
     """Floor line + label. The floor is ~303 tok against a 10-20k y-axis, so the
     label is anchored to the LEFT edge (where the decay curve is still high and the
     space is empty) in x-axes-fraction / y-data coords, with an opaque box — at the
     right edge it collided with the curve as it lands on the floor."""
+    REF = ref if ref is not None else globals()["REF"]
     ax.axhspan(0, REF, color=FLOOR_C, alpha=0.10, zorder=0)
     ax.axhline(REF, color=FLOOR_C, lw=2.4, zorder=3)
+    if not label:
+        return
     # Right-anchored, well above the line. The observed dots (and now their
     # multiple-of-floor labels) occupy the bottom-LEFT, while by the right-hand end
     # the curve has flattened onto the floor and everything above it is empty.
@@ -561,7 +577,7 @@ def build_excess_appendix(fname, successes_only=True):
                 tid = str(r["task_id"])
                 if tid not in pf.CANON_KEYS:
                     continue
-                mn = pf.CANON[tid]["min"]
+                mn = pf.floor_for(label, tid)
                 for tok, c in zip(r["total_completion_tokens"], r["correct"]):
                     # a cap-hit trace never delivered an answer, so it is not a
                     # success (same rule as figures_sept._trial_correct)

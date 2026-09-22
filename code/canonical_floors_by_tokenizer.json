@@ -5,637 +5,1415 @@
     "claude-opus-4-7": "anthropic_4_7_plus",
     "claude-opus-4-8": "anthropic_4_7_plus",
     "claude-opus-5": "anthropic_4_7_plus",
-    "Fable 5.1": "anthropic_4_7_plus"
+    "claude-fable-5-1": "anthropic_4_7_plus",
+    "Opus 4.5": "anthropic_pre_4_7",
+    "Opus 4.6": "anthropic_pre_4_7",
+    "Opus 4.7": "anthropic_4_7_plus",
+    "Opus 4.8": "anthropic_4_7_plus",
+    "Opus 5": "anthropic_4_7_plus",
+    "Fable 5.1": "anthropic_4_7_plus",
+    "fable5.1": "anthropic_4_7_plus"
   },
   "floors": {
     "aime_2026_i_01": {
       "o200k": {
         "min": 134.0,
-        "mean": 244.66666666666666
+        "median": 284.0,
+        "mean": 244.66666666666666,
+        "counts": [
+          134,
+          316,
+          284
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 150.0,
-        "mean": 271.3333333333333
+        "median": 326.0,
+        "mean": 271.3333333333333,
+        "counts": [
+          150,
+          338,
+          326
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 174.0,
-        "mean": 337.3333333333333
+        "median": 412.0,
+        "mean": 337.3333333333333,
+        "counts": [
+          174,
+          412,
+          426
+        ]
       }
     },
     "aime_2026_i_02": {
       "o200k": {
         "min": 128.0,
-        "mean": 323.0
+        "median": 377.0,
+        "mean": 323.0,
+        "counts": [
+          400,
+          474,
+          128,
+          377,
+          236
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 137.0,
-        "mean": 356.0
+        "median": 419.0,
+        "mean": 356.0,
+        "counts": [
+          436,
+          527,
+          137,
+          419,
+          261
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 167.0,
-        "mean": 456.4
+        "median": 518.0,
+        "mean": 456.4,
+        "counts": [
+          584,
+          678,
+          167,
+          518,
+          335
+        ]
       }
     },
     "aime_2026_i_03": {
       "o200k": {
         "min": 223.0,
-        "mean": 232.0
+        "median": 232.0,
+        "mean": 232.0,
+        "counts": [
+          241,
+          223
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 253.0,
-        "mean": 263.0
+        "median": 263.0,
+        "mean": 263.0,
+        "counts": [
+          273,
+          253
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 332.0,
-        "mean": 342.0
+        "median": 342.0,
+        "mean": 342.0,
+        "counts": [
+          352,
+          332
+        ]
       }
     },
     "aime_2026_i_04": {
       "o200k": {
         "min": 165.0,
-        "mean": 261.25
+        "median": 235.0,
+        "mean": 261.25,
+        "counts": [
+          165,
+          410,
+          168,
+          302
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 180.0,
-        "mean": 281.25
+        "median": 255.0,
+        "mean": 281.25,
+        "counts": [
+          180,
+          435,
+          183,
+          327
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 215.0,
-        "mean": 345.25
+        "median": 305.0,
+        "mean": 345.25,
+        "counts": [
+          220,
+          556,
+          215,
+          390
+        ]
       }
     },
     "aime_2026_i_05": {
       "o200k": {
         "min": 100.0,
-        "mean": 183.66666666666666
+        "median": 179.0,
+        "mean": 183.66666666666666,
+        "counts": [
+          145,
+          109,
+          100,
+          220,
+          213,
+          315
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 114.0,
-        "mean": 216.83333333333334
+        "median": 210.5,
+        "mean": 216.83333333333334,
+        "counts": [
+          171,
+          137,
+          114,
+          250,
+          256,
+          373
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 142.0,
-        "mean": 279.5
+        "median": 268.0,
+        "mean": 279.5,
+        "counts": [
+          211,
+          179,
+          142,
+          343,
+          325,
+          477
+        ]
       }
     },
     "aime_2026_i_06": {
       "o200k": {
         "min": 135.0,
-        "mean": 331.3333333333333
+        "median": 314.5,
+        "mean": 331.3333333333333,
+        "counts": [
+          362,
+          135,
+          197,
+          267,
+          656,
+          371
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 155.0,
-        "mean": 372.0
+        "median": 355.0,
+        "mean": 372.0,
+        "counts": [
+          403,
+          155,
+          221,
+          307,
+          740,
+          406
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 182.0,
-        "mean": 432.0
+        "median": 407.5,
+        "mean": 432.0,
+        "counts": [
+          470,
+          182,
+          265,
+          355,
+          860,
+          460
+        ]
       }
     },
     "aime_2026_i_07": {
       "o200k": {
         "min": 197.0,
-        "mean": 506.75
+        "median": 525.5,
+        "mean": 506.75,
+        "counts": [
+          418,
+          633,
+          197,
+          779
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 215.0,
-        "mean": 559.5
+        "median": 589.0,
+        "mean": 559.5,
+        "counts": [
+          478,
+          700,
+          215,
+          845
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 288.0,
-        "mean": 690.5
+        "median": 708.5,
+        "mean": 690.5,
+        "counts": [
+          564,
+          853,
+          288,
+          1057
+        ]
       }
     },
     "aime_2026_i_08": {
       "o200k": {
         "min": 257.0,
-        "mean": 327.75
+        "median": 337.0,
+        "mean": 327.75,
+        "counts": [
+          325,
+          257,
+          349,
+          380
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 264.0,
-        "mean": 364.5
+        "median": 381.0,
+        "mean": 364.5,
+        "counts": [
+          349,
+          264,
+          413,
+          432
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 324.0,
-        "mean": 428.0
+        "median": 434.0,
+        "mean": 428.0,
+        "counts": [
+          414,
+          324,
+          454,
+          520
+        ]
       }
     },
     "aime_2026_i_09": {
       "o200k": {
         "min": 343.0,
-        "mean": 642.125
+        "median": 612.5,
+        "mean": 642.125,
+        "counts": [
+          343,
+          645,
+          709,
+          653,
+          580,
+          397,
+          413,
+          1397
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 365.0,
-        "mean": 723.875
+        "median": 683.5,
+        "mean": 723.875,
+        "counts": [
+          365,
+          722,
+          789,
+          758,
+          645,
+          419,
+          443,
+          1650
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 470.0,
-        "mean": 896.75
+        "median": 852.0,
+        "mean": 896.75,
+        "counts": [
+          470,
+          904,
+          969,
+          953,
+          800,
+          543,
+          531,
+          2004
+        ]
       }
     },
     "aime_2026_i_10": {
       "o200k": {
         "min": 420.0,
-        "mean": 726.2
+        "median": 760.0,
+        "mean": 726.2,
+        "counts": [
+          854,
+          420,
+          760,
+          1119,
+          478
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 487.0,
-        "mean": 836.4
+        "median": 859.0,
+        "mean": 836.4,
+        "counts": [
+          977,
+          487,
+          859,
+          1312,
+          547
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 647.0,
-        "mean": 1056.8
+        "median": 1117.0,
+        "mean": 1056.8,
+        "counts": [
+          1187,
+          647,
+          1117,
+          1653,
+          680
+        ]
       }
     },
     "aime_2026_i_11": {
       "o200k": {
         "min": 426.0,
-        "mean": 506.0
+        "median": 506.0,
+        "mean": 506.0,
+        "counts": [
+          586,
+          426
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 459.0,
-        "mean": 560.5
+        "median": 560.5,
+        "mean": 560.5,
+        "counts": [
+          662,
+          459
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 577.0,
-        "mean": 712.0
+        "median": 712.0,
+        "mean": 712.0,
+        "counts": [
+          847,
+          577
+        ]
       }
     },
     "aime_2026_i_12": {
       "o200k": {
         "min": 286.0,
-        "mean": 409.75
+        "median": 349.5,
+        "mean": 409.75,
+        "counts": [
+          286,
+          654,
+          398,
+          301
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 325.0,
-        "mean": 460.75
+        "median": 388.0,
+        "mean": 460.75,
+        "counts": [
+          325,
+          742,
+          439,
+          337
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 396.0,
-        "mean": 571.25
+        "median": 495.5,
+        "mean": 571.25,
+        "counts": [
+          396,
+          898,
+          571,
+          420
+        ]
       }
     },
     "aime_2026_i_13": {
       "o200k": {
         "min": 601.0,
-        "mean": 966.75
+        "median": 700.5,
+        "mean": 966.75,
+        "counts": [
+          601,
+          1865,
+          796,
+          605
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 682.0,
-        "mean": 1094.5
+        "median": 794.0,
+        "mean": 1094.5,
+        "counts": [
+          682,
+          2108,
+          877,
+          711
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 853.0,
-        "mean": 1335.5
+        "median": 956.0,
+        "mean": 1335.5,
+        "counts": [
+          861,
+          2577,
+          1051,
+          853
+        ]
       }
     },
     "aime_2026_i_14": {
       "o200k": {
         "min": 454.0,
-        "mean": 1114.0
+        "median": 982.5,
+        "mean": 1114.0,
+        "counts": [
+          946,
+          454,
+          1019,
+          2037
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 542.0,
-        "mean": 1283.25
+        "median": 1125.0,
+        "mean": 1283.25,
+        "counts": [
+          1082,
+          542,
+          1168,
+          2341
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 665.0,
-        "mean": 1583.5
+        "median": 1414.5,
+        "mean": 1583.5,
+        "counts": [
+          1360,
+          665,
+          1469,
+          2840
+        ]
       }
     },
     "aime_2026_ii_01": {
       "o200k": {
         "min": 133.0,
-        "mean": 133.0
+        "median": 133.0,
+        "mean": 133.0,
+        "counts": [
+          133
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 142.0,
-        "mean": 142.0
+        "median": 142.0,
+        "mean": 142.0,
+        "counts": [
+          142
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 176.0,
-        "mean": 176.0
+        "median": 176.0,
+        "mean": 176.0,
+        "counts": [
+          176
+        ]
       }
     },
     "aime_2026_ii_03": {
       "o200k": {
         "min": 308.0,
-        "mean": 308.0
+        "median": 308.0,
+        "mean": 308.0,
+        "counts": [
+          308
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 349.0,
-        "mean": 349.0
+        "median": 349.0,
+        "mean": 349.0,
+        "counts": [
+          349
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 453.0,
-        "mean": 453.0
+        "median": 453.0,
+        "mean": 453.0,
+        "counts": [
+          453
+        ]
       }
     },
     "aime_2026_ii_04": {
       "o200k": {
         "min": 298.0,
-        "mean": 553.6666666666666
+        "median": 555.0,
+        "mean": 553.6666666666666,
+        "counts": [
+          298,
+          808,
+          555
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 317.0,
-        "mean": 608.0
+        "median": 621.0,
+        "mean": 608.0,
+        "counts": [
+          317,
+          886,
+          621
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 392.0,
-        "mean": 724.0
+        "median": 753.0,
+        "mean": 724.0,
+        "counts": [
+          392,
+          1027,
+          753
+        ]
       }
     },
     "aime_2026_ii_05": {
       "o200k": {
         "min": 245.0,
-        "mean": 425.0
+        "median": 433.0,
+        "mean": 425.0,
+        "counts": [
+          433,
+          245,
+          597
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 287.0,
-        "mean": 478.3333333333333
+        "median": 481.0,
+        "mean": 478.3333333333333,
+        "counts": [
+          481,
+          287,
+          667
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 354.0,
-        "mean": 588.6666666666666
+        "median": 606.0,
+        "mean": 588.6666666666666,
+        "counts": [
+          606,
+          354,
+          806
+        ]
       }
     },
     "aime_2026_ii_06": {
       "o200k": {
         "min": 257.0,
-        "mean": 356.6666666666667
+        "median": 296.0,
+        "mean": 356.6666666666667,
+        "counts": [
+          257,
+          517,
+          296
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 294.0,
-        "mean": 396.0
+        "median": 326.0,
+        "mean": 396.0,
+        "counts": [
+          294,
+          568,
+          326
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 358.0,
-        "mean": 473.0
+        "median": 407.0,
+        "mean": 473.0,
+        "counts": [
+          358,
+          654,
+          407
+        ]
       }
     },
     "aime_2026_ii_07": {
       "o200k": {
         "min": 276.0,
-        "mean": 568.0
+        "median": 589.0,
+        "mean": 568.0,
+        "counts": [
+          276,
+          738,
+          818,
+          440
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 312.0,
-        "mean": 636.75
+        "median": 648.0,
+        "mean": 636.75,
+        "counts": [
+          312,
+          813,
+          939,
+          483
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 395.0,
-        "mean": 779.75
+        "median": 792.0,
+        "mean": 779.75,
+        "counts": [
+          395,
+          1008,
+          1140,
+          576
+        ]
       }
     },
     "aime_2026_ii_08": {
       "o200k": {
         "min": 275.0,
-        "mean": 363.5
+        "median": 363.5,
+        "mean": 363.5,
+        "counts": [
+          452,
+          275
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 308.0,
-        "mean": 406.0
+        "median": 406.0,
+        "mean": 406.0,
+        "counts": [
+          504,
+          308
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 409.0,
-        "mean": 514.5
+        "median": 514.5,
+        "mean": 514.5,
+        "counts": [
+          620,
+          409
+        ]
       }
     },
     "aime_2026_ii_09": {
       "o200k": {
         "min": 178.0,
-        "mean": 326.0
+        "median": 243.0,
+        "mean": 326.0,
+        "counts": [
+          253,
+          178,
+          197,
+          759,
+          243
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 196.0,
-        "mean": 369.4
+        "median": 280.0,
+        "mean": 369.4,
+        "counts": [
+          291,
+          196,
+          225,
+          855,
+          280
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 234.0,
-        "mean": 450.8
+        "median": 335.0,
+        "mean": 450.8,
+        "counts": [
+          373,
+          234,
+          277,
+          1035,
+          335
+        ]
       }
     },
     "aime_2026_ii_10": {
       "o200k": {
         "min": 350.0,
-        "mean": 687.8
+        "median": 677.0,
+        "mean": 687.8,
+        "counts": [
+          350,
+          735,
+          677,
+          493,
+          1184
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 387.0,
-        "mean": 761.6
+        "median": 755.0,
+        "mean": 761.6,
+        "counts": [
+          387,
+          819,
+          755,
+          547,
+          1300
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 497.0,
-        "mean": 934.6
+        "median": 937.0,
+        "mean": 934.6,
+        "counts": [
+          497,
+          1011,
+          937,
+          618,
+          1610
+        ]
       }
     },
     "aime_2026_ii_11": {
       "o200k": {
         "min": 304.0,
-        "mean": 616.0
+        "median": 595.5,
+        "mean": 616.0,
+        "counts": [
+          316,
+          304,
+          969,
+          875
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 354.0,
-        "mean": 711.5
+        "median": 705.0,
+        "mean": 711.5,
+        "counts": [
+          370,
+          354,
+          1082,
+          1040
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 424.0,
-        "mean": 907.25
+        "median": 901.0,
+        "mean": 907.25,
+        "counts": [
+          529,
+          424,
+          1403,
+          1273
+        ]
       }
     },
     "aime_2026_ii_12": {
       "o200k": {
         "min": 969.0,
-        "mean": 969.0
+        "median": 969.0,
+        "mean": 969.0,
+        "counts": [
+          969
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 1082.0,
-        "mean": 1082.0
+        "median": 1082.0,
+        "mean": 1082.0,
+        "counts": [
+          1082
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 1403.0,
-        "mean": 1403.0
+        "median": 1403.0,
+        "mean": 1403.0,
+        "counts": [
+          1403
+        ]
       }
     },
     "aime_2026_ii_13": {
       "o200k": {
         "min": 361.0,
-        "mean": 618.0
+        "median": 618.0,
+        "mean": 618.0,
+        "counts": [
+          361,
+          875
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 390.0,
-        "mean": 715.0
+        "median": 715.0,
+        "mean": 715.0,
+        "counts": [
+          390,
+          1040
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 475.0,
-        "mean": 874.0
+        "median": 874.0,
+        "mean": 874.0,
+        "counts": [
+          475,
+          1273
+        ]
       }
     },
     "aime_2026_ii_14": {
       "o200k": {
         "min": 1089.0,
-        "mean": 1675.3333333333333
+        "median": 1661.0,
+        "mean": 1675.3333333333333,
+        "counts": [
+          2276,
+          1089,
+          1661
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 1227.0,
-        "mean": 1867.0
+        "median": 1877.0,
+        "mean": 1867.0,
+        "counts": [
+          2497,
+          1227,
+          1877
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 1448.0,
-        "mean": 2307.3333333333335
+        "median": 2275.0,
+        "mean": 2307.3333333333335,
+        "counts": [
+          3199,
+          1448,
+          2275
+        ]
       }
     },
     "aime_2026_ii_15": {
       "o200k": {
         "min": 1355.0,
-        "mean": 1849.3333333333333
+        "median": 2028.0,
+        "mean": 1849.3333333333333,
+        "counts": [
+          2028,
+          1355,
+          2165
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 1497.0,
-        "mean": 2063.0
+        "median": 2317.0,
+        "mean": 2063.0,
+        "counts": [
+          2317,
+          1497,
+          2375
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 1798.0,
-        "mean": 2478.6666666666665
+        "median": 2798.0,
+        "mean": 2478.6666666666665,
+        "counts": [
+          2840,
+          1798,
+          2798
+        ]
       }
     },
     "math_500_0136": {
       "o200k": {
         "min": 152.0,
-        "mean": 152.0
+        "median": 152.0,
+        "mean": 152.0,
+        "counts": [
+          152
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 171.0,
-        "mean": 171.0
+        "median": 171.0,
+        "mean": 171.0,
+        "counts": [
+          171
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 192.0,
-        "mean": 192.0
+        "median": 192.0,
+        "mean": 192.0,
+        "counts": [
+          192
+        ]
       }
     },
     "math_500_0148": {
       "o200k": {
         "min": 345.0,
-        "mean": 345.0
+        "median": 345.0,
+        "mean": 345.0,
+        "counts": [
+          345
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 423.0,
-        "mean": 423.0
+        "median": 423.0,
+        "mean": 423.0,
+        "counts": [
+          423
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 497.0,
-        "mean": 497.0
+        "median": 497.0,
+        "mean": 497.0,
+        "counts": [
+          497
+        ]
       }
     },
     "math_500_0158": {
       "o200k": {
         "min": 134.0,
-        "mean": 134.0
+        "median": 134.0,
+        "mean": 134.0,
+        "counts": [
+          134
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 157.0,
-        "mean": 157.0
+        "median": 157.0,
+        "mean": 157.0,
+        "counts": [
+          157
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 187.0,
-        "mean": 187.0
+        "median": 187.0,
+        "mean": 187.0,
+        "counts": [
+          187
+        ]
       }
     },
     "math_500_0200": {
       "o200k": {
         "min": 143.0,
-        "mean": 143.0
+        "median": 143.0,
+        "mean": 143.0,
+        "counts": [
+          143
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 165.0,
-        "mean": 165.0
+        "median": 165.0,
+        "mean": 165.0,
+        "counts": [
+          165
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 186.0,
-        "mean": 186.0
+        "median": 186.0,
+        "mean": 186.0,
+        "counts": [
+          186
+        ]
       }
     },
     "math_500_0369": {
       "o200k": {
         "min": 235.0,
-        "mean": 235.0
+        "median": 235.0,
+        "mean": 235.0,
+        "counts": [
+          235
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 263.0,
-        "mean": 263.0
+        "median": 263.0,
+        "mean": 263.0,
+        "counts": [
+          263
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 324.0,
-        "mean": 324.0
+        "median": 324.0,
+        "mean": 324.0,
+        "counts": [
+          324
+        ]
       }
     },
     "hmmt_2026_feb_comb_05": {
       "o200k": {
         "min": 196.0,
-        "mean": 196.0
+        "median": 196.0,
+        "mean": 196.0,
+        "counts": [
+          196
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 211.0,
-        "mean": 211.0
+        "median": 211.0,
+        "mean": 211.0,
+        "counts": [
+          211
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 258.0,
-        "mean": 258.0
+        "median": 258.0,
+        "mean": 258.0,
+        "counts": [
+          258
+        ]
       }
     },
     "hmmt_2026_feb_comb_06": {
       "o200k": {
         "min": 143.0,
-        "mean": 143.0
+        "median": 143.0,
+        "mean": 143.0,
+        "counts": [
+          143
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 159.0,
-        "mean": 159.0
+        "median": 159.0,
+        "mean": 159.0,
+        "counts": [
+          159
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 207.0,
-        "mean": 207.0
+        "median": 207.0,
+        "mean": 207.0,
+        "counts": [
+          207
+        ]
       }
     },
     "hmmt_2026_feb_comb_07": {
       "o200k": {
         "min": 220.0,
-        "mean": 220.0
+        "median": 220.0,
+        "mean": 220.0,
+        "counts": [
+          220
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 240.0,
-        "mean": 240.0
+        "median": 240.0,
+        "mean": 240.0,
+        "counts": [
+          240
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 298.0,
-        "mean": 298.0
+        "median": 298.0,
+        "mean": 298.0,
+        "counts": [
+          298
+        ]
       }
     },
     "hmmt_2026_feb_comb_08": {
       "o200k": {
         "min": 216.0,
-        "mean": 216.0
+        "median": 216.0,
+        "mean": 216.0,
+        "counts": [
+          216
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 251.0,
-        "mean": 251.0
+        "median": 251.0,
+        "mean": 251.0,
+        "counts": [
+          251
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 322.0,
-        "mean": 322.0
+        "median": 322.0,
+        "mean": 322.0,
+        "counts": [
+          322
+        ]
       }
     },
     "hmmt_2026_feb_comb_09": {
       "o200k": {
         "min": 294.0,
-        "mean": 294.0
+        "median": 294.0,
+        "mean": 294.0,
+        "counts": [
+          294
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 330.0,
-        "mean": 330.0
+        "median": 330.0,
+        "mean": 330.0,
+        "counts": [
+          330
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 382.0,
-        "mean": 382.0
+        "median": 382.0,
+        "mean": 382.0,
+        "counts": [
+          382
+        ]
       }
     },
     "hmmt_2026_feb_geo_05": {
       "o200k": {
         "min": 232.0,
-        "mean": 232.0
+        "median": 232.0,
+        "mean": 232.0,
+        "counts": [
+          232
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 264.0,
-        "mean": 264.0
+        "median": 264.0,
+        "mean": 264.0,
+        "counts": [
+          264
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 344.0,
-        "mean": 344.0
+        "median": 344.0,
+        "mean": 344.0,
+        "counts": [
+          344
+        ]
       }
     },
     "hmmt_2026_feb_geo_06": {
       "o200k": {
         "min": 126.0,
-        "mean": 131.5
+        "median": 131.5,
+        "mean": 131.5,
+        "counts": [
+          126,
+          137
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 158.0,
-        "mean": 158.0
+        "median": 158.0,
+        "mean": 158.0,
+        "counts": [
+          158,
+          158
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 199.0,
-        "mean": 200.0
+        "median": 200.0,
+        "mean": 200.0,
+        "counts": [
+          201,
+          199
+        ]
       }
     },
     "hmmt_2026_feb_geo_07": {
       "o200k": {
         "min": 136.0,
-        "mean": 139.5
+        "median": 139.5,
+        "mean": 139.5,
+        "counts": [
+          143,
+          136
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 167.0,
-        "mean": 171.5
+        "median": 171.5,
+        "mean": 171.5,
+        "counts": [
+          176,
+          167
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 217.0,
-        "mean": 226.5
+        "median": 226.5,
+        "mean": 226.5,
+        "counts": [
+          236,
+          217
+        ]
       }
     },
     "hmmt_2026_feb_geo_08": {
       "o200k": {
         "min": 112.0,
-        "mean": 133.0
+        "median": 133.0,
+        "mean": 133.0,
+        "counts": [
+          154,
+          112
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 130.0,
-        "mean": 154.0
+        "median": 154.0,
+        "mean": 154.0,
+        "counts": [
+          178,
+          130
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 177.0,
-        "mean": 213.0
+        "median": 213.0,
+        "mean": 213.0,
+        "counts": [
+          249,
+          177
+        ]
       }
     },
     "hmmt_2026_feb_geo_09": {
       "o200k": {
         "min": 226.0,
-        "mean": 226.0
+        "median": 226.0,
+        "mean": 226.0,
+        "counts": [
+          226
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 269.0,
-        "mean": 269.0
+        "median": 269.0,
+        "mean": 269.0,
+        "counts": [
+          269
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 352.0,
-        "mean": 352.0
+        "median": 352.0,
+        "mean": 352.0,
+        "counts": [
+          352
+        ]
       }
     },
     "hmmt_2026_feb_geo_10": {
       "o200k": {
         "min": 214.0,
-        "mean": 244.0
+        "median": 244.0,
+        "mean": 244.0,
+        "counts": [
+          274,
+          214
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 248.0,
-        "mean": 277.0
+        "median": 277.0,
+        "mean": 277.0,
+        "counts": [
+          306,
+          248
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 302.0,
-        "mean": 341.0
+        "median": 341.0,
+        "mean": 341.0,
+        "counts": [
+          380,
+          302
+        ]
       }
     },
     "hmmt_2026_feb_algnt_04": {
       "o200k": {
         "min": 259.0,
-        "mean": 259.0
+        "median": 259.0,
+        "mean": 259.0,
+        "counts": [
+          259
+        ]
       },
       "anthropic_pre_4_7": {
         "min": 305.0,
-        "mean": 305.0
+        "median": 305.0,
+        "mean": 305.0,
+        "counts": [
+          305
+        ]
       },
       "anthropic_4_7_plus": {
         "min": 339.0,
-        "mean": 339.0
+        "median": 339.0,
+        "mean": 339.0,
+        "counts": [
+          339
+        ]
       }
     }
   }

@@ -79,9 +79,15 @@ def rows_for(mfiles, dv="excess"):
                 if tok < 50 or not c or tok >= 40000:
                     continue
                 if dv == "excess":
-                    h = tok / pf.CANON[tid]["min"]
-                    if h > 1:                  # log requires excess > 0
-                        out.append((tid, month, label, math.log(h - 1)))
+                    # the PAPER'S DV, log(L - MHD_j), in absolute tokens. It used to
+                    # be log(h - 1) = log(L - C_j) - log(C_j), justified by -log(C_j)
+                    # being absorbed by the problem FE. That holds only while C_j
+                    # depends on the problem alone; with per-model tokenizers it also
+                    # varies by model and correlates with time, which put Anthropic at
+                    # 48.6%/qtr against the correct 44.1%. See README item 15.
+                    cj = pf.floor_for(label, tid)        # model's own tokenizer
+                    if tok > cj:               # log requires excess > 0
+                        out.append((tid, month, label, math.log(tok - cj)))
                 elif dv == "logL":
                     out.append((tid, month, label, math.log(tok)))
                 elif dv == "logthink":
