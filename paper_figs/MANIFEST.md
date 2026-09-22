@@ -22,9 +22,8 @@ a script produces stays in `figures/figs_sept/`.
 | `table_decay.tex` | `code/table_decay.py` | see below |
 | `table_floor_robustness.tex` | `code/table_floor_robustness.py` | see below |
 | `table_behaviours.tex` | `code/llm_judge/behaviour_table.py` | see below |
-| `appendix_judge_prompts.tex` | `code/llm_judge/make_prompt_appendix.py` | see below |
-| `fig_judge_prompt_backtracking.pdf` | `code/llm_judge/make_prompt_image.py` | image form of the same prompt |
-| `fig_judge_prompt_verification.pdf` | `code/llm_judge/make_prompt_image.py` | image form of the same prompt |
+| `fig_judge_prompt_backtracking.pdf` | `code/llm_judge/make_prompt_image.py` | see below |
+| `fig_judge_prompt_verification.pdf` | `code/llm_judge/make_prompt_image.py` | see below |
 
 ## Sample
 
@@ -45,7 +44,7 @@ row here: it measures only abandonment the writer states outright, and printing
 two definitions side by side invites reading them as one measurement. The two
 disagree on the algorithm lever (judge 1.48x, markers 4.29x) and which is right is
 unresolved — 20 traces per behaviour are laid out in
-`code/llm_judge/for_RA_review/` to settle it. Prompts: `appendix_judge_prompts.tex`.
+`code/llm_judge/for_RA_review/` to settle it. Prompts: `fig_judge_prompt_*.pdf`.
 
 **Rates are per 10k TOKENS**, the same denominator for both behaviours so they
 are directly comparable. A character denominator would be wrong: GLM 5.2 writes
@@ -62,8 +61,12 @@ from writing less, not from reasoning differently.
 **Do not quote absolute counts.** Judges differ ~2.5x in magnitude even where they
 agree on ranking. The table supports comparisons within itself.
 
-## `appendix_judge_prompts.tex` — the judge prompts
+## `fig_judge_prompt_*.pdf` — the judge prompts
 
-Both prompts verbatim in quote blocks, with the single edited line marked
-`[edited]`. Generated from the live `*_v0.txt` templates so it cannot drift from
-what was actually sent. Needs `\citet{gandhi2025cognitive}` in the bibliography.
+Both prompts rendered as block-quote images, with the single edited line marked
+`[edited]`. Include with `\includegraphics[width=\textwidth]{...}`.
+
+Images rather than LaTeX: the prompts are full of `#`, `{}`, `<>` and markdown
+that fight with LaTeX even after escaping, so a typeset version was tried and
+dropped. Generated from the live `*_v0.txt` templates, so the appendix cannot
+drift from what was actually sent to the judge.
