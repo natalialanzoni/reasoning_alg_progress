@@ -183,7 +183,12 @@ def latex(res, path):
         return f"${v_tr:.2f}$ & ${v_rt:.2f}$ & ${b_wd:.2f}$"
     t = [r"\begin{tabular}{lcccc}", r"\toprule",
          r" & \multicolumn{2}{c}{Scale} & \multicolumn{2}{c}{Algorithm} \\",
-         r"\cmidrule(lr){2-3}\cmidrule(lr){4-5}",
+         # No (lr) trim: the parenthesised optional argument is booktabs-specific
+         # syntax, and a document whose \cmidrule comes from somewhere else (or from
+         # a class that stubs it) prints "(lr)2-3(lr)4-5" as literal text instead of
+         # drawing the rules. Plain \cmidrule{a-b} is understood far more widely and
+         # differs only by a hair of trim at the rule ends.
+         r"\cmidrule{2-3}\cmidrule{4-5}",
          r" & gpt-oss-20B & gpt-oss-120B & GLM 5.2 & GLM 5.3 \\", r"\midrule"]
     names = ["gpt-oss-20b", "gpt-oss-120b", "GLM 5.2", "GLM 5.3"]
     rows_spec = [("Verification, per trace", 0, "{:.2f}"),
