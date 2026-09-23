@@ -203,11 +203,23 @@ def wcb_band(mfiles, excl, successes_only, dates, B=1999, seed=0):
                 continue
             tt = r.get("thinking_tokens", [1] * len(r["correct"]))
             for tok, c, th in zip(r["total_completion_tokens"], r["correct"], tt):
-                if tok < 50 or (successes_only and not c):   # see _trial_ok
+                if tok < 50:                                 # see figures_sept._trial_ok
                     continue
-                h = tok / pf.floor_for(label, tid)
-                if h > 1:
-                    rows.append((tid, month, label, math.log(h - 1)))
+                # ... and a cap-hit trace never delivered an answer, so it is not a
+                # success. Same rule as _fit_headroom_forecast: the band must be fitted
+                # on the SAME rows as the estimate it wraps, or the two drift apart.
+                if successes_only and not (c and tok < 40000):
+                    continue
+                # The PAPER'S DV, log(L - MHD_j), in absolute tokens -- the same one
+                # pf._fit_headroom_forecast uses. This band and the curve it wraps are
+                # what the figure DRAWS, while the rate annotation comes from that fit,
+                # so the two must fit the same thing. They did not: this was still on
+                # log(headroom - 1), whose -log(C_j) term stopped being absorbed by the
+                # problem FE once the floor became per-model, putting the drawn
+                # Anthropic curve at ~48.6%/quarter under a label reading 44.1%.
+                cj = pf.floor_for(label, tid)
+                if tok > cj:
+                    rows.append((tid, month, label, math.log(tok - cj)))
     probs = sorted({r[0] for r in rows}); pidx = {p: i for i, p in enumerate(probs)}
     models = sorted({r[2] for r in rows}); midx = {m: i for i, m in enumerate(models)}
     J = len(probs); G = len(models); n = len(rows); k = J + 1
@@ -223,14 +235,14 @@ def wcb_band(mfiles, excl, successes_only, dates, B=1999, seed=0):
     Pinv = np.linalg.pinv(P)
     bhat = Pinv @ y
     yhat = P @ bhat; e = y - yhat
-    center = (1 + np.exp(Xd @ bhat)) * REF
+    center = np.exp(Xd @ bhat) + REF          # excess tokens + the floor
     rng = np.random.default_rng(seed)
     wm = rng.choice([-1.0, 1.0], size=(B, G))     # one Rademacher sign per model per rep
     Ystar = yhat[None, :] + wm[:, cl] * e[None, :]
     Bstar = Ystar @ Pinv.T                         # (B, k)
     Cmu = Bstar @ Xd.T                             # (B, n_dates)
-    lo = (1 + np.exp(np.percentile(Cmu, 2.5, axis=0))) * REF
-    hi = (1 + np.exp(np.percentile(Cmu, 97.5, axis=0))) * REF
+    lo = np.exp(np.percentile(Cmu, 2.5, axis=0)) + REF
+    hi = np.exp(np.percentile(Cmu, 97.5, axis=0)) + REF
     bci = np.percentile(Bstar[:, 1], [2.5, 97.5])
     return center, lo, hi, float(bhat[1]), bci, G
 
