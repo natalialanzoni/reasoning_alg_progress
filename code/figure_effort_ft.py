@@ -182,7 +182,10 @@ for eff, (d, color) in EFFORTS.items():
 
 ax.axhspan(0, REF, color=FLOOR_C, alpha=0.08, zorder=0)
 ax.axhline(REF, color=FLOOR_C, lw=2.2, zorder=4)
-ax.annotate(f"minimal human derivation ≈ {REF:,.0f} tok",
+# NO token count: this is the hard-but-doable ten, floor ~325, against the 316 the
+# rest of the paper quotes for the 40 problems. Different sample, different
+# number, and printing it here just looks like an inconsistency.
+ax.annotate("minimal human derivation",
             (ax.get_xlim()[0], REF), textcoords="offset points", xytext=(8, 8),
             ha="left", va="bottom", fontsize=12, fontweight="bold", color=FLOOR_C)
 handles.append(mlines.Line2D([], [], color=FLOOR_C, lw=2.2, label="Minimal human derivation"))

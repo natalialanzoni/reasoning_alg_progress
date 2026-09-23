@@ -117,7 +117,13 @@ def plot_row(ax, hard_files, title):
     floor = canonical_floor(keys, hard_files[-1][0])   # newest model on this panel
     if floor:
         ax.axhline(floor, ls="--", lw=1.6, color=FLOOR_C, zorder=4)
-        ax.text(0.015, 0.955, f"Minimal human derivation ≈ {floor:,.0f} tokens",
+        # NO token count. This panel is the hard-but-doable TEN, whose floor is
+        # ~325 (OpenAI) and ~450 (Anthropic) -- both different from the 316/441
+        # the rest of the paper quotes for the 40-problem sample, because they
+        # are a different set of problems. Printing the number invited a reader
+        # to think one of the two was wrong. The LINE is still the right
+        # reference for this panel; only the figure is dropped.
+        ax.text(0.015, 0.955, "Minimal human derivation",
                 transform=ax.transAxes, ha="left", va="top", fontsize=15,
                 fontweight="bold", color=FLOOR_C, zorder=8,
                 bbox=dict(boxstyle="round,pad=0.3", fc="white", ec=FLOOR_C, alpha=0.9))
