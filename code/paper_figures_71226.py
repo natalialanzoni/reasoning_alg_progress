@@ -682,7 +682,6 @@ def figure2_sample_problems(fname="fig2_sample_problems.png",
 # ============================================================================
 def _fit_headroom_forecast(model_files, exclude_baseline=True, successes_only=True):
     """Fit log(headroom - 1) ~ month + problem fixed effects on a (label, date,
-    path) list. Shared by figure3_forecast() and figure3_forecast_combined() so
     the econometrics live in exactly one place.
 
     `successes_only` restricts to correct traces (drop it to fit on all traces,
@@ -776,8 +775,10 @@ def _fit_headroom_forecast(model_files, exclude_baseline=True, successes_only=Tr
 
     def ehat(dt):                      # fitted EXCESS tokens, the quantity fitted
         return math.exp(a + b * (dt - ORIGIN).days / 30.44)
-    def hhat(dt):                      # the same curve as a multiple of the floor
-        return 1.0 + ehat(dt) / ref_floor
+    # NO hhat(). A "multiple of the floor" accessor existed here and every caller that
+    # used it had to remember to multiply by the RIGHT floor afterwards; three of them
+    # did not, and rescaled their curves by up to 1.23x. Callers take ehat() -- excess
+    # tokens -- and add or divide by the floor they are actually drawing against.
     def reach(frac):                   # when excess falls to `frac` of the floor
         return ORIGIN + timedelta(
             days=((math.log(frac * ref_floor) - a) / b) * 30.44)
@@ -788,7 +789,7 @@ def _fit_headroom_forecast(model_files, exclude_baseline=True, successes_only=Tr
     gm = [geomean[m] for m in labels]
 
     return {
-        "labels": labels, "dates": dates, "gm": gm, "hhat": hhat, "ehat": ehat,
+        "labels": labels, "dates": dates, "gm": gm, "ehat": ehat,
         "ref_floor": ref_floor, "reach": reach,
         "mile": mile, "baseline_label": baseline_label,
         "quarterly_pct": (1 - q_factor) * 100, "t0": model_files[-1][1],
@@ -798,131 +799,13 @@ def _fit_headroom_forecast(model_files, exclude_baseline=True, successes_only=Tr
     }
 
 
-def figure3_forecast(model_files=None, fname="fig3_forecast_successes_linear.png",
-                      fit_annotation_date=None, exclude_baseline=True, successes_only=True):
-    model_files = model_files if model_files is not None else MAIN_K8
-    fit = _fit_headroom_forecast(model_files, exclude_baseline=exclude_baseline,
-                                  successes_only=successes_only)
-    labels, dates, gm = fit["labels"], fit["dates"], fit["gm"]
-    hhat, mile, baseline_label, t0 = fit["hhat"], fit["mile"], fit["baseline_label"], fit["t0"]
-
-    start_i = 1 if exclude_baseline else 0
-    fdates = [model_files[start_i][1] + timedelta(days=30.44 * mo) for mo in range(0, 58)]
-    if fit_annotation_date is None:
-        # Midpoint between the last real data point and the first (least
-        # stringent) milestone, so the label sits clear of both the data
-        # points and the milestone lines/annotations regardless of how fast
-        # this series converges.
-        fit_annotation_date = t0 + (mile[0.25] - t0) / 2
-
-    # Display in TOKENS: headroom is trace tokens / per-problem canonical floor,
-    # so multiplying by the average canonical floor (a constant) turns the whole
-    # picture into interpretable token units without touching the econometrics.
-    REF = canon_avg   # avg canonical-solution length over keyed problems (tokens)
-
-    fig, ax = plt.subplots(figsize=(11.5, 6.8))
-    for l, d, g in zip(labels, dates, gm):
-        if exclude_baseline and l == baseline_label:
-            continue
-        ax.plot(d, g * REF, "o", color="#1B5E20", markersize=11, zorder=5)
-        ax.annotate(f"{l}: {g:.1f}× over floor ({g * REF:,.0f} tok)", (d, g * REF),
-                    textcoords="offset points", xytext=(14, 0), ha="left", va="center",
-                    fontsize=9, fontweight="bold", color="#1B5E20")
-    ax.plot(fdates, [hhat(d) * REF for d in fdates], "--", color="#1565C0",
-            linewidth=2.6, zorder=4)
-    ax.annotate(f"fit: {fit['quarterly_pct']:.0f}% less reasoning required / quarter",
-                (fit_annotation_date, hhat(fit_annotation_date) * REF),
-                textcoords="offset points", xytext=(30, 22), fontsize=11, fontweight="bold",
-                color="#1565C0", arrowprops=dict(arrowstyle="->", color="#1565C0", lw=1.2))
-    ax.axhline(REF, color="#FFB300", linewidth=2.6, zorder=3)
-    ax.annotate(f"canonical floor ({REF:,.0f} tok)", (fdates[-1], REF),
-                textcoords="offset points", xytext=(-6, 6), ha="right", va="bottom",
-                fontsize=9, color="#C79100", fontweight="bold")
-    for p, d in mile.items():
-        ax.axvline(d, color="#1565C0", linewidth=1, linestyle=":", alpha=0.5)
-        ax.annotate(f"within {int(p*100)}%\n{d:%Y-%m}", (d, (1 + p) * REF),
-                    textcoords="offset points", xytext=(6, 20), fontsize=8,
-                    color="#1565C0", fontweight="bold")
-    ax.set_ylim(0, max(gm) * 1.25 * REF)
-    ax.axhspan(0, REF, color="#FFB300", alpha=0.07, zorder=0)
-    ax.set_ylabel(f"Reasoning tokens ({'successful' if successes_only else 'all'} traces, o200k)", fontsize=11)
-    ax.set_xlabel("Date", fontsize=11)
-    ax.set_xlim(model_files[start_i][1] - timedelta(days=40), fdates[-1] + timedelta(days=20))
-    ax.xaxis.set_major_locator(mdates.MonthLocator(interval=4))
-    ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m"))
-    fig.autofmt_xdate(rotation=30)
-    plt.tight_layout()
-    fig.savefig(OUT_DIR / fname, dpi=200, bbox_inches="tight")
-    plt.close(fig)
-    scope = f"excl {baseline_label}" if exclude_baseline else "all models"
-    print(f"wrote {OUT_DIR / fname}  ({scope}: {fit['quarterly_pct']:.0f}%/quarter; "
-          f"within10%={mile[0.10]:%Y-%m})")
-
-
-def figure3_forecast_combined(fname="fig3_forecast_combined.png",
-                               families=(("OpenAI", MAIN_K8, "#1B5E20", "#66BB6A"),
-                                         ("Anthropic", None, "#4A148C", "#AB47BC"))):
-    """Both families' headroom-over-canonical-floor fits on one shared axis,
-    for a direct pace-of-convergence comparison. `families` is a list of
-    (display_name, model_files, dot_color, curve_color); `model_files=None`
-    for the second entry defaults to OPUS_MODELS (deferred so this default
-    argument doesn't need OPUS_MODELS defined above this function)."""
-    families = [(name, mf if mf is not None else OPUS_MODELS, dot_c, line_c)
-                for name, mf, dot_c, line_c in families]
-    REF = canon_avg
-    fig, ax = plt.subplots(figsize=(12.5, 7.2))
-
-    # Labels go above the first family's points and below the second's --
-    # the two series' points land close together in date/value, so a single
-    # fixed offset direction would make same-vicinity labels overlap.
-    label_side = [(14, "bottom"), (-14, "top")]
-
-    fdate_ends = []
-    for fam_idx, (fam_name, model_files, dot_color, line_color) in enumerate(families):
-        fit = _fit_headroom_forecast(model_files)
-        labels, dates, gm = fit["labels"], fit["dates"], fit["gm"]
-        dy, va = label_side[fam_idx % len(label_side)]
-        for l, d, g in zip(labels, dates, gm):
-            if l == fit["baseline_label"]:
-                continue
-            ax.plot(d, g * REF, "o", color=dot_color, markersize=10, zorder=5)
-            ax.annotate(f"{l}", (d, g * REF), textcoords="offset points",
-                        xytext=(0, dy), ha="center", va=va, fontsize=8,
-                        fontweight="bold", color=dot_color)
-        fdates = [model_files[1][1] + timedelta(days=30.44 * mo) for mo in range(0, 58)]
-        ax.plot(fdates, [fit["hhat"](d) * REF for d in fdates], "--",
-                color=line_color, linewidth=2.6, zorder=4,
-                label=f"{fam_name} fit: {fit['quarterly_pct']:.0f}% less reasoning / quarter")
-        fdate_ends.append(fdates[-1])
-
-    ax.axhline(REF, color="#FFB300", linewidth=2.4, zorder=3)
-    ax.annotate(f"canonical floor ({REF:,.0f} tok)", (max(fdate_ends), REF),
-                textcoords="offset points", xytext=(-6, 6), ha="right", va="bottom",
-                fontsize=9, color="#C79100", fontweight="bold")
-    ax.axhspan(0, REF, color="#FFB300", alpha=0.07, zorder=0)
-    ax.set_ylim(bottom=0)
-    ax.set_ylabel("Reasoning tokens (successful traces, o200k)", fontsize=11)
-    ax.set_xlabel("Date", fontsize=11)
-    ax.xaxis.set_major_locator(mdates.MonthLocator(interval=4))
-    ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m"))
-    fig.autofmt_xdate(rotation=30)
-    ax.legend(loc="upper right", framealpha=0.95, fontsize=10)
-    ax.set_title("Reasoning-length forecast: OpenAI vs. Anthropic converge toward "
-                 "the same canonical floor", fontsize=12.5, loc="left", fontweight="bold")
-    plt.tight_layout()
-    fig.savefig(OUT_DIR / fname, dpi=200, bbox_inches="tight")
-    plt.close(fig)
-    print(f"wrote {OUT_DIR / fname}")
-
-
-# ============================================================================
-# FIGURE 4 (edge_of_capability k=40 violins, split success/failure)
-#   k=40 is built in-memory: main k=8 samples + k=32 edge samples per (model, task)
-# ============================================================================
-_LIST_FIELDS = ["correct", "total_completion_tokens", "thinking_tokens", "answer_in_boxed",
-                "extracted_answers", "response_texts", "prompt_length_tokens",
-                "trace_length_tokens", "answer_tokens", "response_chars", "total_latency_sec"]
-
+#
+# They were superseded by code/figure_forecast_ft.py, had no callers outside this
+# module's own __main__, and were the last users of fit["hhat"] -- converting the fit
+# to tokens as hhat * REF against a module-level floor. That is exactly the rescale
+# fault found in build_excess_appendix and build_contamination, and leaving two
+# working-looking copies of it here is how it would come back. The live figure is
+# figure_forecast_ft.build_decay_2panel.
 
 def merge_k40(main_path, k32_path):
     """Concatenate k=8 main samples + k=32 edge samples per task -> k=40 rows."""
@@ -1214,7 +1097,6 @@ def figure_headline_openai_vs_anthropic(fname="headline_openai_vs_anthropic.png"
 if __name__ == "__main__":
     figure1()
     figure1_example_problems()
-    figure3_forecast()
     figure4_edge_violins()
     figure1_oss()
     figure1_open_weight()
@@ -1232,9 +1114,7 @@ if __name__ == "__main__":
         suptitle="Per-problem reasoning length across Claude Opus generations "
                  "(2 easy / 2 medium / 2 hard; each vs. its canonical floor)",
         fname="fig1_example_problems_opus.png")
-    figure3_forecast(model_files=OPUS_MODELS, fname="fig3_forecast_opus.png")
 
     figure_headline_openai_vs_anthropic()
-    figure3_forecast_combined()
     figure2_sample_problems()
     print(f"\nAll figures written to {OUT_DIR}/")

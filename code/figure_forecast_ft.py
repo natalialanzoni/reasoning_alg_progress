@@ -90,7 +90,9 @@ SEP_C = "#8A8A8A"        # grey — observed/forecast separator
 OAI_C = CATEGORICAL[0]   # blue  — OpenAI (combined plot)
 ANT_C = CATEGORICAL[1]   # MIT red — Anthropic (combined plot)
 FULL_C = "#6E6E6E"       # grey — full-sample trend overlaid on the appendix check
-REF = pf.canon_short   # o200k floor; the DEFAULT and the one OpenAI is measured in
+# NO module-level floor constant. There used to be one (pf.canon_short, 316) and
+# every drawing site reached for it by default, which was right only while all
+# models shared a floor. Use ref_of(mfiles) -- it resolves the family's own.
 
 
 def ref_of(mfiles):
@@ -164,25 +166,6 @@ def model_points(mfiles, successes_only):
                     (1 + math.exp(mu - 1.96 * se)) * own,
                     (1 + math.exp(mu + 1.96 * se)) * own, own))
     return out
-
-
-def _band(fit, fdates, extra_var=0.0):
-    """Band + center for the fitted average-problem decay. extra_var=0 -> 95% CI of
-    the mean trend (cluster-robust cov); extra_var=sigma^2 -> 95% PREDICTION interval
-    (adds model-level residual scatter, so it envelops individual model points)."""
-    res = fit["res"]; names = list(res.params.index)
-    pvec = res.params.values; cov = res.cov_params().values; J = fit["n_problems"]
-    lo, hi, ctr = [], [], []
-    for d in fdates:
-        m = (d - pf.ORIGIN).days / 30.44
-        x = np.array([1.0 if nm == "Intercept" else
-                      (m if nm == "month" else
-                       (1.0 / J if nm.startswith("C(problem)") else 0.0)) for nm in names])
-        mu = float(x @ pvec); se = float((x @ cov @ x + extra_var) ** 0.5)
-        lo.append((1 + math.exp(mu - 1.96 * se)) * REF)
-        hi.append((1 + math.exp(mu + 1.96 * se)) * REF)
-        ctr.append((1 + math.exp(mu)) * REF)
-    return lo, hi, ctr
 
 
 def wcb_band(mfiles, excl, successes_only, dates, B=1999, seed=0):
@@ -343,11 +326,17 @@ def draw_family(ax, mfiles, excl, successes_only, color, milestones=True,
 
 
 def _floor(ax, xend=None, ref=None, label=True):
+    """`ref` is REQUIRED in practice: it is the floor in the units of the family on
+    this axes. It kept a module-level default until every call site was found to be
+    relying on it and drawing 316 under Anthropic curves measured against 441."""
     """Floor line + label. The floor is ~303 tok against a 10-20k y-axis, so the
     label is anchored to the LEFT edge (where the decay curve is still high and the
     space is empty) in x-axes-fraction / y-data coords, with an opaque box — at the
     right edge it collided with the curve as it lands on the floor."""
-    REF = ref if ref is not None else globals()["REF"]
+    if ref is None:
+        raise ValueError("_floor needs the floor for THIS panel's family; "
+                         "use ref_of(mfiles). See README run-hygiene item 15.")
+    REF = ref
     ax.axhspan(0, REF, color=FLOOR_C, alpha=0.10, zorder=0)
     ax.axhline(REF, color=FLOOR_C, lw=2.4, zorder=3)
     if not label:
