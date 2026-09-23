@@ -122,3 +122,30 @@ when comparing models of different verbosity: GLM 5.2's traces are ~3.4x longer
 than 5.3's, so a per-trace difference partly just restates a length difference.
 "Verifies less" and "writes less" are different claims and the two columns
 separate them.
+
+## A rewrite we tried and dropped
+
+After the RA review of the v0 counts we drafted a tightened pair and rejected
+both. Recorded here so nobody re-derives it.
+
+**Backtracking v1** required that the writer both conclude the approach fails AND
+take a different route, with an explicit NOT-list for re-checking, arithmetic
+fixes, pausing, and re-reading the problem. It cut the mean over 20 traces from
+10.35 to 1.75, removing the self-interruption the RA flagged — but on manual
+review it then **undercounted**, missing genuine abandonments stated tersely.
+Trading over-counting for under-counting is not progress when the direction of the
+bias is what the paper's claim rests on.
+
+**Verification v1** widened the definition to claim doubt-and-rederive events, and
+also added a deduplication rule of my own: *each distinct check counts once, even
+when the writer expresses doubt several times about the same quantity.* That rule
+did most of the damage — on `GLM 5.2 aime_2026_ii_04` it took the count 28 → 9,
+almost entirely by collapsing separately-tested examples (n=19, n=23, n=90) into
+one instance. It also violated its own NOT-list, counting "checking for a
+misunderstanding of the problem". Manual review found v0 verification was fine as
+it stood.
+
+**The open question v1 was trying to answer** is still open: is testing three
+examples to confirm one rule three verifications or one? v0 counts three, so the
+count partly measures how many examples a model tries, which scales with trace
+length. If the paper leans on verification counts, it should say which it means.

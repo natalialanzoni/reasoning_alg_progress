@@ -83,31 +83,36 @@ EDIT_NOTE = ("line 2 reframed from 'text from the internet' to 'the reasoning tr
              "language model solving a competition mathematics problem'; rest verbatim")
 
 
-def _template(behaviour):
-    p = os.path.join(HERE, f"{behaviour}_v0.txt")
+PROMPT_VERSION = "v0"   # Gandhi et al.'s templates + the one-line domain edit.
+                        # A v1 pair that redefined both constructs was drafted and
+                        # rejected -- see README, "A rewrite we tried and dropped".
+
+
+def _template(behaviour, version=None):
+    p = os.path.join(HERE, f"{behaviour}_{version or PROMPT_VERSION}.txt")
     if not os.path.exists(p):
         raise SystemExit(f"no prompt template for {behaviour!r} at {p}")
     return open(p).read()
 
 
-def template_sha(behaviour):
-    return hashlib.sha256(_template(behaviour).encode()).hexdigest()[:16]
+def template_sha(behaviour, version=None):
+    return hashlib.sha256(_template(behaviour, version).encode()).hexdigest()[:16]
 
 
-def build_messages(behaviour, trace):
+def build_messages(behaviour, trace, version=None):
     """One user turn, NO system message -- upstream's relabel_pretrain.py sends the
     formatted template as the only message, and adding a system turn would be a
     second undocumented change to the instrument."""
-    t = _template(behaviour)
+    t = _template(behaviour, version)
     if "{response}" not in t:
         raise SystemExit(f"{behaviour}_v0.txt lost its {{response}} placeholder")
     # .replace not .format: a trace containing { or } would break .format
     return [{"role": "user", "content": t.replace("{response}", trace)}]
 
 
-def judge_one(client, behaviour, trace, model):
+def judge_one(client, behaviour, trace, model, version=None):
     r = client.chat.completions.create(
-        model=model, messages=build_messages(behaviour, trace),
+        model=model, messages=build_messages(behaviour, trace, version),
         max_tokens=MAX_OUT, temperature=TEMPERATURE)
     txt = r.choices[0].message.content or ""
     m = COUNT_RE.search(txt)
@@ -118,6 +123,7 @@ def judge_one(client, behaviour, trace, model):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--judge-model", default=JUDGE_MODEL)
+    ap.add_argument("--prompt-version", default=PROMPT_VERSION, choices=("v0",))
     ap.add_argument("--models", nargs="*", default=MODEL_ORDER)
     ap.add_argument("--behaviours", nargs="*", default=["backtracking", "verification"],
                     choices=list(BEHAVIOURS))
@@ -153,7 +159,8 @@ def main():
     try:
         import tiktoken
         enc = tiktoken.get_encoding("cl100k_base")
-        n = sum(len(enc.encode(build_messages(j["behaviour"], j["cot"])[0]["content"]))
+        n = sum(len(enc.encode(build_messages(j["behaviour"], j["cot"],
+                                              a.prompt_version)[0]["content"]))
                 for j in jobs[:150]) / min(150, len(jobs))
         tot = n * len(jobs)
         print(f"  mean prompt ~{n:,.0f} tok  ->  ~{tot/1e6:.1f}M input tokens")
@@ -164,7 +171,7 @@ def main():
 
     if a.show_one:
         j = jobs[0]
-        c = build_messages(j["behaviour"], j["cot"])[0]["content"]
+        c = build_messages(j["behaviour"], j["cot"], a.prompt_version)[0]["content"]
         print("\n" + "=" * 70)
         print(f"ONE REAL PAYLOAD  {j['model']} {j['task_id']} sample={j['sample']} "
               f"behaviour={j['behaviour']}")
@@ -197,14 +204,16 @@ def main():
 
     n = 0
     with open(a.out, "a") as fh, ThreadPoolExecutor(max_workers=a.workers) as ex:
-        fut = {ex.submit(judge_one, client, j["behaviour"], j["cot"], a.judge_model): j
-               for j in todo}
+        fut = {ex.submit(judge_one, client, j["behaviour"], j["cot"], a.judge_model,
+                         a.prompt_version): j for j in todo}
         for f in as_completed(fut):
             j = fut[f]
             rec = {k: j[k] for k in ("model", "task_id", "sample", "behaviour",
                                      "tokens", "correct")}
             rec.update({"judge_model": a.judge_model, "temperature": TEMPERATURE,
-                        "prompt_sha": template_sha(j["behaviour"]), "prompt_edit": EDIT_NOTE})
+                        "prompt_version": a.prompt_version,
+                        "prompt_sha": template_sha(j["behaviour"], a.prompt_version),
+                        "prompt_edit": EDIT_NOTE})
             try:
                 rec.update(f.result())
             except Exception as e:
