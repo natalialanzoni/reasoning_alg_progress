@@ -1,0 +1,81 @@
+Triangle ABC isosceles with AB = BC = s, base AC = b. Perimeter ABC = 2s + b. Triangle AIC: sides AI, CI, AC = b. Incenter I lies on the symmetry axis (perpendicular bisector of AC).
+
+Let angle at A = C = α, angle B = β. The incenter: AI bisects angle A. AI = r / sin(α/2). CI same by symmetry.
+
+Perimeter of AIC = 2·AI + b = 2·(r/sin(α/2)) + b.
+
+Ratio: (2s+b)/(2AI + b) = 125/6, so 2AI + b = 6(2s+b)/125.
+
+We need integer sides for both triangles: s, b, AI, CI, AC integers. AI = CI must be integer, b integer, s integer.
+
+Let's parametrize. AI = r/sin(A/2). Standard: AI = r·csc(A/2). Also AI = r/sin(A/2) = s? Let's use known: in any triangle, distance from A to incenter along angle bisector: AI = r / sin(A/2). Also AI = √(bc(1 - a²/(b+c)²))... For isosceles with equal sides s and base b: angle bisector from B hits midpoint of AC. AI: coordinates.
+
+Place A = (-b/2, 0), C = (b/2, 0), B = (0, h), h = √(s² - b²/4).
+
+Incenter at (0, r) where r = area / semiperimeter = (b h /2) / (s + b/2) = b h / (2s + b).
+
+AI = √( (b/2)² + r² ).
+
+Let's compute: r = b h/(2s+b). AI² = b²/4 + b² h²/(2s+b)² = b² [ (2s+b)² + 4h² ] / (4(2s+b)²).
+
+(2s+b)² + 4h² = 4s² + 4sb + b² + 4s² - b² = 8s² + 4sb = 4s(2s + b).
+
+So AI² = b² · 4s(2s+b) / (4(2s+b)²) = b² s / (2s+b).
+
+So AI = b √(s/(2s+b)).
+
+Let d = 2s + b (perimeter P = d... wait P = 2s+b, yes perimeter). So AI = b√(s/P).
+
+Let s = P·k²? Write s/(2s+b) as a square of rational: need AI integer. Let g = gcd stuff. Write s = t·m², P = t·n² with gcd(m,n)=1, then AI = b·m/n... need n | b·m i.e. n | b (since gcd(m,n)=1). Also P = 2s + b → b = P - 2s = t(n² - 2m²). Need b > 0: n² > 2m². Also b < 2s (triangle inequality): t(n²-2m²) < 2tm² → n² < 4m².
+
+Condition: n | b = t(n² - 2m²). Since n | t n², need n | 2t m². With gcd(m,n)=1: n | 2t. So t = n·u/2? Let's set t multiple of n (or n/gcd(n,2)).
+
+Perimeter ratio: P / (2AI + b) = 125/6. So 2AI + b = 6P/125.
+
+AI = b m/n. So 2 b m/n + b = b(2m + n)/n = 6P/125 = 6 t n²/125.
+
+b = t(n² - 2m²). So t(n² - 2m²)(2m+n)/n = 6 t n²/125.
+
+Cancel t: (n² - 2m²)(2m+n) · 125 = 6 n³.
+
+Hmm, so we need (n² - 2m²)(2m+n) · 125 = 6n³.
+
+Since gcd stuff: Let's analyze. 125(n²-2m²)(n+2m) = 6n³.
+
+Both m, n positive integers, gcd=1, with 2m² < n² < 4m².
+
+Note n² - 2m² and n+2m: their gcd divides... gcd(n²-2m², n+2m) divides (n+2m)(n-2m) = n² - 4m², and also divides (n²-2m²). Difference: (n²-2m²) - (n²-4m²) = 2m². Hmm.
+
+Alternative approach: define x = 2m/n. Then ratio condition: (1 - 2m²/n²)(1 + 2m/n) = 6/125? Wait divide by n³: (n²-2m²)(n+2m)/n³ = (1 - (2m²/n²))(1 + 2m/n) = 6/125.
+
+Let u = 2m/n. Then 2m²/n² = u·(m/n)·... hmm, m/n = u/2, so 2m²/n² = 2(u/2)² = u²/2. So (1 - u²/2)(1+u) = 6/125.
+
+Solve: (1+u)(2 - u²) = 12/125? Multiply by 2: (1 - u²/2)(1+u)·2 = (2 - u²)(1+u)/... wait (1 - u²/2) = (2-u²)/2. So (2-u²)(1+u)/2 = 6/125 → (2-u²)(1+u) = 12/125.
+
+Expand: 2 + 2u - u² - u³ = 12/125. So u³ + u² - 2u - 2 + 12/125 = 0 → u³ + u² - 2u - 238/125 = 0.
+
+Multiply 125: 125u³ + 125u² - 250u - 238 = 0.
+
+Try rational roots: u = 14/25? 125·(2744/15625) + 125·(196/625) - 250·(14/25) - 238 = 2744/125 + 196/5 - 140 - 238 = 21.952 + 39.2 - 140 - 238 = -316.8... no.
+
+u = 7/5 = 1.4: 125·2.744 + 125·1.96 - 350 - 238 = 343 + 245 - 588 = 0. Yes! u = 7/5 is a root.
+
+Factor: 125u³ + 125u² - 250u - 238 = (5u - 7)(25u² + au + b). Expand: (5u-7)(25u² + pu + q) = 125u³ + 5p u² - 175u² + 5q u - 7p u - 7q. Match: 5p - 175 = 125 → p = 60. 5q - 7p = -250 → 5q - 420 = -250 → q = 34. -7q = -238 ✓.
+
+Other roots: 25u² + 60u + 34 = 0, discriminant 3600 - 3400 = 200 > 0, roots = (-60 ± 10√2)/50 = (-6 ± √2)/5, both negative. u must be positive, so u = 7/5.
+
+Wait — but u = 2m/n with gcd(m,n)=1. u = 7/5 means 2m/n = 7/5 → m/n = 7/10. But gcd(7,10)=1, m=7, n=10 (or multiples, but gcd=1 forces m=7k, n=10k reduced... actually 2m/n = 7/5 in lowest terms: 2m·5 = 7n, so 10m = 7n. Since gcd(m,n)=1, m | 7·... Let's solve: 10m = 7n. gcd(10,7)=1 so 7 | m and 10 | n. Write m = 7a, n = 10a. gcd(7a, 10a) = a·gcd(7,10) = a. gcd(m,n)=1 → a=1. So m=7, n=10 uniquely.
+
+Check constraints: 2m² = 98 < n² = 100 < 4m² = 196. ✓. b = t(n² - 2m²) = t·2 = 2t. s = t·49. P = t·100.
+
+Condition n | b earlier: we derived requirement n | 2t m²; with actual values check: AI = b m/n = 2t·7/10 = 7t/5. For AI integer, need 5 | t. So t = 5u, giving b = 10u, s = 245u, P = 500u, AI = 7u.
+
+Check triangle inequality: b < 2s: 10u < 490u ✓; b + s > s trivially ✓ (b>0). Triangle AIC sides: 7u, 7u, 10u — valid triangle ✓.
+
+Also need inradius... AI = 7u, b = 10u: check AI² = b² s/(2s+b) = 100u²·245u/(500u) = 49u² ✓.
+
+Minimum AB = s = 245 (with u=1).
+
+Wait — should we double check perimeter of AIC: 2·7u + 10u = 24u. P = 500u. Ratio 500u/24u = 125/6 ✓. 
+
+So minimum AB = 245.

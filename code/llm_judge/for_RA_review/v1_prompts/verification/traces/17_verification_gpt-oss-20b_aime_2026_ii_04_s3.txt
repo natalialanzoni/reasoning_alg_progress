@@ -1,0 +1,125 @@
+We need positive integers n<1000 such that f(n)=n. Definition: For n as decimal digits. Let d=max digit of n. b = least integer greater than d. So b = d+1. Then f(n) = interpret decimal numeral of n in base b. That is, if n has decimal representation digits a_k a_{k-1}...a_0 (in decimal). Each a_i in {0,...,9}. Then f(n)= sum_{i=0}^{k} a_i * b^i. We want sum_{i} a_i b^i = n = sum a_i 10^i. So need sum a_i (b^i -10^i)=0. Since b = d+1 which <=10? Actually d at most 9, so b <=10. For n<1000 decimal, at most 3 digits: digits hundreds, tens, ones. So k up to 2.
+
+We need compute cases. Let's denote digits: n = 100h +10t + u with 0≤u,t≤9, 0≤h≤9 but if n<1000 h can be 0-9, but if h=0 then effectively two-digit. We'll consider general.
+
+We need to find all triples (h,t,u) such that interpret base b computed from maximum digit d among {h,t,u}. Let d = max(h,t,u). Then b=d+1. Condition: 100h +10t + u = h b^2 + t b + u (if h non-zero; if h=0 then not need b^2?). Actually for two-digit numbers h could be 0 meaning t first non-zero? But the expression still holds because leading zero doesn't change. If h=0 but t non-zero, the decimal representation of n has 2 digits; but the formal polynomial representation with power 2 may include 0 coefficient. That's fine: n=100*0+10t+u. Similarly for f(n)= 0*b^2 + t*b + u. Works. Good.
+
+So we need equation: h (100 - b^2) + t (10 - b) + u (1-1) = 0. Since u term cancels. So condition reduces to
+
+h (100 - b^2) + t (10 - b) = 0.
+
+Because u's coefficient zero. So no restriction on u beyond being 0-9.
+
+Thus we need pairs (h,t) such that that equation holds, with b = max(h,t,u)+1. note u can affect b because it's max digit. But equation does not involve u. However b depends on u as well. So choice of u influences whether equality holds because b depends on max among h,t,u. So for given h,t, we must pick u such that b determined is consistent and equation holds.
+
+We can approach by enumerating possible values of b (between 2 and 10). For each b, we consider digits less than b (since max digit d = b-1). So all digits are ≤ b-1 and at least one digit = b-1. So digits can be from 0 to b-1. We require max digit is b-1 (i.e., at least one of h,t,u equals b-1). Then equation h (100 - b^2)+ t(10 - b) = 0.
+
+We also require n<1000 and digits fit.
+
+We just need to count number of n<1000 satisfying.
+
+Let's analyze by b.
+
+b ranges 2-10 (since max digit less than 10; if all digits 9, b=10). Note b cannot be 1.
+
+For each b, we need to pick (h,t,u) digits 0..b-1, with max = b-1, and equation holds.
+
+Equation involves only h and t.
+
+Let's compute 100-b^2 and 10-b values for each b.
+
+We'll do table:
+
+b=2: 100-4=96. 10-2=8. Equation: 96h + 8t = 0 => h=0, t=0. But digits must be <2 (0 or1). For b=2, max digit must be 1. Need at least one of h,t,u =1. But equation forces h=0, t=0. Thus u must be 1 to satisfy max=1. So n = 0*100+0*10+1=1. But does n<1000 yes. digits digits? n=1 is 1-digit, decimal representation "1" has max digit 1, b=2; f(1) = interpretation of "1" in base 2 -> 1. Condition holds. Indeed we found. But check the equation: we used 3-digit with h=0, t=0, u=1. That's fine. So n=1 qualifies. Are there any others for b=2? No, only that.
+
+b=3: 100-9=91. 10-3=7. Equation: 91h + 7t =0 => divide 7: 13h + t =0 => t = -13h. Since digits nonnegative, only solution h=0, t=0. But we still need at least one digit =2 (b-1). So u must be 2. So n=2. Verify f(2) base3 gives 2. So n=2 qualifies.
+
+b=4: 100-16=84. 10-4=6. Equation 84h + 6t = 0 => divide 6: 14h + t = 0 => t = -14h. Nonnegative only h=0,t=0. Must have max digit 3. So u=3. So n=3 qualifies.
+
+Similarly pattern: For b=5: 100-25=75. 10-5=5. Equation 75h + 5t = 0 => divide 5: 15h + t = 0 => t = -15h. h=0 only. u=4. So n=4 qualifies.
+
+b=6: 100-36=64. 10-6=4. Equation: 64h+4t=0 => divide 4: 16h + t =0 => t=-16h => h=0, t=0. u=5 => n=5. f(5)=5 in base6 works.
+
+b=7: 100-49=51. 10-7=3. Equation 51h+3t=0 => divide 3: 17h + t =0 => t=-17h. h=0, t=0. u=6 => n=6.
+
+b=8: 100-64=36. 10-8=2. Equation 36h+2t=0 => divide 2: 18h + t =0 => t = -18h. h=0,t=0. u=7 => n=7.
+
+b=9: 100-81=19. 10-9=1. Equation 19h + t = 0 => t = -19h => h=0,t=0. u=8 => n=8.
+
+b=10: 100-100=0. 10-10=0. Equation 0*h + 0*t = 0. Holds for any h,t. But digits must be <10 and max digit must be 9. So at least one of digits =9. So all numbers <1000 whose decimal representation's maximum digit is 9 satisfy equality? Wait need also that u any? Because no restriction. So for b=10, any n with max digit 9 (i.e., at least one digit 9) gives f(n)=n since base-10 numeral value is equal to itself? Let's verify: n decimal digits same as base 10 representation; base-10 numeral evaluation is same. So yes, f(n)=n for all n with max digit 9.
+
+But also what about numbers with no digit 9 but with max digit less than 9: those would be addressed by earlier b. For each b<10 we found only single number n = b-1? For b=2..9 we found n = b-1 (digit only). Did any other solutions exist? Let's double-check: For b ≤9, we enforced h=0 and t=0 due to non-negative. But what if b is smaller causing negative coefficient? But 100-b^2 positive for b<=9 because 100 - 81 =19. And 10-b positive for b<10. So equation requires h=t=0. So only option. So indeed only single-digit numbers <=8.
+
+But also when b=10, we allow multiple numbers, but also some previous numbers might still satisfy? For n=9? For n=9, maximum digit 9 => b=10; f(9) = 9; also works. That would be counted by b=10 case. Our earlier enumeration produced n=8 for b=9. n=9 from b=10. Also n=10? Let's analyze n=10: digits 1,0 -> max digit 1 => b=2 => compute f(10). In base 2, digits '10' => 1*2+0=2. Not equal. So not counted.
+
+Alright.
+
+Now we count total n <1000 with f(n)=n.
+
+Numbers that have max digit 9: i.e., all decimal numbers less than 1000 with at least one 9 digit. That includes 1-digit 9, 2-digit with any digit 9, 3-digit with any digit 9. Count them. However we must exclude numbers that already counted as single-digit 9? Not issues, we count all. But note that earlier we also counted n=9 from b=10. That's within this set. So we don't also double count.
+
+So total = number of n<1000 with at least one digit 9 + additional "digit-only 1-8" we considered? Wait the 1-8 are also numbers with max digit less than 9, so not counted in the at-least-one-9 set. So we need final count = count of numbers <1000 that contain digit 9 plus the numbers 1-8? Also include n=9? It's already included in at-least-one-9 set; but we also included n=9 earlier; but we should avoid duplicate. So total = number of numbers with at least one digit 9 + numbers 1-8 (excluding 9). So basically count all numbers with at least one digit 9 plus numbers 1-8 that don't have 9.
+
+But numbers 1-8 include 1-8 themselves, are they already counted by at least one 9? No. So they add 8 numbers.
+
+But be careful about numbers 0? Positive integers only.
+
+Now compute count of numbers less than 1000 with at least one digit 9.
+
+Total numbers from 1 to 999. Count those without any 9 digits and subtract from 999.
+
+Let's compute number of 3-digit or fewer numbers without digit 9.
+
+We can treat 0-9 digits but for numbers <1000 inclusive. We'll count positive integers less than 1000, i.e., 1..999. Count numbers not containing digit 9. We'll use digit DP.
+
+Simplify: For 1-digit numbers: 1-9. Those without 9: 1-8 => 8 numbers. 0-9 but positive so 1-9. For 2-digit numbers: 10-99. Count 2-digit numbers with no 9. Each of two positions can't be 9. But leading digit can't be 0. For first digit 1-8 except 9: 8 choices (1-8). For second digit 0-8: 9 choices. So 8*9=72 numbers.
+
+For 3-digit numbers: 100-999. First digit 1-8 (can't be 0 or 9), so 8 choices. second digit 0-8: 9 choices. third digit 0-8: 9 choices. So 8*9*9=648. Total numbers without any 9: 8 + 72 + 648 = 728.
+
+Total numbers 1-999 = 999. Thus numbers with at least one 9 = 999 - 728 = 271.
+
+Double-check: 728+271 = 999. Yes.
+
+Now add numbers 1-8 (which are 8) but note 9 counted already. So total numbers where f(n)=n = 271 + 8 = 279.
+
+But double-check if number 0 may considered? Not positive integer. So fine.
+
+Need to verify if any numbers less than 1000 with max digit 9 but less than 1000 may have base representation leading zeros? Example n=9, we counted; n=90, etc. All fine.
+
+Also need to confirm that for any number with max digit 9, f(n)=n indeed holds. Because b=10, and evaluating decimal digits in base 10 gives same value. But does the problem require the least integer greater than greatest digit. For max digit 9, greater integer is 10. That's b=10. So f(n) is interpreting n as base-10 numeral (since base 10). That is the same as decimal value. So yes f(n)=n.
+
+Thus all numbers containing a digit 9 satisfy.
+
+Now consider numbers with multiple digits containing 9 but also other digits. Works.
+
+Now double-check that there are not other solutions with b <10 but having h, t not zero but still satisfying equation due to negative? Wait earlier we concluded t = -k h for k positive integer, leading to no positive digits except zero. Let's examine for b=6: equation 64h+4t=0 => divide 4: 16h + t =0 => t negative unless h=0. But we considered digits 0..5 because b=6. If h=0 negative t? can't. So indeed only h=0.
+
+For b=4: 84h+6t=0 divide 6: 14h+t=0. That would give t negative unless h=0. So only h=0. So indeed only zeros.
+
+Thus only digits 0 for h,t.
+
+Thus numbers are single-digit numbers <=8 that have b=2-9 accordingly.
+
+But do numbers like 80 have representation with high digit 8 and other digits zero? Max digit=8 so b=9. Condition: For b=9, equation 19h + t =0. Here h=8, t=0 -> 19*8 = 152 ≠ 0. So no.
+
+So only single-digit numbers <=8.
+
+But double-check n=10? Not in set.
+
+So final answer 279.
+
+But need to double-check 999 numbers? 999 contains 9; yes counted. 999 f(999) with digits 9,9,9: b=10; f(999) = 999. So works.
+
+Edge case: n=0? Not considered.
+
+Edge case: n=100, digits 1,0,0; max digit=1 <9; b=2. f(100) interpret "100" in base 2: 1*4 + 0 + 0 = 4; not equal 100.
+
+Ok.
+
+Thus answer 279.
+
+We must provide steps.
+
+Now produce final answer with reasoning.
+
+Let's craft explanation.

@@ -1,0 +1,42 @@
+# Task Description
+You will be provided with the reasoning trace of a language model solving a competition mathematics problem.
+Evaluate whether the text contains any backtracking behavior, where the writer realizes a path won't work and explicitly goes back to try a different approach. We want to mark instances where the writer ABANDONS an approach and pursues a DIFFERENT one.
+
+An instance counts only if BOTH of the following hold:
+1. The writer concludes that the current approach, assumption, or line of work will not reach the answer, or is wrong.
+2. The writer then takes a DIFFERENT route — a different method, formula, case, or starting point. Re-deriving the same thing a second way to check it does not count.
+
+Backtracking in mathematics might look like:
+- "I started with the wrong formula. Let's use integration by parts instead."
+- "This approach leads to a contradiction. Going back to the original equation..."
+- "This algebraic manipulation isn't simplifying as expected. Let's try factoring differently."
+- "Assume the roots are real. ... That gives a negative discriminant, so they are not. Drop that and consider the complex case."
+
+The following are NOT backtracking, however they are phrased:
+- Re-checking, re-deriving, or re-computing something and CONFIRMING it. "Let me reconsider... yes, that is right" is verification, not backtracking, even though it begins with "let me reconsider".
+- Correcting an arithmetic slip and continuing along the SAME approach.
+- Pausing, hesitating, or expressing uncertainty: "Wait", "Hmm", "Actually", "Let me think", "Is that right?". These are self-interruption. They count ONLY if the writer goes on to abandon the approach.
+- Re-reading or reinterpreting the problem statement.
+- Trying to recall whether the problem is a known one, or what its answer was.
+- Considering an alternative and rejecting it WITHOUT having been committed to the current one.
+
+If a passage is ambiguous, do not count it.
+
+Count the number of distinct backtracking instances and provide the count between the tags <count> </count>. If the writer does not backtrack, please provide a count of 0 as <count>0</count>.
+
+# Task Format
+Format your response in markdown as follows:
+
+## Thoughts
+[For each instance you count, quote the abandoned approach and the different approach taken instead. If you count none, say what the closest candidate was and why it does not qualify.]
+
+## Does backtrack?
+[yes/no]
+
+## Number of backtrack steps
+<count> [1/2/...] </count>
+
+# Task to evaluate for backtracking
+{response}
+
+# Response
