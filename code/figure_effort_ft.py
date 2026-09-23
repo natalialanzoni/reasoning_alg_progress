@@ -76,15 +76,23 @@ FLOOR_C = "#E07A3F"
 
 # MATH-500 excluded, matching figure1_grid_ft.py / figure_forecast_ft.py /
 # figure_mechanism_ft.py. The hard-but-doable-10 set contains no MATH-500 problems,
-# so this changes no data here -- but the FLOOR does change: pf.canon_short averages
-# over all 45 canonical problems including MATH-500's short solutions (303 tok),
-# whereas every other figure now draws the floor over the 40 competition problems
-# (316 tok). Drawing the 303 line here would put a different floor on this figure
-# than on the ones it is meant to be read against.
+# so excluding them changes no data here.
+#
+# THE FLOOR LINE MUST BE THE FLOOR OF THE PROBLEMS ACTUALLY PLOTTED. This figure is
+# the hard-but-doable TEN, whose mean shortest solution is ~325 tok, not the 40
+# competition problems' 316 and not the all-45 303. Drawing 316 here understated the
+# floor for every curve on the panel. Figure 2 plots the same ten problems and
+# already draws their own floor, so this was also inconsistent with the figure it is
+# most directly read against.
 CANON_KEYS = {t for t in pf.CANON_KEYS if not str(t).startswith("math_500")}
-REF = float(np.mean([CANON[t]["min"] for t in CANON_KEYS]))
-print(f"fig_effort: floor = {REF:.0f} tok over {len(CANON_KEYS)} competition problems "
-      f"(all-45 floor was {pf.canon_short:.0f})")
+_ref_run = (DATA / "hard_but_doable_10q_k32"
+            / "gpt-5_medium_thinking_benchmark_hard_but_doable_10.json")
+_PLOTTED = sorted({str(r["task_id"]) for r in load_rows(_ref_run)
+                   if str(r["task_id"]) in CANON_KEYS})
+REF = float(np.mean([CANON[t]["min"] for t in _PLOTTED]))
+print(f"fig_effort: floor = {REF:.0f} tok over the {len(_PLOTTED)} hard-but-doable "
+      f"problems actually plotted (the 40-problem floor is "
+      f"{np.mean([CANON[t]['min'] for t in CANON_KEYS]):.0f})")
 
 DATES = {"o3": datetime(2025, 4, 16), "gpt-5": datetime(2025, 8, 7),
          "gpt-5.1": datetime(2025, 11, 13),

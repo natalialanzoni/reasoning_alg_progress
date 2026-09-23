@@ -363,6 +363,28 @@ def _floor(ax, xend=None, ref=None, label=True):
                           lw=0.9, alpha=0.96))
 
 
+def _floor_multi(ax, refs):
+    """Floor lines for a panel carrying SEVERAL families, one per distinct floor.
+
+    A single line was drawn at the global 316 regardless of which curves were on the
+    axes, so Anthropic -- measured against 441 since its tokenizer changed at Opus
+    4.7 -- was shown sitting well above a floor that was not its own.
+    """
+    uniq = sorted({round(v) for _, v in refs})
+    if len(uniq) == 1:
+        _floor(ax, ref=uniq[0]); return
+    for name, v in refs:                       # shade only up to the LOWEST floor
+        ax.axhline(v, color=FLOOR_C, lw=2.0, zorder=3)
+    ax.axhspan(0, min(uniq), color=FLOOR_C, alpha=0.10, zorder=0)
+    txt = "  ·  ".join(f"{n.split(' (')[0]} {v:,.0f}" for n, v in refs)
+    ax.annotate(f"minimal human derivation ≈ {txt} tok",
+                xy=(0.985, max(uniq)), xycoords=("axes fraction", "data"),
+                textcoords="offset points", xytext=(0, 34), ha="right", va="bottom",
+                fontsize=12.5, fontweight="bold", color=FLOOR_C, zorder=9,
+                bbox=dict(boxstyle="round,pad=0.28", fc="white", ec=FLOOR_C,
+                          lw=0.9, alpha=0.96))
+
+
 def _sep(ax, t_last, ytop, color=SEP_C, labels=True):
     ax.axvline(t_last, color=color, lw=1.6, ls="--", zorder=2)
     if labels:
@@ -418,7 +440,7 @@ def build(fname, exclude_earliest, successes_only):
         fit, t_last, xend, ymax = draw_family(ax, mfiles, excl, successes_only, TOK,
                                               label_dots=True)
         print_spec(title, fit)
-        _floor(ax, xend)
+        _floor(ax, xend, ref=ref_of(mfiles))
         _sep(ax, t_last, ymax)
         start = (mfiles[1] if excl else mfiles[0])[1]
         ax.set_ylim(0, ymax)
@@ -459,7 +481,7 @@ def build_combined(fname, successes_only=True, exclude_earliest=True):
         xlo = s if xlo is None else min(xlo, s); xhi = e if xhi is None else max(xhi, e)
         tlast_all = t_last if tlast_all is None else max(tlast_all, t_last)
         handles.append(mlines.Line2D([], [], color=col, lw=2.6, marker="o", ms=8, label=name))
-    _floor(ax, xhi)
+    _floor_multi(ax, [(name, ref_of(mf)) for name, mf, _, _ in fams])
     _sep(ax, tlast_all, ymax)
     ax.set_ylim(0, ymax); ax.set_xlim(xlo, xhi)
     ax.set_ylabel(f"Output tokens: reasoning + answer ({'correct' if successes_only else 'all'} traces)")
@@ -518,7 +540,9 @@ def build_decay_2panel(fname, exclude_earliest=True, successes_only=True):
         miles.append(f"{name.split(' (')[0]} {fit['mile'][MILE_P]:%Y-%m}")
         handles.append(mlines.Line2D([], [], color=col, lw=2.6, marker="o", ms=9, label=name))
 
-    _floor(al); _sep(al, tlast, ymax * 0.98)
+    # both families on one axes, and they no longer share a floor
+    _floor_multi(al, [(name, ref_of(mf)) for name, mf, _, _ in fams])
+    _sep(al, tlast, ymax * 0.98)
     al.set_ylim(0, ymax); al.set_xlim(xlo, xhi)
     al.set_ylabel(f"Output tokens: reasoning + answer\n"
                   f"({'correct' if successes_only else 'all'} traces)")
@@ -621,7 +645,10 @@ def build_excess_appendix(fname, successes_only=True):
         t0, t1 = pts[0][0], fit["mile"][MILE_P]
         n_mo = int((t1 - t0).days / 30.44) + 1
         cd = [t0 + timedelta(days=30.44 * k) for k in range(n_mo + 1)]
-        cy = [(fit["hhat"](d) - 1.0) * REF * smear for d in cd]
+        # ehat is already excess TOKENS. The old form was (hhat - 1) * REF,
+        # i.e. ehat * REF / (the fit's geometric reference) -- which scaled the
+        # OpenAI curve 1.23x too high and the Anthropic one to 0.88x.
+        cy = [fit["ehat"](d) * smear for d in cd]
         t_last = mfiles[-1][1]
         sd = [(d, v) for d, v in zip(cd, cy) if d <= t_last]
         dd = [(d, v) for d, v in zip(cd, cy) if d >= t_last]
@@ -747,14 +774,18 @@ def build_contamination(fname, successes_only=True):
                                              successes_only=successes_only)
         n_mo = int((span_end - pre[0][1]).days / 30.44) + 1
         gd = [pre[0][1] + timedelta(days=30.44 * k) for k in range(n_mo + 1)]
-        gy = [fit_full["hhat"](d) * REF for d in gd]
+        # tokens = excess + THAT family's floor. hhat * REF mixed the fit's
+        # geometric reference with the global 316 and drew Anthropic's
+        # full-sample curve at ~72% of its height.
+        _ref_full = ref_of(full_set)
+        gy = [fit_full["ehat"](d) + _ref_full for d in gd]
         ax.plot(gd, gy, ls="-.", color=FULL_C, lw=2.2, alpha=0.9, zorder=5)
         ax.annotate(f"Full sample: {fit_full['quarterly_pct']:.0f}% / quarter",
                     xy=(0.97, 0.54), xycoords="axes fraction", ha="right", va="center",
                     fontsize=14, fontweight="bold", color=FULL_C)
 
         ymax = max(ymax, max(gy) * 1.06)
-        _floor(ax)
+        _floor(ax, ref=ref_of(pre))
         xlims.append((pre[0][1] - timedelta(days=40), span_end + timedelta(days=20)))
         ax.set_title(title, fontsize=15)
         ax.set_xlabel("Date")
