@@ -1,0 +1,508 @@
+We need geometry relationships. Triangle ABC, orthocenter H. Angle bisector of A cuts circumcircles of ABH and ACH at P and Q; also circumcircle of ABC at M (other than A). Given AP=4, AQ=5, BC=7, find AM.
+
+We need relation between distances along angle bisector. Likely using power of point or some known ratios: For point along angle bisector, its distances to circle intersections relate to something like AP*AM = AB*AC? Not exactly.
+
+Let’s denote the angle bisector line L. Points: from A outward, first P on circle ABH, then Q on circle ACH, then M on circumcircle ABC. So AP< AQ < AM. We need AM.
+
+Consider circle (ABH). It passes through A, B, H. Since H is orthocenter, reflection of H across AB lies on circumcircle? Known property: The circumcircle of ABH passes through the antipode of C? Wait: In triangle, points A, B, H, and the antipode of C on circumcircle are concyclic? Actually the circumcircle of ABH is the same as circle with diameter? Hmm.
+
+Maybe use property that angle between AB and AH equals angle C? Because quadrilateral ABHC? Not cyclic generally. So not simple.
+
+Another approach: Use directed distances along angle bisector: maybe AP = AB * sin(B/2) / sin(A/2) etc? Let's use law of sines and power of point.
+
+Let’s define coordinates: Place triangle conveniently. Let A at origin? Use angle bisector as x-axis. Use plane geometry.
+
+Let angle at A be 2α, with bisector along positive x-axis. So AB makes angle +α above the axis, AC makes angle -α below.
+
+Let AB length = c? Wait by usual notation: opposite vertex. Usually side a = BC = 7 given. Let AB = c, AC = b (since opposite C is side a). So we have triangle with known BC = a =7, unknown b, c, and angle A = 2α.
+
+We need compute AM, which is distance from A to second intersection of the line (bisector) with circumcircle of ABC.
+
+Given that the bisector line meets circumcircle again at M, we can use formula for length of internal bisector from vertex to circumcircle: AM = \frac{2bc \cos(α)}{b+c}? Not sure.
+
+Let’s derive.
+
+Circumcircle of ABC: Let O be circumcenter. Intersection of angle bisector with circumcircle is the so-called "A-excenter" ??? Actually the internal bisector meets circumcircle at the midpoint of arc BC (not containing A). Indeed the intersection of internal angle bisector with circumcircle is the midpoint of arc BC (the point where the bisector meets circumcircle). Let's call that point M. This point M has equal distances to B and C (since it's arc midpoint). M is known as the midpoint of arc BC (including A? The internal bisector passes through the midpoint of arc B C that contains A? Wait there are two arc midpoints: one on the major arc (not containing A) and one on minor arc (containing A). The internal angle bisector passes through the midpoint of the arc BC that contains A? Actually the internal bisector passes through the midpoint of the arc BC opposite A (i.e., not containing A). Let's recall: The intersection of internal angle bisector of A with circumcircle is the midpoint of arc BC not containing A, denoted as M_a. Yes that point has property MB = MC and also MA is angle bisector.
+
+Thus M is the midpoint of arc BC opposite A. Good.
+
+Thus AM relates to sides via formula: AM = \frac{bc}{\sqrt{b^2 + c^2 - a^2}}? Not.
+
+Better use known relation: The distance from the vertex A to the midpoint of arc BC (let's call it M) equals \frac{R}{\cos (A/2)}? Let's verify: In circumcircle, O is center, OM = R (radius). The chord subtended by arc BM = CM = equal arcs. The central angle BOC = 2A (since angle subtended by BC at center is 2A). The midpoint of arc BC (not containing A) lies at angle halfway: so angle BOM = angle COM = A. Then triangle AOM: OA = R, OM = R, angle AOM is? Points O, A, M. Angle AOM is difference between OA direction and OM direction; OA is at angle from O to A. Since OA is radius to vertex A; OM is radius to midpoint of arc BC. The arc from A to M is half of arc from A to B? hmm.
+
+But we can compute using law of sines in triangle ABO? maybe easier: Known formula: AI = \frac{r}{\sin (A/2)} (where I is incenter). For M (arc midpoint), we have AM = \frac{bc}{a}\cdot\frac{1}{\cos(A/2)}? Let's search memory: Length of A-symmedian etc.
+
+Alternative: Use power of point along angle bisector: For point P on line, power w.r.t. circumcircle of ABH: AP * (AP'?) Actually P is second intersection with that circle; So A and P are two intersection points of line L with circle (ABH). Hence AP * AP' = power of A w.r.t that circle? But A lies on circle, so power zero. Not helpful.
+
+But for point Q: Q is second intersection of L with circle (ACH). So likewise.
+
+But P, Q lying on same line L as angle bisector may provide relation between distances.
+
+Perhaps there is homothety: The circles (ABH) and (ACH) are reflections across the bisector? Since H reflects across the bisector? Actually H reflects across the internal bisector of angle A to a point on the circumcircle? Not.
+
+But given AP and AQ values, maybe we can get ratio of side lengths b and c.
+
+Observe that P lies on circumcircle of ABH. Points A, B, H known geometry: The circumcircle of ABH has diameter? Not.
+
+Another property: The angle between AB and AH equals angle C (since quadrilateral ABCH? Wait: Since H is orthocenter, angle BAH = 90° - B? Actually angle BAH is 90° - B, because altitude from C is through H, giving CA ⟂ BH etc. Let's compute: In triangle, AH is altitude from A to BC? No, orthocenter is intersection of altitudes, so AH is altitude from A to BC? Yes, altitude from A to BC meets BC at foot D, but H is intersection of altitudes, not foot. So AH is not perpendicular to BC generally; only AH is not altitude.
+
+But known: ∠BHC = 180° – A. Similarly, ∠CHB = 180° – A? Actually angle BHC = 180° – A (since quadrilateral formed by cyclic quadrilaterals BH C?). Wait property: The reflections of H across sides lie on circumcircle. Also, quadrilateral ABHC is cyclic? Let's test: ∠ABH = angle between AB and BH. BH is altitude from B to AC, so BH ⟂ AC. So ∠ABH = 90° - ∠BAC? Not exactly. Since AB with BH (perpendicular to AC). So angle ABH = 90° - ∠BAC? Because angle between AB and a line perpendicular to AC equals 90° - angle between AB and AC (which is angle A). So ∠ABH = 90° - A.
+
+Similarly, ∠ACH = 90° - A? Actually AC with CH where CH ⟂ AB, so angle ACH = 90° - A as well. Thus quadrilateral ABHC has opposite angles: ∠ABH + ∠ACH = (90° - A)+(90° - A)=180° - 2A, not 180. So not cyclic generally.
+
+Thus circles ABH and ACH are distinct.
+
+Now consider line L (angle bisector). Since AB and AC symmetrical about L, maybe circles ABH and ACH are symmetric w.r.t L. Indeed, reflect triangle across L swaps B ↔ C and also altitude lines? Orthocenter H is symmetric about angle bisector? In general, the reflection of H across the angle bisector of A lies somewhere on the circumcircle? Actually reflection of H across the internal angle bisector of A lies on circumcircle of ABC. Indeed property: The reflections of H across sides lie on circumcircle. For the angle bisector, maybe mapping B↔C leads to reflection of H across bisector gives point H' which is other intersection of the circumcircles? Not.
+
+But if we reflect triangle across A's angle bisector, B maps to C, and AB maps to AC. The altitude from B (line through B perpendicular to AC) maps to altitude from C (line through C perpendicular to AB). Their intersection point (H) reflects to itself because intersection of those two lines after reflection becomes intersection of the other two altitudes, which is also H. Actually the reflection of H over the angle bisector should be H itself because the configuration is symmetric? Let's test: Since reflection swaps B and C, the altitude from B (B to AC) maps to altitude from C (C to AB). Their intersection (H) maps to intersection of altitude from C and B which is same point H. So H is invariant under reflection across the internal bisector of A. Therefore H lies on the bisector line! Wait is that always true? Not necessarily: Orthocenter may not lie on angle bisector unless triangle is isosceles (b=c). So reflection of H across bisector is another point H' (distinct) maybe not coincide. Let's think: altitude from B: line through B perpendicular to AC. After reflection across the bisector, B maps to C, AC maps to AB, so the reflected line is line through C perpendicular to AB, which is altitude from C. So the image of altitude from B is altitude from C. Their intersection point H (original) maps to intersection of altitude from C (image of altitude B) and altitude from B (image of altitude C) which is the same point H (since intersection of those two lines is still H). So H maps to itself! Wait intersection of altitude from C and altitude from B is same as original intersection of altitude from B and altitude from C, yes H. Thus H is invariant under the reflection across angle bisector. Therefore H lies on the angle bisector! That would only happen if triangle is isosceles. But is that true? Let's check with a non-isosceles example: Suppose triangle with coordinates A at (0,0), B at (1,0), C at (0,2). Angle bisector of A is line y = x? Not exactly. Orthocenter of this right triangle? Let's compute quickly. Triangle not isosceles. Orthocenter is at (0,0) because it's right at A? Actually right triangle at A (AB ⟂ AC) then orthocenter at vertex A (0,0). That lies on bisector? If angle at A is 90°, angle bisector is at 45°, line y = x; point A is at origin (common). So yes orthocenter A is on bisector trivial. Not conclusive.
+
+Another non-right example: choose triangle with coordinates A (0,0), B (4,0), C (0,3). Angle bisector? Let's compute orthocenter. Altitude from B: line through B perpendicular to AC (slope of AC is 3/0 infinite, vertical; AC is vertical line x=0, altitude from B is horizontal line y=0). So altitude from B is line y=0 (coincident with AB). Altitude from C is line through C perpendicular to AB (AB horizontal), so vertical line x=0 (coincident with AC). Their intersection is at (0,0) again A, because triangle is right at A. Choose non-right example: A (0,0), B (5,1), C (1,4). Compute quickly? Hard.
+
+But property: Is orthocenter symmetric about angle bisector? Not generally. So my earlier reasoning flawed because the reflection maps altitudes to each other, but the intersection point may not be fixed unless the two lines are symmetric about the bisector, which they are (each line maps to the other). Intersection of a line L1 and L2, after reflection, becomes intersection of reflected lines L1' (=L2) and L2' (=L1) which is the same point (since intersection of L1 and L2 is same as intersection of L2 and L1). Hence the reflection of the intersection point is the same point! So H is invariant under reflection, meaning it lies on the line of symmetry? Actually if a point is mapped to itself via reflection across line ℓ, then point lies on ℓ. Indeed reflection across a line fixes points exactly on the line. Since H maps to itself, H must be on the bisector line. But that would imply orthocenter lies on internal angle bisector of A for any triangle, which is false. Therefore my earlier conclusion that altitude from B maps to altitude from C under that reflection is correct, but the image of H is intersection of altitude from C and altitude from B (i.e., same two lines). But those lines are the same as original ones, just swapped, so intersection unchanged. Thus reflection of H is H, regardless of triangle shape. That suggests H is always on the angle bisector. But we know false, check with an acute scalene triangle: Let's pick typical acute triangle coordinates: A (0,0), B (4,0), C (1,3). Compute orthocenter.
+
+Compute slopes: AB slope 0, so altitude from C is vertical line x=1. AC slope 3/1=3, so altitude from B perpendicular slope -1/3, passes through (4,0): equation y = -(1/3)(x-4). Intersection with x=1 gives y = -(1/3)(1-4)=1. So H = (1,1). Angle bisector of angle at A between AB (positive x-axis) and AC (slope 3) bisects angle. Compute direction vectors: AB: (1,0). AC: (1,3). Normalize: AB unit (1,0). AC unit = (1,3)/√10. Sum gives direction (1+1/√10, 0+3/√10). So bisector line passes through A (0,0) and direction v. Not vertical line x=1, slope maybe around? v approx (1+0.316, 0+0.949) = (1.316,0.949). Equation y = (0.949/1.316)x ≈0.722x. At x=1, y≈0.722, not equal to 1. Hence H not on bisector. So reflection reasoning wrong because reflection of altitude from B does not map to altitude from C precisely, because altitude from B is line through B perpendicular to AC; after reflecting across angle bisector, B moves to C, AC maps to AB, but the reflected line passes through C and is perpendicular to AB, which indeed is altitude from C. So mapping of each altitude swaps them. Hence the set {altitude from B, altitude from C} is invariant under the reflection, but the intersection point of the pair is the same point (since swapping lines does not change intersection). Therefore H is fixed by the reflection, implying H lies on bisector. But counterexample shows not. What's wrong? Because the reflection also moves the point of intersection along the lines? Wait intersection point is defined geometrically: It's unique point that lies on both lines. If we reflect the pair of lines, the intersection point is reflected accordingly, but the reflected lines intersect at the reflected point of the original intersection. Since each line maps to the other line, the intersection of transformed lines is the image of original intersection point. But original intersection point is at intersection of original lines. After reflection, the intersection of the transformed lines (which are swapped) is the reflected image of original point. However swapping the lines does not guarantee that the intersection point is unchanged; the intersection of L2 and L1 is same as intersection of L1 and L2 (since they intersect at the same point). But after reflection, the lines are L1' = reflected(L1) = L2, and L2' = reflected(L2) = L1. Intersection of L1' and L2' = intersection of L2 and L1 = same as original intersection point. So indeed image of intersection is same coordinates, meaning the original point is invariant, implying it lies on reflection axis. This suggests orthocenter always lies on angle bisector of A, contradictory. Let's test with the example coordinates: altitude from B is line through (4,0) with slope -1/3: equation y = -(1/3)(x-4). Altitude from C is vertical line x=1. Intersection is at (1, 1). Reflect this point across angle bisector line y=0.722x. Compute reflection result. Reflection of (1,1) across that line likely not (1,1). So not fixed. Then our earlier reasoning must be false; maybe altitude from B does not map to altitude from C because the reflection of line through B perpendicular to AC is not line through C perpendicular to AB, because the reflected point of B is C, but the line after reflection passes through C? The line L through B (not through A) when reflected across angle bisector passes through image of B, which is C. Also its direction after reflection is the reflection of direction vector, which originally was perpendicular to AC. The reflection of a vector perpendicular to AC is a vector perpendicular to the reflection of AC, which is AB. So indeed the reflected line is through C perpendicular to AB. Yes that's altitude from C. So mapping holds. So the whole set of two altitudes is swapped. Intersection point of altitude from B and altitude from C is H. After reflection, the pair of lines is swapped, intersection still H (since same two lines). Thus H invariant. But we know counterexample. The flaw: When reflecting a line, the point of intersection may not map to same coordinates unless the entire line set is exactly preserved as a set, not just swapped. The reflection of the set {L1, L2} is {L1', L2'} = {L2, L1}. Intersection of L1' and L2' is same as intersection of L2 and L1 (same original lines), which is indeed H. So H's image under reflection is still point that lies on both reflected lines (which are the original lines). But the reflection map sends each point to a generally different location; however because H lies on both lines, after reflection H lies on both reflected lines as well (since those are the same lines). Hence the image of H under reflection must be a point that lies on both original lines, which could be H itself (since only one point is intersection). Thus reflection sends H to H. So indeed H must be invariant. But our numeric example says otherwise. Let's compute reflection of H across bisector line to verify maybe H is actually on bisector? compute quickly: line y = kx with k = 0.722. Reflect point (1,1) across line. Formula: reflect (x,y) across line y=mx: compute. Using python mental: Let m = 0.722. Unit vector along line: u = (1, m)/√(1+m^2). Compute projection etc. Compute dot = x + m y over (1+m^2). Actually projection of vector (x,y) onto line direction (1,m) is ((x + m y)/(1+m^2))*(1,m). Then perpendicular component v = (x,y) - projection. Reflection flips sign of v: reflected point = projection - v = 2*projection - (x,y). So compute: denominator d=1+m^2 =1+0.522=1.522. x+m y =1+0.722*1=1.722. projection = (1.722/1.522)*(1, m) = 1.132*(1,0.722)= (1.132,0.817). Then reflected point = (2*proj - (x,y)) = (2.264-1, 1.634-1)= (1.264,0.634). Not equal to (1,1). So H not invariant. So our earlier reasoning is flawed because the reflected altitude line may not pass through C exactly: because reflecting line L through point B not at A will send B to C, but the reflected line will pass through C and be perpendicular to the reflected of AC only if the reflection is about the bisector that passes through A. That is true. So altitude from B after reflection passes through C and is perpendicular to AB. So indeed the reflected line is altitude from C. So after reflection, we have two lines: altitude from C (passing through C) and altitude from B (passing through B). But original altitude from B passes through B, which after reflection becomes line through C? Wait altitude from B after reflection passes through C (the image of B). So we have altitude from B (original) becomes altitude from C. Conversely altitude from C becomes altitude from B. Therefore the set of two lines after reflection are {altitude from C, altitude from B} same as original set but swapped. Intersection of swapped set is same point H. The reflected point of H must lie on both transformed lines, which are the same lines as before, so indeed the image of H should be H. So contradiction persists.
+
+Thus my geometric reasoning must have an untrue assumption: The reflection of a line through point B perpendicular to AC is not necessarily the line through C perpendicular to AB because reflecting the line does not guarantee it passes through image of B unless reflection axis passes through B? Actually reflection of a line is defined as image of all points of the line; the image of point B (which lies on the line) will be C (since B maps to C). Hence the reflected line contains C, and also for any direction vector v original line (perpendicular to AC) reflects to direction v' which is perpendicular to reflected AC, which is AB. So indeed reflected line passes through C and is perpendicular to AB. So yes altitude from C. So everything seems consistent; so H should be invariant. Something paradoxical; perhaps our initial example triangle is actually isosceles? No.
+
+Let's compute altitudes again for triangle (0,0), B (4,0), C (1,3). Wait earlier we had B (4,0), C (1,3). Check orthocenter: altitude from B perpendicular to AC (slope of AC = (3-0)/(1-0)=3). So altitude from B slope = -1/3, passes through (4,0): y = -(1/3)(x-4). altitude from C perpendicular to AB (AB horizontal), so altitude from C vertical line x=1. Intersection at x=1, y = -(1/3)(1-4)=1. So H (1,1). Good.
+
+Now compute angle bisector of A between AB direction (1,0) and AC direction (1,3). Indeed earlier.
+
+Now reflect point H (1,1) across bisector we got (1.264,0.634). Not equal.
+
+Thus maybe our deduction that orthocenter reflects to itself is false because the set {altitudes} is not preserved as unordered set after reflection; they swap but also each line moves; however intersection point of swapped lines is same as original intersection? Wait intersection of altitude from B and altitude from C is unique point H. If we swap labels, still intersection is same H. So invariance holds independent of which line is which. So after reflection, we have two lines that intersect at H. Indeed altitude from B (original) after reflection becomes line through C perpendicular to AB, which is exactly altitude from C (original). Similarly altitude from C becomes altitude from B (original). Hence the pair after reflection is exactly the original pair (just swapped), intersect at H. Therefore H maps to H. Something contradictory. Let's check using actual geometry: Take line L1: altitude from B (original) equation y = -(1/3)(x-4). Reflect this line across bisector y=0.722x; compute the reflected line coordinates maybe not vertical x=1? Let's test with two points on L1: B (4,0) reflects to C (1,3). Another point on L1: take (1,1) which is H, reflect to (1.264,0.634). The line connecting reflected images of two points on L1 should be the image of the line L1, which will be line through C (image of B) and through reflected H (not point C?), wait H not on L1? H is on L1 yes intersection point, so its image also lies on reflected line. That reflected line passes through C (1,3) and point (1.264,0.634). That line is not vertical x=1. So the reflected line is not altitude from C. Indeed altitude from C is x=1. So our assumption fails: The reflection of altitude from B is not altitude from C because its image does not pass through C with perpendicular to AB? It passes through C yes, but direction may not be perpendicular to AB? Let's compute slope between (1,3) and (1.264,0.634): slope = (0.634-3)/(1.264-1) = (-2.366)/(0.264) ≈ -8.96, which is not infinite. So not perpendicular to AB (which is horizontal). So indeed not altitude. Therefore our earlier claim wrong because reflection of a line that is perpendicular to AC does not guarantee the reflected line is perpendicular to reflected AC, unless the axis of reflection passes through the point where the perpendicular condition is measured. For a line to be perpendicular to a segment, the direction must be orthogonal. Reflecting the line preserves angles with the reflecting axis, not with other lines. However reflecting a line that is perpendicular to AC will result in a line that makes the same angle with the image of AC as original line made with AC. Since original angle was 90°, the reflected line will also make 90° with image of AC. So it should be perpendicular to reflected AC (which is AB). So indeed reflected line should be perpendicular to AB. Yet our computation shows not. Let's verify: is original line L1 truly perpendicular to AC? Compute dot product of direction vectors: direction of AC is (1,3). Direction of L1 is slope -1/3, vector (3,-1). Dot product (1*3)+(3*(-1)) =3-3=0. So perpendicular indeed. Reflect AC across bisector gives AB direction (1,0). Reflect the direction vector (3,-1) across bisector should become a vector perpendicular to (1,0), i.e., vertical direction (0, something). Let's check reflect vector (3,-1) across line y=kx. Use same formula ignoring translation: reflect vector v. Compute using unit normal? Let's compute using reflective transformation matrix. Vector v=(3,-1). Compute its components parallel and perpendicular to line direction u = (1, k). Normalize u. Projection scalar = (v·u)/(u·u). v·u = 3*1 + (-1)*k = 3 - k. u·u = 1 + k^2 = d. Parallel component = ((3 - k)/d) * (1, k). Perpendicular component = v - parallel. Reflected vector = parallel - perpendicular = 2*parallel - v.
+
+Plug k=0.722, d=1.522. Compute 3 - k = 3 -0.722 =2.278. Parallel = (2.278/1.522)*(1,0.722) = 1.497*(1,0.722) = (1.497,1.080). Then reflected = 2*parallel - v = (2.994,2.160) - (3,-1) = (-0.006,3.160) ≈ (0,3.16). Indeed close to vertical. So direction after reflection is nearly vertical (x component ~ 0). So line through C with near-vertical direction is approx x = constant (near 1). Our earlier calculation gave slope -8.96 which is steep but not infinite; but that's close to vertical. So maybe due to rounding error; true line may be exactly vertical. Let's compute more precisely maybe the reflected line is vertical. Indeed analytic calculation should give x = 1 exactly maybe.
+
+Thus earlier numeric discrepancy due to approximation. So we can trust that H is indeed invariant. Then orthocenter lies on angle bisector always, which contradict known geometry. Wait maybe we considered internal angle bisector of vertex A for any triangle, it always passes through orthocenter? That is false. But maybe orthocenter lies on A-angle bisector of triangle formed by ABC? No.
+
+Let's test with known scalene triangle e.g., A(0,0), B(6,0), C(2,5). Compute orthocenter quickly? Use formula maybe not but we could compute altitude intersection. Slope AB =0, altitude from C vertical line x=2. Slope AC =5/2 =2.5, altitude from B slope = -0.4, passes through (6,0): y = -0.4(x-6) = -0.4x +2.4. Intersection with x=2 gives y = -0.8 +2.4 =1.6. So H(2,1.6). Angle bisector at A between AB (horizontal) and AC direction (2,5). Compute unit vectors perhaps. The bisector line direction given by normalized sum; approximate: unit AB = (1,0). unit AC = (2,5)/√(4+25)= (2,5)/√29 ≈ (0.371,0.649). Sum = (1.371,0.649). Slope ~0.473. At x=2, y =0.473*2 =0.946. Not equal H y=1.6. Hence H not on bisector. So our earlier conclusion false. Good.
+
+Thus reflection argument flawed due to assumption about image of altitude lines; likely they are not swapped exactly because the vertex B maps to C, but the altitude line from B may not map to line through C because the reflection of a line not passing through the axis does not necessarily pass through reflected point? Wait but reflection maps each point; point B maps to C, so image of line L containing B will contain C, yes. So altitude from B maps to a line through C. But its direction after reflection becomes perpendicular to reflected AC (AB). So indeed line through C perpendicular to AB, which is altitude from C. So altitude from B maps to altitude from C. So indeed orthocenter invariant; but this leads to contradiction with example. Let's compute reflection of altitude from B for that example to verify.
+
+Take triangle with A(0,0), B(6,0), C(2,5). Compute angle bisector line; find its reflection of altitude line from B (slope -0.4). The line L1: y = -0.4(x-6). The bisector slope we approximated 0.473, direction vector v = (1,0.473). We'll compute transformed line analytically maybe leads to not altitude from C.
+
+Given the contradictions, time is limited.
+
+Perhaps the problem actually yields simple relationship: AP * AM = (some constant), similarly AQ * AM? Since AP, AQ are distances from A to intersection points with circles that share same chord? Might be that P and Q are symmetric with respect to the midpoint of arc, leading to harmonic division.
+
+The line L intersect circles ABH and ACH at P,Q. Since these circles intersect at A and H? Wait circles ABH and ACH intersect at A and H? Yes both pass through A and H. Indeed both circles contain A and H. So the line L (angle bisector) meets each circle again at P and Q respectively, so P,Q are second intersections of L with circles through A and H. So P, Q, A, H are concyclic? Not.
+
+But power of point P with respect to circle (ACH) maybe? Since P lies on circle ABH, not on the other.
+
+However we can use chord theorem: For a given line through A intersecting circle with chord AH, the product of distances from A to the two intersect points? Actually for circle passing through A and H, if a line through A meets circle again at X, then AX * AA' = 0? Not.
+
+But we can use the fact that for any line through A meeting the circumcircle of triangle ABH again at X, we have ∠AXH = ∠ABH (subtended by arc AH). Since H is fixed, maybe relationship with angles leads to equality of some ratios.
+
+Maybe using angle bisector property: Since L is angle bisector, we have ∠BAP = ∠PAC = α.
+
+Now consider circle ABH: Since it passes through A,B,H, we have angle ABH equals angle AH B? Not.
+
+But maybe we can use directed angles to show that quadrilateral ABPH is cyclic with some angle condition.
+
+Better: In triangle, points B, H, and the projection of B onto AC produce right angles.
+
+Given time constraints, perhaps the answer simple: AM = 6? Let's test guess: Use property of internal bisector length formula: AI = (bc/(b+c)) * (something). We have AP=4, AQ=5, distances from A to P and Q on same line. Maybe they correspond to distances to circles with diameters? Suppose circle ABH has diameter? Not.
+
+If we assume P and Q are harmonic division with M such that AP·AM = AQ·AM? Not.
+
+If P and Q correspond to intersections with circles through H, then using power of H with respect to line L? Actually for circle ABH, power of H is 0. For line L, product of distances from H to intersections with the circle is 0? Since H lies on circle, then intersection points are A and P? Wait line L passes through A not through H generally. So intersection points of L with circle ABH are A and P. So by power of H regarding line L? Not.
+
+Maybe we can use inversion at A with radius sqrt(AP·AQ) etc.
+
+Given uncertainties, maybe we can compute using known length AP=4, AQ=5, and BC=7, maybe AM = 9? Let's test plausible.
+
+Better attempt: Use law of sines to express AP in terms of side lengths.
+
+Consider triangle ABH. Points A, B, H with circle passing through them. Let line L intersect at P. Since L is angle bisector at A, angle between AB and L is α. In circle ABH, chord AH subtends angle at B: ∠ABH = 90° - C? Wait earlier we computed ∠ABH = 90° - C? Let's compute: angle between AB and BH (altitude from B). Since BH ⟂ AC, angle between AB and BH = 90° - angle between AB and AC = 90° - A. So ∠ABH = 90° - A. Similarly, angle AHB? Not needed.
+
+Now in circle ABH, consider chord AP. The angle subtended by chord AP at point B is ∠ABP. Since B lies on circle, ∠ABP = ∠AH P (since both subtend arc AP). Not easier.
+
+We know angle between AB and AP is α. So ∠BAP = α.
+
+In circle ABH, the measure of angle between chord AB and chord AH equals angle at the circle? Actually central.
+
+But perhaps we can use law of sines in triangle ABP: AB / sin∠APB = AP / sin∠ABP.
+
+We know ∠ABP equals angle AHB? Not.
+
+Angles: In cyclic quadrilateral ABPH, opposite angles sum to 180°: ∠ABP + ∠AHP = 180°. But we don't know.
+
+Also ∠AHP is angle between AH and H P; unknown.
+
+Maybe easier to use trigonometric form of power: For a point A on circle, the directed length AP = 2R sin(θ) where θ is half of central angle? hmm.
+
+Given time limited, maybe compute AM using formula: AM = AP * AQ / (AQ - AP) * (BC ???). Actually using harmonic division: If points A,P,Q,M are in that order along line and they are related through circles passing through H, perhaps (A,M;P,Q) is a harmonic bundle: cross ratio -1. Then AP/AQ = AM/??? Not.
+
+If (A,P;Q,M) harmonic then (AP/AQ) : (AM/AQ?) Actually cross ratio (A,P;Q,M) = -1 means (AQ/QA?) not.
+
+Let's assume cross ratio -1: (A,P;Q,M) = -1 => (AQ/QA? maybe compute using directed lengths). Using directed lengths, (A,P;Q,M) = (AQ/PM)/(AP/QM) = -1??? This gets messy.
+
+Maybe simpler: There is known lemma: The internal bisector meets the circumcircles of ABH and ACH at points P and Q such that P,Q are the projections of H onto the sides of the triangle? Not.
+
+Given difficulty, maybe compute using coordinates.
+
+Let's set up coordinate system for general triangle with A at origin, AB along direction making angle +α, AC making -α. So B = (c cos α, c sin α) where AB = c. C = (b cos α, -b sin α) where AC = b.
+
+Compute orthocenter H: Coordinates using vectors? For acute triangle, coordinates: H = (x_H, y_H) = (c cos α + b cos α - a cos A?), maybe easier use vector formula: In barycentric coordinates, H = (tan A : tan B : tan C). Hard.
+
+But we can compute using intersection of altitudes. Altitude from B is line through B perpendicular to AC. Vector AC = (b cos α, -b sin α). Its direction slope = -tan α? Actually AC makes angle -α from x-axis, so its direction vector is (cos α, -sin α) scaled by b. Perpendicular direction is (sin α, cos α). So altitude from B passes through B and direction (sin α, cos α). Equation: (x - c cos α)/sin α = (y - c sin α)/cos α.
+
+Altitude from C is line through C perpendicular to AB. AB direction (cos α, sin α). Perpendicular direction (-sin α, cos α). So altitude from C: (x - b cos α)/(-sin α) = (y + b sin α)/cos α.
+
+Solve intersection H.
+
+Set param t for altitude from B: x = c cos α + t sin α, y = c sin α + t cos α.
+
+Plug into equation for altitude from C: (c cos α + t sin α - b cos α)/(-sin α) = (c sin α + t cos α + b sin α)/cos α.
+
+Compute left: ( (c - b)cos α + t sin α)/(-sin α) = -[(c - b)cos α + t sin α]/sin α.
+
+Right: (c sin α + t cos α + b sin α)/cos α = ( (c + b) sin α + t cos α)/cos α.
+
+Set equality:
+
+-[(c - b)cos α + t sin α]/sin α = ((c + b) sin α + t cos α)/cos α
+
+Multiply both sides by sin α cos α:
+
+-[(c - b)cos α + t sin α] cos α = ((c + b) sin α + t cos α) sin α
+
+Compute left: -[(c - b)cos^2 α + t sin α cos α] = right: (c + b) sin^2 α + t sin α cos α
+
+Bring terms:
+
+- (c - b)cos^2 α - t sin α cos α = (c + b) sin^2 α + t sin α cos α
+
+Collect t terms: - t sinα cosα - t sinα cosα = (c + b) sin^2 α + (c - b) cos^2 α (moving to right side, sign changes). So -2 t sinα cosα = (c + b) sin^2 α + (c - b) cos^2 α.
+
+Thus t = - [ (c + b) sin^2 α + (c - b) cos^2 α ] / (2 sinα cosα) = - [ (c + b) sin^2 α + (c - b) cos^2 α ] / (sin 2α)
+
+Simplify numerator: expand: (c + b) sin^2 α + (c - b) cos^2 α = c (sin^2+cos^2) + b (sin^2 - cos^2) = c + b (sin^2 - cos^2) = c + b (-cos 2α). Since sin^2 - cos^2 = -cos 2α.
+
+Thus numerator = c - b cos 2α.
+
+Therefore t = - (c - b cos 2α) / sin 2α.
+
+Hence H coordinates: x_H = c cos α + t sin α = c cos α - (c - b cos 2α) / sin 2α * sin α
+
+Recall sin 2α = 2 sin α cos α.
+
+So t sin α = - (c - b cos 2α) * sin α / (2 sin α cos α) = - (c - b cos 2α) / (2 cos α)
+
+Thus x_H = c cos α + (c - b cos 2α)/(2 cos α) = [2c cos^2 α + c - b cos 2α]/ (2 cos α)
+
+But cos 2α = 2cos^2α -1. So:
+
+2c cos^2 α + c - b (2cos^2α -1) = 2c cos^2α + c -2b cos^2α + b = (2c -2b)cos^2α + (c + b)
+
+Thus x_H = [(2(c - b) cos^2α + (c + b))]/ (2 cos α)
+
+Similarly y_H = c sin α + t cos α = c sin α - (c - b cos 2α) / (2 sin α)
+
+Compute t cos α = - (c - b cos 2α) cos α / (2 sin α cos α) = - (c - b cos 2α) / (2 sin α)
+
+Thus y_H = c sin α + (c - b cos 2α)/(2 sin α) = [2c sin^2α + c - b cos 2α]/(2 sin α)
+
+Similarly sin^2 α = (1 - cos2α)/2.
+
+Now we need intersection of line L (x-axis?) Actually line L is angle bisector which we placed along x-axis? Wait we set AB at angle +α from x-axis, AC at -α, so bisector is x-axis (positive direction). Indeed because we oriented angle bisector along x-axis (0 degrees). Good! So L is x-axis (y=0) with A at origin.
+
+Therefore AP = distance from A (0,0) to intersection of x-axis with circle ABH again at P (other than A). So P is point (p,0) with p>0.
+
+Similarly Q = (q,0), M = (m,0). Need to find p, q, m.
+
+We have equation of circle ABH: passes through A (0,0), B (c cos α, c sin α), and H (x_H, y_H).
+
+General circle equation can be expressed, then intersect with y=0 to get x-coordinates.
+
+Let's compute using known formula: For points A(0,0) and B(x1,y1) and H(x2,y2), the equation of circle is determined; intersection with y=0 gives solutions x=0 and x = something which is p.
+
+We could use power of A regarding circle ABH: Since A is on circle, the power is zero, which leads to quadratic factoring (x)(x-p)=0.
+
+Thus p can be found as quotient of determinant? Use the fact that chord through A along x-axis meets circle at P, so AP = p.
+
+We can compute p using the relation that line y=0 substitutes in circle equation derived from three points.
+
+Circle equation: (x^2 + y^2) + Dx + Ey = 0 (since passes through origin, constant term 0). Determine D,E from other two points.
+
+Plug B: (x1^2 + y1^2) + D x1 + E y1 = 0.
+
+Plug H: (x2^2 + y2^2) + D x2 + E y2 = 0.
+
+Solve for D,E, then compute intersection with y=0: x^2 + D x = 0 -> x (x + D) =0. So nonzero solution p = -D.
+
+Thus p = -D. Similarly for circle ACH, its D' leads to q = -D'.
+
+Thus we just need D and D'.
+
+We have for ABH: using B coordinates.
+
+Compute D from solving linear equations.
+
+Equation (1): x1^2 + y1^2 + D x1 + E y1 = 0.
+Equation (2): x2^2 + y2^2 + D x2 + E y2 = 0.
+
+Solve for D: subtract multiply to eliminate E.
+
+We can solve using determinants.
+
+Let’s compute values in terms of c,b,α.
+
+First compute B coordinates: x1 = c cos α, y1 = c sin α. So x1^2 + y1^2 = c^2.
+
+Second H coordinates as derived earlier; we have x2 = [ (2(c - b) cos^2α + (c + b)) ] / (2 cos α). Let's simplify using trig.
+
+Let’s compute x2 expression more simply.
+
+Let’s denote C = cos α, S = sin α, and also cos 2α = C2 = C^2 - S^2 = 2C^2 -1.
+
+We have earlier: x_H = [ (2(c - b) C^2 + (c + b)) ] / (2 C).
+
+Similarly y_H = [ (2c S^2 + c - b C2) ] / (2 S). Compute using C2.
+
+Let's compute needed quantities: x2, y2.
+
+Now compute equation (1): c^2 + D (c C) + E (c S) =0 => divide by c: c + D C + E S =0. So (i): D C + E S = -c.
+
+Equation (2): x2^2 + y2^2 + D x2 + E y2 =0.
+
+We aim to find D = -p.
+
+Rather than compute full expression maybe we can find p directly using power of B wrt line? Another property: Since chord AP is along axis, the power of B with respect to circle ABH equals BA * BP'?? Not.
+
+But maybe easier: Since the circle's equation with origin simplifies, D = -p. So we can compute p by requiring that B satisfies x1^2 + y1^2 - p x1 + E y1 =0.
+
+Thus plug: c^2 - p (c C) + E (c S)=0 => divide c: c - p C + E S =0 => E S = p C - c. (ii)
+
+From (i): D C + E S = -c => (-p) C + E S = -c => -p C + E S = -c => E S = p C - c. Same as (ii). Consistent. So we haven't solved E.
+
+Thus any p satisfying that equation yields same E.
+
+Thus we can find p via condition that H also satisfies: x2^2 + y2^2 - p x2 + E y2 =0.
+
+Replace E from (ii): E = (p C - c)/S.
+
+Plug into equation:
+
+x2^2 + y2^2 - p x2 + ((p C - c)/S) y2 =0.
+
+Now plug x2,y2 expressions.
+
+Let's compute using symbolic.
+
+Let’s denote denominator 2C for x2: x2 = [2(c - b) C^2 + (c + b)]/(2C) = ( (c - b) 2 C^2 + c + b )/(2C). Similarly y2 = [2c S^2 + c - b C2]/(2 S).
+
+Simplify using identities: 2C^2 = 1+ C2? Actually C2 = 2C^2 -1 => 2C^2 = C2 +1.
+
+Thus numerator for x2: (c - b)(C2 +1) + (c + b) = (c - b)C2 + (c - b) + c + b = (c - b)C2 + (2c). Wait (c - b)+(c + b) =2c. Good.
+
+Thus x2 = [ (c - b) C2 + 2c ] / (2C).
+
+Similarly for y2: 2c S^2 = c (1 - C2) because S^2 = (1 - C2)/2 so 2c S^2 = c (1 - C2). So numerator: c (1 - C2) + c - b C2 = c (1 - C2 +1) - b C2 = c (2 - C2) - b C2 = 2c - c C2 - b C2 = 2c - (c + b) C2.
+
+Thus y2 = [ 2c - (c + b) C2 ] / (2 S).
+
+Great.
+
+Now compute expression:
+
+Let’s denote X = x2, Y = y2.
+
+Now compute condition:
+
+X^2 + Y^2 - p X + ((p C - c)/S) Y = 0.
+
+Multiply by denominator maybe 4C^2 S^2 to avoid fractions.
+
+First compute X = [ (c - b) C2 + 2c ] / (2C). Let’s write numerator N_x.
+
+Similarly Y = [ 2c - (c + b) C2 ] / (2S). Numerator N_y.
+
+Compute X^2: N_x^2 / (4 C^2). Y^2: N_y^2 / (4 S^2).
+
+Now multiply whole equation by 4 C^2 S^2:
+
+N_x^2 S^2 + N_y^2 C^2 - p X *4 C^2 S^2 + ((p C - c)/S) Y *4 C^2 S^2 =0.
+
+Compute term - p X *4 C^2 S^2 = -p * (N_x / (2C)) *4 C^2 S^2 = -p * N_x *2 C S^2.
+
+Similarly last term: ((p C - c)/S) Y *4 C^2 S^2 = (p C - c) * Y *4 C^2 S = (p C - c) * (N_y / (2S)) *4 C^2 S = (p C - c) * N_y *2 C^2.
+
+Thus equation:
+
+S^2 N_x^2 + C^2 N_y^2 - 2p C S^2 N_x + 2 (p C - c) C^2 N_y =0.
+
+Now we need to simplify using C2 = cos 2α.
+
+Recall N_x = (c - b) C2 + 2c.
+N_y = 2c - (c + b) C2.
+
+Let's denote u = C2.
+
+Thus N_x = (c - b) u + 2c = 2c + (c - b) u.
+N_y = 2c - (c + b) u = 2c - (c + b) u.
+
+Now S^2 = (1 - u)/2, C^2 = (1 + u)/2.
+
+Plug into equation.
+
+Compute term1: S^2 N_x^2 = (1 - u)/2 * N_x^2.
+Term2: C^2 N_y^2 = (1 + u)/2 * N_y^2.
+Term3: -2p C S^2 N_x = -2p C * (1 - u)/2 * N_x = -p C (1 - u) N_x.
+Term4: 2 (p C - c) C^2 N_y = 2(p C - c) * (1 + u)/2 * N_y = (p C - c)(1 + u) N_y.
+
+Now equation:
+
+(1 - u) N_x^2 /2 + (1 + u) N_y^2 /2 - p C (1 - u) N_x + (p C - c)(1 + u) N_y =0.
+
+Multiply by 2:
+
+(1 - u) N_x^2 + (1 + u) N_y^2 - 2 p C (1 - u) N_x + 2 (p C - c)(1 + u) N_y =0.
+
+We know p is AP = 4 (given). So p known =4.
+
+Similarly for circle ACH leading to q =5; that will give similar equation with b and c swapped (since roles of B and C swap). This may allow solving for b and c and u.
+
+We also have side a = BC =7. Compute BC length using coordinates: B (cC, cS), C (bC, -bS). Distance squared:
+
+( cC - bC )^2 + (cS + bS)^2 = (C (c - b))^2 + (S (c + b))^2 = C^2 (c - b)^2 + S^2 (c + b)^2.
+
+So a^2 = C^2 (c - b)^2 + S^2 (c + b)^2.
+
+Now using C^2 = (1+u)/2, S^2 = (1 - u)/2.
+
+Thus a^2 = (1+u)/2 (c - b)^2 + (1 - u)/2 (c + b)^2.
+
+Simplify: a^2 = [ (1+u)(c - b)^2 + (1 - u)(c + b)^2 ] /2.
+
+Given a=7, a^2 =49.
+
+Now we have unknowns b,c,u (with u = cos 2α). Also we can perhaps express p and q using formulas that might be simpler: For circle ABH, p = -D = ? Might relate to projection of H onto AB? Not.
+
+But perhaps we can compute p directly using power of B with respect to line? Wait point B lies on circle ABH, and line through B and H? Not.
+
+Given the complexity, maybe we can solve numerically.
+
+Let’s treat unknowns b,c,α. Use given AP and AQ to compute p and q via earlier derived expression relating them to circle parameters. Could use computational approach, but we can approximate manually.
+
+Let's set up numeric solve.
+
+We have equations:
+
+(1) For ABH: using derived formula earlier (the big equation) with p=4.
+
+(2) For ACH: same but swapping b and c yields q=5.
+
+(3) a^2 = 49.
+
+Let's attempt to guess integer sides? Maybe b and c are integers. Since a=7, maybe b=5, c=6 etc.
+
+Let's test possibilities.
+
+Assume triangle acute, angle A moderate.
+
+Try b=5, c=6. Compute using formula for a^2 to find u.
+
+Compute (c - b)=1, (c + b)=11.
+
+Compute a^2 = [ (1+u)*1^2 + (1 - u)*121 ]/2 = [ (1+u) +121 -121 u ]/2 = [122 -120 u]/2 =61 -60 u.
+
+Set equal 49 => 61 -60 u =49 => 60 u =12 => u =0.2.
+
+Thus cos 2α =0.2 => 2α ≈ arccos(0.2) ≈ 78.46°, α≈39.23°. OK.
+
+Now compute p using geometry maybe formula p = (c * something). Let's compute using previous equation numerically to see if p matches 4.
+
+We need to evaluate the big equation for p=4 with b=5, c=6, u=0.2.
+
+First compute N_x = 2c + (c - b) u = 12 + (1)*(0.2)=12.2.
+N_y = 2c - (c + b) u = 12 - (11)*0.2 = 12 -2.2 =9.8.
+
+C = cos α = sqrt((1+u)/2) = sqrt( (1.2)/2 ) = sqrt(0.6) ≈0.7746.
+S = sqrt((1-u)/2) = sqrt(0.4/2?) Wait (1 -0.2)/2 =0.4. sqrt=0.6325.
+
+Now compute left side of equation earlier: (1 - u) N_x^2 + (1 + u) N_y^2 - 2 p C (1 - u) N_x + 2 (p C - c)(1 + u) N_y.
+
+Compute (1 - u)=0.8, (1+u)=1.2.
+
+N_x^2 =148.84, N_y^2=96.04.
+
+TermA =0.8*148.84=119.07.
+TermB =1.2*96.04=115.25.
+
+Sum =234.32.
+
+Now compute termC: 2 p C (1 - u) N_x =2*4*0.7746*0.8*12.2 =8*0.7746*0.8*12.2? Wait 2*4 =8. So 8*0.7746=6.1968. Times 0.8 =4.957. Times 12.2=60.45.
+
+So subtract termC: -60.45.
+
+TermD: 2 (p C - c)(1 + u) N_y. Compute p C =4*0.7746=3.0984. pC - c =3.0984-6 = -2.9016. Multiply (1+u)=1.2 => -3.482. Times N_y 9.8 => -34.13. Multiply by 2? Wait we already included 2 in front. Actually we used formula with 2 already? termD = 2 (pC - c)(1+u) N_y . Compute (pC - c) = -2.9016. Multiply (1+u)=1.2 gives -3.482. Then times N_y 9.8 => -34.13. Then times 2 gives -68.26. Wait my computation missed factor 2. Let's recalc stepwise:
+
+(pC - c) = -2.9016.
+(1+u)=1.2
+Product = -3.4820.
+Multiply by N_y = -3.4820*9.8 = -34.134.
+Multiply by 2 = -68.268.
+
+Thus termD = -68.27.
+
+Now total left side = 234.32 - 60.45 -68.27 = 105.6 approx, not zero. So not satisfied.
+
+Thus b=5,c=6 not correct.
+
+We need values that satisfy both p and q equations.
+
+We can maybe solve using algebraic elimination with unknowns b,c,u.
+
+However perhaps there is a known result: On angle bisector, distances to circles ABH and ACH relate to sides: AP = 2R cos B? hmm.
+
+Let's hypothesize formulas: For circle ABH, the intersection of angle bisector with that circle maybe corresponds to point where the circle's chord through A subtends something.
+
+Maybe AP = \frac{2bc \cos B \sin (A/2)}{b+c}? Not.
+
+Given limited time, maybe answer is 6? Let's test if AM might be AP + AQ =9? Not.
+
+Maybe relation: 1/AP + 1/AQ = 1/AM? Let's compute: 1/4+1/5 = 9/20 =0.45. So AM = 20/9 ≈2.22 not larger.
+
+Maybe harmonic: AM = (AP*AQ + BC)/? Not.
+
+Let's try using law of sines for triangle ABM where M is arc BC midpoint. In triangle ABM, we know AB = c, angle at B = ??? Since M is midpoint of arc BC, MB = MC =? length = 2R sin (B/2)??? Actually chord MB subtends angle MAB =? Maybe simpler: The angle B M A equals half of arc B A? Not.
+
+But geometry: Since M is on circumcircle, arc BM = CM (equal). Hence angle B A M equals half of arc B M = ??? Actually angle B A M subtended by arc B M, which equals 1/2 measure of arc B M (not containing A). That's not simple.
+
+Given difficulty.
+
+Maybe we can use known lengths: In triangle, distance from vertex A to midpoint of arc BC (not containing A) equals \frac{bc}{a} \cdot \frac{1}{\cos (A/2)}? Let's verify with isosceles b=c scenario. If b=c, then triangle is isosceles, M lies on symmetry line. In that case AM equals? For isosceles with base a, altitude and bisector coincide. Coordinates: let b=c. Then the circumradius R = a/(2 sin A). And distance from A to midpoint of arc BC is 2R cos (A/2)? Indeed known formula: AI_a (distance from A to excenter?) maybe.
+
+Actually there is formula: The distance from vertex A to midpoint of arc BC (the point where angle bisector meets circumcircle) is \frac{R}{\cos (A/2)}. Let's check with isosceles example. For any triangle, the midpoint of arc BC (not containing A) is the point where the internal bisector meets circumcircle, call it M. Then OM = R (radius). Triangle O A M is isosceles with OA = OM = R, and angle A O M equals ? Central angle subtended by arc AM? Actually arc AM is half of arc A? Not.
+
+But known relationship: AM = 2R cos (A/2). Yes I think that's correct: because chord AM subtends angle at the center O equal to 2*∠ABM? but B M is at angle half.
+
+Let's test with equilateral triangle (A=60°, R = side / (√3)). Then AM should be side? In equilateral, M is the same as the other vertex? Actually angle bisector from A meets circumcircle at the midpoint of arc BC opposite A, which is also the point opposite A, that is the arc midpoint not containing A, which in equilateral is same as the point diametrically opposite A? Wait in equilateral, the arc BC not containing A is 120° arc, its midpoint is 60° from B, which is the same as vertex A? Not. Actually for equilateral, the internal bisector goes through the circumcenter and meets the circumcircle at the point opposite A (i.e., the midpoint of arc BC containing A? hmm). Anyway compute: For equilateral side s, R = s/√3, A=60°, cos(A/2)= cos30°=√3/2, then 2R cos(A/2) = 2 * s/√3 * √3/2 = s. So AM = s, which matches that point M is the vertex opposite? Actually side length s is distance from A to the other vertex? No, distance from A to B is s. So if AM = s for equilateral, that would place M at B, which is false. So maybe formula 2R sin(A/2) ??? Let's test: 2R sin(A/2) for equilateral: 2 * s/√3 * sin30°=2 * s/√3 * 0.5 = s/√3. Not correct.
+
+Thus maybe AM = 2R * sin (B/2)??? Not.
+
+Let's compute directly using geometry: In triangle ABC, let M be midpoint of arc BC not containing A. Then MB = MC = chord length corresponding to arc half of B C arc. Central angle BOC = 2A, so half of that is A. Therefore angle B O M = angle M O C = A/2? Actually O to B and O to C subtend angle 2A between them. The midpoint of the arc lies halfway, so angle B O M = A, not A/2. Because total angle B O C = 2A, midpoint gives angle B O M = A, and similarly M O C = A.
+
+Thus triangle B O M is isosceles with sides OB=OC=R and chord BM subtends angle B O M = A at the center. Therefore chord length BM = 2R sin (A/2)?? Wait chord length formula: chord length = 2R sin ( central_angle /2 ). Central angle B O M = A, so BM = 2R sin (A/2). Similarly CM = BM.
+
+Now consider triangle A O M. OA = R, OM = R, central angle A O M equals? The arc A M that does NOT contain B and C? Angle A O M equals half of arc A?? Not needed.
+
+But we can find AM using law of cos in triangle A O M: AM^2 = OA^2 + OM^2 - 2 OA*OM cos( A O M ) = 2R^2 (1 - cos θ) where θ = ∠A O M.
+
+Now what is ∠A O M? It's half of arc A M at the center? Arc A M equals arc AB + arc BM? arc AB equals? Not.
+
+Arc AB corresponds to angle A O B = 2C (since angle subtended at center opposite side AC?). Actually central angle A O B = 2C, because inscribed angle A C B = C subtends arc A B. So central angle A O B = 2C. Similarly, B O M = A. So A O M = A O B + B O M = 2C + A.
+
+Thus θ = 2C + A.
+
+Recall triangle angles A+B+C = 180°. So 2C + A = 2C + A = (A + 2C). Not symmetric.
+
+Then cos θ = cos (A + 2C) = cos (A + 2C).
+
+But maybe easier to use formula: AM = 2R cos (B/2) cos (C/2) / sin (A/2)? Not.
+
+Time is nearly out.
+
+Probably answer is 6? Let's output.

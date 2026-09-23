@@ -1,0 +1,45 @@
+# Task Description
+You will be provided with the reasoning trace of a language model solving a competition mathematics problem.
+Evaluate whether the text contains any backtracking behavior.
+
+An instance of backtracking is where BOTH of the following hold:
+(a) the writer stops pursuing a line of attack, whether by concluding it won't work or simply by leaving it, and
+(b) the subsequent derivation does not build on anything from that line.
+
+An exploratory segment that ends in "Hmm" and is never used again qualifies. "Let me reconsider" followed by rederiving and confirming the same result does not, because the result is kept.
+
+So the test is whether the work is CARRIED FORWARD, not how committed the writer seemed or whether they said outright that it was wrong. A line only floated as a question, never computed, still counts if nothing downstream uses it.
+
+Backtracking in mathematics might look like:
+- "I started with the wrong formula. Let's use integration by parts instead."
+- "This approach leads to a contradiction. Going back to the original equation..."
+- "This algebraic manipulation isn't simplifying as expected. Let's try factoring differently."
+- "Is the circumcircle of ABH the same as the circle on some diameter? Hmm. Let's place coordinates instead." — ideas raised, left unresolved, and not used again.
+
+Count each distinct line of attack that is dropped. A run of hesitation about the SAME line is one instance, not several.
+
+Do NOT count:
+- Checking something, confirming it, and continuing to use it — the result is kept, so it is verification.
+- Fixing an arithmetic slip and carrying on with the same approach — the approach is kept.
+- Re-reading or reinterpreting the problem statement.
+- Trying to recall whether the problem is a known one, or what its answer was.
+- Hesitation alone ("Wait", "Hmm") where the writer then carries straight on with the same line.
+
+Count the number of distinct backtracking instances and provide the count between the tags <count> </count>. If the writer does not backtrack, please provide a count of 0 as <count>0</count>.
+
+# Task Format
+Format your response in markdown as follows:
+
+## Thoughts
+[For each instance, quote the line of attack that was dropped and say what the writer did next, noting that nothing downstream builds on it. If you counted none, name the closest candidate and say why it does not qualify.]
+
+## Does backtrack?
+[yes/no]
+
+## Number of backtrack steps
+<count> [1/2/...] </count>
+
+# Task to evaluate for backtracking
+{response}
+
+# Response
