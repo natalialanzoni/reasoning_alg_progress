@@ -1,5 +1,12 @@
 # Behaviour counts — results
 
+> **Backtracking numbers below are from prompt v3 (gemini-2.5-flash).** They are being
+> replaced by v6 (gemini-3.1-pro-preview, `out/judge_backtracking_v6.jsonl`); see
+> README, "The backtracking prompt, v4 → v6". Regenerate this file's tables with
+> `behaviour_table.py` once that run is complete. The "Traces judged" row was also
+> split into one row per behaviour: the old single row showed verification's n
+> under the backtracking rows too (GLM 5.2 backtracking is 313 traces, not 309).
+
 **The paper uses `paper_figs/table_behaviours.tex`, built from
 `out/judge_whole_gemini.jsonl` (verification) and
 `out/judge_backtracking_v3.jsonl` (backtracking).** Rejected methods are in

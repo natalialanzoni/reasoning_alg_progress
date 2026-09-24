@@ -1,5 +1,11 @@
 """Count backtracking / verification steps in reasoning traces with an LLM judge.
 
+SCOPE NOW: this script produced the VERIFICATION run the paper uses
+(out/judge_whole_gemini.jsonl, prompt v0) and the superseded backtracking runs
+v0-v3. The paper's backtracking run is v6, made by run_backtracking_v6.py, which
+line-numbers the trace and checks the judge's quotes -- this script does neither.
+The default is therefore --behaviours verification.
+
 WHAT THIS DOES
   For each trace: send the WHOLE chain-of-thought plus one Gandhi et al. prompt
   to the judge, read the <count> it returns, write one JSONL record. One call per
@@ -32,7 +38,8 @@ USAGE
   python code/llm_judge/judge_traces.py --estimate     # volume + cost, no calls
   python code/llm_judge/judge_traces.py --show-one     # print a real payload
   python code/llm_judge/judge_traces.py --limit 6 --send   # pilot (spread over problems)
-  python code/llm_judge/judge_traces.py --send            # full run (~$7, ~40 min)
+  python code/llm_judge/judge_traces.py --send            # verification, full run (~$7, ~40 min)
+  python code/llm_judge/run_backtracking_v6.py --send     # backtracking, full run
   python code/llm_judge/behaviour_table.py --tex paper_figs/table_behaviours.tex
 
   Needs ERA_OPENROUTER_V2 (or OPENROUTER_API_KEY) in the environment.
@@ -97,7 +104,7 @@ EDIT_NOTE = ("line 2 reframed from 'text from the internet' to 'the reasoning tr
 #                      abandonment; a v1 attempt then undercounted. v2 tests
 #                      whether the line of attack is CARRIED FORWARD, which is
 #                      visible on the page. See README.
-#   backtracking v3 -- IN USE. v2 undercounted:
+#   backtracking v3 -- superseded by v6 (run_backtracking_v6.py). v2 undercounted:
 #                      it refused brief ideas as "too undeveloped". v3 counts a
 #                      candidate however briefly raised, separates required case
 #                      eliminations from guessed ones, and counts recomputed wrong
@@ -144,7 +151,7 @@ def main():
     ap.add_argument("--prompt-version", default=None, choices=("v0", "v2", "v3"),
                     help="override the per-behaviour default in PROMPT_VERSION")
     ap.add_argument("--models", nargs="*", default=MODEL_ORDER)
-    ap.add_argument("--behaviours", nargs="*", default=["backtracking", "verification"],
+    ap.add_argument("--behaviours", nargs="*", default=["verification"],
                     choices=list(BEHAVIOURS))
     ap.add_argument("--limit", type=int, default=None,
                     help="N traces per model for piloting, SPREAD ACROSS PROBLEMS. Taking "

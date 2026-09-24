@@ -1,0 +1,27 @@
+# Task Description
+You will be provided with the reasoning trace of a language model solving a competition mathematics problem. Each line of the trace is prefixed with its line number (L1:, L2:, ...).
+
+Mark each place where the writer tries an approach and gives it up to do something different.
+
+Do not mark:
+- Checking a step that was already completed (that is verification).
+- Ruling out a case that the solution has to rule out.
+
+# Task Format
+For each place, in order of appearance:
+
+<instance>
+approach: [short name of the approach that was given up]
+adopt_line: [line number where the attempt starts]
+adopt_quote: "[5-15 words copied exactly from that line]"
+abandon_line: [line number where it is given up]
+abandon_quote: "[5-15 words copied exactly from that line]"
+</instance>
+
+After the last instance (or immediately, if there are none), give the number of places:
+<count> [0/1/2/...] </count>
+
+# Task to evaluate
+{response}
+
+# Response

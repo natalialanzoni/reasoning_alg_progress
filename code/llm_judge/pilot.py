@@ -189,11 +189,10 @@ def summary(rows):
         "mae_share": sum(abs(x["share_j"] - x["share_g"]) for x in rows) / len(rows),
         "span_prec": sum(sp) / len(sp) if sp else float("nan"),
         "span_rec": sum(sr) / len(sr) if sr else float("nan"),
-        "per_model": {m: (sum(x["verified"] for x in rows if x["model"] == m),
-                          sum(x["gold"] for x in rows if x["model"] == m),
-                          sum(x["share_j"] for x in rows if x["model"] == m) / 5,
-                          sum(x["share_g"] for x in rows if x["model"] == m) / 5)
-                      for m in models}}
+        # share is averaged over each model's own traces (was a hard-coded / 5)
+        "per_model": {m: (sum(x["verified"] for x in R), sum(x["gold"] for x in R),
+                          sum(x["share_j"] for x in R) / len(R), sum(x["share_g"] for x in R) / len(R))
+                      for m in models for R in [[x for x in rows if x["model"] == m]]}}
 
 
 def compare():

@@ -1,10 +1,28 @@
-"""The behaviour table: BOTH behaviours from the LLM judge, with markers alongside.
+"""The behaviour table: BOTH behaviours from an LLM judge, with markers alongside.
 
-PRIMARY INSTRUMENT: gemini-2.5-flash, whole trace, one count per trace per
-behaviour. Whole-trace because the prompts ask the judge to COUNT occurrences,
-which needs the whole chain -- a fragment cannot tell a backtrack from a first
-attempt. Chunking or marker-anchored windows over-count ~5-6x against a hand
-count.
+TWO JUDGE RUNS, one per behaviour, settled at different times:
+  verification  out/judge_whole_gemini.jsonl     prompt v0, gemini-2.5-flash
+  backtracking  out/judge_backtracking_v6.jsonl  prompt v6, gemini-3.1-pro-preview
+                (written by run_backtracking_v6.py; v6 was validated against the
+                hand-counted key in gold_soft/, see README)
+Every record carries judge_model, prompt_version and prompt_sha, and the console
+output prints them, so which run produced a number is on disk. Both are whole
+trace, one count per trace. Whole-trace because the prompts ask the judge to
+COUNT occurrences, which needs the whole chain -- a fragment cannot tell a
+backtrack from a first attempt. Chunking or marker-anchored windows over-count
+~5-6x against a hand count.
+
+GUARDS (each of these once produced a wrong number silently):
+  * every loaded trace must have exactly one usable record per behaviour; the
+    last record for a trace wins (a resumed run appends retries), and --tex is
+    refused while any trace has no record at all (e.g. a run still in progress)
+  * the per-token denominator is CoT tokens joined from load_traces; a record
+    that does not join is an error, never a silent fall-back to whole-completion
+    tokens (the pre-2026-09-24 bug)
+  * the backtracking file must exist -- there is no fall-back to the v0
+    backtracking records inside judge_whole_gemini.jsonl
+Unparsable records (no count) are dropped and reported per behaviour; the
+"traces judged" rows give each behaviour's own n.
 
 THE STRING-MARKER COLUMN IS A DIAGNOSTIC. It prints to the terminal but is NOT a
 row in the paper table -- it measures a narrower construct (only abandonment the
@@ -14,16 +32,6 @@ not to the reader. It counts only
 explicit abandonment language, so it is narrower by construction, and it has known
 RECALL GAPS -- the set lacks "another approach" and "step wrong", both of which
 appear in traces where the judge correctly found instances it missed.
-
-BOTH INSTRUMENTS HAVE A KNOWN PROBLEM AND THE REVIEW IS OPEN. The judge's count
-correlates more with how often the model writes "wait" (r=+0.50) than with
-explicit abandonment language (r=+0.35), and its justifications sometimes cite
-mere uncertainty ("expresses uncertainty ('Hmm')") as backtracking -- i.e. it may
-over-count self-interruption on long traces. Two judges (gemini-2.5-flash,
-sonnet-4.5) also correlate only +0.52 with each other on backtracking, against a
-preserved ranking on verification. 20 traces are laid out in for_RA_review/ to
-settle which instrument is right. Until that lands, report backtracking with the
-marker cross-check beside it and say the effect size is instrument-dependent.
 
 MARKER PRECISION, checked by reading samples:
   reconsider / start over / try different / is wrong / made an error  -- mostly genuine
@@ -62,14 +70,13 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 from load_traces import load_all                       # noqa: E402
 
-# Two files, because the two behaviours were settled at different times.
-#   verification -- judge_whole_gemini.jsonl, prompt v0, approved on manual review
-#   backtracking -- judge_backtracking_v2.jsonl, prompt v2. v0 counted
-#     self-interruption as abandonment (RA review), v1 then undercounted.
-# Records carry prompt_version, so which prompt produced a number is on disk.
+# Two files, because the two behaviours were settled at different times (see the
+# module note). judge_whole_gemini.jsonl also holds v0 BACKTRACKING records; they
+# are superseded and never read -- only its verification records are used.
 JUDGED = os.path.join(HERE, "out", "judge_whole_gemini.jsonl")
-JUDGED_BT = os.path.join(HERE, "out", "judge_backtracking_v3.jsonl")
+JUDGED_BT = os.path.join(HERE, "out", "judge_backtracking_v6.jsonl")
 MODEL_ORDER = ["gpt-oss-20b", "gpt-oss-120b", "GLM 5.2", "GLM 5.3"]
+NAN = float("nan")
 LEVERS = [("SCALE      gpt-oss 20B -> 120B", "gpt-oss-20b", "gpt-oss-120b"),
           ("ALGORITHM  GLM 5.2 -> 5.3", "GLM 5.2", "GLM 5.3")]
 
@@ -122,12 +129,30 @@ def count_backtracking(cot, rx, exclude_recall=True, window=RECALL_WINDOW):
     return kept, dropped
 
 
+def load_judged(path, behaviour, keys):
+    """Records for one behaviour, one per trace (the last record wins -- a resumed run
+    appends its retries). Returns (usable records, unparsable count, traces with no
+    record at all)."""
+    if not os.path.exists(path):
+        raise SystemExit(f"{behaviour}: {path} not found. There is no fall-back file.")
+    last = {}
+    for line in open(path):
+        r = json.loads(line)
+        if r["behaviour"] == behaviour:
+            last[(r["model"], r["task_id"], r["sample"])] = r
+    unknown = set(last) - keys
+    if unknown:
+        raise SystemExit(f"{behaviour}: {len(unknown)} records in {path} match no loaded trace, "
+                         f"e.g. {sorted(unknown)[:3]}. The loader and the judged file disagree.")
+    usable = [r for r in last.values() if r.get("count") is not None]
+    return usable, len(last) - len(usable), keys - set(last)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--include-contradiction", action="store_true")
-    ap.add_argument("--judged", default=JUDGED)
-    ap.add_argument("--judged-backtracking", default=JUDGED_BT,
-                    help="separate file; falls back to --judged if absent")
+    ap.add_argument("--judged", default=JUDGED, help="verification records")
+    ap.add_argument("--judged-backtracking", default=JUDGED_BT, help="backtracking records")
     ap.add_argument("--tex", default=None, help="also write the paper table to this .tex path")
     ap.add_argument("--correct-only", action="store_true",
                     help="restrict to traces that reached the right answer")
@@ -147,68 +172,61 @@ def main():
     approx = sorted({t["model"] for t in traces if not t["cot_tokens_exact"]})
 
     def ctok(r):
-        return CT.get((r["model"], r["task_id"], r["sample"]), r["tokens"])
+        return CT[(r["model"], r["task_id"], r["sample"])]   # load_judged checked the join
 
-    jr = [json.loads(l) for l in open(a.judged)]
-    btsrc = (jr if not os.path.exists(a.judged_backtracking)
-             else [json.loads(l) for l in open(a.judged_backtracking)])
-    J = {"verification": [r for r in jr if r["behaviour"] == "verification"
-                          and r.get("count") is not None],
-         "backtracking": [r for r in btsrc if r["behaviour"] == "backtracking"
-                          and r.get("count") is not None]}
-    drop = {"verification": sum(1 for r in jr if r["behaviour"] == "verification"
-                                and r.get("count") is None),
-            "backtracking": sum(1 for r in btsrc if r["behaviour"] == "backtracking"
-                                and r.get("count") is None)}
-    vers = {b: sorted({r.get("prompt_version", "v0") for r in v}) for b, v in J.items()}
+    J, drop, missing = {}, {}, {}
+    for b, path in (("verification", a.judged), ("backtracking", a.judged_backtracking)):
+        J[b], drop[b], missing[b] = load_judged(path, b, set(CT))
+    about = {b: sorted({(r.get("judge_model"), r.get("prompt_version", "v0")) for r in v})
+             for b, v in J.items()}
     if a.correct_only:
         J = {b: [r for r in v if r["correct"]] for b, v in J.items()}
         traces = [t for t in traces if t["correct"]]
-    judges = {r.get("judge_model") for v in J.values() for r in v}
-    print(f"both behaviours: LLM judge {judges}")
     print(f"  sample: {'CORRECT traces only' if a.correct_only else 'all traces'}"
           f"   rates per 10k REASONING tokens"
           f"   (estimated for {', '.join(approx)}; exact elsewhere)")
-    print(f"  prompts: backtracking {vers['backtracking']}  verification {vers['verification']}")
-    print(f"  verification {len(J['verification'])} traces ({drop['verification']} unparsable "
-          f"dropped)   backtracking {len(J['backtracking'])} ({drop['backtracking']} dropped)")
+    for b in J:
+        print(f"  {b:12} judge/prompt {about[b]}   {len(J[b])} traces used, "
+              f"{drop[b]} unparsable dropped, {len(missing[b])} not yet judged")
     print(f"  marker cross-check: explicit abandonment language, contradiction "
           f"{'INCLUDED' if a.include_contradiction else 'excluded'}\n")
-    ok = J["verification"]
 
     res = {}
-    print(f"  {'model':<15}{'n':>5}{'verif/trace':>12}{'verif/10k':>11}"
-          f"{'bt/trace':>10}{'bt/10k':>8}{'|  marker bt/10k':>18}")
+    print(f"  {'model':<15}{'n verif':>8}{'verif/trace':>12}{'verif/10k':>11}"
+          f"{'n bt':>6}{'bt/trace':>10}{'bt/10k':>8}{'|  marker bt/10k':>18}")
     for m in MODEL_ORDER:
-        g = [r for r in ok if r["model"] == m]
-        t = [r for r in traces if r["model"] == m]
-        v_tr = st.mean(r["count"] for r in g)
-        # pooled, not mean-of-ratios -- see the module note
-        v_rt = 1e4 * sum(r["count"] for r in g) / max(1, sum(ctok(r) for r in g))
-        # PRIMARY: the judge's backtracking counts
+        g = [r for r in J["verification"] if r["model"] == m]
         jb = [r for r in J["backtracking"] if r["model"] == m]
-        b_tr = st.mean(r["count"] for r in jb)
-        b_rt = 1e4 * sum(r["count"] for r in jb) / max(1, sum(ctok(r) for r in jb))
-        # CROSS-CHECK: explicit abandonment markers over the same traces
-        bcounts = [count_backtracking(r["cot"], rx, not a.keep_recall)[0] for r in t]
-        mk_rt = 1e4 * sum(bcounts) / max(1, sum(t_["cot_tokens"] for t_ in t))
-        dropped = sum(count_backtracking(r["cot"], rx, not a.keep_recall)[1] for r in t)
-        raw = sum(len(rx.findall(r["cot"])) for r in t)
-        res[m] = (v_tr, v_rt, b_rt, st.median(len(r["cot"]) for r in t), len(g), b_tr,
-                  dropped, raw, mk_rt)
-        print(f"  {m:<15}{len(g):>5}{v_tr:>12.2f}{v_rt:>11.2f}{b_tr:>10.2f}{b_rt:>8.2f}"
-              f"{mk_rt:>18.2f}")
+        t = [r for r in traces if r["model"] == m]
+        # pooled, not mean-of-ratios -- see the module note. nan only while a run is
+        # incomplete (--tex refuses that case).
+        rate = lambda rs: 1e4 * sum(r["count"] for r in rs) / sum(ctok(r) for r in rs) if rs else NAN
+        mean = lambda rs: st.mean(r["count"] for r in rs) if rs else NAN
+        # CROSS-CHECK: explicit abandonment markers over all loaded traces
+        mk = [count_backtracking(r["cot"], rx, not a.keep_recall)[0] for r in t]
+        res[m] = {"verif_n": len(g), "verif_trace": mean(g),
+                  "verif_10k": rate(g),
+                  "bt_n": len(jb), "bt_trace": mean(jb), "bt_10k": rate(jb),
+                  "median_chars": st.median(len(r["cot"]) for r in t),
+                  "marker_10k": 1e4 * sum(mk) / sum(r["cot_tokens"] for r in t)}
+        x = res[m]
+        print(f"  {m:<15}{x['verif_n']:>8}{x['verif_trace']:>12.2f}{x['verif_10k']:>11.2f}"
+              f"{x['bt_n']:>6}{x['bt_trace']:>10.2f}{x['bt_10k']:>8.2f}{x['marker_10k']:>18.2f}")
 
     print("\n  the two levers")
     for lever, x, y in LEVERS:
-        av, ar, ab = res[x][:3]; zv, zr, zb = res[y][:3]
+        X, Y = res[x], res[y]
+        r = lambda k: f"{X[k]:6.2f} -> {Y[k]:6.2f} ({Y[k] / X[k]:5.2f}x)"
         print(f"    {lever}")
-        print(f"      verification  per trace {av:6.2f} -> {zv:6.2f} ({zv/av:5.2f}x)"
-              f"   per 10k tok {ar:5.2f} -> {zr:5.2f} ({zr/ar:5.2f}x)")
-        print(f"      backtracking  per 10k tok {ab:5.2f} -> {zb:5.2f} ({zb/ab:5.2f}x)"
-              f"   [markers {res[x][8]:.2f} -> {res[y][8]:.2f} ({res[y][8]/res[x][8]:.2f}x)]")
+        print(f"      verification  per trace {r('verif_trace')}   per 10k tok {r('verif_10k')}")
+        print(f"      backtracking  per trace {r('bt_trace')}   per 10k tok {r('bt_10k')}"
+              f"   [markers {r('marker_10k')}]")
 
     if a.tex:
+        gaps = {b: len(v) for b, v in missing.items() if v}
+        if gaps:
+            raise SystemExit(f"\nNOT writing {a.tex}: traces with no record yet {gaps}. "
+                             "Finish the judge run first.")
         latex(res, a.tex)
 
 
@@ -224,17 +242,17 @@ def latex(res, path):
          r"\cmidrule{2-3}\cmidrule{4-5}",
          r" & gpt-oss-20B & gpt-oss-120B & GLM 5.2 & GLM 5.3 \\", r"\midrule"]
     names = ["gpt-oss-20b", "gpt-oss-120b", "GLM 5.2", "GLM 5.3"]
-    rows_spec = [("Verification, per trace", 0, "{:.2f}"),
-                 ("Verification, per 10k reasoning tokens", 1, "{:.2f}"),
-                 ("Backtracking, per trace", 5, "{:.2f}"),
-                 ("Backtracking, per 10k reasoning tokens", 2, "{:.2f}")]
-    for lab, i, f in rows_spec:
-        t.append(lab + " & " + " & ".join("$" + f.format(res[m][i]) + "$" for m in names) + r" \\")
-    t += [r"\addlinespace",
+    cell = lambda k: " & ".join("$" + f"{res[m][k]:.2f}" + "$" for m in names) + r" \\"
+    t += ["Verification, per trace & " + cell("verif_trace"),
+          "Verification, per 10k reasoning tokens & " + cell("verif_10k"),
+          "Backtracking, per trace & " + cell("bt_trace"),
+          "Backtracking, per 10k reasoning tokens & " + cell("bt_10k"),
+          r"\addlinespace",
           "Median CoT characters & " +
-          " & ".join("$" + f"{res[m][3]:,.0f}".replace(",", "{,}") + "$" for m in names) + r" \\",
-          "Traces judged & " +
-          " & ".join(f"${res[m][4]}$" for m in names) + r" \\",
+          " & ".join("$" + f"{res[m]['median_chars']:,.0f}".replace(",", "{,}") + "$" for m in names) + r" \\",
+          # each behaviour has its own n: unparsable replies are dropped per behaviour
+          "Traces judged, verification & " + " & ".join(f"${res[m]['verif_n']}$" for m in names) + r" \\",
+          "Traces judged, backtracking & " + " & ".join(f"${res[m]['bt_n']}$" for m in names) + r" \\",
           r"\bottomrule", r"\end{tabular}"]
     tex = "\n".join(t)
     Path(path).write_text(tex + "\n")
