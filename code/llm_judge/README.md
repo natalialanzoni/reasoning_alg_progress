@@ -24,11 +24,15 @@ Needs `ERA_OPENROUTER_V2` (or `OPENROUTER_API_KEY`). **Nothing is sent without
 
 | File | Role |
 | --- | --- |
-| `backtracking_v0.txt`, `verification_v0.txt` | the two prompts, from `kanishkg/cognitive-behaviors` |
+| `verification_v0.txt` | **in use.** Gandhi et al.'s template + one domain edit |
+| `backtracking_v3.txt` | **in use.** See "The backtracking prompt, v0 → v3" |
+| `backtracking_v0.txt`, `backtracking_v2.txt` | superseded; kept so old runs stay readable |
 | `load_traces.py` | loads the CoT for the four fig_mechanism models, normalised |
 | `judge_traces.py` | sends each whole trace to the judge, parses `<count>` |
 | `behaviour_table.py` | **builds `paper_figs/table_behaviours.tex`** |
-| `out/judge_whole_gemini.jsonl` | the run; one record per trace per behaviour |
+| `out/judge_whole_gemini.jsonl` | verification (and the superseded v0 backtracking) |
+| `out/judge_backtracking_v3.jsonl` | **the backtracking run the paper uses** |
+| `for_RA_review/v3_backtracking/` | 20 sheets, v0/v2/v3 side by side |
 
 ## The prompts
 
@@ -107,9 +111,15 @@ cheaper, so it is the judge. Temperature 0, recorded per record.
 **`max_tokens` truncates the count.** The template puts `## Thoughts` first and
 `<count>` last, so a verbose judge is cut off before it emits the number — an
 unparsable record, not a zero. At 600 this lost 7/96 replies, all from the
-longest-trace model; at 2000 it lost 81/766 on Gemini. Now 4000. If you change
+longest-trace model; at 2000 it lost 81/766 on Gemini. Now 24000. If you change
 judges, check the unparsable rate first, and note that `behaviour_table.py` DROPS
 unparsable records rather than counting them as zero.
+
+**The drop is never random — it takes the longest traces**, which is the variable
+under study. Always print the loss as a share of each model's TOKENS, not as a
+count of traces: v3 loses 25 of 1,280 traces, which sounds negligible, but that is
+10.8% of GLM 5.3's tokens against 3.5% of GLM 5.2's. RESULTS.md carries the
+sensitivity check that shows the levers survive it.
 
 **`--limit N` must spread across problems.** Taking the first N traces takes N
 samples of ONE problem — the easiest one — which is how an early pilot "showed"
@@ -117,16 +127,59 @@ zero backtracking everywhere. It now walks distinct problems.
 
 ## Reading the output
 
-`behaviour_table.py` prints per-trace counts and per-10k-token rates. Use the **rate**
+`behaviour_table.py` prints per-trace counts and rates **per 10k reasoning
+tokens** — CoT tokens, not whole-completion tokens, because that is where the
+behaviours are counted. Exact for GLM (`thinking_tokens`); estimated by character
+share for gpt-oss, which logs no reasoning-token field. Use the **rate**
 when comparing models of different verbosity: GLM 5.2's traces are ~3.4x longer
 than 5.3's, so a per-trace difference partly just restates a length difference.
 "Verifies less" and "writes less" are different claims and the two columns
 separate them.
 
-## A rewrite we tried and dropped
+## The backtracking prompt, v0 → v3
 
-After the RA review of the v0 counts we drafted a tightened pair and rejected
-both. Recorded here so nobody re-derives it.
+Four versions. v3 is in use; the history is here so nobody re-derives a rejected
+one. Verification never moved off v0 — review found it sound.
+
+**v0** (upstream, verbatim + domain edit) counted self-interruption as
+abandonment: most of what it called backtracking was "let me reconsider", then
+rederive, then confirm the same result. That is the model second-guessing itself,
+which scales with trace length — the variable the paper says is shrinking.
+
+**v2** tested whether the line of attack is CARRIED FORWARD. It fixed the
+over-count and then undercounted differently: it refused candidates as "too brief
+and undeveloped to count as a distinct line of attack", and treated a failed case
+inside a continuing strategy as not-abandoned.
+
+**v3** counts a candidate however briefly raised and drops the computation
+requirement. Three refinements came out of review:
+
+* **Cases.** Ruling out case 1 of a required case split is work the shortest human
+  solution also does, so counting it inflates every model with necessary
+  derivation. v3 counts a guessed case that was abandoned, not one the argument
+  forced.
+* **Arithmetic slips** count: a recomputed value replaces a discarded one, which
+  is the rule as written. Stating this once was not enough — the judge overrode it
+  with "not an abandonment of a line of attack" — so v3 rebuts that framing.
+* **Interpretations.** Re-reading the problem does not count; adopting an
+  interpretation, dropping it and proceeding under another does.
+
+Two pilot defects, both fixed before the full run. Stating the arithmetic rule as
+"no other exclusions" let the judge treat a *remembered answer* as a dropped
+candidate — one GLM 5.3 trace scored 63, counting the same recalled value
+seven-plus times. And the dedup rule only covered adjacent sentences, so it now
+spans the whole trace.
+
+**The v3 format section must forbid listing non-instances.** Without that clause
+the judge walks long traces sentence by sentence emitting thousands of entries
+reading "this is a verification", and never reaches `<count>`. That clause cut the
+unparsable rate from 28/1280 to 25/1280; raising the output cap does not help
+(48,000 tokens recovered 1 of 28) and neither does retrying (2 of 27 over four
+attempts), so the failure is deterministic per trace.
+
+### Two rewrites we tried and dropped
+
+Recorded so nobody re-derives them.
 
 **Backtracking v1** required that the writer both conclude the approach fails AND
 take a different route, with an explicit NOT-list for re-checking, arithmetic

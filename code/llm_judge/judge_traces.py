@@ -52,7 +52,7 @@ from load_traces import load_all, MODEL_ORDER          # noqa: E402
 
 JUDGE_MODEL = "google/gemini-2.5-flash"   # $0.30/M in, $2.50/M out (2026-09-21)
 TEMPERATURE = 0
-MAX_OUT = 12000          # The template puts "## Thoughts" FIRST and <count> LAST, so a
+MAX_OUT = 24000          # The template puts "## Thoughts" FIRST and <count> LAST, so a
                         # verbose judge is cut off before it emits the count -- an
                         # unparsable record, not a zero. Measured: 600 lost 7/96 replies
                         # (all the longest-trace model), 2000 lost 81/766 on Gemini,
@@ -83,6 +83,13 @@ EDIT_NOTE = ("line 2 reframed from 'text from the internet' to 'the reasoning tr
              "language model solving a competition mathematics problem'; rest verbatim")
 
 
+# MAX_OUT was raised 12000 -> 24000 for v3. The v3 format section originally let
+# the judge walk long traces sentence by sentence, emitting thousands of entries
+# reading "this is a verification"; 28/1280 never reached <count>, and the loss was
+# concentrated in the longest traces (14.4% of GLM 5.3's tokens against 2.6% of GLM
+# 5.2's -- i.e. biased along the algorithm lever). The format section now forbids
+# listing non-instances, which cut typical output to 200-4,600 tokens.
+#
 # Prompt version is PER BEHAVIOUR, because they were settled separately.
 #   verification v0 -- Gandhi et al.'s template + the one-line domain edit. Manual
 #                      review found it sound, so it was never re-run.
@@ -90,14 +97,13 @@ EDIT_NOTE = ("line 2 reframed from 'text from the internet' to 'the reasoning tr
 #                      abandonment; a v1 attempt then undercounted. v2 tests
 #                      whether the line of attack is CARRIED FORWARD, which is
 #                      visible on the page. See README.
-#   backtracking v3 -- AWAITING RA SIGN-OFF, not yet run at scale. v2 undercounted:
+#   backtracking v3 -- IN USE. v2 undercounted:
 #                      it refused brief ideas as "too undeveloped". v3 counts a
 #                      candidate however briefly raised, separates required case
 #                      eliminations from guessed ones, and counts recomputed wrong
 #                      values. Pilot and rationale in
-#                      for_RA_review/v3_backtracking/. Switch the dict below to v3
-#                      once approved, then re-run backtracking only.
-PROMPT_VERSION = {"backtracking": "v2", "verification": "v0"}
+#                      for_RA_review/v3_backtracking/.
+PROMPT_VERSION = {"backtracking": "v3", "verification": "v0"}
 
 
 def _template(behaviour, version=None):
@@ -135,7 +141,7 @@ def judge_one(client, behaviour, trace, model, version=None):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--judge-model", default=JUDGE_MODEL)
-    ap.add_argument("--prompt-version", default=None, choices=("v0", "v2"),
+    ap.add_argument("--prompt-version", default=None, choices=("v0", "v2", "v3"),
                     help="override the per-behaviour default in PROMPT_VERSION")
     ap.add_argument("--models", nargs="*", default=MODEL_ORDER)
     ap.add_argument("--behaviours", nargs="*", default=["backtracking", "verification"],

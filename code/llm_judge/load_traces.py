@@ -101,8 +101,13 @@ def _load_glm(label):
             cot = (traces[i] or "").strip()
             if not cot:
                 continue
+            # Behaviours are counted in the CoT, so a per-token rate must divide by
+            # CoT tokens, not by the whole completion. GLM logs thinking_tokens, so
+            # this is exact. (thinking + answer = total, checked.)
             out.append({"model": label, "task_id": tid, "sample": i, "cot": cot,
-                        "tokens": tok, "correct": bool(r["correct"][i])})
+                        "tokens": tok, "cot_tokens": r["thinking_tokens"][i],
+                        "cot_tokens_exact": True,
+                        "correct": bool(r["correct"][i])})
     return out
 
 
@@ -121,8 +126,17 @@ def _load_oss(label):
             cot = _strip_oss(c.get("text"))
             if not cot:
                 continue
+            # gpt-oss logs only n_tokens for the whole completion -- there is no
+            # reasoning-token field -- so the CoT share is ESTIMATED by character
+            # proportion. Median CoT share is 0.84, and the answer is ordinary prose
+            # plus a boxed result, so it tokenises at much the same rate as the CoT.
+            # Treat this column as approximate; the GLM columns are exact.
+            full = c.get("text") or ""
+            frac = (len(cot) / len(full)) if full else 1.0
             out.append({"model": label, "task_id": tid, "sample": i, "cot": cot,
-                        "tokens": tok, "correct": bool(c.get("is_correct"))})
+                        "tokens": tok, "cot_tokens": tok * frac,
+                        "cot_tokens_exact": False,
+                        "correct": bool(c.get("is_correct"))})
     return out
 
 

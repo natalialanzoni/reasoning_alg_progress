@@ -68,7 +68,7 @@ from load_traces import load_all                       # noqa: E402
 #     self-interruption as abandonment (RA review), v1 then undercounted.
 # Records carry prompt_version, so which prompt produced a number is on disk.
 JUDGED = os.path.join(HERE, "out", "judge_whole_gemini.jsonl")
-JUDGED_BT = os.path.join(HERE, "out", "judge_backtracking_v2.jsonl")
+JUDGED_BT = os.path.join(HERE, "out", "judge_backtracking_v3.jsonl")
 MODEL_ORDER = ["gpt-oss-20b", "gpt-oss-120b", "GLM 5.2", "GLM 5.3"]
 LEVERS = [("SCALE      gpt-oss 20B -> 120B", "gpt-oss-20b", "gpt-oss-120b"),
           ("ALGORITHM  GLM 5.2 -> 5.3", "GLM 5.2", "GLM 5.3")]
@@ -85,7 +85,8 @@ HIGH_PRECISION = [
 CONTRADICTION = [r"\bcontradiction\b"]
 
 # WORD is kept only for the recall-rate diagnostic in recall_check.py; the table
-# itself is per 10k TOKENS so backtracking and verification share a denominator.
+# itself is per 10k REASONING TOKENS so backtracking and verification share a
+# denominator, and the denominator matches where the behaviours are counted.
 WORD = re.compile(r"\b[a-zA-Z]{2,}\b")
 
 # RECALL-CONTEXT EXCLUSION.
@@ -128,6 +129,8 @@ def main():
     ap.add_argument("--judged-backtracking", default=JUDGED_BT,
                     help="separate file; falls back to --judged if absent")
     ap.add_argument("--tex", default=None, help="also write the paper table to this .tex path")
+    ap.add_argument("--correct-only", action="store_true",
+                    help="restrict to traces that reached the right answer")
     ap.add_argument("--keep-recall", action="store_true",
                     help="do NOT drop marker hits in memory-recall context (shows the bias)")
     a = ap.parse_args()
@@ -135,6 +138,17 @@ def main():
     rx = re.compile("|".join(HIGH_PRECISION + (CONTRADICTION if a.include_contradiction else [])),
                     re.I)
     traces = load_all()
+    # DENOMINATOR. Both behaviours are counted in the CoT, so a per-token rate has
+    # to divide by CoT tokens. The judged records carry "tokens", which is the whole
+    # completion (CoT + answer), so join back to the traces for cot_tokens. Exact
+    # for GLM (thinking_tokens); estimated by character share for gpt-oss, which
+    # logs no reasoning-token field.
+    CT = {(t["model"], t["task_id"], t["sample"]): t["cot_tokens"] for t in traces}
+    approx = sorted({t["model"] for t in traces if not t["cot_tokens_exact"]})
+
+    def ctok(r):
+        return CT.get((r["model"], r["task_id"], r["sample"]), r["tokens"])
+
     jr = [json.loads(l) for l in open(a.judged)]
     btsrc = (jr if not os.path.exists(a.judged_backtracking)
              else [json.loads(l) for l in open(a.judged_backtracking)])
@@ -147,8 +161,14 @@ def main():
             "backtracking": sum(1 for r in btsrc if r["behaviour"] == "backtracking"
                                 and r.get("count") is None)}
     vers = {b: sorted({r.get("prompt_version", "v0") for r in v}) for b, v in J.items()}
+    if a.correct_only:
+        J = {b: [r for r in v if r["correct"]] for b, v in J.items()}
+        traces = [t for t in traces if t["correct"]]
     judges = {r.get("judge_model") for v in J.values() for r in v}
     print(f"both behaviours: LLM judge {judges}")
+    print(f"  sample: {'CORRECT traces only' if a.correct_only else 'all traces'}"
+          f"   rates per 10k REASONING tokens"
+          f"   (estimated for {', '.join(approx)}; exact elsewhere)")
     print(f"  prompts: backtracking {vers['backtracking']}  verification {vers['verification']}")
     print(f"  verification {len(J['verification'])} traces ({drop['verification']} unparsable "
           f"dropped)   backtracking {len(J['backtracking'])} ({drop['backtracking']} dropped)")
@@ -164,14 +184,14 @@ def main():
         t = [r for r in traces if r["model"] == m]
         v_tr = st.mean(r["count"] for r in g)
         # pooled, not mean-of-ratios -- see the module note
-        v_rt = 1e4 * sum(r["count"] for r in g) / max(1, sum(r["tokens"] for r in g))
+        v_rt = 1e4 * sum(r["count"] for r in g) / max(1, sum(ctok(r) for r in g))
         # PRIMARY: the judge's backtracking counts
         jb = [r for r in J["backtracking"] if r["model"] == m]
         b_tr = st.mean(r["count"] for r in jb)
-        b_rt = 1e4 * sum(r["count"] for r in jb) / max(1, sum(r["tokens"] for r in jb))
+        b_rt = 1e4 * sum(r["count"] for r in jb) / max(1, sum(ctok(r) for r in jb))
         # CROSS-CHECK: explicit abandonment markers over the same traces
         bcounts = [count_backtracking(r["cot"], rx, not a.keep_recall)[0] for r in t]
-        mk_rt = 1e4 * sum(bcounts) / max(1, sum(r["tokens"] for r in t))
+        mk_rt = 1e4 * sum(bcounts) / max(1, sum(t_["cot_tokens"] for t_ in t))
         dropped = sum(count_backtracking(r["cot"], rx, not a.keep_recall)[1] for r in t)
         raw = sum(len(rx.findall(r["cot"])) for r in t)
         res[m] = (v_tr, v_rt, b_rt, st.median(len(r["cot"]) for r in t), len(g), b_tr,
@@ -194,9 +214,6 @@ def main():
 
 def latex(res, path):
     """Emit the paper table. Mirrors table_decay.py's booktabs style."""
-    def col(m):
-        v_tr, v_rt, b_wd = res[m]
-        return f"${v_tr:.2f}$ & ${v_rt:.2f}$ & ${b_wd:.2f}$"
     t = [r"\begin{tabular}{lcccc}", r"\toprule",
          r" & \multicolumn{2}{c}{Scale} & \multicolumn{2}{c}{Algorithm} \\",
          # No (lr) trim: the parenthesised optional argument is booktabs-specific
@@ -208,9 +225,9 @@ def latex(res, path):
          r" & gpt-oss-20B & gpt-oss-120B & GLM 5.2 & GLM 5.3 \\", r"\midrule"]
     names = ["gpt-oss-20b", "gpt-oss-120b", "GLM 5.2", "GLM 5.3"]
     rows_spec = [("Verification, per trace", 0, "{:.2f}"),
-                 ("Verification, per 10k tokens", 1, "{:.2f}"),
+                 ("Verification, per 10k reasoning tokens", 1, "{:.2f}"),
                  ("Backtracking, per trace", 5, "{:.2f}"),
-                 ("Backtracking, per 10k tokens", 2, "{:.2f}")]
+                 ("Backtracking, per 10k reasoning tokens", 2, "{:.2f}")]
     for lab, i, f in rows_spec:
         t.append(lab + " & " + " & ".join("$" + f.format(res[m][i]) + "$" for m in names) + r" \\")
     t += [r"\addlinespace",

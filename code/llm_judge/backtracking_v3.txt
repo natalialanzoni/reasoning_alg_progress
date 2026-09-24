@@ -34,7 +34,9 @@ Count the number of distinct backtracking instances and provide the count betwee
 Format your response in markdown as follows:
 
 ## Thoughts
-[For each instance, quote the candidate that was raised and say what happened to it, noting that nothing downstream uses it. For any case elimination, say whether it was required by the argument or guessed. If you counted none, name the closest candidate and say why it does not qualify.]
+[List ONLY the instances you are counting, one short entry each: quote the candidate that was raised and say what happened to it. For any case elimination, say whether it was required by the argument or guessed.
+Do NOT walk through the trace sentence by sentence, and do NOT list segments you are not counting -- no entries reading "this is a verification" or "no backtracking here". A long trace gets a longer list only if it genuinely has more instances.
+If you count none, say so in one sentence and stop.]
 
 ## Does backtrack?
 [yes/no]
