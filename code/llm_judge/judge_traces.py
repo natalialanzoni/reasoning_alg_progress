@@ -83,13 +83,25 @@ EDIT_NOTE = ("line 2 reframed from 'text from the internet' to 'the reasoning tr
              "language model solving a competition mathematics problem'; rest verbatim")
 
 
-PROMPT_VERSION = "v0"   # Gandhi et al.'s templates + the one-line domain edit.
-                        # A v1 pair that redefined both constructs was drafted and
-                        # rejected -- see README, "A rewrite we tried and dropped".
+# Prompt version is PER BEHAVIOUR, because they were settled separately.
+#   verification v0 -- Gandhi et al.'s template + the one-line domain edit. Manual
+#                      review found it sound, so it was never re-run.
+#   backtracking v2 -- rewritten after review. v0 counted self-interruption as
+#                      abandonment; a v1 attempt then undercounted. v2 tests
+#                      whether the line of attack is CARRIED FORWARD, which is
+#                      visible on the page. See README.
+#   backtracking v3 -- AWAITING RA SIGN-OFF, not yet run at scale. v2 undercounted:
+#                      it refused brief ideas as "too undeveloped". v3 counts a
+#                      candidate however briefly raised, separates required case
+#                      eliminations from guessed ones, and counts recomputed wrong
+#                      values. Pilot and rationale in
+#                      for_RA_review/v3_backtracking/. Switch the dict below to v3
+#                      once approved, then re-run backtracking only.
+PROMPT_VERSION = {"backtracking": "v2", "verification": "v0"}
 
 
 def _template(behaviour, version=None):
-    p = os.path.join(HERE, f"{behaviour}_{version or PROMPT_VERSION}.txt")
+    p = os.path.join(HERE, f"{behaviour}_{version or PROMPT_VERSION[behaviour]}.txt")
     if not os.path.exists(p):
         raise SystemExit(f"no prompt template for {behaviour!r} at {p}")
     return open(p).read()
@@ -123,7 +135,8 @@ def judge_one(client, behaviour, trace, model, version=None):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--judge-model", default=JUDGE_MODEL)
-    ap.add_argument("--prompt-version", default=PROMPT_VERSION, choices=("v0",))
+    ap.add_argument("--prompt-version", default=None, choices=("v0", "v2"),
+                    help="override the per-behaviour default in PROMPT_VERSION")
     ap.add_argument("--models", nargs="*", default=MODEL_ORDER)
     ap.add_argument("--behaviours", nargs="*", default=["backtracking", "verification"],
                     choices=list(BEHAVIOURS))
@@ -211,7 +224,7 @@ def main():
             rec = {k: j[k] for k in ("model", "task_id", "sample", "behaviour",
                                      "tokens", "correct")}
             rec.update({"judge_model": a.judge_model, "temperature": TEMPERATURE,
-                        "prompt_version": a.prompt_version,
+                        "prompt_version": a.prompt_version or PROMPT_VERSION[j["behaviour"]],
                         "prompt_sha": template_sha(j["behaviour"], a.prompt_version),
                         "prompt_edit": EDIT_NOTE})
             try:

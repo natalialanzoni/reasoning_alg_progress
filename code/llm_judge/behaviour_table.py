@@ -62,7 +62,13 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 from load_traces import load_all                       # noqa: E402
 
+# Two files, because the two behaviours were settled at different times.
+#   verification -- judge_whole_gemini.jsonl, prompt v0, approved on manual review
+#   backtracking -- judge_backtracking_v2.jsonl, prompt v2. v0 counted
+#     self-interruption as abandonment (RA review), v1 then undercounted.
+# Records carry prompt_version, so which prompt produced a number is on disk.
 JUDGED = os.path.join(HERE, "out", "judge_whole_gemini.jsonl")
+JUDGED_BT = os.path.join(HERE, "out", "judge_backtracking_v2.jsonl")
 MODEL_ORDER = ["gpt-oss-20b", "gpt-oss-120b", "GLM 5.2", "GLM 5.3"]
 LEVERS = [("SCALE      gpt-oss 20B -> 120B", "gpt-oss-20b", "gpt-oss-120b"),
           ("ALGORITHM  GLM 5.2 -> 5.3", "GLM 5.2", "GLM 5.3")]
@@ -119,6 +125,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--include-contradiction", action="store_true")
     ap.add_argument("--judged", default=JUDGED)
+    ap.add_argument("--judged-backtracking", default=JUDGED_BT,
+                    help="separate file; falls back to --judged if absent")
     ap.add_argument("--tex", default=None, help="also write the paper table to this .tex path")
     ap.add_argument("--keep-recall", action="store_true",
                     help="do NOT drop marker hits in memory-recall context (shows the bias)")
@@ -128,12 +136,20 @@ def main():
                     re.I)
     traces = load_all()
     jr = [json.loads(l) for l in open(a.judged)]
-    J = {b: [r for r in jr if r["behaviour"] == b and r.get("count") is not None]
-         for b in ("verification", "backtracking")}
-    drop = {b: sum(1 for r in jr if r["behaviour"] == b and r.get("count") is None)
-            for b in J}
+    btsrc = (jr if not os.path.exists(a.judged_backtracking)
+             else [json.loads(l) for l in open(a.judged_backtracking)])
+    J = {"verification": [r for r in jr if r["behaviour"] == "verification"
+                          and r.get("count") is not None],
+         "backtracking": [r for r in btsrc if r["behaviour"] == "backtracking"
+                          and r.get("count") is not None]}
+    drop = {"verification": sum(1 for r in jr if r["behaviour"] == "verification"
+                                and r.get("count") is None),
+            "backtracking": sum(1 for r in btsrc if r["behaviour"] == "backtracking"
+                                and r.get("count") is None)}
+    vers = {b: sorted({r.get("prompt_version", "v0") for r in v}) for b, v in J.items()}
     judges = {r.get("judge_model") for v in J.values() for r in v}
     print(f"both behaviours: LLM judge {judges}")
+    print(f"  prompts: backtracking {vers['backtracking']}  verification {vers['verification']}")
     print(f"  verification {len(J['verification'])} traces ({drop['verification']} unparsable "
           f"dropped)   backtracking {len(J['backtracking'])} ({drop['backtracking']} dropped)")
     print(f"  marker cross-check: explicit abandonment language, contradiction "

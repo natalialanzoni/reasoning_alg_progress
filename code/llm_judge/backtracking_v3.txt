@@ -1,0 +1,48 @@
+# Task Description
+You will be provided with the reasoning trace of a language model solving a competition mathematics problem.
+Evaluate whether the text contains any backtracking behavior.
+
+Count an instance whenever the writer raises a candidate approach, formula, case, value, or idea and then drops it without the subsequent derivation using it. This counts regardless of how brief the consideration was: a single sentence naming an approach and then setting it aside is backtracking. Do NOT require that any computation was done on the abandoned idea. The only exclusion is doubt that ends by confirming the original step ("wait, is that right?... yes"), which is verification, not backtracking.
+
+Notes on applying this:
+- A candidate that is raised and dropped counts even if the writer never says it was wrong, and even if they simply moved on without comment.
+- Do not require the dropped idea to be a whole "line of attack". A named formula, a guessed identity, a half-sentence suggestion, or a computed value that gets replaced all count if nothing downstream uses them.
+- A wrong value that the writer catches and recomputes COUNTS. The discarded value is not carried forward, so it meets the rule. "I get 24. Wait, that's wrong, 3 times 9 is 27" is one instance. Do not exclude these on the grounds that the overall approach survived — the rule is about the candidate that was dropped, not about whether a whole line of attack was abandoned.
+- Several sentences of hesitation about the SAME candidate are one instance, not several. This holds across the whole trace: if the writer raises, drops, and re-raises one idea five times, that is 1, not 5. Count distinct candidates, not mentions.
+
+Cases require a distinction. A case the writer HAD to eliminate is part of the derivation, not search, and does not count; a case the writer guessed at and then abandoned does count. Read the framing:
+- "We consider two cases: n even and n odd. If n is even... contradiction. So n is odd." — a required case split. Counts as 0, even though case 1 was ruled out.
+- "Maybe n is even? ... no, that doesn't lead anywhere. Let me instead look at the parity of k." — a guessed case, dropped. Counts as 1.
+The test is whether the elimination is a necessary part of the argument a clean solution would also contain, or a guess the writer happened to try.
+
+Backtracking in mathematics might look like:
+- "I started with the wrong formula. Let's use integration by parts instead."
+- "This approach leads to a contradiction. Going back to the original equation..."
+- "This seems reminiscent of the mixtilinear incircle. Possibly Gamma is the exradius? Wait, we need to think." — then never used again. Counts, despite being brief.
+- "Suppose the problem means the points are distinct. ... that gives no solution. Perhaps it allows repeats instead." — an interpretation adopted, dropped, and replaced.
+
+Do NOT count:
+- Doubt that ends by confirming the original step, then continuing to use it — that is verification.
+- Re-reading or restating the problem to understand it, when no interpretation is adopted and then dropped.
+- Eliminating a case that the argument requires eliminating (see above).
+- Trying to recall whether the problem is a known one, or what its answer was. A remembered answer is NOT a candidate approach. If the writer returns to the same remembered value repeatedly ("I think the answer is 63... no wait... but I recall 63..."), that is one episode of recall and counts 0, no matter how many times it recurs.
+- An idea that IS used later, however much hesitation surrounded it.
+
+Count the number of distinct backtracking instances and provide the count between the tags <count> </count>. If the writer does not backtrack, please provide a count of 0 as <count>0</count>.
+
+# Task Format
+Format your response in markdown as follows:
+
+## Thoughts
+[For each instance, quote the candidate that was raised and say what happened to it, noting that nothing downstream uses it. For any case elimination, say whether it was required by the argument or guessed. If you counted none, name the closest candidate and say why it does not qualify.]
+
+## Does backtrack?
+[yes/no]
+
+## Number of backtrack steps
+<count> [1/2/...] </count>
+
+# Task to evaluate for backtracking
+{response}
+
+# Response
