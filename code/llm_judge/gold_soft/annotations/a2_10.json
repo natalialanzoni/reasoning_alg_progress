@@ -1,0 +1,263 @@
+{
+ "trace": "10",
+ "annotator": "a2",
+ "nlines": 1584,
+ "instances": [
+  {
+   "approach": "acute-sign constraint d > b-14 forcing AB=15, then solving the resulting quartic",
+   "visits": [
+    [
+     91,
+     157
+    ],
+    [
+     165,
+     316
+    ]
+   ],
+   "abandon_line": 316,
+   "abandon_quote": "Thus our assumption wrong. Let's reevaluate entire approach.",
+   "switched_to": "re-verified setup and used the magnitude |dot| equation (u-s)^2(2-s^2)=h^2 s^2, searching values of s",
+   "tier": "firm",
+   "reason": "Committed to the candidate AB=15, found the quartic had no root, and dropped the sign constraint and the candidate."
+  },
+  {
+   "approach": "clockwise-orientation reinterpretation of the interior angles",
+   "visits": [
+    [
+     71,
+     71
+    ],
+    [
+     159,
+     163
+    ]
+   ],
+   "abandon_line": 163,
+   "abandon_quote": "Thus our calculations above correct. Good.",
+   "switched_to": "keeping the BA-based interior-angle computation",
+   "tier": "borderline",
+   "reason": "Idea raised twice with no work and set aside."
+  },
+  {
+   "approach": "exact algebraic solution of the u=8 quartic for d",
+   "visits": [
+    [
+     926,
+     972
+    ]
+   ],
+   "abandon_line": 968,
+   "abandon_quote": "We suspect solution around 1.069 not integer, so factorization not nice.",
+   "switched_to": "deriving a general shoelace area formula 17u+98+3d",
+   "tier": "firm",
+   "reason": "Expanded to d^4-16d^3+98d^2+32d-128 and tried integer roots, then gave up the exact solve."
+  },
+  {
+   "approach": "residue matching d = 2-3u (mod 16) for the down-left case",
+   "visits": [
+    [
+     1081,
+     1148
+    ]
+   ],
+   "abandon_line": 1150,
+   "abandon_quote": "But maybe easier: compute area formula for down-right orientation",
+   "switched_to": "area mod-16 condition for down-right, forcing 3d to be an integer",
+   "tier": "firm",
+   "reason": "Built a residue table and tested u=11, then called the general case hard and switched methods."
+  },
+  {
+   "approach": "substitute s=(16m-u-2)/3 into the quartic for each m",
+   "visits": [
+    [
+     1270,
+     1384
+    ]
+   ],
+   "abandon_line": 1384,
+   "abandon_quote": "to get polynomial equation in u for each m. But could be heavy.",
+   "switched_to": "considering numeric enumeration and then the behaviour of d(u)",
+   "tier": "firm",
+   "reason": "Tested u=10..13 for m=1, found no roots, and dropped the substitution as too heavy."
+  },
+  {
+   "approach": "brute-force numeric enumeration of u up to 2011",
+   "visits": [
+    [
+     1386,
+     1386
+    ]
+   ],
+   "abandon_line": 1386,
+   "abandon_quote": "Alternatively, we can try numeric enumeration for u up to 2011",
+   "switched_to": "looking for a pattern in area mod 16",
+   "tier": "borderline",
+   "reason": "Raised in one line and never carried out."
+  },
+  {
+   "approach": "every integer u is admissible (e.g. AB=22); sweep d(u) numerically to hit area = 0 mod 16",
+   "visits": [
+    [
+     884,
+     926
+    ],
+    [
+     1220,
+     1228
+    ],
+    [
+     1388,
+     1404
+    ]
+   ],
+   "abandon_line": 1406,
+   "abandon_quote": "So requirement area integer implies d must be rational?",
+   "switched_to": "integrality argument: 3d must be an integer, so d = k/3",
+   "tier": "firm",
+   "reason": "Accepted AB=22 and general u as candidates and studied d(u) numerically, then dropped this for the integrality restriction that brings back only AB=21, 49."
+  },
+  {
+   "approach": "self-intersecting pentagon interpretation",
+   "visits": [
+    [
+     1530,
+     1530
+    ],
+    [
+     1564,
+     1564
+    ]
+   ],
+   "abandon_line": 1564,
+   "abandon_quote": "But problem states pentagon, likely simple.",
+   "switched_to": "keeping the simple-pentagon angle sum of 540",
+   "tier": "borderline",
+   "reason": "Alternative reading raised and dismissed without work."
+  },
+  {
+   "approach": "angle at B read as an external/reflex angle",
+   "visits": [
+    [
+     1534,
+     1534
+    ],
+    [
+     1562,
+     1562
+    ]
+   ],
+   "abandon_line": 1562,
+   "abandon_quote": "But B internal angle 45. So no.",
+   "switched_to": "keeping the interior 45-degree reading",
+   "tier": "borderline",
+   "reason": "Interpretation floated and dismissed in one line."
+  }
+ ],
+ "rejected": [
+  {
+   "lines": [
+    25,
+    29
+   ],
+   "what": "doubt whether AB is slanted instead of vertical",
+   "why_not": "verification"
+  },
+  {
+   "lines": [
+    35,
+    75
+   ],
+   "what": "BC measured from AB (up) giving C=(+-14,b+14); contradiction, then realised the angle uses BA",
+   "why_not": "error fix"
+  },
+  {
+   "lines": [
+    91,
+    143
+   ],
+   "what": "BC down-right vs down-left cases",
+   "why_not": "required case"
+  },
+  {
+   "lines": [
+    226,
+    246
+   ],
+   "what": "re-derivation of the cosine equation",
+   "why_not": "verification"
+  },
+  {
+   "lines": [
+    318,
+    330
+   ],
+   "what": "re-check that AB is vertical and BC has y=-14",
+   "why_not": "verification"
+  },
+  {
+   "lines": [
+    458,
+    470
+   ],
+   "what": "trial values s=0.5, sqrt1.5, 1.4 for h=6",
+   "why_not": "other: routine trials inside the same search"
+  },
+  {
+   "lines": [
+    648,
+    684
+   ],
+   "what": "shoelace area recomputed for AB=21",
+   "why_not": "verification"
+  },
+  {
+   "lines": [
+    762,
+    832
+   ],
+   "what": "rationality argument s/t=1 giving only AB=21,49",
+   "why_not": "other: conclusion revived at 1406-1434 and kept"
+  },
+  {
+   "lines": [
+    836,
+    854
+   ],
+   "what": "convexity/angle-at-C check showing BC and CD collinear",
+   "why_not": "verification"
+  },
+  {
+   "lines": [
+    1150,
+    1196
+   ],
+   "what": "3d must be integer, so d in {1/3,2/3,1,4/3}",
+   "why_not": "other: same argument resumed at 1406 and kept to the end"
+  },
+  {
+   "lines": [
+    1458,
+    1478
+   ],
+   "what": "hypothesis that CD must point down-left, shown impossible",
+   "why_not": "other: sub-check in verifying the angle at C"
+  },
+  {
+   "lines": [
+    1486,
+    1548
+   ],
+   "what": "dot-product condition for a 270-degree angle at C",
+   "why_not": "verification"
+  },
+  {
+   "lines": [
+    1550,
+    1560
+   ],
+   "what": "re-check of AB vertical and BC downward assumptions",
+   "why_not": "verification"
+  }
+ ]
+}

@@ -1,0 +1,32 @@
+{
+ "trace": "17",
+ "annotator": "a1",
+ "nlines": 77,
+ "instances": [],
+ "rejected": [
+  {
+   "lines": [
+    53,
+    55
+   ],
+   "what": "double-checking S1 (16/27 vs 16/81)",
+   "why_not": "verification"
+  },
+  {
+   "lines": [
+    57,
+    73
+   ],
+   "what": "double-checking S2 and final P",
+   "why_not": "verification"
+  },
+  {
+   "lines": [
+    75,
+    75
+   ],
+   "what": "proposed simulation/generating-function cross-check, only a plausibility glance",
+   "why_not": "verification"
+  }
+ ]
+}

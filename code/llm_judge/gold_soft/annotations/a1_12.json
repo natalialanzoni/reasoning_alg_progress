@@ -1,0 +1,317 @@
+{
+ "trace": "12",
+ "annotator": "a1",
+ "nlines": 1786,
+ "instances": [
+  {
+   "approach": "power-of-point relation for O_Gamma wrt omega and (BIC)",
+   "visits": [
+    [
+     87,
+     89
+    ]
+   ],
+   "abandon_line": 94,
+   "abandon_quote": "Let's set up a coordinate system on the line $IM$.",
+   "switched_to": "1D coordinates on line IM with explicit circle equations",
+   "tier": "borderline",
+   "reason": "A power-of-point relation is floated ('must satisfy some relation? No') and replaced by coordinates after little work."
+  },
+  {
+   "approach": "search for an integer/rational root of the Case 1 cubic",
+   "visits": [
+    [
+     185,
+     189
+    ],
+    [
+     377,
+     384
+    ],
+    [
+     533,
+     542
+    ],
+    [
+     851,
+     854
+    ],
+    [
+     1245,
+     1249
+    ],
+    [
+     1391,
+     1396
+    ],
+    [
+     1655,
+     1661
+    ]
+   ],
+   "abandon_line": 1661,
+   "abandon_quote": "So $BC$ is between 6 and 8.",
+   "switched_to": "hypothesizing errors in R1 or in the cubic's coefficients",
+   "tier": "firm",
+   "reason": "Repeated rational-root testing fails each time and the writer finally stops looking for a root and hunts for an error instead."
+  },
+  {
+   "approach": "fractional candidate values a = 13/2, 25/4, 20/3, 24/5",
+   "visits": [
+    [
+     968,
+     974
+    ],
+    [
+     1341,
+     1345
+    ]
+   ],
+   "abandon_line": 1344,
+   "abandon_quote": "$4.8^3 + 6(4.8)^2 - 74(4.8) - 24 = 110.592",
+   "switched_to": "rechecking R1 and the setup",
+   "tier": "firm",
+   "reason": "Specific non-integer candidates are substituted and rejected."
+  },
+  {
+   "approach": "candidate a = 11 for the x2 = -3r/sin(A/2) case",
+   "visits": [
+    [
+     983,
+     986
+    ]
+   ],
+   "abandon_line": 986,
+   "abandon_quote": "Maybe $a = 11$? $f(11) = 15 \\neq 0$.",
+   "switched_to": "rechecking whether Gamma must pass through E, F",
+   "tier": "borderline",
+   "reason": "A candidate floated in one line and rejected immediately."
+  },
+  {
+   "approach": "factor the cubic as (a-6)(a^2+12a+4)",
+   "visits": [
+    [
+     1231,
+     1238
+    ]
+   ],
+   "abandon_line": 1238,
+   "abandon_quote": "This means $70a = 0$, which is impossible.",
+   "switched_to": "re-deriving the cubic's coefficients",
+   "tier": "firm",
+   "reason": "A guessed factorization (implying a=6) is expanded, does not match, and is dropped."
+  },
+  {
+   "approach": "candidate a = 2*sqrt(19)",
+   "visits": [
+    [
+     1384,
+     1385
+    ]
+   ],
+   "abandon_line": 1385,
+   "abandon_quote": "- 24 = 4\\sqrt{19} + 432 \\neq 0$.",
+   "switched_to": "questioning whether the answer can be numeric",
+   "tier": "firm",
+   "reason": "A radical candidate is substituted into the cubic and rejected."
+  },
+  {
+   "approach": "solve the cubic exactly (shift to depressed cubic, discriminant, trigonometric roots)",
+   "visits": [
+    [
+     1537,
+     1558
+    ],
+    [
+     1620,
+     1626
+    ]
+   ],
+   "abandon_line": 1626,
+   "abandon_quote": "No, math competition problems have clean answers.",
+   "switched_to": "rechecking the setup, then hypothesizing formula errors",
+   "tier": "firm",
+   "reason": "Writer works on an exact solution of the cubic and gives it up because the roots are not nice."
+  },
+  {
+   "approach": "hypothesis R1 = R (circle BIC radius equals circumradius)",
+   "visits": [
+    [
+     1663,
+     1676
+    ],
+    [
+     1779,
+     1780
+    ]
+   ],
+   "abandon_line": 1780,
+   "abandon_quote": "If $R_1 = R$, then $2a(b^2+c^2-a^2) = 2(b+c)(s-b)(s-c) \\dots$ no.",
+   "switched_to": "guessing the answer",
+   "tier": "firm",
+   "reason": "An alternative formula is tried, giving a^2 = 152/3, and dropped (briefly revisited later)."
+  },
+  {
+   "approach": "reverse-engineer a nice root by altering the cubic's constant/signs (a = 12 via sign flip)",
+   "visits": [
+    [
+     1678,
+     1731
+    ]
+   ],
+   "abandon_line": 1731,
+   "abandon_quote": "So $u \\cos((B-C)/2) = \\cos A$ is the only way",
+   "switched_to": "re-verifying the derivation step by step",
+   "tier": "firm",
+   "reason": "Writer tries modified equations to find one with a nice root, finds a=12 but it is degenerate, and gives this line up."
+  },
+  {
+   "approach": "radical guesses sqrt(40) and 2*sqrt(13)",
+   "visits": [
+    [
+     1777,
+     1777
+    ],
+    [
+     1783,
+     1784
+    ]
+   ],
+   "abandon_line": 1785,
+   "abandon_quote": "Actually, let me check $a=6$ again.",
+   "switched_to": "final guess a = 6",
+   "tier": "borderline",
+   "reason": "Candidates named in a line each and set aside with no work."
+  }
+ ],
+ "rejected": [
+  {
+   "lines": [
+    19,
+    33
+   ],
+   "what": "whether circumcenter of BIC lies on bisector; 'perpendicular bisector of BC? No'",
+   "why_not": "error fix"
+  },
+  {
+   "lines": [
+    48,
+    67
+   ],
+   "what": "computing AM to confirm order A, I, M",
+   "why_not": "verification"
+  },
+  {
+   "lines": [
+    101,
+    103
+   ],
+   "what": "is O_Gamma between I and M? left unresolved",
+   "why_not": "other: side question, not an approach"
+  },
+  {
+   "lines": [
+    193,
+    212
+   ],
+   "what": "external angle bisector for O_Gamma ruled out (also 449-455, 566-582, 991-1009)",
+   "why_not": "required case"
+  },
+  {
+   "lines": [
+    213,
+    268
+   ],
+   "what": "second center x2 = -3r/sin(A/2) and its cubic (also 405-412, 546-560, 976-986)",
+   "why_not": "required case"
+  },
+  {
+   "lines": [
+    1213,
+    1226
+   ],
+   "what": "x2 case shown impossible (3 + r/2R = sin^2)",
+   "why_not": "required case"
+  },
+  {
+   "lines": [
+    370,
+    376
+   ],
+   "what": "-4a corrected to -74a in the cubic",
+   "why_not": "error fix"
+  },
+  {
+   "lines": [
+    397,
+    403
+   ],
+   "what": "segments vs lines interpretation (also 705-707, 1325-1335)",
+   "why_not": "other: interpretation check that does not change the equation"
+  },
+  {
+   "lines": [
+    414,
+    431
+   ],
+   "what": "circle BIC center could be other arc midpoint? re-proved M is center",
+   "why_not": "verification"
+  },
+  {
+   "lines": [
+    734,
+    754
+   ],
+   "what": "check M2 (arc containing A) is not the center",
+   "why_not": "verification"
+  },
+  {
+   "lines": [
+    756,
+    817
+   ],
+   "what": "suspicion that equation is identity cos A = sin(A/2)cos((B-C)/2); tested false",
+   "why_not": "verification"
+  },
+  {
+   "lines": [
+    818,
+    838
+   ],
+   "what": "re-derive cubic via cos A",
+   "why_not": "verification"
+  },
+  {
+   "lines": [
+    921,
+    952
+   ],
+   "what": "rewrite as 1 - r/2R = 3 sin^2(A/2), same equation",
+   "why_not": "verification"
+  },
+  {
+   "lines": [
+    1097,
+    1107
+   ],
+   "what": "alarm over R1 = a/(2cos(A/2)); equal to 2R sin(A/2)",
+   "why_not": "verification"
+  },
+  {
+   "lines": [
+    1138,
+    1147
+   ],
+   "what": "test whether equation holds for equilateral / right triangles",
+   "why_not": "verification"
+  },
+  {
+   "lines": [
+    1774,
+    1786
+   ],
+   "what": "final guess a = 6",
+   "why_not": "other: kept as the final answer, not abandoned"
+  }
+ ]
+}

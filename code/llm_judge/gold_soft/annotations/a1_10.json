@@ -1,0 +1,261 @@
+{
+ "trace": "10",
+ "annotator": "a1",
+ "nlines": 1584,
+ "instances": [
+  {
+   "approach": "BC direction obtained by rotating the AB (upward) direction by 45 deg, C=(+-14, b+14)",
+   "visits": [
+    [
+     35,
+     71
+    ]
+   ],
+   "abandon_line": 71,
+   "abandon_quote": "Maybe polygon orientation is clockwise such that interior angles measured other way? Let's step back.",
+   "switched_to": "measure the angle at B from BA (downward), giving C=(+-14, b-14)",
+   "tier": "firm",
+   "reason": "Both up-right and up-left constructions were worked out, led to contradictions and were dropped for the downward construction (root cause was a direction slip, so close to an error fix)."
+  },
+  {
+   "approach": "Acute-dot sign restriction d > b-14 giving unique candidate AB = 15",
+   "visits": [
+    [
+     91,
+     153
+    ],
+    [
+     165,
+     316
+    ]
+   ],
+   "abandon_line": 316,
+   "abandon_quote": "Thus our assumption wrong. Let's reevaluate entire approach.",
+   "switched_to": "use the magnitude of the dot product and solve the general equation for integer u",
+   "tier": "firm",
+   "reason": "Committed to 'AB=15 only', ground through a quartic, found no solution and dropped the candidate and the restriction."
+  },
+  {
+   "approach": "Rationality argument: integer u requires s/t rational, so only r=1 (AB in {21,49})",
+   "visits": [
+    [
+     762,
+     826
+    ],
+    [
+     1206,
+     1218
+    ]
+   ],
+   "abandon_line": 1220,
+   "abandon_quote": "Problem didn't require DE integer. So AB=22 is acceptable.",
+   "switched_to": "treat d as any real root and allow every integer u",
+   "tier": "firm",
+   "reason": "A (flawed) argument that only d=1 works was built twice and then explicitly dropped after noticing that u=8 gives a real d."
+  },
+  {
+   "approach": "Solve exactly for d at u=8 (t-substitution, factor the quartic)",
+   "visits": [
+    [
+     926,
+     968
+    ]
+   ],
+   "abandon_line": 968,
+   "abandon_quote": "We suspect solution around 1.069 not integer, so factorization not nice.",
+   "switched_to": "derive a general area formula 17u+98+3d",
+   "tier": "firm",
+   "reason": "Tried t=sqrt(2-d^2) (messy), expanded the quartic and tested integer roots, then gave up on an exact d."
+  },
+  {
+   "approach": "Substitute u(d) into the area formula to get area in d alone",
+   "visits": [
+    [
+     1023,
+     1025
+    ]
+   ],
+   "abandon_line": 1025,
+   "abandon_quote": "20 d + 98 + 102 d / sqrt(2 - d^2). That's messy.",
+   "switched_to": "reasoning about u and area separately",
+   "tier": "borderline",
+   "reason": "One line of substitution, then dropped as messy."
+  },
+  {
+   "approach": "Down-left modular argument treating d as a residue mod 16 (forces d=1, u=11)",
+   "visits": [
+    [
+     1081,
+     1146
+    ]
+   ],
+   "abandon_line": 1146,
+   "abandon_quote": "Given u integer, d is real solving equation (u - d)^2 (2 - d^2) = 1156 d^2. Hard.",
+   "switched_to": "the area-mod-16 condition in the down-right orientation",
+   "tier": "borderline",
+   "reason": "Real work on the modular approach, dropped as 'Hard'; but the down-left orientation is a required case and gets checked again at 1416-1430."
+  },
+  {
+   "approach": "Every integer u has a real root d; search numerically for u with area divisible by 16",
+   "visits": [
+    [
+     884,
+     925
+    ],
+    [
+     976,
+     1029
+    ],
+    [
+     1220,
+     1230
+    ],
+    [
+     1388,
+     1404
+    ]
+   ],
+   "abandon_line": 1406,
+   "abandon_quote": "We can attempt to approximate d to rational approximate? But d is irrational.",
+   "switched_to": "area must be an integer, so 3d is an integer and d is in {1/3,2/3,1,4/3}",
+   "tier": "firm",
+   "reason": "Repeatedly pursued the 'any real d' numerical search, then dropped it for the integrality argument."
+  },
+  {
+   "approach": "Parametrize s=(16m-u-2)/3 and substitute into the quartic for each m",
+   "visits": [
+    [
+     1270,
+     1386
+    ]
+   ],
+   "abandon_line": 1386,
+   "abandon_quote": "Alternatively, we can try numeric enumeration for u up to 2011",
+   "switched_to": "numerical enumeration of roots d(u)",
+   "tier": "firm",
+   "reason": "Tested u=10..13 for m=1, all failed, then gave up the substitution scheme."
+  }
+ ],
+ "rejected": [
+  {
+   "lines": [
+    157,
+    163
+   ],
+   "what": "re-checking whether BC could go up / angle defined via BA",
+   "why_not": "verification"
+  },
+  {
+   "lines": [
+    170,
+    181
+   ],
+   "what": "t=d^2 substitution called messy, solved directly instead",
+   "why_not": "other: momentary notation change inside one computation"
+  },
+  {
+   "lines": [
+    226,
+    246
+   ],
+   "what": "re-deriving the case-1 equation",
+   "why_not": "verification"
+  },
+  {
+   "lines": [
+    266,
+    276
+   ],
+   "what": "law-of-cosines recheck that BC has y-component -14",
+   "why_not": "verification"
+  },
+  {
+   "lines": [
+    316,
+    324
+   ],
+   "what": "re-examining whether AB is vertical (confirmed)",
+   "why_not": "verification"
+  },
+  {
+   "lines": [
+    344,
+    346
+   ],
+   "what": "switch from signed dot to |dot|",
+   "why_not": "error fix"
+  },
+  {
+   "lines": [
+    506,
+    510
+   ],
+   "what": "dropping the d > b-14 requirement after finding y positive works",
+   "why_not": "error fix"
+  },
+  {
+   "lines": [
+    553,
+    642
+   ],
+   "what": "shoelace areas for AB=21,49 in both orientations",
+   "why_not": "required case"
+  },
+  {
+   "lines": [
+    648,
+    684
+   ],
+   "what": "recomputing shoelace for AB=21",
+   "why_not": "verification"
+  },
+  {
+   "lines": [
+    838,
+    858
+   ],
+   "what": "d=1 solutions give angle 180 at C, not 270",
+   "why_not": "other: checking candidates against a constraint"
+  },
+  {
+   "lines": [
+    1035,
+    1049
+   ],
+   "what": "down-left area formula",
+   "why_not": "required case"
+  },
+  {
+   "lines": [
+    1154,
+    1196
+   ],
+   "what": "3d must be an integer, so d in {k/3}; set aside at 1220 but resumed at 1406 and kept",
+   "why_not": "other: resumed and kept"
+  },
+  {
+   "lines": [
+    1458,
+    1478
+   ],
+   "what": "trying CD down-left to get a reflex angle at C; impossible since D.x=20",
+   "why_not": "required case"
+  },
+  {
+   "lines": [
+    1494,
+    1516
+   ],
+   "what": "rechecking the angle sum (270 at C)",
+   "why_not": "verification"
+  },
+  {
+   "lines": [
+    1520,
+    1572
+   ],
+   "what": "rechecking AB vertical and BC downward",
+   "why_not": "verification"
+  }
+ ]
+}

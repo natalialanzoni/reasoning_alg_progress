@@ -1,0 +1,1160 @@
+{
+ "note": "Strict backtracking gold (commit + explicit failure + switch to a different method) on the 20 v3 review traces. Adjudicated by Claude reviewers 2026-09-24; NOT yet checked by the RA. Line numbers are traces/NN_*.txt lines.",
+ "instances": [
+  {
+   "trace": "01",
+   "id": "01a",
+   "tier": "borderline",
+   "spans": [
+    [
+     35,
+     35
+    ]
+   ],
+   "anchors": [
+    35
+   ],
+   "approach": "power of a point along bisector (brief)"
+  },
+  {
+   "trace": "01",
+   "id": "01b",
+   "tier": "firm",
+   "spans": [
+    [
+     41,
+     41
+    ],
+    [
+     55,
+     85
+    ]
+   ],
+   "anchors": [
+    85
+   ],
+   "approach": "circles ABH/ACH symmetric under reflection in bisector"
+  },
+  {
+   "trace": "01",
+   "id": "01c",
+   "tier": "firm",
+   "spans": [
+    [
+     87,
+     107
+    ],
+    [
+     135,
+     139
+    ]
+   ],
+   "anchors": [
+    139
+   ],
+   "approach": "harmonic division / cross-ratio"
+  },
+  {
+   "trace": "01",
+   "id": "01d",
+   "tier": "firm",
+   "spans": [
+    [
+     115,
+     143
+    ]
+   ],
+   "anchors": [
+    143
+   ],
+   "approach": "law of sines in ABP"
+  },
+  {
+   "trace": "01",
+   "id": "01e",
+   "tier": "firm",
+   "spans": [
+    [
+     145,
+     458
+    ]
+   ],
+   "anchors": [
+    450,
+    458
+   ],
+   "approach": "coordinate / numeric solve"
+  },
+  {
+   "trace": "01",
+   "id": "01f",
+   "tier": "borderline",
+   "spans": [
+    [
+     470,
+     474
+    ]
+   ],
+   "anchors": [
+    474
+   ],
+   "approach": "law of sines in ABM"
+  },
+  {
+   "trace": "01",
+   "id": "01g",
+   "tier": "borderline",
+   "spans": [
+    [
+     496,
+     506
+    ]
+   ],
+   "anchors": [
+    506
+   ],
+   "approach": "AOM route"
+  },
+  {
+   "trace": "02",
+   "id": "02a",
+   "tier": "firm",
+   "spans": [
+    [
+     97,
+     119
+    ],
+    [
+     139,
+     285
+    ]
+   ],
+   "anchors": [
+    119,
+    285
+   ],
+   "approach": "analytic coordinates of O1"
+  },
+  {
+   "trace": "02",
+   "id": "02b",
+   "tier": "firm",
+   "spans": [
+    [
+     71,
+     77
+    ]
+   ],
+   "anchors": [
+    75
+   ],
+   "approach": "EF perp AI via AI bisecting angle BIC"
+  },
+  {
+   "trace": "02",
+   "id": "02c",
+   "tier": "borderline",
+   "spans": [
+    [
+     65,
+     69
+    ]
+   ],
+   "anchors": [
+    69
+   ],
+   "approach": "O1 on AI via symmetry of B,C about AI"
+  },
+  {
+   "trace": "02",
+   "id": "02d",
+   "tier": "borderline",
+   "spans": [
+    [
+     79,
+     89
+    ]
+   ],
+   "anchors": [
+    87
+   ],
+   "approach": "intersection-existence condition r<=OI<=3r"
+  },
+  {
+   "trace": "03",
+   "id": "03a",
+   "tier": "firm",
+   "spans": [
+    [
+     185,
+     309
+    ]
+   ],
+   "anchors": [
+    273,
+    309
+   ],
+   "approach": "component with F_50 factor"
+  },
+  {
+   "trace": "03",
+   "id": "03b",
+   "tier": "firm",
+   "spans": [
+    [
+     343,
+     351
+    ]
+   ],
+   "anchors": [
+    351
+   ],
+   "approach": "interacting components (gaps) for non-Fibonacci factors"
+  },
+  {
+   "trace": "03",
+   "id": "03c",
+   "tier": "firm",
+   "spans": [
+    [
+     468,
+     497
+    ]
+   ],
+   "anchors": [
+    497
+   ],
+   "approach": "insert pairs to trim count to 4040"
+  },
+  {
+   "trace": "03",
+   "id": "03d",
+   "tier": "borderline",
+   "spans": [
+    [
+     499,
+     513
+    ]
+   ],
+   "anchors": [
+    513
+   ],
+   "approach": "component with exactly 101 matchings"
+  },
+  {
+   "trace": "04",
+   "id": "04a",
+   "tier": "firm",
+   "spans": [
+    [
+     1,
+     21
+    ]
+   ],
+   "anchors": [
+    21
+   ],
+   "approach": "mutually tangent small circles model"
+  },
+  {
+   "trace": "04",
+   "id": "04b",
+   "tier": "firm",
+   "spans": [
+    [
+     49,
+     57
+    ],
+    [
+     81,
+     85
+    ],
+    [
+     117,
+     117
+    ]
+   ],
+   "anchors": [
+    117
+   ],
+   "approach": "area decomposition"
+  },
+  {
+   "trace": "04",
+   "id": "04c",
+   "tier": "firm",
+   "spans": [
+    [
+     193,
+     219
+    ]
+   ],
+   "anchors": [
+    219
+   ],
+   "approach": "law of cosines with full chord lengths"
+  },
+  {
+   "trace": "04",
+   "id": "04d",
+   "tier": "borderline",
+   "spans": [
+    [
+     89,
+     95
+    ],
+    [
+     151,
+     153
+    ]
+   ],
+   "anchors": [
+    153
+   ],
+   "approach": "angles from chord central angles"
+  },
+  {
+   "trace": "05",
+   "id": "05a",
+   "tier": "firm",
+   "spans": [
+    [
+     29,
+     77
+    ]
+   ],
+   "anchors": [
+    77
+   ],
+   "approach": "equilateral centre configuration"
+  },
+  {
+   "trace": "05",
+   "id": "05b",
+   "tier": "borderline",
+   "spans": [
+    [
+     99,
+     115
+    ]
+   ],
+   "anchors": [
+    115
+   ],
+   "approach": "general common-tangent parametrisation"
+  },
+  {
+   "trace": "05",
+   "id": "05c",
+   "tier": "firm",
+   "spans": [
+    [
+     246,
+     285
+    ]
+   ],
+   "anchors": [
+    285
+   ],
+   "approach": "centre-symmetric model"
+  },
+  {
+   "trace": "05",
+   "id": "05d",
+   "tier": "borderline",
+   "spans": [
+    [
+     365,
+     398
+    ]
+   ],
+   "anchors": [
+    398
+   ],
+   "approach": "case (i) set aside"
+  },
+  {
+   "trace": "05",
+   "id": "05e",
+   "tier": "borderline",
+   "spans": [
+    [
+     427,
+     488
+    ]
+   ],
+   "anchors": [
+    488
+   ],
+   "approach": "case (ii) option (a)"
+  },
+  {
+   "trace": "07",
+   "id": "07a",
+   "tier": "firm",
+   "spans": [
+    [
+     62,
+     70
+    ]
+   ],
+   "anchors": [
+    70
+   ],
+   "approach": "plain decreasing walk reading"
+  },
+  {
+   "trace": "07",
+   "id": "07b",
+   "tier": "firm",
+   "spans": [
+    [
+     180,
+     194
+    ]
+   ],
+   "anchors": [
+    194
+   ],
+   "approach": "C-infinity threshold argument"
+  },
+  {
+   "trace": "07",
+   "id": "07c",
+   "tier": "firm",
+   "spans": [
+    [
+     198,
+     249
+    ]
+   ],
+   "anchors": [
+    249
+   ],
+   "approach": "functional-equation recursion for p(D)"
+  },
+  {
+   "trace": "08",
+   "id": "08a",
+   "tier": "firm",
+   "spans": [
+    [
+     26,
+     209
+    ]
+   ],
+   "anchors": [
+    209
+   ],
+   "approach": "Gamma centre on x-axis"
+  },
+  {
+   "trace": "08",
+   "id": "08b",
+   "tier": "firm",
+   "spans": [
+    [
+     219,
+     300
+    ],
+    [
+     460,
+     470
+    ]
+   ],
+   "anchors": [
+    298
+   ],
+   "approach": "y-axis as external bisector"
+  },
+  {
+   "trace": "08",
+   "id": "08c",
+   "tier": "firm",
+   "spans": [
+    [
+     127,
+     140
+    ]
+   ],
+   "anchors": [
+    140
+   ],
+   "approach": "elimination approach"
+  },
+  {
+   "trace": "08",
+   "id": "08d",
+   "tier": "borderline",
+   "spans": [
+    [
+     106,
+     111
+    ]
+   ],
+   "anchors": [
+    111
+   ],
+   "approach": "circumcentre via perpendicular bisectors"
+  },
+  {
+   "trace": "09",
+   "id": "09a",
+   "tier": "firm",
+   "spans": [
+    [
+     297,
+     320
+    ],
+    [
+     726,
+     750
+    ],
+    [
+     790,
+     796
+    ],
+    [
+     850,
+     850
+    ]
+   ],
+   "anchors": [
+    320,
+    796,
+    850
+   ],
+   "approach": "hexagon in literal order AA'CC'BB'"
+  },
+  {
+   "trace": "09",
+   "id": "09b",
+   "tier": "firm",
+   "spans": [
+    [
+     297,
+     297
+    ],
+    [
+     352,
+     352
+    ],
+    [
+     500,
+     524
+    ]
+   ],
+   "anchors": [
+    524
+   ],
+   "approach": "area independent of rotation; ignore side condition"
+  },
+  {
+   "trace": "09",
+   "id": "09c",
+   "tier": "firm",
+   "spans": [
+    [
+     808,
+     820
+    ]
+   ],
+   "anchors": [
+    820
+   ],
+   "approach": "convex-hull ordering"
+  },
+  {
+   "trace": "09",
+   "id": "09d",
+   "tier": "firm",
+   "spans": [
+    [
+     899,
+     974
+    ]
+   ],
+   "anchors": [
+    974
+   ],
+   "approach": "hexagon as union of two triangles = 168"
+  },
+  {
+   "trace": "09",
+   "id": "09e",
+   "tier": "borderline",
+   "spans": [
+    [
+     221,
+     231
+    ]
+   ],
+   "anchors": [
+    231
+   ],
+   "approach": "theta+pi third rotation"
+  },
+  {
+   "trace": "10",
+   "id": "10a",
+   "tier": "firm",
+   "spans": [
+    [
+     35,
+     71
+    ]
+   ],
+   "anchors": [
+    71
+   ],
+   "approach": "BC goes up-right (angle reading)"
+  },
+  {
+   "trace": "10",
+   "id": "10b",
+   "tier": "borderline",
+   "spans": [
+    [
+     69,
+     69
+    ]
+   ],
+   "anchors": [
+    69
+   ],
+   "approach": "BC goes up-left"
+  },
+  {
+   "trace": "10",
+   "id": "10c",
+   "tier": "firm",
+   "spans": [
+    [
+     151,
+     316
+    ]
+   ],
+   "anchors": [
+    316
+   ],
+   "approach": "only b=15 / sign condition"
+  },
+  {
+   "trace": "10",
+   "id": "10d",
+   "tier": "firm",
+   "spans": [
+    [
+     840,
+     858
+    ]
+   ],
+   "anchors": [
+    854
+   ],
+   "approach": "AB=21/49 shape (angle at C 180)"
+  },
+  {
+   "trace": "10",
+   "id": "10e",
+   "tier": "firm",
+   "spans": [
+    [
+     762,
+     892
+    ],
+    [
+     1206,
+     1226
+    ]
+   ],
+   "anchors": [
+    892,
+    1220
+   ],
+   "approach": "only r=1 works argument"
+  },
+  {
+   "trace": "10",
+   "id": "10f",
+   "tier": "firm",
+   "spans": [
+    [
+     1272,
+     1386
+    ]
+   ],
+   "anchors": [
+    1386
+   ],
+   "approach": "enumeration of s=(16m-u-2)/3"
+  },
+  {
+   "trace": "10",
+   "id": "10g",
+   "tier": "borderline",
+   "spans": [
+    [
+     1087,
+     1146
+    ]
+   ],
+   "anchors": [
+    1146
+   ],
+   "approach": "down-left mod-16 route"
+  },
+  {
+   "trace": "11",
+   "id": "11a",
+   "tier": "firm",
+   "spans": [
+    [
+     409,
+     409
+    ],
+    [
+     544,
+     557
+    ],
+    [
+     697,
+     743
+    ],
+    [
+     918,
+     939
+    ]
+   ],
+   "anchors": [
+    743,
+    939
+   ],
+   "approach": "greedy: smallest numbers to most-bucket nodes"
+  },
+  {
+   "trace": "11",
+   "id": "11b",
+   "tier": "firm",
+   "spans": [
+    [
+     486,
+     504
+    ],
+    [
+     630,
+     630
+    ],
+    [
+     815,
+     837
+    ]
+   ],
+   "anchors": [
+    837
+   ],
+   "approach": "greedy: fewest buckets / smallest increase"
+  },
+  {
+   "trace": "11",
+   "id": "11c",
+   "tier": "firm",
+   "spans": [
+    [
+     1247,
+     1313
+    ],
+    [
+     1482,
+     1513
+    ]
+   ],
+   "anchors": [
+    1513
+   ],
+   "approach": "right-to-left S*C greedy"
+  },
+  {
+   "trace": "11",
+   "id": "11d",
+   "tier": "borderline",
+   "spans": [
+    [
+     20,
+     29
+    ]
+   ],
+   "anchors": [
+    29
+   ],
+   "approach": "prime-power construction"
+  },
+  {
+   "trace": "11",
+   "id": "11e",
+   "tier": "borderline",
+   "spans": [
+    [
+     952,
+     1082
+    ]
+   ],
+   "anchors": [
+    1082
+   ],
+   "approach": "linear-extension formulation"
+  },
+  {
+   "trace": "11",
+   "id": "11f",
+   "tier": "borderline",
+   "spans": [
+    [
+     847,
+     875
+    ]
+   ],
+   "anchors": [
+    875
+   ],
+   "approach": "reverse greedy"
+  },
+  {
+   "trace": "12",
+   "id": "12a",
+   "tier": "firm",
+   "spans": [
+    [
+     1696,
+     1731
+    ]
+   ],
+   "anchors": [
+    1705,
+    1727
+   ],
+   "approach": "suppose sign error, root a=12"
+  },
+  {
+   "trace": "12",
+   "id": "12b",
+   "tier": "borderline",
+   "spans": [
+    [
+     1663,
+     1676
+    ]
+   ],
+   "anchors": [
+    1676
+   ],
+   "approach": "what if R1=R"
+  },
+  {
+   "trace": "12",
+   "id": "12c",
+   "tier": "borderline",
+   "spans": [
+    [
+     1537,
+     1625
+    ]
+   ],
+   "anchors": [
+    1625
+   ],
+   "approach": "solve cubic exactly"
+  },
+  {
+   "trace": "16",
+   "id": "16a",
+   "tier": "firm",
+   "spans": [
+    [
+     91,
+     127
+    ]
+   ],
+   "anchors": [
+    127
+   ],
+   "approach": "vector approach to O1"
+  },
+  {
+   "trace": "16",
+   "id": "16b",
+   "tier": "borderline",
+   "spans": [
+    [
+     67,
+     79
+    ],
+    [
+     128,
+     138
+    ]
+   ],
+   "anchors": [
+    138
+   ],
+   "approach": "power of A w.r.t. (BIC)"
+  },
+  {
+   "trace": "16",
+   "id": "16c",
+   "tier": "borderline",
+   "spans": [
+    [
+     874,
+     874
+    ],
+    [
+     1218,
+     1225
+    ],
+    [
+     1420,
+     1422
+    ]
+   ],
+   "anchors": [
+    1422
+   ],
+   "approach": "Gamma = A-mixtilinear incircle"
+  },
+  {
+   "trace": "16",
+   "id": "16d",
+   "tier": "borderline",
+   "spans": [
+    [
+     1374,
+     1400
+    ]
+   ],
+   "anchors": [
+    1400
+   ],
+   "approach": "Gamma = A-excircle"
+  },
+  {
+   "trace": "18",
+   "id": "18a",
+   "tier": "firm",
+   "spans": [
+    [
+     71,
+     225
+    ]
+   ],
+   "anchors": [
+    225
+   ],
+   "approach": "cyclic 3-block labelling count 993"
+  },
+  {
+   "trace": "19",
+   "id": "19a",
+   "tier": "firm",
+   "spans": [
+    [
+     18,
+     47
+    ],
+    [
+     124,
+     167
+    ]
+   ],
+   "anchors": [
+    167
+   ],
+   "approach": "M-origin coordinates"
+  },
+  {
+   "trace": "19",
+   "id": "19b",
+   "tier": "firm",
+   "spans": [
+    [
+     53,
+     108
+    ]
+   ],
+   "anchors": [
+    108
+   ],
+   "approach": "A-origin coordinates"
+  },
+  {
+   "trace": "19",
+   "id": "19c",
+   "tier": "firm",
+   "spans": [
+    [
+     311,
+     492
+    ]
+   ],
+   "anchors": [
+    492
+   ],
+   "approach": "trig substitution system"
+  },
+  {
+   "trace": "19",
+   "id": "19d",
+   "tier": "firm",
+   "spans": [
+    [
+     560,
+     603
+    ]
+   ],
+   "anchors": [
+    603
+   ],
+   "approach": "inscribed-angle / bisector argument"
+  },
+  {
+   "trace": "19",
+   "id": "19e",
+   "tier": "borderline",
+   "spans": [
+    [
+     544,
+     550
+    ]
+   ],
+   "anchors": [
+    550
+   ],
+   "approach": "angles at X"
+  },
+  {
+   "trace": "19",
+   "id": "19f",
+   "tier": "borderline",
+   "spans": [
+    [
+     110,
+     124
+    ]
+   ],
+   "anchors": [
+    124
+   ],
+   "approach": "known trick via law of sines"
+  },
+  {
+   "trace": "20",
+   "id": "20a",
+   "tier": "firm",
+   "spans": [
+    [
+     9,
+     35
+    ]
+   ],
+   "anchors": [
+    35
+   ],
+   "approach": "(BIC) centre = excenter / arc midpoint"
+  },
+  {
+   "trace": "20",
+   "id": "20b",
+   "tier": "firm",
+   "spans": [
+    [
+     65,
+     91
+    ]
+   ],
+   "anchors": [
+    91
+   ],
+   "approach": "homothety centred at I"
+  },
+  {
+   "trace": "20",
+   "id": "20c",
+   "tier": "firm",
+   "spans": [
+    [
+     627,
+     781
+    ]
+   ],
+   "anchors": [
+    781
+   ],
+   "approach": "sign hunt for x2"
+  },
+  {
+   "trace": "20",
+   "id": "20d",
+   "tier": "firm",
+   "spans": [
+    [
+     75,
+     87
+    ]
+   ],
+   "anchors": [
+    87
+   ],
+   "approach": "power of O' w.r.t. (BIC)"
+  },
+  {
+   "trace": "20",
+   "id": "20e",
+   "tier": "firm",
+   "spans": [
+    [
+     101,
+     113
+    ],
+    [
+     875,
+     905
+    ]
+   ],
+   "anchors": [
+    113,
+    905
+   ],
+   "approach": "O' lies on (BIC)"
+  },
+  {
+   "trace": "20",
+   "id": "20f",
+   "tier": "firm",
+   "spans": [
+    [
+     781,
+     873
+    ]
+   ],
+   "anchors": [
+    873
+   ],
+   "approach": "squared algebraic equation"
+  },
+  {
+   "trace": "20",
+   "id": "20g",
+   "tier": "borderline",
+   "spans": [
+    [
+     379,
+     479
+    ]
+   ],
+   "anchors": [
+    479
+   ],
+   "approach": "symbolic solve -> numeric plug-in"
+  }
+ ]
+}

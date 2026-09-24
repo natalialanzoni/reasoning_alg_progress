@@ -1,0 +1,4737 @@
+{
+ "note": "Soft backtracking gold: \"tries an approach and gives it up to do something different\". Two blind Claude annotators; union, agreed=both found it. NOT RA-checked.",
+ "instances": [
+  {
+   "trace": "01",
+   "id": "01s0",
+   "spans": [
+    [
+     3,
+     3
+    ]
+   ],
+   "anchors": [
+    3,
+    3
+   ],
+   "agreed": true,
+   "tiers": [
+    "borderline",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "guessed relation AP*AM = AB*AC"
+  },
+  {
+   "trace": "01",
+   "id": "01s1",
+   "spans": [
+    [
+     7,
+     7
+    ],
+    [
+     7,
+     9
+    ],
+    [
+     45,
+     45
+    ]
+   ],
+   "anchors": [
+    7,
+    45
+   ],
+   "agreed": true,
+   "tiers": [
+    "borderline",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "circle ABH passes through antipode of C / has a diameter"
+  },
+  {
+   "trace": "01",
+   "id": "01s2",
+   "spans": [
+    [
+     9,
+     9
+    ],
+    [
+     11,
+     11
+    ],
+    [
+     47,
+     53
+    ],
+    [
+     458,
+     462
+    ]
+   ],
+   "anchors": [
+    51,
+    462
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "quadrilateral ABHC cyclic / angle BAH = C property"
+  },
+  {
+   "trace": "01",
+   "id": "01s3",
+   "spans": [
+    [
+     11,
+     11
+    ],
+    [
+     13,
+     19
+    ],
+    [
+     143,
+     456
+    ]
+   ],
+   "anchors": [
+    13,
+    458
+   ],
+   "agreed": true,
+   "tiers": [
+    "borderline",
+    "firm"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "law-of-sines formula AP = AB sin(B/2)/sin(A/2)"
+  },
+  {
+   "trace": "01",
+   "id": "01s4",
+   "spans": [
+    [
+     19,
+     33
+    ],
+    [
+     21,
+     21
+    ],
+    [
+     29,
+     33
+    ],
+    [
+     470,
+     478
+    ],
+    [
+     476,
+     484
+    ],
+    [
+     484,
+     504
+    ],
+    [
+     504,
+     504
+    ]
+   ],
+   "anchors": [
+    504,
+    504
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "firm"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "closed-form formula for AM (distance to arc midpoint) via triangle AOM / law of sines"
+  },
+  {
+   "trace": "01",
+   "id": "01s5",
+   "spans": [
+    [
+     31,
+     31
+    ],
+    [
+     35,
+     39
+    ],
+    [
+     91,
+     93
+    ],
+    [
+     109,
+     109
+    ],
+    [
+     486,
+     502
+    ]
+   ],
+   "anchors": [
+    109,
+    504
+   ],
+   "agreed": true,
+   "tiers": [
+    "borderline",
+    "firm"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "power of a point along the bisector (A, P, H)"
+  },
+  {
+   "trace": "01",
+   "id": "01s6",
+   "spans": [
+    [
+     35,
+     39
+    ],
+    [
+     41,
+     41
+    ],
+    [
+     55,
+     83
+    ],
+    [
+     91,
+     93
+    ],
+    [
+     109,
+     109
+    ],
+    [
+     272,
+     272
+    ],
+    [
+     383,
+     383
+    ]
+   ],
+   "anchors": [
+    85,
+    383
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "firm"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "reflection symmetry across the A-bisector (circles ABH, ACH swapped; H fixed)"
+  },
+  {
+   "trace": "01",
+   "id": "01s7",
+   "spans": [
+    [
+     41,
+     41
+    ],
+    [
+     55,
+     85
+    ],
+    [
+     87,
+     87
+    ],
+    [
+     107,
+     107
+    ],
+    [
+     135,
+     139
+    ]
+   ],
+   "anchors": [
+    139,
+    85
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "firm"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "harmonic division / cross-ratio (A,P;Q,M)"
+  },
+  {
+   "trace": "01",
+   "id": "01s8",
+   "spans": [
+    [
+     87,
+     87
+    ],
+    [
+     95,
+     103
+    ],
+    [
+     107,
+     107
+    ],
+    [
+     115,
+     133
+    ],
+    [
+     135,
+     139
+    ]
+   ],
+   "anchors": [
+    135,
+    139
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "firm"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "inscribed angles / law of sines in cyclic ABPH"
+  },
+  {
+   "trace": "01",
+   "id": "01s9",
+   "spans": [
+    [
+     111,
+     111
+    ]
+   ],
+   "anchors": [
+    111,
+    111
+   ],
+   "agreed": true,
+   "tiers": [
+    "borderline",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "inversion at A"
+  },
+  {
+   "trace": "01",
+   "id": "01s10",
+   "spans": [
+    [
+     105,
+     105
+    ],
+    [
+     113,
+     113
+    ],
+    [
+     464,
+     464
+    ]
+   ],
+   "anchors": [
+    464,
+    464
+   ],
+   "agreed": true,
+   "tiers": [
+    "borderline",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "guessed answer AM = 9 (= AP + AQ)"
+  },
+  {
+   "trace": "01",
+   "id": "01s11",
+   "spans": [
+    [
+     141,
+     141
+    ]
+   ],
+   "anchors": [
+    141,
+    141
+   ],
+   "agreed": true,
+   "tiers": [
+    "borderline",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "lemma: P, Q are projections of H onto the sides"
+  },
+  {
+   "trace": "01",
+   "id": "01s12",
+   "spans": [
+    [
+     147,
+     147
+    ]
+   ],
+   "anchors": [
+    147
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a1"
+   ],
+   "approach": "barycentric formula H = (tan A : tan B : tan C)"
+  },
+  {
+   "trace": "01",
+   "id": "01s13",
+   "spans": [
+    [
+     13,
+     17
+    ],
+    [
+     145,
+     454
+    ],
+    [
+     399,
+     452
+    ]
+   ],
+   "anchors": [
+    458,
+    452
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "firm"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "coordinates with bisector as x-axis, solve for b, c, alpha from AP=4, AQ=5, BC=7"
+  },
+  {
+   "trace": "01",
+   "id": "01s14",
+   "spans": [
+    [
+     399,
+     452
+    ]
+   ],
+   "anchors": [
+    452
+   ],
+   "agreed": false,
+   "tiers": [
+    "firm"
+   ],
+   "by": [
+    "a1"
+   ],
+   "approach": "integer-side guess b=5, c=6"
+  },
+  {
+   "trace": "01",
+   "id": "01s15",
+   "spans": [
+    [
+     113,
+     113
+    ],
+    [
+     458,
+     462
+    ],
+    [
+     464,
+     464
+    ]
+   ],
+   "anchors": [
+    462,
+    464
+   ],
+   "agreed": true,
+   "tiers": [
+    "borderline",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "guessed closed forms for AP (2R cos B, 2bc cos B sin(A/2)/(b+c))"
+  },
+  {
+   "trace": "01",
+   "id": "01s16",
+   "spans": [
+    [
+     466,
+     466
+    ]
+   ],
+   "anchors": [
+    466,
+    466
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "firm"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "relation 1/AP + 1/AQ = 1/AM"
+  },
+  {
+   "trace": "01",
+   "id": "01s17",
+   "spans": [
+    [
+     468,
+     468
+    ],
+    [
+     470,
+     474
+    ]
+   ],
+   "anchors": [
+    468,
+    474
+   ],
+   "agreed": true,
+   "tiers": [
+    "borderline",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "relation AM = (AP*AQ + BC)/?"
+  },
+  {
+   "trace": "01",
+   "id": "01s18",
+   "spans": [
+    [
+     480,
+     482
+    ]
+   ],
+   "anchors": [
+    482
+   ],
+   "agreed": false,
+   "tiers": [
+    "firm"
+   ],
+   "by": [
+    "a1"
+   ],
+   "approach": "formula AM = 2R cos(A/2)"
+  },
+  {
+   "trace": "01",
+   "id": "01s19",
+   "spans": [
+    [
+     482,
+     482
+    ]
+   ],
+   "anchors": [
+    482
+   ],
+   "agreed": false,
+   "tiers": [
+    "firm"
+   ],
+   "by": [
+    "a1"
+   ],
+   "approach": "formula AM = 2R sin(A/2)"
+  },
+  {
+   "trace": "01",
+   "id": "01s20",
+   "spans": [
+    [
+     47,
+     53
+    ]
+   ],
+   "anchors": [
+    51
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "test whether ABHC is cyclic"
+  },
+  {
+   "trace": "01",
+   "id": "01s21",
+   "spans": [
+    [
+     95,
+     103
+    ]
+   ],
+   "anchors": [
+    105
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "inscribed-angle relations in circle ABH (angle AXH = angle ABH)"
+  },
+  {
+   "trace": "01",
+   "id": "01s22",
+   "spans": [
+    [
+     115,
+     133
+    ]
+   ],
+   "anchors": [
+    135
+   ],
+   "agreed": false,
+   "tiers": [
+    "firm"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "law of sines in triangle ABP / cyclic ABPH angles"
+  },
+  {
+   "trace": "02",
+   "id": "02s23",
+   "spans": [
+    [
+     3,
+     3
+    ]
+   ],
+   "anchors": [
+    3
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "identify Gamma as an excircle"
+  },
+  {
+   "trace": "02",
+   "id": "02s24",
+   "spans": [
+    [
+     5,
+     5
+    ]
+   ],
+   "anchors": [
+    5
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "identify circle BIC as the A-mixtilinear incircle"
+  },
+  {
+   "trace": "02",
+   "id": "02s25",
+   "spans": [
+    [
+     19,
+     21
+    ]
+   ],
+   "anchors": [
+    21
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "locate center of circle BIC via angle-BIC bisector / diameter"
+  },
+  {
+   "trace": "02",
+   "id": "02s26",
+   "spans": [
+    [
+     25,
+     25
+    ]
+   ],
+   "anchors": [
+    25
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "intersect EF with AB, AC"
+  },
+  {
+   "trace": "02",
+   "id": "02s27",
+   "spans": [
+    [
+     27,
+     27
+    ]
+   ],
+   "anchors": [
+    27
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "use circle through incircle touch points D,E,F"
+  },
+  {
+   "trace": "02",
+   "id": "02s28",
+   "spans": [
+    [
+     71,
+     75
+    ]
+   ],
+   "anchors": [
+    75
+   ],
+   "agreed": false,
+   "tiers": [
+    "firm"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "AI bisects angle BIC (E,F symmetric about AI)"
+  },
+  {
+   "trace": "02",
+   "id": "02s29",
+   "spans": [
+    [
+     93,
+     119
+    ],
+    [
+     139,
+     285
+    ]
+   ],
+   "anchors": [
+    287
+   ],
+   "agreed": false,
+   "tiers": [
+    "firm"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "compute circumcenter O1 of BIC in coordinates (perpendicular bisectors / AI meets perp bisector of BC)"
+  },
+  {
+   "trace": "02",
+   "id": "02s30",
+   "spans": [
+    [
+     121,
+     121
+    ]
+   ],
+   "anchors": [
+    121
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "I as excenter of triangle BIC"
+  },
+  {
+   "trace": "02",
+   "id": "02s31",
+   "spans": [
+    [
+     548,
+     564
+    ],
+    [
+     714,
+     714
+    ]
+   ],
+   "anchors": [
+    714
+   ],
+   "agreed": false,
+   "tiers": [
+    "firm"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "match cubic root to a nice radical (2sqrt10, sqrt40, 2+sqrt20, 3+sqrt13, 4+sqrt5, 6+sqrt12)"
+  },
+  {
+   "trace": "02",
+   "id": "02s32",
+   "spans": [
+    [
+     566,
+     570
+    ],
+    [
+     716,
+     722
+    ]
+   ],
+   "anchors": [
+    724
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "alternative interpretation of the problem (radius meaning / external tangency)"
+  },
+  {
+   "trace": "02",
+   "id": "02s33",
+   "spans": [
+    [
+     588,
+     592
+    ],
+    [
+     738,
+     738
+    ]
+   ],
+   "anchors": [
+    738
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "solve the cubic exactly (depressed cubic / cubic formula)"
+  },
+  {
+   "trace": "02",
+   "id": "02s34",
+   "spans": [
+    [
+     730,
+     734
+    ]
+   ],
+   "anchors": [
+    734
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "guessed integer answer BC = 6 (or 5, 7)"
+  },
+  {
+   "trace": "03",
+   "id": "03s35",
+   "spans": [
+    [
+     179,
+     325
+    ],
+    [
+     361,
+     363
+    ],
+    [
+     389,
+     393
+    ],
+    [
+     417,
+     421
+    ],
+    [
+     444,
+     446
+    ],
+    [
+     468,
+     468
+    ]
+   ],
+   "anchors": [
+    468
+   ],
+   "agreed": false,
+   "tiers": [
+    "firm"
+   ],
+   "by": [
+    "a1"
+   ],
+   "approach": "a chain component whose Fibonacci factor contains 101 (F_50, 48 vertices)"
+  },
+  {
+   "trace": "03",
+   "id": "03s36",
+   "spans": [
+    [
+     343,
+     351
+    ],
+    [
+     381,
+     383
+    ],
+    [
+     519,
+     521
+    ]
+   ],
+   "anchors": [
+    521
+   ],
+   "agreed": false,
+   "tiers": [
+    "firm"
+   ],
+   "by": [
+    "a1"
+   ],
+   "approach": "interacting / closely spaced components to escape pure Fibonacci products"
+  },
+  {
+   "trace": "03",
+   "id": "03s37",
+   "spans": [
+    [
+     353,
+     355
+    ],
+    [
+     434,
+     434
+    ],
+    [
+     466,
+     466
+    ],
+    [
+     470,
+     515
+    ]
+   ],
+   "anchors": [
+    515
+   ],
+   "agreed": false,
+   "tiers": [
+    "firm"
+   ],
+   "by": [
+    "a1"
+   ],
+   "approach": "consecutive pairs mixed with isolated vertices (component with exactly 101 matchings)"
+  },
+  {
+   "trace": "03",
+   "id": "03s38",
+   "spans": [
+    [
+     357,
+     357
+    ],
+    [
+     395,
+     397
+    ],
+    [
+     436,
+     442
+    ]
+   ],
+   "anchors": [
+    440
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a1"
+   ],
+   "approach": "alternative readings of the cousin definition (pairing not a bijection, T = S, empty set)"
+  },
+  {
+   "trace": "03",
+   "id": "03s39",
+   "spans": [
+    [
+     523,
+     523
+    ]
+   ],
+   "anchors": [
+    523
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a1"
+   ],
+   "approach": "brute-force listing of Fibonacci products"
+  },
+  {
+   "trace": "03",
+   "id": "03s40",
+   "spans": [
+    [
+     533,
+     533
+    ]
+   ],
+   "anchors": [
+    533
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a1"
+   ],
+   "approach": "guessed answer 49"
+  },
+  {
+   "trace": "05",
+   "id": "05s41",
+   "spans": [
+    [
+     29,
+     37
+    ],
+    [
+     57,
+     77
+    ]
+   ],
+   "anchors": [
+    77,
+    77
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "firm"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "Equilateral arrangement of the three centers"
+  },
+  {
+   "trace": "05",
+   "id": "05s42",
+   "spans": [
+    [
+     41,
+     51
+    ],
+    [
+     99,
+     115
+    ],
+    [
+     246,
+     285
+    ],
+    [
+     246,
+     287
+    ]
+   ],
+   "anchors": [
+    287,
+    285
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "firm"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "Center-based parametrization (place centers A,B,C on radius-9 circle, compute common tangents of each pair)"
+  },
+  {
+   "trace": "05",
+   "id": "05s43",
+   "spans": [
+    [
+     256,
+     273
+    ],
+    [
+     256,
+     275
+    ]
+   ],
+   "anchors": [
+    273,
+    275
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "firm"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "Assign the A-B tangent chord to distance 1 (sin alpha = 1/3, A=(6sqrt2,3))"
+  },
+  {
+   "trace": "05",
+   "id": "05s44",
+   "spans": [
+    [
+     83,
+     83
+    ]
+   ],
+   "anchors": [
+    83,
+    83
+   ],
+   "agreed": true,
+   "tiers": [
+    "borderline",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "Mutually tangent small circles configuration"
+  },
+  {
+   "trace": "05",
+   "id": "05s45",
+   "spans": [
+    [
+     117,
+     119
+    ],
+    [
+     226,
+     226
+    ]
+   ],
+   "anchors": [
+    228,
+    226
+   ],
+   "agreed": true,
+   "tiers": [
+    "borderline",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "Recall the problem from memory / known competition solution"
+  },
+  {
+   "trace": "05",
+   "id": "05s46",
+   "spans": [
+    [
+     228,
+     230
+    ],
+    [
+     232,
+     234
+    ],
+    [
+     240,
+     240
+    ]
+   ],
+   "anchors": [
+    242,
+    234
+   ],
+   "agreed": true,
+   "tiers": [
+    "borderline",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "Chain / clustered arrangement of the small circles"
+  },
+  {
+   "trace": "05",
+   "id": "05s47",
+   "spans": [
+    [
+     232,
+     234
+    ],
+    [
+     236,
+     236
+    ]
+   ],
+   "anchors": [
+    234,
+    238
+   ],
+   "agreed": true,
+   "tiers": [
+    "borderline",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "Interpretation: two chords tangent to the same pair of circles"
+  },
+  {
+   "trace": "05",
+   "id": "05s48",
+   "spans": [
+    [
+     236,
+     236
+    ],
+    [
+     240,
+     240
+    ]
+   ],
+   "anchors": [
+    238,
+    242
+   ],
+   "agreed": true,
+   "tiers": [
+    "borderline",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "Work backwards from a guessed nice answer (h = 5, 6, 7, or diameter)"
+  },
+  {
+   "trace": "05",
+   "id": "05s49",
+   "spans": [
+    [
+     195,
+     200
+    ],
+    [
+     197,
+     198
+    ]
+   ],
+   "anchors": [
+    200,
+    200
+   ],
+   "agreed": true,
+   "tiers": [
+    "borderline",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "Coordinates with s1 as the line y = 1"
+  },
+  {
+   "trace": "05",
+   "id": "05s50",
+   "spans": [
+    [
+     482,
+     484
+    ],
+    [
+     482,
+     486
+    ],
+    [
+     660,
+     664
+    ]
+   ],
+   "anchors": [
+    664,
+    486
+   ],
+   "agreed": true,
+   "tiers": [
+    "borderline",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "Non-symmetric configuration / different pairing of the two equal chords"
+  },
+  {
+   "trace": "06",
+   "id": "06s51",
+   "spans": [
+    [
+     1,
+     1
+    ],
+    [
+     9,
+     9
+    ],
+    [
+     23,
+     23
+    ],
+    [
+     70,
+     70
+    ],
+    [
+     264,
+     266
+    ],
+    [
+     296,
+     296
+    ],
+    [
+     304,
+     316
+    ],
+    [
+     335,
+     335
+    ],
+    [
+     345,
+     345
+    ],
+    [
+     373,
+     381
+    ],
+    [
+     395,
+     399
+    ],
+    [
+     417,
+     429
+    ],
+    [
+     444,
+     446
+    ],
+    [
+     485,
+     487
+    ],
+    [
+     507,
+     509
+    ],
+    [
+     537,
+     537
+    ],
+    [
+     563,
+     563
+    ],
+    [
+     585,
+     595
+    ],
+    [
+     609,
+     611
+    ],
+    [
+     623,
+     627
+    ],
+    [
+     651,
+     653
+    ],
+    [
+     667,
+     669
+    ],
+    [
+     695,
+     697
+    ],
+    [
+     723,
+     727
+    ],
+    [
+     757,
+     761
+    ]
+   ],
+   "anchors": [
+    761
+   ],
+   "agreed": false,
+   "tiers": [
+    "firm"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "recalled AIME answer 63"
+  },
+  {
+   "trace": "06",
+   "id": "06s52",
+   "spans": [
+    [
+     19,
+     21
+    ],
+    [
+     70,
+     70
+    ],
+    [
+     669,
+     675
+    ]
+   ],
+   "anchors": [
+    675
+   ],
+   "agreed": false,
+   "tiers": [
+    "firm"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "small |S| near 2^12 = 4096 (answer 12, or 13)"
+  },
+  {
+   "trace": "06",
+   "id": "06s53",
+   "spans": [
+    [
+     13,
+     13
+    ]
+   ],
+   "anchors": [
+    15
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "count cousins by inclusion-exclusion over sign functions"
+  },
+  {
+   "trace": "07",
+   "id": "07s54",
+   "spans": [
+    [
+     1,
+     1
+    ],
+    [
+     3,
+     3
+    ],
+    [
+     9,
+     11
+    ],
+    [
+     20,
+     20
+    ],
+    [
+     26,
+     28
+    ],
+    [
+     26,
+     30
+    ],
+    [
+     36,
+     36
+    ],
+    [
+     40,
+     40
+    ],
+    [
+     52,
+     56
+    ],
+    [
+     62,
+     62
+    ],
+    [
+     70,
+     72
+    ],
+    [
+     72,
+     72
+    ]
+   ],
+   "anchors": [
+    74,
+    74
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "firm"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "literal reading: doubling after debt-free is trivial (0 doubles to 0), process is a plain decreasing walk"
+  },
+  {
+   "trace": "07",
+   "id": "07s55",
+   "spans": [
+    [
+     18,
+     18
+    ],
+    [
+     24,
+     24
+    ],
+    [
+     32,
+     32
+    ],
+    [
+     44,
+     50
+    ],
+    [
+     58,
+     58
+    ],
+    [
+     58,
+     60
+    ],
+    [
+     64,
+     64
+    ]
+   ],
+   "anchors": [
+    64,
+    64
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "firm"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "reading where the leftover nonpositive/overpaid debt gets doubled after becoming debt-free"
+  },
+  {
+   "trace": "07",
+   "id": "07s56",
+   "spans": [
+    [
+     13,
+     13
+    ]
+   ],
+   "anchors": [
+    13,
+    13
+   ],
+   "agreed": true,
+   "tiers": [
+    "borderline",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "typo reading: doubling applies if debt never becomes nonpositive"
+  },
+  {
+   "trace": "07",
+   "id": "07s57",
+   "spans": [
+    [
+     62,
+     62
+    ],
+    [
+     66,
+     66
+    ],
+    [
+     70,
+     70
+    ]
+   ],
+   "anchors": [
+    66,
+    70
+   ],
+   "agreed": true,
+   "tiers": [
+    "borderline",
+    "firm"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "reading where the amount paid is doubled"
+  },
+  {
+   "trace": "07",
+   "id": "07s58",
+   "spans": [
+    [
+     66,
+     66
+    ],
+    [
+     68,
+     68
+    ]
+   ],
+   "anchors": [
+    68,
+    66
+   ],
+   "agreed": true,
+   "tiers": [
+    "borderline",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "reading where heads gains money / tails changes debt differently"
+  },
+  {
+   "trace": "07",
+   "id": "07s59",
+   "spans": [
+    [
+     22,
+     22
+    ],
+    [
+     34,
+     34
+    ],
+    [
+     38,
+     38
+    ],
+    [
+     42,
+     42
+    ],
+    [
+     52,
+     52
+    ]
+   ],
+   "anchors": [
+    52,
+    42
+   ],
+   "agreed": true,
+   "tiers": [
+    "borderline",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "recall the problem from memory / known source"
+  },
+  {
+   "trace": "07",
+   "id": "07s60",
+   "spans": [
+    [
+     5,
+     5
+    ],
+    [
+     34,
+     34
+    ],
+    [
+     42,
+     42
+    ]
+   ],
+   "anchors": [
+    42
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a1"
+   ],
+   "approach": "reading where 'remaining debt' means some other debt (pre-payment debt or debt owed elsewhere)"
+  },
+  {
+   "trace": "07",
+   "id": "07s61",
+   "spans": [
+    [
+     194,
+     247
+    ],
+    [
+     198,
+     249
+    ]
+   ],
+   "anchors": [
+    249,
+    249
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "firm"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "functional equation p(D) = (p(2D-2)+p(2D-4))/2 with q = 1-p recursion"
+  },
+  {
+   "trace": "07",
+   "id": "07s62",
+   "spans": [
+    [
+     68,
+     68
+    ]
+   ],
+   "anchors": [
+    68
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "Interpretation: heads gains money rather than paying"
+  },
+  {
+   "trace": "07",
+   "id": "07s63",
+   "spans": [
+    [
+     121,
+     136
+    ]
+   ],
+   "anchors": [
+    138
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "Enumerating debt values along explicit coin-flip paths (D1, D2 cases)"
+  },
+  {
+   "trace": "08",
+   "id": "08s64",
+   "spans": [
+    [
+     85,
+     105
+    ],
+    [
+     91,
+     105
+    ]
+   ],
+   "anchors": [
+    106,
+    106
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "power of point of B wrt omega / second intersection of circle BIC with AB"
+  },
+  {
+   "trace": "08",
+   "id": "08s65",
+   "spans": [
+    [
+     106,
+     110
+    ],
+    [
+     106,
+     111
+    ]
+   ],
+   "anchors": [
+    111,
+    111
+   ],
+   "agreed": true,
+   "tiers": [
+    "borderline",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "find circumcenter O1 of BIC via perpendicular bisector of IB"
+  },
+  {
+   "trace": "08",
+   "id": "08s66",
+   "spans": [
+    [
+     113,
+     139
+    ],
+    [
+     113,
+     140
+    ]
+   ],
+   "anchors": [
+    140,
+    140
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "firm"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "solve for u, v by multiplying by b and c and subtracting (half-angle expressions for IB, IC)"
+  },
+  {
+   "trace": "08",
+   "id": "08s67",
+   "spans": [
+    [
+     602,
+     607
+    ],
+    [
+     605,
+     607
+    ],
+    [
+     641,
+     781
+    ],
+    [
+     1329,
+     1354
+    ],
+    [
+     1498,
+     1498
+    ]
+   ],
+   "anchors": [
+    1498,
+    1354
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "firm"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "candidate C = 90 degrees, a = 2*sqrt(6)"
+  },
+  {
+   "trace": "08",
+   "id": "08s68",
+   "spans": [
+    [
+     1199,
+     1201
+    ]
+   ],
+   "anchors": [
+    1201,
+    1201
+   ],
+   "agreed": true,
+   "tiers": [
+    "borderline",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "guess phi = 45 degrees - alpha"
+  },
+  {
+   "trace": "08",
+   "id": "08s69",
+   "spans": [
+    [
+     1457,
+     1460
+    ],
+    [
+     1520,
+     1523
+    ]
+   ],
+   "anchors": [
+    1523,
+    1460
+   ],
+   "agreed": true,
+   "tiers": [
+    "borderline",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "exact closed form for root of 4v^3-8v^2-4v-1 via depressed-cubic shift"
+  },
+  {
+   "trace": "08",
+   "id": "08s70",
+   "spans": [
+    [
+     1422,
+     1423
+    ],
+    [
+     1447,
+     1450
+    ],
+    [
+     1490,
+     1491
+    ],
+    [
+     1490,
+     1575
+    ],
+    [
+     1510,
+     1511
+    ],
+    [
+     1524,
+     1526
+    ],
+    [
+     1533,
+     1575
+    ]
+   ],
+   "anchors": [
+    1575,
+    1575
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "firm"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "candidate a = 6"
+  },
+  {
+   "trace": "08",
+   "id": "08s71",
+   "spans": [
+    [
+     1492,
+     1497
+    ],
+    [
+     1512,
+     1518
+    ],
+    [
+     1527,
+     1530
+    ]
+   ],
+   "anchors": [
+    1518
+   ],
+   "agreed": false,
+   "tiers": [
+    "firm"
+   ],
+   "by": [
+    "a1"
+   ],
+   "approach": "other integer candidates for a (8, 9, 10, 11, 7, 5, 4, 3)"
+  },
+  {
+   "trace": "08",
+   "id": "08s72",
+   "spans": [
+    [
+     209,
+     298
+    ],
+    [
+     301,
+     315
+    ],
+    [
+     442,
+     458
+    ]
+   ],
+   "anchors": [
+    469
+   ],
+   "agreed": false,
+   "tiers": [
+    "firm"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "treating the y-axis (through I) as the external angle bisector, center of Gamma at (0,y0)"
+  },
+  {
+   "trace": "09",
+   "id": "09s73",
+   "spans": [
+    [
+     41,
+     285
+    ],
+    [
+     299,
+     322
+    ],
+    [
+     545,
+     722
+    ],
+    [
+     726,
+     750
+    ],
+    [
+     790,
+     796
+    ],
+    [
+     820,
+     846
+    ],
+    [
+     846,
+     848
+    ],
+    [
+     994,
+     996
+    ]
+   ],
+   "anchors": [
+    996,
+    996
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "firm"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "shoelace on the literal vertex order A, A', C, C', B, B' (area 155.7, answer 156)"
+  },
+  {
+   "trace": "09",
+   "id": "09s74",
+   "spans": [
+    [
+     297,
+     297
+    ],
+    [
+     297,
+     322
+    ],
+    [
+     429,
+     529
+    ],
+    [
+     726,
+     752
+    ],
+    [
+     790,
+     796
+    ],
+    [
+     820,
+     845
+    ],
+    [
+     858,
+     897
+    ],
+    [
+     996,
+     996
+    ]
+   ],
+   "anchors": [
+    897,
+    996
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "firm"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "area independent of which rotation; compute area for rotation 2"
+  },
+  {
+   "trace": "09",
+   "id": "09s75",
+   "spans": [
+    [
+     221,
+     231
+    ],
+    [
+     553,
+     553
+    ],
+    [
+     654,
+     656
+    ],
+    [
+     980,
+     990
+    ]
+   ],
+   "anchors": [
+    990,
+    231
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "look for another rotation (theta+pi, 90 degrees, other angles) satisfying the side condition"
+  },
+  {
+   "trace": "09",
+   "id": "09s76",
+   "spans": [
+    [
+     907,
+     937
+    ]
+   ],
+   "anchors": [
+    939,
+    937
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "firm"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "hull-like order A, C, C', A', B, B' (area 163.76)"
+  },
+  {
+   "trace": "09",
+   "id": "09s77",
+   "spans": [
+    [
+     899,
+     905
+    ],
+    [
+     941,
+     976
+    ],
+    [
+     943,
+     974
+    ],
+    [
+     978,
+     980
+    ]
+   ],
+   "anchors": [
+    980,
+    974
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "firm"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "hexagon as union of the two triangles (disjoint gives 168; order A,C,C',A',B',B gives 81.375)"
+  },
+  {
+   "trace": "09",
+   "id": "09s78",
+   "spans": [
+    [
+     143,
+     143
+    ],
+    [
+     287,
+     289
+    ]
+   ],
+   "anchors": [
+    289,
+    289
+   ],
+   "agreed": true,
+   "tiers": [
+    "borderline",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "reinterpret 'B' in the side condition as B'"
+  },
+  {
+   "trace": "09",
+   "id": "09s79",
+   "spans": [
+    [
+     205,
+     205
+    ],
+    [
+     557,
+     557
+    ],
+    [
+     722,
+     724
+    ],
+    [
+     724,
+     724
+    ]
+   ],
+   "anchors": [
+    724,
+    724
+   ],
+   "agreed": true,
+   "tiers": [
+    "borderline",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "side condition relative to line BC (or a different condition)"
+  },
+  {
+   "trace": "09",
+   "id": "09s80",
+   "spans": [
+    [
+     127,
+     127
+    ],
+    [
+     213,
+     213
+    ],
+    [
+     684,
+     684
+    ]
+   ],
+   "anchors": [
+    684,
+    684
+   ],
+   "agreed": true,
+   "tiers": [
+    "borderline",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "swapped vertex labels (A' and C' images mixed up)"
+  },
+  {
+   "trace": "09",
+   "id": "09s81",
+   "spans": [
+    [
+     808,
+     820
+    ]
+   ],
+   "anchors": [
+    820,
+    818
+   ],
+   "agreed": true,
+   "tiers": [
+    "borderline",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "take hexagon as the convex hull of the six points"
+  },
+  {
+   "trace": "09",
+   "id": "09s82",
+   "spans": [
+    [
+     899,
+     906
+    ],
+    [
+     939,
+     939
+    ],
+    [
+     939,
+     941
+    ],
+    [
+     978,
+     980
+    ]
+   ],
+   "anchors": [
+    939,
+    980
+   ],
+   "agreed": true,
+   "tiers": [
+    "borderline",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "decompose hexagon into triangles AB'C', AC'B'"
+  },
+  {
+   "trace": "09",
+   "id": "09s83",
+   "spans": [
+    [
+     429,
+     529
+    ],
+    [
+     858,
+     897
+    ]
+   ],
+   "anchors": [
+    897
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "Rotation 2 configuration with angle-sorted order (area 155.74, then 159.49)"
+  },
+  {
+   "trace": "10",
+   "id": "10s84",
+   "spans": [
+    [
+     35,
+     71
+    ],
+    [
+     71,
+     71
+    ],
+    [
+     159,
+     163
+    ]
+   ],
+   "anchors": [
+    71,
+    163
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "BC direction obtained by rotating the AB (upward) direction by 45 deg, C=(+-14, b+14)"
+  },
+  {
+   "trace": "10",
+   "id": "10s85",
+   "spans": [
+    [
+     91,
+     153
+    ],
+    [
+     91,
+     157
+    ],
+    [
+     165,
+     316
+    ]
+   ],
+   "anchors": [
+    316,
+    316
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "firm"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "Acute-dot sign restriction d > b-14 giving unique candidate AB = 15"
+  },
+  {
+   "trace": "10",
+   "id": "10s86",
+   "spans": [
+    [
+     762,
+     826
+    ],
+    [
+     884,
+     926
+    ],
+    [
+     1206,
+     1218
+    ],
+    [
+     1220,
+     1228
+    ],
+    [
+     1388,
+     1404
+    ]
+   ],
+   "anchors": [
+    1220,
+    1406
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "firm"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "Rationality argument: integer u requires s/t rational, so only r=1 (AB in {21,49})"
+  },
+  {
+   "trace": "10",
+   "id": "10s87",
+   "spans": [
+    [
+     926,
+     968
+    ],
+    [
+     926,
+     972
+    ]
+   ],
+   "anchors": [
+    968,
+    968
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "firm"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "Solve exactly for d at u=8 (t-substitution, factor the quartic)"
+  },
+  {
+   "trace": "10",
+   "id": "10s88",
+   "spans": [
+    [
+     1023,
+     1025
+    ]
+   ],
+   "anchors": [
+    1025
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a1"
+   ],
+   "approach": "Substitute u(d) into the area formula to get area in d alone"
+  },
+  {
+   "trace": "10",
+   "id": "10s89",
+   "spans": [
+    [
+     1081,
+     1146
+    ],
+    [
+     1081,
+     1148
+    ]
+   ],
+   "anchors": [
+    1146,
+    1150
+   ],
+   "agreed": true,
+   "tiers": [
+    "borderline",
+    "firm"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "Down-left modular argument treating d as a residue mod 16 (forces d=1, u=11)"
+  },
+  {
+   "trace": "10",
+   "id": "10s90",
+   "spans": [
+    [
+     884,
+     925
+    ],
+    [
+     976,
+     1029
+    ],
+    [
+     1220,
+     1230
+    ],
+    [
+     1270,
+     1384
+    ],
+    [
+     1388,
+     1404
+    ]
+   ],
+   "anchors": [
+    1406,
+    1384
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "firm"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "Every integer u has a real root d; search numerically for u with area divisible by 16"
+  },
+  {
+   "trace": "10",
+   "id": "10s91",
+   "spans": [
+    [
+     1270,
+     1386
+    ],
+    [
+     1386,
+     1386
+    ]
+   ],
+   "anchors": [
+    1386,
+    1386
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "Parametrize s=(16m-u-2)/3 and substitute into the quartic for each m"
+  },
+  {
+   "trace": "10",
+   "id": "10s92",
+   "spans": [
+    [
+     1530,
+     1530
+    ],
+    [
+     1564,
+     1564
+    ]
+   ],
+   "anchors": [
+    1564
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "self-intersecting pentagon interpretation"
+  },
+  {
+   "trace": "10",
+   "id": "10s93",
+   "spans": [
+    [
+     1534,
+     1534
+    ],
+    [
+     1562,
+     1562
+    ]
+   ],
+   "anchors": [
+    1562
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "angle at B read as an external/reflex angle"
+  },
+  {
+   "trace": "11",
+   "id": "11s94",
+   "spans": [
+    [
+     16,
+     17
+    ]
+   ],
+   "anchors": [
+    17,
+    17
+   ],
+   "agreed": true,
+   "tiers": [
+    "borderline",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "A_i = set of divisors of i"
+  },
+  {
+   "trace": "11",
+   "id": "11s95",
+   "spans": [
+    [
+     20,
+     20
+    ],
+    [
+     24,
+     24
+    ]
+   ],
+   "anchors": [
+    24,
+    24
+   ],
+   "agreed": true,
+   "tiers": [
+    "borderline",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "vector / tuple-indexed construction"
+  },
+  {
+   "trace": "11",
+   "id": "11s96",
+   "spans": [
+    [
+     25,
+     29
+    ]
+   ],
+   "anchors": [
+    29,
+    29
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "firm"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "elements indexed by prime powers (p,e), A_i = {(p,e): p^e | i}"
+  },
+  {
+   "trace": "11",
+   "id": "11s97",
+   "spans": [
+    [
+     36,
+     36
+    ]
+   ],
+   "anchors": [
+    36,
+    36
+   ],
+   "agreed": true,
+   "tiers": [
+    "borderline",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "B_k = A_k minus union of A_d for proper divisors d"
+  },
+  {
+   "trace": "11",
+   "id": "11s98",
+   "spans": [
+    [
+     84,
+     101
+    ],
+    [
+     179,
+     191
+    ],
+    [
+     180,
+     191
+    ],
+    [
+     284,
+     296
+    ],
+    [
+     286,
+     296
+    ],
+    [
+     319,
+     321
+    ],
+    [
+     464,
+     465
+    ]
+   ],
+   "anchors": [
+    320,
+    465
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "firm"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "candidate: every M_d at its lower bound d (A_d = {1..d}, answer sigma(250))"
+  },
+  {
+   "trace": "11",
+   "id": "11s99",
+   "spans": [
+    [
+     304,
+     304
+    ]
+   ],
+   "anchors": [
+    304
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a1"
+   ],
+   "approach": "bipartite matching / flow formulation"
+  },
+  {
+   "trace": "11",
+   "id": "11s100",
+   "spans": [
+    [
+     363,
+     373
+    ],
+    [
+     363,
+     374
+    ]
+   ],
+   "anchors": [
+    375,
+    375
+   ],
+   "agreed": true,
+   "tiers": [
+    "borderline",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "exchange argument: nested up-sets for increasing x"
+  },
+  {
+   "trace": "11",
+   "id": "11s101",
+   "spans": [
+    [
+     396,
+     411
+    ],
+    [
+     409,
+     414
+    ],
+    [
+     533,
+     589
+    ],
+    [
+     544,
+     568
+    ],
+    [
+     689,
+     743
+    ],
+    [
+     912,
+     939
+    ]
+   ],
+   "anchors": [
+    939,
+    939
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "firm"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "heuristic: give smallest numbers to nodes in the most buckets (count descending)"
+  },
+  {
+   "trace": "11",
+   "id": "11s102",
+   "spans": [
+    [
+     485,
+     501
+    ],
+    [
+     485,
+     504
+    ],
+    [
+     590,
+     607
+    ],
+    [
+     590,
+     687
+    ],
+    [
+     619,
+     687
+    ],
+    [
+     795,
+     837
+    ]
+   ],
+   "anchors": [
+    837,
+    837
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "firm"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "forward greedy: assign each x to the node with the smallest current increase (fewest buckets first)"
+  },
+  {
+   "trace": "11",
+   "id": "11s103",
+   "spans": [
+    [
+     844,
+     910
+    ]
+   ],
+   "anchors": [
+    912,
+    912
+   ],
+   "agreed": true,
+   "tiers": [
+    "borderline",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "reverse greedy: assign 250 downward, largest numbers to the fewest-bucket nodes"
+  },
+  {
+   "trace": "11",
+   "id": "11s104",
+   "spans": [
+    [
+     941,
+     950
+    ]
+   ],
+   "anchors": [
+    947
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a1"
+   ],
+   "approach": "weighted completion-time scheduling analogy"
+  },
+  {
+   "trace": "11",
+   "id": "11s105",
+   "spans": [
+    [
+     1247,
+     1321
+    ],
+    [
+     1481,
+     1512
+    ],
+    [
+     1481,
+     1513
+    ]
+   ],
+   "anchors": [
+    1513,
+    1512
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "firm"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "right-to-left greedy minimizing S(v)*|U_v union U_P| at each step"
+  },
+  {
+   "trace": "12",
+   "id": "12s106",
+   "spans": [
+    [
+     87,
+     89
+    ]
+   ],
+   "anchors": [
+    94
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a1"
+   ],
+   "approach": "power-of-point relation for O_Gamma wrt omega and (BIC)"
+  },
+  {
+   "trace": "12",
+   "id": "12s107",
+   "spans": [
+    [
+     185,
+     189
+    ],
+    [
+     377,
+     384
+    ],
+    [
+     533,
+     542
+    ],
+    [
+     851,
+     854
+    ],
+    [
+     963,
+     974
+    ],
+    [
+     1229,
+     1249
+    ],
+    [
+     1245,
+     1249
+    ],
+    [
+     1341,
+     1348
+    ],
+    [
+     1384,
+     1396
+    ],
+    [
+     1391,
+     1396
+    ],
+    [
+     1537,
+     1558
+    ],
+    [
+     1620,
+     1626
+    ],
+    [
+     1655,
+     1661
+    ]
+   ],
+   "anchors": [
+    1661,
+    1774
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "firm"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "search for an integer/rational root of the Case 1 cubic"
+  },
+  {
+   "trace": "12",
+   "id": "12s108",
+   "spans": [
+    [
+     968,
+     974
+    ],
+    [
+     1341,
+     1345
+    ]
+   ],
+   "anchors": [
+    1344
+   ],
+   "agreed": false,
+   "tiers": [
+    "firm"
+   ],
+   "by": [
+    "a1"
+   ],
+   "approach": "fractional candidate values a = 13/2, 25/4, 20/3, 24/5"
+  },
+  {
+   "trace": "12",
+   "id": "12s109",
+   "spans": [
+    [
+     983,
+     986
+    ]
+   ],
+   "anchors": [
+    986
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a1"
+   ],
+   "approach": "candidate a = 11 for the x2 = -3r/sin(A/2) case"
+  },
+  {
+   "trace": "12",
+   "id": "12s110",
+   "spans": [
+    [
+     1231,
+     1238
+    ]
+   ],
+   "anchors": [
+    1238
+   ],
+   "agreed": false,
+   "tiers": [
+    "firm"
+   ],
+   "by": [
+    "a1"
+   ],
+   "approach": "factor the cubic as (a-6)(a^2+12a+4)"
+  },
+  {
+   "trace": "12",
+   "id": "12s111",
+   "spans": [
+    [
+     1384,
+     1385
+    ]
+   ],
+   "anchors": [
+    1385
+   ],
+   "agreed": false,
+   "tiers": [
+    "firm"
+   ],
+   "by": [
+    "a1"
+   ],
+   "approach": "candidate a = 2*sqrt(19)"
+  },
+  {
+   "trace": "12",
+   "id": "12s112",
+   "spans": [
+    [
+     1537,
+     1558
+    ],
+    [
+     1620,
+     1626
+    ]
+   ],
+   "anchors": [
+    1626
+   ],
+   "agreed": false,
+   "tiers": [
+    "firm"
+   ],
+   "by": [
+    "a1"
+   ],
+   "approach": "solve the cubic exactly (shift to depressed cubic, discriminant, trigonometric roots)"
+  },
+  {
+   "trace": "12",
+   "id": "12s113",
+   "spans": [
+    [
+     1663,
+     1676
+    ],
+    [
+     1779,
+     1780
+    ]
+   ],
+   "anchors": [
+    1780,
+    1780
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "firm"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "hypothesis R1 = R (circle BIC radius equals circumradius)"
+  },
+  {
+   "trace": "12",
+   "id": "12s114",
+   "spans": [
+    [
+     1678,
+     1731
+    ]
+   ],
+   "anchors": [
+    1731,
+    1731
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "firm"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "reverse-engineer a nice root by altering the cubic's constant/signs (a = 12 via sign flip)"
+  },
+  {
+   "trace": "12",
+   "id": "12s115",
+   "spans": [
+    [
+     1777,
+     1777
+    ],
+    [
+     1783,
+     1783
+    ],
+    [
+     1783,
+     1784
+    ]
+   ],
+   "anchors": [
+    1785,
+    1784
+   ],
+   "agreed": true,
+   "tiers": [
+    "borderline",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "radical guesses sqrt(40) and 2*sqrt(13)"
+  },
+  {
+   "trace": "12",
+   "id": "12s116",
+   "spans": [
+    [
+     8,
+     8
+    ],
+    [
+     19,
+     25
+    ]
+   ],
+   "anchors": [
+    23
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "locating circumcenter O1 of BIC via perpendicular bisectors of IB, IC"
+  },
+  {
+   "trace": "14",
+   "id": "14s117",
+   "spans": [
+    [
+     29,
+     33
+    ]
+   ],
+   "anchors": [
+    35
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "other eliminations, e.g. combining (1) and (3)"
+  },
+  {
+   "trace": "15",
+   "id": "15s118",
+   "spans": [
+    [
+     40,
+     41
+    ]
+   ],
+   "anchors": [
+    61
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a1"
+   ],
+   "approach": "7 values as a 4+3 split of distinct roots between the two quartics f and g"
+  },
+  {
+   "trace": "16",
+   "id": "16s119",
+   "spans": [
+    [
+     58,
+     65
+    ]
+   ],
+   "anchors": [
+    65,
+    65
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "conjecture that A lies on the circumcircle of BIC"
+  },
+  {
+   "trace": "16",
+   "id": "16s120",
+   "spans": [
+    [
+     69,
+     69
+    ]
+   ],
+   "anchors": [
+    70,
+    70
+   ],
+   "agreed": true,
+   "tiers": [
+    "borderline",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "inversion centered at A with radius sqrt(AB*AC)"
+  },
+  {
+   "trace": "16",
+   "id": "16s121",
+   "spans": [
+    [
+     67,
+     68
+    ],
+    [
+     67,
+     75
+    ],
+    [
+     70,
+     75
+    ],
+    [
+     78,
+     79
+    ],
+    [
+     128,
+     133
+    ],
+    [
+     128,
+     138
+    ],
+    [
+     137,
+     138
+    ]
+   ],
+   "anchors": [
+    139,
+    139
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "firm"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "power of A wrt circle BIC (via second intersection B' on AB / chord along AI)"
+  },
+  {
+   "trace": "16",
+   "id": "16s122",
+   "spans": [
+    [
+     76,
+     77
+    ]
+   ],
+   "anchors": [
+    77
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a1"
+   ],
+   "approach": "known fact: reflection of I over BC lies on circumcircle of ABC"
+  },
+  {
+   "trace": "16",
+   "id": "16s123",
+   "spans": [
+    [
+     91,
+     126
+    ],
+    [
+     91,
+     127
+    ]
+   ],
+   "anchors": [
+    127,
+    127
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "firm"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "vector setup with I at origin to test whether IO1 is parallel to AI"
+  },
+  {
+   "trace": "16",
+   "id": "16s124",
+   "spans": [
+    [
+     134,
+     135
+    ]
+   ],
+   "anchors": [
+    135,
+    135
+   ],
+   "agreed": true,
+   "tiers": [
+    "borderline",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "guess that circle BIC is orthogonal to the incircle"
+  },
+  {
+   "trace": "16",
+   "id": "16s125",
+   "spans": [
+    [
+     144,
+     144
+    ]
+   ],
+   "anchors": [
+    144
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a1"
+   ],
+   "approach": "reflect O1 over BC"
+  },
+  {
+   "trace": "16",
+   "id": "16s126",
+   "spans": [
+    [
+     283,
+     284
+    ],
+    [
+     702,
+     704
+    ]
+   ],
+   "anchors": [
+    704
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a1"
+   ],
+   "approach": "express sin B / sin C = 7/5 in terms of u, v"
+  },
+  {
+   "trace": "16",
+   "id": "16s127",
+   "spans": [
+    [
+     285,
+     287
+    ]
+   ],
+   "anchors": [
+    288
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a1"
+   ],
+   "approach": "identity (b^2-c^2)/(b^2+c^2) via sines"
+  },
+  {
+   "trace": "16",
+   "id": "16s128",
+   "spans": [
+    [
+     318,
+     348
+    ],
+    [
+     424,
+     442
+    ],
+    [
+     497,
+     521
+    ],
+    [
+     580,
+     614
+    ],
+    [
+     580,
+     645
+    ],
+    [
+     633,
+     645
+    ],
+    [
+     805,
+     868
+    ],
+    [
+     913,
+     915
+    ],
+    [
+     1424,
+     1432
+    ]
+   ],
+   "anchors": [
+    1229,
+    1433
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "firm"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "find a rational/integer root of the Case 1 cubic (in x, then in z = a^2 - 4)"
+  },
+  {
+   "trace": "16",
+   "id": "16s129",
+   "spans": [
+    [
+     874,
+     875
+    ],
+    [
+     1218,
+     1225
+    ],
+    [
+     1420,
+     1422
+    ]
+   ],
+   "anchors": [
+    1422,
+    1422
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "Gamma as the A-mixtilinear incircle"
+  },
+  {
+   "trace": "16",
+   "id": "16s130",
+   "spans": [
+    [
+     1307,
+     1309
+    ]
+   ],
+   "anchors": [
+    1309,
+    1309
+   ],
+   "agreed": true,
+   "tiers": [
+    "borderline",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "Gamma as incircle of the excentral triangle"
+  },
+  {
+   "trace": "16",
+   "id": "16s131",
+   "spans": [
+    [
+     1374,
+     1418
+    ]
+   ],
+   "anchors": [
+    1409,
+    1400
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "firm"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "Gamma is the A-excircle, candidate a = 4"
+  },
+  {
+   "trace": "16",
+   "id": "16s132",
+   "spans": [
+    [
+     1425,
+     1429
+    ],
+    [
+     1540,
+     1546
+    ]
+   ],
+   "anchors": [
+    1546
+   ],
+   "agreed": false,
+   "tiers": [
+    "firm"
+   ],
+   "by": [
+    "a1"
+   ],
+   "approach": "integer candidates a = 7, 8, 2, 10, 5"
+  },
+  {
+   "trace": "16",
+   "id": "16s133",
+   "spans": [
+    [
+     1449,
+     1469
+    ],
+    [
+     1450,
+     1469
+    ],
+    [
+     1509,
+     1532
+    ],
+    [
+     1595,
+     1596
+    ]
+   ],
+   "anchors": [
+    1511,
+    1601
+   ],
+   "agreed": true,
+   "tiers": [
+    "firm",
+    "firm"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "candidate a = sqrt(26)"
+  },
+  {
+   "trace": "16",
+   "id": "16s134",
+   "spans": [
+    [
+     1567,
+     1574
+    ]
+   ],
+   "anchors": [
+    1574
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a1"
+   ],
+   "approach": "Gamma as B- or C-excircle"
+  },
+  {
+   "trace": "16",
+   "id": "16s135",
+   "spans": [
+    [
+     1589,
+     1593
+    ]
+   ],
+   "anchors": [
+    1593,
+    1593
+   ],
+   "agreed": true,
+   "tiers": [
+    "borderline",
+    "borderline"
+   ],
+   "by": [
+    "a1",
+    "a2"
+   ],
+   "approach": "Gamma is the circumcircle of BIC"
+  },
+  {
+   "trace": "18",
+   "id": "18s136",
+   "spans": [
+    [
+     5,
+     7
+    ]
+   ],
+   "anchors": [
+    7
+   ],
+   "agreed": false,
+   "tiers": [
+    "firm"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "general-position dichotomy formula 2*sum C(19,k) = 2320"
+  },
+  {
+   "trace": "18",
+   "id": "18s137",
+   "spans": [
+    [
+     39,
+     39
+    ]
+   ],
+   "anchors": [
+    39
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "hyperplane arrangement in the parameter space of affine functions"
+  },
+  {
+   "trace": "18",
+   "id": "18s138",
+   "spans": [
+    [
+     41,
+     41
+    ]
+   ],
+   "anchors": [
+    41
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "view the cutting plane as a graph over (x,y) via projection"
+  },
+  {
+   "trace": "18",
+   "id": "18s139",
+   "spans": [
+    [
+     1,
+     1
+    ],
+    [
+     11,
+     11
+    ],
+    [
+     19,
+     19
+    ],
+    [
+     29,
+     31
+    ],
+    [
+     119,
+     119
+    ],
+    [
+     153,
+     157
+    ]
+   ],
+   "anchors": [
+    157
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "recalled answer of the 9-gon AIME analogue (244 / 488) as target"
+  },
+  {
+   "trace": "18",
+   "id": "18s140",
+   "spans": [
+    [
+     157,
+     157
+    ]
+   ],
+   "anchors": [
+    159
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "small cases to determine the correct count"
+  },
+  {
+   "trace": "18",
+   "id": "18s141",
+   "spans": [
+    [
+     75,
+     119
+    ],
+    [
+     121,
+     221
+    ]
+   ],
+   "anchors": [
+    225
+   ],
+   "agreed": false,
+   "tiers": [
+    "firm"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "count M as cyclic 3-block labelings (X,Y,Z consecutive arcs, Y an arc): 993, total 2*993-92 = 1894"
+  },
+  {
+   "trace": "19",
+   "id": "19s142",
+   "spans": [
+    [
+     5,
+     47
+    ],
+    [
+     124,
+     169
+    ],
+    [
+     290,
+     292
+    ]
+   ],
+   "anchors": [
+    294
+   ],
+   "agreed": false,
+   "tiers": [
+    "firm"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "coordinate bash with M at origin, P,Q on rays at angle theta (unknowns t, s, theta)"
+  },
+  {
+   "trace": "19",
+   "id": "19s143",
+   "spans": [
+    [
+     53,
+     106
+    ]
+   ],
+   "anchors": [
+    108
+   ],
+   "agreed": false,
+   "tiers": [
+    "firm"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "coordinates with A at origin and bisector on x-axis"
+  },
+  {
+   "trace": "19",
+   "id": "19s144",
+   "spans": [
+    [
+     108,
+     108
+    ]
+   ],
+   "anchors": [
+    108
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "guessed answer BP = 2"
+  },
+  {
+   "trace": "19",
+   "id": "19s145",
+   "spans": [
+    [
+     110,
+     122
+    ]
+   ],
+   "anchors": [
+    124
+   ],
+   "agreed": false,
+   "tiers": [
+    "firm"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "law of sines in triangles PMB, QMC, ABM assuming AM relates to theta"
+  },
+  {
+   "trace": "19",
+   "id": "19s146",
+   "spans": [
+    [
+     132,
+     132
+    ],
+    [
+     171,
+     171
+    ]
+   ],
+   "anchors": [
+    171
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "reflection of B / line MB across MP"
+  },
+  {
+   "trace": "19",
+   "id": "19s147",
+   "spans": [
+    [
+     134,
+     134
+    ]
+   ],
+   "anchors": [
+    136
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "angle-chase in triangle APM via a 'known fact'"
+  },
+  {
+   "trace": "19",
+   "id": "19s148",
+   "spans": [
+    [
+     177,
+     290
+    ]
+   ],
+   "anchors": [
+    290
+   ],
+   "agreed": false,
+   "tiers": [
+    "firm"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "angle chase in cyclic APMQ for extra constraint (led to AB = AC)"
+  },
+  {
+   "trace": "19",
+   "id": "19s149",
+   "spans": [
+    [
+     294,
+     302
+    ],
+    [
+     494,
+     508
+    ],
+    [
+     542,
+     542
+    ]
+   ],
+   "anchors": [
+    304
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "power of a point of B, C w.r.t. circle APMQ"
+  },
+  {
+   "trace": "19",
+   "id": "19s150",
+   "spans": [
+    [
+     304,
+     307
+    ],
+    [
+     512,
+     514
+    ]
+   ],
+   "anchors": [
+    516
+   ],
+   "agreed": false,
+   "tiers": [
+    "firm"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "Ptolemy on APMQ"
+  },
+  {
+   "trace": "19",
+   "id": "19s151",
+   "spans": [
+    [
+     309,
+     492
+    ],
+    [
+     520,
+     540
+    ]
+   ],
+   "anchors": [
+    542
+   ],
+   "agreed": false,
+   "tiers": [
+    "firm"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "law-of-sines trig system in angles theta, B, alpha1, alpha2"
+  },
+  {
+   "trace": "19",
+   "id": "19s152",
+   "spans": [
+    [
+     516,
+     516
+    ],
+    [
+     544,
+     548
+    ],
+    [
+     560,
+     601
+    ]
+   ],
+   "anchors": [
+    603
+   ],
+   "agreed": false,
+   "tiers": [
+    "firm"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "locate X via inscribed angles (AX is angle bisector) and orientation analysis"
+  },
+  {
+   "trace": "20",
+   "id": "20s153",
+   "spans": [
+    [
+     9,
+     9
+    ],
+    [
+     17,
+     33
+    ]
+   ],
+   "anchors": [
+    33
+   ],
+   "agreed": false,
+   "tiers": [
+    "firm"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "identify center of (BIC) from recalled facts (arc midpoint / excenter I_A)"
+  },
+  {
+   "trace": "20",
+   "id": "20s154",
+   "spans": [
+    [
+     65,
+     65
+    ],
+    [
+     89,
+     91
+    ],
+    [
+     943,
+     943
+    ]
+   ],
+   "anchors": [
+    943
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "view Gamma as homothety image of incircle centered at I"
+  },
+  {
+   "trace": "20",
+   "id": "20s155",
+   "spans": [
+    [
+     71,
+     73
+    ],
+    [
+     101,
+     113
+    ],
+    [
+     875,
+     907
+    ],
+    [
+     955,
+     955
+    ]
+   ],
+   "anchors": [
+    955
+   ],
+   "agreed": false,
+   "tiers": [
+    "firm"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "O' (reflection of A over I) lies on circle (BIC)"
+  },
+  {
+   "trace": "20",
+   "id": "20s156",
+   "spans": [
+    [
+     75,
+     87
+    ],
+    [
+     115,
+     115
+    ]
+   ],
+   "anchors": [
+    115
+   ],
+   "agreed": false,
+   "tiers": [
+    "firm"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "power of point O' with respect to omega / (BIC)"
+  },
+  {
+   "trace": "20",
+   "id": "20s157",
+   "spans": [
+    [
+     11,
+     11
+    ],
+    [
+     117,
+     145
+    ]
+   ],
+   "anchors": [
+    145
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "coordinate bash (A at origin, AB on x-axis) to get E,F"
+  },
+  {
+   "trace": "20",
+   "id": "20s158",
+   "spans": [
+    [
+     379,
+     379
+    ],
+    [
+     425,
+     467
+    ]
+   ],
+   "anchors": [
+    471
+   ],
+   "agreed": false,
+   "tiers": [
+    "firm"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "square and clear denominators to get polynomial in a"
+  },
+  {
+   "trace": "20",
+   "id": "20s159",
+   "spans": [
+    [
+     145,
+     873
+    ],
+    [
+     929,
+     941
+    ]
+   ],
+   "anchors": [
+    943
+   ],
+   "agreed": false,
+   "tiers": [
+    "firm"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "equate signed distances from I to common chord EF (omega-Gamma vs omega-(BIC))"
+  },
+  {
+   "trace": "20",
+   "id": "20s160",
+   "spans": [
+    [
+     909,
+     927
+    ],
+    [
+     951,
+     955
+    ]
+   ],
+   "anchors": [
+    953
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "guessed answer BC = 9"
+  },
+  {
+   "trace": "20",
+   "id": "20s161",
+   "spans": [
+    [
+     967,
+     969
+    ]
+   ],
+   "anchors": [
+    969
+   ],
+   "agreed": false,
+   "tiers": [
+    "borderline"
+   ],
+   "by": [
+    "a2"
+   ],
+   "approach": "recall a known theorem (exsimilicenter / Miquel point)"
+  }
+ ]
+}

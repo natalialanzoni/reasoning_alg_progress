@@ -1,0 +1,55 @@
+{
+ "trace": "14",
+ "annotator": "a2",
+ "nlines": 213,
+ "instances": [
+  {
+   "approach": "other eliminations, e.g. combining (1) and (3)",
+   "visits": [
+    [
+     29,
+     33
+    ]
+   ],
+   "abandon_line": 35,
+   "abandon_quote": "But we have relation between a and sum of b,c.",
+   "switched_to": "plugging a=3-(b+c) into (1)/(2)",
+   "tier": "borderline",
+   "reason": "Raised as a possibility with no work and set aside for the substitution."
+  }
+ ],
+ "rejected": [
+  {
+   "lines": [
+    39,
+    47
+   ],
+   "what": "S=b+c, P=bc notation, then 'Let's use variables b, c'",
+   "why_not": "restatement"
+  },
+  {
+   "lines": [
+    81,
+    85
+   ],
+   "what": "b^2 cancellation checked",
+   "why_not": "verification"
+  },
+  {
+   "lines": [
+    137,
+    149
+   ],
+   "what": "consistency check of S=-1/2 against (3)",
+   "why_not": "verification"
+  },
+  {
+   "lines": [
+    151,
+    209
+   ],
+   "what": "solving for b, c explicitly to confirm distinctness",
+   "why_not": "verification"
+  }
+ ]
+}

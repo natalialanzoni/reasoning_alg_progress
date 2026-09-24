@@ -1,0 +1,301 @@
+{
+ "trace": "08",
+ "annotator": "a1",
+ "nlines": 1590,
+ "instances": [
+  {
+   "approach": "power of point of B wrt omega / second intersection of circle BIC with AB",
+   "visits": [
+    [
+     91,
+     105
+    ]
+   ],
+   "abandon_line": 106,
+   "abandon_quote": "Let's find the circumcircle of $BIC$ center.",
+   "switched_to": "locating the center O1 of the circumcircle of BIC",
+   "tier": "firm",
+   "reason": "Writer tries to use B's power wrt omega and a second intersection B' on AB, gets nowhere, and turns to the circumcenter instead."
+  },
+  {
+   "approach": "find circumcenter O1 of BIC via perpendicular bisector of IB",
+   "visits": [
+    [
+     106,
+     110
+    ]
+   ],
+   "abandon_line": 111,
+   "abandon_quote": "Is there a simpler way to find the radical axis $EF$?",
+   "switched_to": "writing the circle equation x^2+y^2+ux+vy=0 through B, I, C",
+   "tier": "borderline",
+   "reason": "Idea raised for a few lines with almost no work before being set aside for a simpler route."
+  },
+  {
+   "approach": "solve for u, v by multiplying by b and c and subtracting (half-angle expressions for IB, IC)",
+   "visits": [
+    [
+     113,
+     139
+    ]
+   ],
+   "abandon_line": 140,
+   "abandon_quote": "This looks complicated. Let's try a different approach.",
+   "switched_to": "radical-axis argument comparing omega with Gamma",
+   "tier": "firm",
+   "reason": "Explicit give-up of this elimination after real algebra; the later successful u,v computation (L356+) uses a different substitution c=r(cot alpha + cot B/2)."
+  },
+  {
+   "approach": "candidate C = 90 degrees, a = 2*sqrt(6)",
+   "visits": [
+    [
+     605,
+     607
+    ],
+    [
+     641,
+     781
+    ],
+    [
+     1329,
+     1354
+    ],
+    [
+     1498,
+     1498
+    ]
+   ],
+   "abandon_line": 1498,
+   "abandon_quote": "I already checked $C=90^\\circ$ and it failed.",
+   "switched_to": "rechecking the u, v formulas, later testing other values of a",
+   "tier": "firm",
+   "reason": "Writer commits to a=2sqrt6 as the answer, tests it at length, finds it fails, and drops it (revisiting it once more before final dismissal)."
+  },
+  {
+   "approach": "guess phi = 45 degrees - alpha",
+   "visits": [
+    [
+     1199,
+     1201
+    ]
+   ],
+   "abandon_line": 1201,
+   "abandon_quote": "then $\\tan\\phi = \\frac{1 - \\tan\\alpha}{1 + \\tan\\alpha}$, which doesn't match.",
+   "switched_to": "Case 2 of y0 and matching constant terms",
+   "tier": "borderline",
+   "reason": "A pattern guess is tried in two lines and set aside immediately."
+  },
+  {
+   "approach": "exact closed form for root of 4v^3-8v^2-4v-1 via depressed-cubic shift",
+   "visits": [
+    [
+     1457,
+     1460
+    ],
+    [
+     1520,
+     1523
+    ]
+   ],
+   "abandon_line": 1523,
+   "abandon_quote": "Is there a nice root? No, rational roots are",
+   "switched_to": "testing integer candidate values of a",
+   "tier": "borderline",
+   "reason": "Brief attempt to get an exact root (substitution, rational-root check) dropped with little work."
+  },
+  {
+   "approach": "candidate a = 6",
+   "visits": [
+    [
+     1422,
+     1423
+    ],
+    [
+     1447,
+     1450
+    ],
+    [
+     1490,
+     1491
+    ],
+    [
+     1510,
+     1511
+    ],
+    [
+     1524,
+     1526
+    ],
+    [
+     1533,
+     1575
+    ]
+   ],
+   "abandon_line": 1575,
+   "abandon_quote": "So $a=6$ is not the answer.",
+   "switched_to": "testing a=8, a=9",
+   "tier": "firm",
+   "reason": "Nice candidate a=6 is tested repeatedly, including an extended recheck, and explicitly rejected."
+  },
+  {
+   "approach": "other integer candidates for a (8, 9, 10, 11, 7, 5, 4, 3)",
+   "visits": [
+    [
+     1492,
+     1497
+    ],
+    [
+     1512,
+     1518
+    ],
+    [
+     1527,
+     1530
+    ]
+   ],
+   "abandon_line": 1518,
+   "abandon_quote": "What if $a = 3$? $v = 4(5) / (15 \\times 729)",
+   "switched_to": "rechecking the equation, then focusing on a=6",
+   "tier": "firm",
+   "reason": "Guessed candidate values are each computed and rejected as not matching v about 2.452."
+  }
+ ],
+ "rejected": [
+  {
+   "lines": [
+    8,
+    14
+   ],
+   "what": "restarting coordinate setup with angle bisector as x-axis",
+   "why_not": "restatement"
+  },
+  {
+   "lines": [
+    20,
+    24
+   ],
+   "what": "tan alpha = r/d corrected to AI sin alpha = r",
+   "why_not": "error fix"
+  },
+  {
+   "lines": [
+    33,
+    38
+   ],
+   "what": "two possible centers (d,0) and (-3d,0) on internal bisector",
+   "why_not": "required case"
+  },
+  {
+   "lines": [
+    64,
+    67
+   ],
+   "what": "misremembered fact that circle BIC is centered on bisector of A",
+   "why_not": "error fix"
+  },
+  {
+   "lines": [
+    85,
+    90
+   ],
+   "what": "check BI^2 - r^2 = BP^2",
+   "why_not": "verification"
+  },
+  {
+   "lines": [
+    142,
+    209
+   ],
+   "what": "Gamma centered on internal bisector gives vertical EF, contradiction b=c (revisited 742-760, 1020-1023)",
+   "why_not": "required case"
+  },
+  {
+   "lines": [
+    220,
+    298
+   ],
+   "what": "external bisector taken as y-axis, later corrected to x=-d at 466-476",
+   "why_not": "error fix"
+  },
+  {
+   "lines": [
+    405,
+    423
+   ],
+   "what": "u/v = tan(45-alpha/2), redone as u=v",
+   "why_not": "error fix"
+  },
+  {
+   "lines": [
+    540,
+    634
+   ],
+   "what": "u=v branch: center (-d,-d), cot alpha = 3, ruled out",
+   "why_not": "required case"
+  },
+  {
+   "lines": [
+    836,
+    950
+   ],
+   "what": "cot alpha = 2 from center on y=x, impossible; traced to sign errors",
+   "why_not": "error fix"
+  },
+  {
+   "lines": [
+    963,
+    998
+   ],
+   "what": "sign of r in C equation corrected",
+   "why_not": "error fix"
+  },
+  {
+   "lines": [
+    1139,
+    1155
+   ],
+   "what": "sign of v term in C equation corrected again",
+   "why_not": "error fix"
+  },
+  {
+   "lines": [
+    1106,
+    1112
+   ],
+   "what": "check tangency to the other line AC",
+   "why_not": "verification"
+  },
+  {
+   "lines": [
+    1239,
+    1248
+   ],
+   "what": "sign of cos phi check",
+   "why_not": "verification"
+  },
+  {
+   "lines": [
+    1357,
+    1366
+   ],
+   "what": "re-derive cubic 4u^3-8u^2-4u-1",
+   "why_not": "verification"
+  },
+  {
+   "lines": [
+    1406,
+    1445
+   ],
+   "what": "numeric bracketing a in (10, 10.2)",
+   "why_not": "other: not explicitly dropped; writer goes on looking for an exact value"
+  },
+  {
+   "lines": [
+    1577,
+    1590
+   ],
+   "what": "listing v for a=6,8,9,9.5 to bracket the root (trace ends mid-line)",
+   "why_not": "other: bracketing, trace truncated"
+  }
+ ]
+}
