@@ -18,6 +18,9 @@ system `python3` lacks numpy and tiktoken.
 ./venv/bin/python code/llm_judge/run_backtracking_v6.py          # backtracking: volume + cost, sends nothing
 ./venv/bin/python code/llm_judge/run_backtracking_v6.py --send   # backtracking, ~$280, resumable
 ./venv/bin/python code/llm_judge/behaviour_table.py --tex paper_figs/table_behaviours.tex
+./venv/bin/python code/llm_judge/behaviour_table.py --correct-only --tex paper_figs/table_behaviours_correct.tex
+./venv/bin/python code/llm_judge/prompt_robustness_table.py --tex paper_figs/table_backtracking_prompts.tex
+./venv/bin/python code/llm_judge/make_prompt_image.py            # appendix prompt figures
 ```
 
 Needs `ERA_OPENROUTER_V2` (or `OPENROUTER_API_KEY`). **Nothing is sent without
@@ -35,7 +38,9 @@ reach the paper.
 | `load_traces.py` | loads the CoT for the four fig_mechanism models, normalised |
 | `judge_traces.py` | the verification run (and the superseded backtracking v0–v3 runs) |
 | `run_backtracking_v6.py` | the backtracking run: line-numbers each trace, checks the judge's quotes |
-| `behaviour_table.py` | **builds `paper_figs/table_behaviours.tex`** |
+| `behaviour_table.py` | **builds `paper_figs/table_behaviours.tex`** (and `_correct.tex` with `--correct-only`) |
+| `prompt_robustness_table.py` | appendix table: backtracking levers under prompts v0/v2/v3/v6, and v6 with problems weighted equally |
+| `make_prompt_image.py` | appendix figures of the two prompts the paper's runs used |
 | `out/judge_whole_gemini.jsonl` | **the verification run the paper uses** (its v0 backtracking records are superseded and never read) |
 | `out/judge_backtracking_v6.jsonl` | **the backtracking run the paper uses** |
 | `out/judge_backtracking_v2.jsonl`, `_v3.jsonl` | superseded backtracking runs |

@@ -7,9 +7,10 @@ emits the same text as a picture instead, so the appendix can just do:
     \\includegraphics[width=\\textwidth]{paper_figs/fig_judge_prompt_backtracking.pdf}
     \\includegraphics[width=\\textwidth]{paper_figs/fig_judge_prompt_verification.pdf}
 
-Reads the live `*_v0.txt` templates, exactly as the LaTeX generator does, so the
-appendix cannot drift from what was actually sent to the judge. The one line changed
-from Gandhi et al. is marked `[edited]` and set in bold, same convention.
+Reads the live templates the paper's runs used (PROMPTS below), so the appendix cannot
+drift from what was actually sent to the judge. Verification is Gandhi et al.'s template
+with one line changed, marked `[edited]` and set in bold. Backtracking v6 was written for
+this paper, so nothing in it is marked and its caption says so.
 
     ./venv/bin/python code/llm_judge/make_prompt_image.py
 Output -> paper_figs/fig_judge_prompt_{backtracking,verification}.{pdf,png}
@@ -26,6 +27,10 @@ from matplotlib.patches import FancyBboxPatch
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(os.path.dirname(os.path.dirname(HERE)), "paper_figs")
 
+# behaviour -> (prompt version, judge) of the run behind the paper table
+PROMPTS = {"verification": ("v0", "gemini-2.5-flash"),
+           "backtracking": ("v6", "gemini-3.1-pro-preview")}
+
 OUR_LINE = ("You will be provided with the reasoning trace of a language model "
             "solving a competition mathematics problem.")
 
@@ -40,7 +45,7 @@ INK = "#1A1A1A"
 
 def wrapped_lines(behaviour):
     """The prompt as display lines, each tagged with whether it is our edit."""
-    raw = open(os.path.join(HERE, f"{behaviour}_v0.txt")).read().rstrip()
+    raw = open(os.path.join(HERE, f"{behaviour}_{PROMPTS[behaviour][0]}.txt")).read().rstrip()
     out = []
     for line in raw.splitlines():
         if not line.strip():
@@ -76,7 +81,8 @@ def render(behaviour):
     fig.text(x0, 1 - 0.30 / h, behaviour.capitalize(),
              fontsize=13, fontweight="bold", color=INK, va="bottom")
     fig.text(x1, 1 - 0.30 / h,
-             f"code/llm_judge/{behaviour}_v0.txt   ·   gemini-2.5-flash, temperature 0",
+             f"code/llm_judge/{behaviour}_{PROMPTS[behaviour][0]}.txt   ·   {PROMPTS[behaviour][1]}, "
+             f"temperature 0" + ("   ·   written for this paper" if PROMPTS[behaviour][0] != "v0" else ""),
              fontsize=8, color="#777777", va="bottom", ha="right")
 
     y = y1 - LINE_H / h * 0.9
