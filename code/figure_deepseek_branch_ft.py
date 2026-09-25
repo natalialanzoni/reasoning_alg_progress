@@ -44,7 +44,9 @@ import matplotlib.dates as mdates
 import matplotlib.lines as mlines
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, os.path.expanduser("~/.claude/skills/futuretech-charts/python"))
+# House style from the VENDORED copy in code/ft_style, not from the skill outside
+# the repo -- a clone must reproduce the figures exactly. See its README.
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "ft_style"))
 try:
     from futuretech_helpers import use_style, unit_formatter, save_figure
     from futuretech_palette import PRIMARY

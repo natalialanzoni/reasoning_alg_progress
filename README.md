@@ -58,13 +58,12 @@ spec changed:
 
 ### Two things that will bite a fresh machine
 
-1. **The house style is an external dependency.** The figure scripts look for the
-   `futuretech-charts` skill at `~/.claude/skills/futuretech-charts/python`. If it is
-   absent they fall back to `code/_ft_style_local.py`, which reproduces the same
-   palette and helpers, and print `STYLE_SRC = LOCAL RECONSTRUCTION`. Figures render
-   either way — this was tested by hiding the skill and rebuilding everything — but
-   the fallback is a reconstruction, so treat small typographic differences as
-   expected and colours as exact.
+1. **The house style is vendored, so nothing external is needed.** `code/ft_style/`
+   is a verbatim copy of the `futuretech-charts` skill's python module, and the figure
+   scripts import from there. Verified by deleting the skill and rebuilding: all 13
+   artifacts come out **byte-identical**, and the `_ft_style_local.py` reconstruction
+   (still present as a last resort) is never reached. Do not repoint the imports at
+   `~/.claude/skills/`; see `code/ft_style/README.md` for how to refresh it.
 2. **`data/` must be regraded before anything is plotted.** It already is in this
    repo: a file is regraded when it carries `correct_original` (or
    `is_correct_original` for the gpt-oss schema). If you add a run, do
@@ -78,6 +77,7 @@ spec changed:
 | `paper_figs/` | **the curated set — this is the paper** |
 | `scripts/` | shell entry points: the two build scripts and the run launchers — see its README |
 | `code/` | live analysis and plotting scripts |
+| `code/ft_style/` | the house style, vendored — figures build without the skill |
 | `code/archive/` | superseded scripts, kept not deleted — see its README |
 | `data/` | benchmark results, one JSON per run |
 | `data/archive/` | invalidated runs, each with a `WHY_ARCHIVED.md` |
