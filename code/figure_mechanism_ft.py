@@ -2,7 +2,7 @@
 efficiency gains come from? Two open-source pairs, one lever changed in each:
 
   Column 1  SCALE      gpt-oss 20B -> 120B   (same family, ~6x the parameters)
-  Column 2  ALGORITHM  GLM 5.2 -> 5.3        (same model size, newer training)
+  Column 2  POST-TRAINING  GLM 5.2 -> 5.3     (same model size, newer training)
 
 Rows match figure1_grid_ft.py exactly:
   1. accuracy
@@ -174,11 +174,15 @@ def col_oss(szs):
     return accs, means, hards
 
 
+# (row header, tick labels, data, x-axis label, model id for the floor's tokenizer --
+#  kept separate from the tick label, which is display text and need not be mapped)
 COLS = [
-    ("Scale" + "\n" + r"gpt-oss 20B $\rightarrow$ 120B",
-     ["20B", "120B"], col_oss(["20b", "120b"]), "Model size (fixed training recipe)"),
-    ("Algorithm" + "\n" + r"GLM 5.2 $\rightarrow$ 5.3",
-     ["GLM 5.2", "GLM 5.3"], col_glm(["glm_5_2", "glm_5_3"]), "Model version (fixed size)"),
+    ("Scale: gpt-oss-20B → gpt-oss-120B",
+     ["gpt-oss-20B", "gpt-oss-120B"], col_oss(["20b", "120b"]),
+     "Model size (fixed training recipe)", "gpt-oss-120b"),
+    ("Post-training: GLM 5.2 → GLM 5.3",
+     ["GLM 5.2", "GLM 5.3"], col_glm(["glm_5_2", "glm_5_3"]),
+     "Model version (fixed size)", "glm_5_3"),
 ]
 
 print(f"fig_mechanism: {len(KEYS)} competition problems (MATH-500 excluded), "
@@ -191,16 +195,16 @@ plt.rcParams.update({"axes.labelsize": 14, "xtick.labelsize": 14, "ytick.labelsi
 # COLUMNS. 12 x 13.5 in becomes 18 x 8.4, a full-width slot instead of most of a page.
 # No sharex: each row has its OWN categories (20B/120B vs GLM 5.2/5.3), so the x axis
 # is set per panel rather than shared.
-fig, axes = plt.subplots(2, 3, figsize=(18, 8.4),
-                         gridspec_kw={"hspace": 0.26, "wspace": 0.22})
+# hspace leaves room between the rows for the top row's x label AND the bottom row's
+# header; the extra height keeps the panels the size they were before the headers
+fig, axes = plt.subplots(2, 3, figsize=(18, 9.2),
+                         gridspec_kw={"hspace": 0.48, "wspace": 0.22})
 seen = set()
-for row, (title, labels, (accs, means, hards), xlabel) in enumerate(COLS):
+for row, (title, labels, (accs, means, hards), xlabel, floor_key) in enumerate(COLS):
     x = list(range(len(labels)))
 
     a0 = axes[row][0]                                   # Col 1 — accuracy
     a0.plot(x, accs, "-o", color=ACC, lw=2.6, ms=12, zorder=5)
-    # the lever names the ROW; the metrics are titled once on the top row
-    a0.set_ylabel(title, fontweight="bold", fontsize=13, labelpad=10)
     # data spans 68-86%; 40-104 left half the row empty and flattened both
     # lines into near-horizontal segments, hiding the accuracy gain
     a0.set_ylim(60, 96)
@@ -211,7 +215,7 @@ for row, (title, labels, (accs, means, hards), xlabel) in enumerate(COLS):
 
     a1 = axes[row][1]                                   # Col 2 — mean + floor
     a1.plot(x, means, "-o", color=TOK, lw=3, ms=12, zorder=5)
-    col_floor = floor_of(labels)
+    col_floor = floor_of([floor_key])
     a1.axhline(col_floor, color=FLOOR_COLOR, lw=2, zorder=3)
     a1.set_ylim(0, max(means) * 1.38)                   # headroom for the label
     a1.yaxis.set_major_formatter(unit_formatter(1e3, "k"))
@@ -252,6 +256,12 @@ for row, (title, labels, (accs, means, hards), xlabel) in enumerate(COLS):
 axes[0][0].set_title("Accuracy", fontsize=13)
 axes[0][1].set_title("Mean output tokens (correct traces)", fontsize=13)
 axes[0][2].set_title("Output tokens by problem (hard-but-doable)", fontsize=13)
+# the lever names each ROW, as a header over the row (above the column titles on the
+# top row); the metrics are titled once, on the top row
+for row, (title, *_rest) in enumerate(COLS):
+    pos = axes[row][0].get_position()
+    fig.text(0.075, pos.y1 + (0.058 if row == 0 else 0.03), title, ha="left", va="bottom",
+             fontsize=16, fontweight="bold")
 keys = [k for k in TIER_ORDER if k in seen]
 handles = [mlines.Line2D([], [], color=TIER_COLOR[k], lw=3, label=k) for k in keys]
 axes[-1][2].legend(handles=handles, loc="upper right", fontsize=10, frameon=True,
