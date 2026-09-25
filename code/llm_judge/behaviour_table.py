@@ -207,7 +207,12 @@ def main():
         res[m] = {"verif_n": len(g), "verif_trace": mean(g),
                   "verif_10k": rate(g),
                   "bt_n": len(jb), "bt_trace": mean(jb), "bt_10k": rate(jb),
-                  "median_chars": st.median(len(r["cot"]) for r in t),
+                  # length rows are in reasoning tokens, the per-10k denominator, over the
+                  # traces in the sample: per trace / per 10k x 1e4 gives this mean back
+                  # (up to the few unparsable records dropped per behaviour). Characters
+                  # would inflate GLM 5.2, which writes heavy LaTeX (see module note).
+                  "mean_tokens": st.mean(r["cot_tokens"] for r in t),
+                  "median_tokens": st.median(r["cot_tokens"] for r in t),
                   "marker_10k": 1e4 * sum(mk) / sum(r["cot_tokens"] for r in t)}
         x = res[m]
         print(f"  {m:<15}{x['verif_n']:>8}{x['verif_trace']:>12.2f}{x['verif_10k']:>11.2f}"
@@ -243,13 +248,14 @@ def latex(res, path):
          r" & gpt-oss-20B & gpt-oss-120B & GLM 5.2 & GLM 5.3 \\", r"\midrule"]
     names = ["gpt-oss-20b", "gpt-oss-120b", "GLM 5.2", "GLM 5.3"]
     cell = lambda k: " & ".join("$" + f"{res[m][k]:.2f}" + "$" for m in names) + r" \\"
+    big = lambda k: " & ".join("$" + f"{res[m][k]:,.0f}".replace(",", "{,}") + "$" for m in names) + r" \\"
     t += ["Verification, per trace & " + cell("verif_trace"),
           "Verification, per 10k reasoning tokens & " + cell("verif_10k"),
           "Backtracking, per trace & " + cell("bt_trace"),
           "Backtracking, per 10k reasoning tokens & " + cell("bt_10k"),
           r"\addlinespace",
-          "Median CoT characters & " +
-          " & ".join("$" + f"{res[m]['median_chars']:,.0f}".replace(",", "{,}") + "$" for m in names) + r" \\",
+          "Mean reasoning tokens & " + big("mean_tokens"),
+          "Median reasoning tokens & " + big("median_tokens"),
           # each behaviour has its own n: unparsable replies are dropped per behaviour
           "Traces judged, verification & " + " & ".join(f"${res[m]['verif_n']}$" for m in names) + r" \\",
           "Traces judged, backtracking & " + " & ".join(f"${res[m]['bt_n']}$" for m in names) + r" \\",

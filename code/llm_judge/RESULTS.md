@@ -46,10 +46,10 @@ behaviour.
 
 ## The two levers
 
-| lever | median CoT chars | verif /trace | verif /10k | backtrack /10k | markers /10k |
+| lever | median reasoning tokens | verif /trace | verif /10k | backtrack /10k | markers /10k |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | **Scale** gpt-oss 20B→120B | 0.60× | 0.48× | 0.99× | 1.16× | 0.55× |
-| **Algorithm** GLM 5.2→5.3 | 0.29× | 0.73× | 1.23× | 1.90× | 4.35× |
+| **Algorithm** GLM 5.2→5.3 | 0.28× | 0.73× | 1.23× | 1.90× | 4.35× |
 
 Backtracking v3 (gemini-2.5-flash) gave 1.17× and 1.94× on the same traces, so the
 v3 → v6 change moves the levers by under 3%. v6's absolute counts are lower for GLM
