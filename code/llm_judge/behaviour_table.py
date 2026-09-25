@@ -194,7 +194,10 @@ def main():
             drop[b] += len(J[b]) - sum(key(r) in both for r in J[b])
             J[b] = [r for r in J[b] if key(r) in both]
     if a.correct_only:
-        J = {b: [r for r in v if r["correct"]] for b, v in J.items()}
+        # correctness from the loader (the figures' rule, incl. cap-hit = wrong), never
+        # the "correct" field a judged record was stamped with when it was sent
+        ok = {key(t) for t in traces if t["correct"]}
+        J = {b: [r for r in v if key(r) in ok] for b, v in J.items()}
         traces = [t for t in traces if t["correct"]]
     print(f"  sample: {'CORRECT traces only' if a.correct_only else 'all traces'}"
           f"   rates per 10k REASONING tokens"

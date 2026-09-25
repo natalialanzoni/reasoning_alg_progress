@@ -76,18 +76,21 @@ counts relatively more on 120B, so the scale reduction is, if anything, understa
 
 `--correct-only` restricts to traces that reached the right answer
 (`--tex paper_figs/table_behaviours_correct.tex` writes the paper's version). On the
-common sample it keeps 982 traces:
+common sample it keeps 981 traces. "Correct" follows the figures' rule
+(`figures_sept._trial_correct`): a trace that hit the 40,000-token output cap was cut
+off before answering and scores wrong, whatever the grader extracted. That rule removes
+one gpt-oss-20b trace (`aime_2026_ii_14` s4, stopped at exactly 40,000).
 
 | lever, correct traces | verif /trace | verif /10k | backtrack /trace | backtrack /10k |
 | --- | ---: | ---: | ---: | ---: |
-| Scale | 0.50× | 0.89× | 0.59× | 1.05× |
+| Scale | 0.51× | 0.88× | 0.59× | 1.03× |
 | Post-training | 0.76× | 1.39× | 1.45× | 2.66× |
 
 Restricting raises every rate, because incorrect traces are long and behaviour-sparse.
 Selection by problem is not a concern: the two models of each pair solve almost exactly
 the same problems (37/37 and 39/39, 38 in common). Weighting every problem equally, so a
-model that solves more samples of a hard problem does not weight it more, gives 0.50× and
-1.02× for scale backtracking and 1.30× and 3.09× for post-training (last column of the
+model that solves more samples of a hard problem does not weight it more, gives 0.49× and
+1.01× for scale backtracking and 1.30× and 3.09× for post-training (last column of the
 appendix table). **Whichever sample the paper uses, the prose must say which.**
 
 ## 29 traces dropped from both behaviours

@@ -60,6 +60,7 @@ def main():
 
     traces = load_all()
     ct = {k(t): t["cot_tokens"] for t in traces}
+    correct = {k(t) for t in traces if t["correct"]}      # the loader's rule, as in behaviour_table
     # The main table's sample: traces with both a verification and a v6 count. The v6
     # column is therefore exactly the main table's; v0-v3 each also lose the few traces
     # their own judge could not count (intersecting all four would drop 79 of the longest
@@ -78,7 +79,7 @@ def main():
     for name, _ in RUNS:
         rs = [r for r in runs[name] if k(r) in common]
         if not a.all_traces:
-            rs = [r for r in rs if r["correct"]]
+            rs = [r for r in rs if k(r) in correct]
         n_col[name] = len(rs)
         col, eq = {}, {}
         for lever, old, new in LEVERS:
