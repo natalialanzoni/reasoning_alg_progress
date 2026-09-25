@@ -5,7 +5,7 @@ model solving a competition math problem (AIME / HMMT). Read the WHOLE trace car
 bottom. Do not skim or sample; the point is a careful count.
 
 Traces live in:
-/home/nfl234/reasoning_trace_efficiency/reasoning_alg_progress/code/llm_judge/for_RA_review/v3_backtracking/traces/
+code/llm_judge/for_RA_review/review_traces/traces/   (these ran as for_RA_review/v3_backtracking/traces/, since moved)
 
 Line numbers are the file's own 1-based line numbers, blank lines included. Use `Read` on the
 file, which prints these numbers; read long files in chunks with offset/limit until you have

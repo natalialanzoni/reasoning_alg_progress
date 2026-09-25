@@ -1,6 +1,7 @@
 # Backtracking v6 — review pack
 
-Same 20 traces as the v3 pack. Each sheet links to the trace in `../v3_backtracking/traces/`,
+Same 20 traces as the earlier v0-v3 packs (now in `data/archive/llm_judge_superseded/`).
+Each sheet links to the trace in `../review_traces/traces/`,
 and every line reference opens GitHub with those lines highlighted.
 
 ## What we are measuring
@@ -9,7 +10,8 @@ The paper counts **abandoned approaches**: places where the writer
 
 > tries an approach and gives it up to do something different.
 
-This definition is deliberately softer than the one used for `gold_strict.json`. The writer
+This definition is deliberately softer than the one used for the strict key
+(`gold_strict.json`, archived with the superseded prompts). The writer
 does not have to commit to the approach or say that it failed. An approach can be a method, a
 construction, a formula, a guessed answer or candidate value, or an interpretation of the
 problem, and it can be tried briefly.

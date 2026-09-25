@@ -10,11 +10,12 @@ with a verbatim quote. The count we use is the number of instances whose quotes
 are found in the trace near the lines claimed -- the judge's own <count> is
 recorded but not trusted (v3 showed it drifting from its own list).
 
-Input traces are for_RA_review/v3_backtracking/traces/*.txt (exactly the CoT the
+Input traces are for_RA_review/review_traces/traces/*.txt (exactly the CoT the
 earlier judges saw), prefixed with line numbers so instances can be located and
 matched to gold. Blank lines are skipped but keep their numbers.
 
-Gold: gold_strict.json, strict instances (firm / borderline) adjudicated by Claude
+Gold: gold_strict.json (now in data/archive/llm_judge_superseded/), strict instances
+(firm / borderline) adjudicated by Claude
 reviewers on these 20 traces, 2026-09-24. NOT yet checked by the RA.
 """
 import argparse
@@ -27,10 +28,14 @@ import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-TRACES = os.path.join(HERE, "for_RA_review", "v3_backtracking", "traces")
-VERDICTS = os.path.join(HERE, "for_RA_review", "v3_backtracking", "verdicts.csv")
-GOLD = os.path.join(HERE, "gold_strict.json")
-PROMPT = os.path.join(HERE, "backtracking_v4.txt")
+# The 20 review traces and their index (file, model, task, sample) are what the v6 run,
+# its RA pack and gold_soft/ are scored on. The strict key and the v4 prompt were
+# superseded and live in the archive; they are only read by this module's own pilot.
+TRACES = os.path.join(HERE, "for_RA_review", "review_traces", "traces")
+VERDICTS = os.path.join(HERE, "for_RA_review", "review_traces", "index.csv")
+ARCHIVE = os.path.join(os.path.dirname(os.path.dirname(HERE)), "data", "archive", "llm_judge_superseded")
+GOLD = os.path.join(ARCHIVE, "gold_strict.json")
+PROMPT = os.path.join(ARCHIVE, "prompts", "backtracking_v4.txt")
 OUT = os.path.join(HERE, "out", "pilot_v4.jsonl")
 
 JUDGE_MODEL = "google/gemini-2.5-flash"   # same judge as v0-v3

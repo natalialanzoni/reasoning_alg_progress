@@ -1,6 +1,6 @@
 # 17 — gpt-oss-20b, aime_2026_ii_07 sample 3
 
-**Trace:** [`17_v3bt_gpt-oss-20b_aime_2026_ii_07_s3.txt`](../v3_backtracking/traces/17_v3bt_gpt-oss-20b_aime_2026_ii_07_s3.txt) (77 lines). Line links open GitHub with those lines highlighted.
+**Trace:** [`17_v3bt_gpt-oss-20b_aime_2026_ii_07_s3.txt`](../review_traces/traces/17_v3bt_gpt-oss-20b_aime_2026_ii_07_s3.txt) (77 lines). Line links open GitHub with those lines highlighted.
 
 ## The problem
 
@@ -16,12 +16,12 @@ The annotators found **no** abandoned approaches here.
 
 | lines | what | why not |
 |---|---|---|
-| [L53–55](../v3_backtracking/traces/17_v3bt_gpt-oss-20b_aime_2026_ii_07_s3.txt#L53-L55) | double-checking S1 (16/27 vs 16/81) | verification |
-| [L53–56](../v3_backtracking/traces/17_v3bt_gpt-oss-20b_aime_2026_ii_07_s3.txt#L53-L56) | S1 recomputed; apparent 16/27 vs 16/81 mismatch resolved | verification |
-| [L57–73](../v3_backtracking/traces/17_v3bt_gpt-oss-20b_aime_2026_ii_07_s3.txt#L57-L73) | double-checking S2 and final P | verification |
-| [L57–73](../v3_backtracking/traces/17_v3bt_gpt-oss-20b_aime_2026_ii_07_s3.txt#L57-L73) | S2 and final P recomputed | verification |
-| [L75](../v3_backtracking/traces/17_v3bt_gpt-oss-20b_aime_2026_ii_07_s3.txt#L75) | proposed simulation/generating-function cross-check, only a plausibility glance | verification |
-| [L75](../v3_backtracking/traces/17_v3bt_gpt-oss-20b_aime_2026_ii_07_s3.txt#L75) | cross-check by simulation or generating functions, just sketched | verification |
+| [L53–55](../review_traces/traces/17_v3bt_gpt-oss-20b_aime_2026_ii_07_s3.txt#L53-L55) | double-checking S1 (16/27 vs 16/81) | verification |
+| [L53–56](../review_traces/traces/17_v3bt_gpt-oss-20b_aime_2026_ii_07_s3.txt#L53-L56) | S1 recomputed; apparent 16/27 vs 16/81 mismatch resolved | verification |
+| [L57–73](../review_traces/traces/17_v3bt_gpt-oss-20b_aime_2026_ii_07_s3.txt#L57-L73) | double-checking S2 and final P | verification |
+| [L57–73](../review_traces/traces/17_v3bt_gpt-oss-20b_aime_2026_ii_07_s3.txt#L57-L73) | S2 and final P recomputed | verification |
+| [L75](../review_traces/traces/17_v3bt_gpt-oss-20b_aime_2026_ii_07_s3.txt#L75) | proposed simulation/generating-function cross-check, only a plausibility glance | verification |
+| [L75](../review_traces/traces/17_v3bt_gpt-oss-20b_aime_2026_ii_07_s3.txt#L75) | cross-check by simulation or generating functions, just sketched | verification |
 
 </details>
 

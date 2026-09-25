@@ -37,7 +37,6 @@ traces do.
 | --- | --- |
 | `verification_v0.txt` | **in use.** Gandhi et al.'s template + one domain edit |
 | `backtracking_v6.txt` | **in use.** See "The backtracking prompt, v4 → v6" |
-| `backtracking_v0.txt` … `v5.txt` | superseded; kept so old runs stay readable |
 | `load_traces.py` | loads the CoT for the four fig_mechanism models, normalised |
 | `judge_traces.py` | the verification run (and the superseded backtracking v0–v3 runs) |
 | `run_backtracking_v6.py` | the backtracking run: line-numbers each trace, checks the judge's quotes |
@@ -46,12 +45,14 @@ traces do.
 | `make_prompt_image.py` | appendix figures of the two prompts the paper's runs used |
 | `out/judge_whole_gemini.jsonl` | **the verification run the paper uses** (its v0 backtracking records are superseded and never read) |
 | `out/judge_backtracking_v6.jsonl` | **the backtracking run the paper uses** |
-| `out/judge_backtracking_v2.jsonl`, `_v3.jsonl` | superseded backtracking runs |
-| `pilot.py`, `pilot_v4.py` | prompt × judge pilots on the 20 review traces (`--compare` prints all) |
-| `gold_strict.json` | strict key on the 20 traces (commit + explicit failure + switch) |
+| `out/judge_backtracking_v2.jsonl`, `_v3.jsonl` | superseded backtracking runs, kept because the appendix table reads them |
+| `out/pilot_v6_gemini-3.1-pro-preview.jsonl` | the 20-trace v6 pilot scored against `gold_soft/` (the validation run) |
+| `pilot.py`, `pilot_v4.py` | the pilot harness; `run_backtracking_v6.py`, `gold_soft/` and the RA pack import its line numbering, quote check and matching |
+| `recall_check.py` | GLM 5.3's pre-computation recall attempts (30% / 18% / 83 claims, all traces) |
 | `gold_soft/` | **the soft key v6 is validated against**; `score_soft.py` scores a pilot against it |
 | `for_RA_review/v6_backtracking/` | RA pack: check the soft key, then v6 against it |
-| `for_RA_review/v3_backtracking/` | 20 sheets, v0/v2/v3 side by side; also holds the 20 traces |
+| `for_RA_review/review_traces/` | the 20 review traces, their index (file, model, task, sample) and problem statements |
+| `data/archive/llm_judge_superseded/` | everything superseded: prompts v0–v5, the strict key, the v4/v5 and non-chosen v6 pilots, the v0/v2/v3 RA packs, `audit.py`, `make_review_pack.py` (see its WHY_ARCHIVED.md) |
 
 ## The prompts
 
@@ -241,7 +242,7 @@ appendix**, and quote `backtracking_v6.txt` in full.
   pilot's 24,000-token output cap cut off 1/20 replies, because the judge's
   reasoning counts against it; the full run uses the model's 65,536.
 
-**Validation.** `gold_strict.json` measures the stricter construct and cannot
+**Validation.** `gold_strict.json` (archived) measures the stricter construct and cannot
 validate v6. `gold_soft/` is a key for the soft construct: two annotators (Claude
 models) counted each of the 20 traces blind to every judge. Anthropic's
 usage-policy filter stopped four annotator runs, so 12 traces are double-counted,

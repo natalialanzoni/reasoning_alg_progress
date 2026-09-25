@@ -20,7 +20,7 @@ sys.path.insert(0, HERE)
 import pilot as P                                       # noqa: E402
 import pilot_v4 as p                                    # noqa: E402
 
-V3 = os.path.join(HERE, "for_RA_review", "v3_backtracking")
+RT = os.path.join(HERE, "for_RA_review", "review_traces")    # traces, index, problems
 OUT = os.path.join(HERE, "for_RA_review", "v6_backtracking")
 ANN = os.path.join(HERE, "gold_soft", "annotations")
 JUDGE = "google/gemini-3.1-pro-preview"
@@ -60,29 +60,30 @@ def key_for(t):
 
 def link(f, s, e=None):
     e = e if e is not None and e != s else None
-    return f"[L{s}{'–' + str(e) if e else ''}](../v3_backtracking/traces/{f}#L{s}{'-L' + str(e) if e else ''})"
+    return f"[L{s}{'–' + str(e) if e else ''}](../review_traces/traces/{f}#L{s}{'-L' + str(e) if e else ''})"
+
+
+PROBLEMS = json.load(open(os.path.join(RT, "problems.json")))
 
 
 def problem(t):
-    md = next(x for x in os.listdir(V3) if x.startswith(t) and x.endswith(".md"))
-    m = re.search(r"## The problem\s*\n(.*?)\n## ", open(os.path.join(V3, md)).read(), re.S)
-    return m.group(1).strip() if m else "(see trace)"
+    return PROBLEMS.get(t) or "(see trace)"
 
 
 def main():
     os.makedirs(OUT, exist_ok=True)
-    meta = {r["file"][:2]: r for r in csv.DictReader(open(os.path.join(V3, "verdicts.csv")))}
+    meta = {r["file"][:2]: r for r in csv.DictReader(open(os.path.join(RT, "index.csv")))}
     recs = {d["trace"]: d for d in map(json.loads, open(P.out_path("v6", JUDGE)))}
     kcsv, vcsv = [], []
     for t in sorted(meta):
         m = meta[t]; f = m["file"] + ".txt"
-        lines = open(os.path.join(V3, "traces", f)).read().split("\n")
+        lines = open(os.path.join(RT, "traces", f)).read().split("\n")
         rows, rej, who = key_for(t)
         # key entries in gold format, so v6 is matched exactly as the scorer matched it
         gold = [{"id": f"K{i}", "spans": [list(s) for s in sorted(set(spans(x or y)) | set(spans(y) if x and y else []))],
                  "anchors": [z["abandon_line"] for z in (x, y) if z]} for i, (x, y) in enumerate(rows, 1)]
         out = [f"# {t} — {m['model']}, {m['task']} sample {m['sample']}", "",
-               f"**Trace:** [`{f}`](../v3_backtracking/traces/{f}) ({len(lines)} lines). "
+               f"**Trace:** [`{f}`](../review_traces/traces/{f}) ({len(lines)} lines). "
                "Line links open GitHub with those lines highlighted.", "",
                "## The problem", "", problem(t), ""]
         out += ["## Part 1 — check the answer key", "",

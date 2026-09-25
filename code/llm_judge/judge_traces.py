@@ -109,7 +109,7 @@ EDIT_NOTE = ("line 2 reframed from 'text from the internet' to 'the reasoning tr
 #                      candidate however briefly raised, separates required case
 #                      eliminations from guessed ones, and counts recomputed wrong
 #                      values. Pilot and rationale in
-#                      for_RA_review/v3_backtracking/.
+#                      data/archive/llm_judge_superseded/review_packs/.
 PROMPT_VERSION = {"backtracking": "v3", "verification": "v0"}
 
 
