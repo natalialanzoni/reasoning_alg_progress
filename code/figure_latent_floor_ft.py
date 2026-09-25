@@ -40,12 +40,14 @@ import matplotlib.pyplot as plt
 import matplotlib.lines as mlines
 import seaborn as sns
 
-sys.path.insert(0, os.path.expanduser("~/.claude/skills/futuretech-charts/python"))
+# House style from the VENDORED copy in code/ft_style, not from the skill outside
+# the repo -- a clone must reproduce the figures exactly. See its README.
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "ft_style"))
 try:                                    # house style from the skill, if present
     from futuretech_helpers import use_style, save_figure
     from futuretech_palette import PRIMARY, CATEGORICAL
     STYLE_SRC = "futuretech-charts skill"
-except ModuleNotFoundError:             # replication machines: local stand-in
+except ModuleNotFoundError:             # only if code/ft_style is missing
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     from _ft_style_local import use_style, save_figure, PRIMARY, CATEGORICAL
     STYLE_SRC = "LOCAL RECONSTRUCTION (_ft_style_local.py)"

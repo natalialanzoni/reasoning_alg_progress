@@ -1,0 +1,316 @@
+"""
+FutureTech chart helpers (matplotlib).
+
+The headline function is `label_lines`, which places colored text labels near
+each line inside the plot (Neil's preference). For crowded graphs, use
+mode="right" to place labels in the right margin instead.
+
+Typical use:
+    import matplotlib.pyplot as plt
+    from futuretech_helpers import use_style, label_lines, save_figure
+
+    use_style()
+    fig, ax = plt.subplots()
+    for name, y in series.items():
+        ax.plot(x, y, label=name)
+    label_lines(ax)                         # inline labels near each curve
+    # label_lines(ax, mode="right")         # right-margin labels for crowded graphs
+    # label_lines(ax, positions={"GDP": (2024, 5.2)})  # manual position override
+    ax.set_ylabel("AI Adoption Rate (%)")
+    add_logo(fig)                           # FutureTech wordmark, footer strip
+    save_figure(fig, "adoption")            # writes adoption.png + adoption.pdf at 300dpi
+"""
+import os
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
+
+_STYLE = os.path.join(os.path.dirname(__file__), "futuretech.mplstyle")
+_LOGO  = os.path.join(os.path.dirname(__file__), "..", "logo-p-1600.png")
+_LOGO_CACHE = None  # raw RGBA logo (cropped to ink bounds), loaded once
+
+
+def use_style():
+    """Apply the FutureTech matplotlib style. Call once before plotting."""
+    plt.style.use(_STYLE)
+
+
+def label_lines(ax, labels=None, positions=None, mode="inline",
+                fontsize=13, fontweight="bold",
+                x_offset_frac=0.01, x_right_frac=1.02, min_gap_frac=0.045):
+    """
+    Label plotted lines with colored text — no separate legend box.
+
+    mode="inline" (default): labels appear inside the plot near each line's
+        right end, at the line's own y value. Pass `positions` to override
+        the placement of any individual line.
+    mode="right": labels appear in the right margin outside the plot, y-aligned
+        to the line's endpoint. Better when lines crowd the right edge.
+
+    positions : dict {line_label: (x, y)} in data coordinates (inline mode only).
+                Unspecified lines are auto-positioned at their last data point.
+    labels    : dict {line_label: display_text} to override the displayed string.
+    x_offset_frac : tiny rightward nudge from the last point (as a fraction of
+                    x-axis span), so the label doesn't sit on the marker.
+    min_gap_frac  : minimum vertical spacing between labels in axes-fraction units
+                    (collision avoidance).
+    """
+    lines = [ln for ln in ax.get_lines()
+             if ln.get_label() and not ln.get_label().startswith("_")]
+    if not lines:
+        return
+
+    positions = positions or {}
+    label_overrides = labels or {}
+
+    xmin, xmax = ax.get_xlim()
+    ymin, ymax = ax.get_ylim()
+    x_span = xmax - xmin if xmax != xmin else 1.0
+    y_span = ymax - ymin if ymax != ymin else 1.0
+    _log_y = ax.get_yscale() == "log"
+
+    def _y_frac(y_val):
+        """Axes-fraction for y_val, correct on both linear and log scales."""
+        try:
+            if _log_y:
+                import math
+                ly = math.log10(max(y_val, 1e-300))
+                lymin = math.log10(max(ymin, 1e-300))
+                lymax = math.log10(max(ymax, 1e-300))
+                span = lymax - lymin if lymax != lymin else 1.0
+                return (ly - lymin) / span
+            else:
+                return (y_val - ymin) / y_span
+        except (ValueError, ZeroDivisionError):
+            return 0.5
+
+    if mode == "inline":
+        entries = []
+        for ln in lines:
+            xdata, ydata = ln.get_xdata(), ln.get_ydata()
+            if len(xdata) == 0:
+                continue
+            key = ln.get_label()
+            text = label_overrides.get(key, key)
+            color = ln.get_color()
+            if key in positions:
+                x_pos, y_pos = positions[key]
+            else:
+                x_pos = float(xdata[-1]) + x_offset_frac * x_span
+                y_pos = float(ydata[-1])
+            entries.append([_y_frac(y_pos), x_pos, y_pos, text, color])
+
+        # Collision avoidance: sort by y, nudge overlapping labels upward.
+        entries.sort(key=lambda e: e[0])
+        for i in range(1, len(entries)):
+            if entries[i][0] - entries[i - 1][0] < min_gap_frac:
+                entries[i][0] = entries[i - 1][0] + min_gap_frac
+                # convert fraction back to data coords for text placement
+                if _log_y:
+                    import math
+                    lymin = math.log10(max(ymin, 1e-300))
+                    lymax = math.log10(max(ymax, 1e-300))
+                    entries[i][2] = 10 ** (lymin + entries[i][0] * (lymax - lymin))
+                else:
+                    entries[i][2] = entries[i][0] * y_span + ymin
+
+        for y_frac, x_pos, y_pos, text, color in entries:
+            ax.text(x_pos, y_pos, text, va="center", ha="left",
+                    fontsize=fontsize, fontweight=fontweight, color=color,
+                    clip_on=False, parse_math=False)
+
+    else:  # mode == "right"
+        entries = []
+        for ln in lines:
+            ydata = ln.get_ydata()
+            if len(ydata) == 0:
+                continue
+            key = ln.get_label()
+            text = label_overrides.get(key, key)
+            y_end = float(ydata[-1])
+            entries.append([_y_frac(y_end), text, ln.get_color()])
+
+        entries.sort(key=lambda e: e[0])
+        for i in range(1, len(entries)):
+            if entries[i][0] - entries[i - 1][0] < min_gap_frac:
+                entries[i][0] = entries[i - 1][0] + min_gap_frac
+
+        for y_frac, text, color in entries:
+            ax.annotate(text, xy=(x_right_frac, y_frac), xycoords="axes fraction",
+                        va="center", ha="left", fontsize=fontsize,
+                        fontweight=fontweight, color=color,
+                        annotation_clip=False, parse_math=False)
+
+        ax.figure.subplots_adjust(right=0.82)
+
+    leg = ax.get_legend()
+    if leg is not None:
+        leg.remove()
+
+
+def direct_label_lines(ax, labels=None, x_frac=1.02, fontsize=13,
+                       fontweight="bold", min_gap_frac=0.045):
+    """Backwards-compatible alias. Equivalent to label_lines(ax, mode='right')."""
+    label_lines(ax, labels=labels, mode="right", fontsize=fontsize,
+                fontweight=fontweight, x_right_frac=x_frac,
+                min_gap_frac=min_gap_frac)
+
+
+def _load_logo():
+    """Load the FutureTech logo once, cropped to its visible ink bounds.
+
+    Returns the raw RGBA array with the real brand colors preserved (grey
+    "MIT", red "FutureTech", tagline). `add_logo` composites it over white at
+    render time so the edges stay clean.
+    """
+    global _LOGO_CACHE
+    if _LOGO_CACHE is not None:
+        return _LOGO_CACHE
+    if not os.path.exists(_LOGO):
+        return None
+    try:
+        import matplotlib.image as mpimg
+        logo = mpimg.imread(_LOGO)
+        if logo.dtype == np.uint8:
+            logo = logo.astype(float) / 255.0
+        if logo.ndim == 2:
+            logo = np.dstack([logo, logo, logo, np.ones_like(logo)])
+        # Crop away transparent padding so the logo fills its footer box.
+        if logo.shape[2] >= 4:
+            mask = logo[..., 3] > 0.05
+            if mask.any():
+                rows, cols = np.any(mask, axis=1), np.any(mask, axis=0)
+                r0, r1 = rows.argmax(), len(rows) - rows[::-1].argmax()
+                c0, c1 = cols.argmax(), len(cols) - cols[::-1].argmax()
+                logo = logo[r0:r1, c0:c1]
+        _LOGO_CACHE = logo
+        return logo
+    except Exception:
+        return None
+
+
+def add_slide_header(fig, text, fontsize=20, fontweight="bold", y=0.98, pad_top=0.04):
+    """
+    Add a large deck/slide header above the figure — larger than the plot title.
+
+    Use this for the slide headline; keep ax.set_title() for the chart title.
+    """
+    fig.suptitle(text, fontsize=fontsize, fontweight=fontweight, y=y, ha="center")
+    top = fig.subplotpars.top
+    fig.subplots_adjust(top=max(top - pad_top, 0.78))
+
+
+def add_logo(fig, alpha=1.0, placement="footer", height_frac=0.06,
+             footer_frac=0.09, margin_frac=0.02):
+    """
+    Add the full FutureTech logo — the real brand mark (grey "MIT", red
+    "FutureTech", tagline), rendered solid, not a faded or recolored watermark.
+    Default: in a footer strip below the plot, so it never overlaps the data.
+    Pass placement="overlay" for the legacy bottom-right corner mark.
+
+    The logo is composited onto the (white) figure background so its edges stay
+    clean — the source PNG's transparent regions carry a dark RGB that would
+    otherwise bleed into the edges as a halo.
+
+    alpha        : logo opacity (1.0 = fully solid; lower fades toward white).
+    placement    : "footer" (default) or "overlay".
+    height_frac  : logo height as a fraction of figure height.
+    footer_frac  : bottom margin reserved for the footer strip (footer mode).
+    margin_frac  : inset from figure edges, in figure-fraction units.
+    """
+    logo = _load_logo()
+    if logo is None:
+        return
+    try:
+        h, w = logo.shape[:2]
+        aspect = w / h
+        fig_w, fig_h = fig.get_size_inches()
+
+        # Composite over white (preserves the real colors and kills the edge
+        # halo), then apply opacity as a fade toward white.
+        if logo.shape[2] >= 4:
+            a = logo[..., 3:4]
+            rgb = logo[..., :3] * a + (1.0 - a)
+        else:
+            rgb = logo[..., :3]
+        rgb = rgb * alpha + (1.0 - alpha)
+
+        logo_h = height_frac
+        if placement == "footer":
+            bottom = fig.subplotpars.bottom
+            fig.subplots_adjust(bottom=bottom + footer_frac)
+            y0 = margin_frac * 0.5
+            logo_h = min(logo_h, footer_frac - y0 - margin_frac * 0.5)
+        logo_w = logo_h * aspect * (fig_h / fig_w)
+        y0 = margin_frac * 0.5 if placement == "footer" else margin_frac
+        x0 = 1.0 - logo_w - margin_frac
+
+        ax_logo = fig.add_axes([x0, y0, logo_w, logo_h])
+        ax_logo.imshow(rgb, aspect="auto", interpolation="lanczos")
+        ax_logo.axis("off")
+        ax_logo.patch.set_alpha(0)
+        ax_logo.set_zorder(10)
+    except Exception:
+        pass  # never break figure rendering for the logo
+
+
+def unit_formatter(scale=1, unit="", fmt="{:.3g}"):
+    """
+    Return a matplotlib FuncFormatter that displays tick values in natural units.
+
+    Examples:
+        ax.yaxis.set_major_formatter(unit_formatter(1e6, "M$"))
+            # 4000000 → "4 M$"
+        ax.xaxis.set_major_formatter(unit_formatter(1e9, "B"))
+            # 3500000000 → "3.5 B"
+        ax.xaxis.set_major_formatter(unit_formatter(1, "", fmt="{:.0f}"))
+            # use when x data is already in natural units (e.g. calendar years)
+    """
+    def _fmt(x, pos):
+        val = x / scale
+        s = fmt.format(val)
+        return f"{s} {unit}".strip() if unit else s
+    return ticker.FuncFormatter(_fmt)
+
+
+def sync_axes(*axes_list, which="both"):
+    """
+    Enforce identical axis limits across a list of Axes (for subplot consistency).
+
+    Call after all data is plotted. which: 'x', 'y', or 'both'.
+
+    Example:
+        fig, (ax1, ax2) = plt.subplots(1, 2)
+        # ... plot on both ...
+        sync_axes(ax1, ax2, which="y")   # same y limits on both panels
+    """
+    if which in ("x", "both"):
+        xlims = [ax.get_xlim() for ax in axes_list]
+        lo, hi = min(l[0] for l in xlims), max(l[1] for l in xlims)
+        for ax in axes_list:
+            ax.set_xlim(lo, hi)
+    if which in ("y", "both"):
+        ylims = [ax.get_ylim() for ax in axes_list]
+        lo, hi = min(l[0] for l in ylims), max(l[1] for l in ylims)
+        for ax in axes_list:
+            ax.set_ylim(lo, hi)
+
+
+def add_source_note(fig, text, fontsize=9, color="#888888"):
+    """Add a small left-aligned source/credit note at the bottom of the figure."""
+    fig.text(0.0, -0.02, text, ha="left", va="top",
+             fontsize=fontsize, color=color, style="italic")
+
+
+def save_figure(fig, name, outdir=".", formats=("png", "pdf")):
+    """
+    Save a figure as both raster (PNG, for slides/docs) and vector (PDF, for papers)
+    at publication DPI. Returns the list of written paths.
+    """
+    os.makedirs(outdir, exist_ok=True)
+    paths = []
+    for fmt in formats:
+        p = os.path.join(outdir, f"{name}.{fmt}")
+        fig.savefig(p, format=fmt, bbox_inches="tight")
+        paths.append(p)
+    return paths
