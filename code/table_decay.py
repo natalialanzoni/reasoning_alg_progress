@@ -24,6 +24,11 @@ choices matter and both are the standard recommendation for few clusters
 The interval is still printed because it is what the Figure 4 band shows, but the
 stars come from the bootstrap-t.
 
+Four columns: each family on all its models, and on the PRE-CUTOFF models only (training
+data ends before the Feb 2026 benchmark, the fig4_forecast_precutoff_appendix sample).
+With few clusters (Anthropic pre-cutoff has G = 4) the bootstrap-t is the honest test and
+it has little power; read those p-values accordingly.
+
     ./venv/bin/python code/table_decay.py            # print
     ./venv/bin/python code/table_decay.py OUT.tex    # and write LaTeX
 """
@@ -45,6 +50,20 @@ ANTH = list(pf.OPUS_MODELS) + [
     ("Fable 5.1", datetime(2026, 9, 1),
      pf.RESULTS_DIR / "fable5.1_shallow_pass" / "claude-fable-5-1_medium_thinking_benchmark.json")]
 FAMILIES = [("OpenAI (GPT)", list(pf.MAIN_K8)), ("Anthropic (Opus + Fable)", ANTH)]
+
+
+def pre_cutoff(mfiles):
+    """The contamination-check sample (fig4_forecast_precutoff_appendix): models whose
+    published TRAINING-DATA cutoff month is strictly before Feb 2026, when the benchmark
+    problems went public, so none can have trained on them. A model with no recorded
+    cutoff is dropped, never assumed clean. Same rule as figure_forecast_ft._pre_cutoff."""
+    return [m for m in mfiles if m[0] in pf.TRAIN_CUTOFF and pf.TRAIN_CUTOFF[m[0]] < pf.CUTOFF_MONTH]
+
+
+# One column per (family, sample). Families are never pooled: a single time trend across
+# two labs would mix their levels with calendar time.
+COLUMNS = [(fam, sample, ms) for fam, mf in FAMILIES
+           for sample, ms in (("All models", mf), ("Pre-cutoff", pre_cutoff(mf)))]
 
 
 def rows_for(mfiles, dv="excess"):
@@ -144,31 +163,36 @@ def fit(rows, B=9999, seed=0):
                      else "*" if pval < 0.10 else "")
 
 
-res = {fam: fit(rows_for(mf)) for fam, mf in FAMILIES}
-print(f"{'family':<26s} {'beta':>9s} {'SE':>7s} {'95% CI':>18s} {'t':>7s} "
+res = {(fam, sample): fit(rows_for(ms)) for fam, sample, ms in COLUMNS}
+keys = [(fam, sample) for fam, sample, _ in COLUMNS]
+print(f"{'family':<26s} {'sample':<11s} {'beta':>9s} {'SE':>7s} {'95% CI':>18s} {'t':>7s} "
       f"{'WCR p':>7s} {'%/qtr':>7s} {'N':>6s} {'G':>3s}")
-for fam, _ in FAMILIES:
-    r = res[fam]
-    print(f"  {fam:<24s} {r['b']:>+9.4f} {r['se']:>7.4f} "
+for (fam, sample), (_, _, ms) in zip(keys, COLUMNS):
+    r = res[(fam, sample)]
+    print(f"  {fam:<24s} {sample:<11s} {r['b']:>+9.4f} {r['se']:>7.4f} "
           f"[{r['lo']:+.3f}, {r['hi']:+.3f}] {r['t']:>7.2f} {r['p']:>7.4f}{r['star']:<3s} "
-          f"{r['q']:>6.1f}% {r['n']:>6d} {r['G']:>3d}")
+          f"{r['q']:>6.1f}% {r['n']:>6d} {r['G']:>3d}   " + ", ".join(m[0] for m in ms))
 
-tex = [r"\begin{tabular}{lcc}", r"\toprule",
-       " & " + " & ".join(f for f, _ in FAMILIES) + r" \\", r"\midrule"]
-cells = lambda f: [res[fam][f] for fam, _ in FAMILIES]
-tex += ["Release month & " + " & ".join(f"${res[f]['b']:.3f}^{{{res[f]['star']}}}$"
-                                        for f, _ in FAMILIES) + r" \\",
+tex = [r"\begin{tabular}{l" + "c" * len(keys) + "}", r"\toprule",
+       " & " + " & ".join(rf"\multicolumn{{2}}{{c}}{{{f}}}" for f, _ in FAMILIES) + r" \\",
+       # plain \cmidrule{a-b}, no (lr) trim: see behaviour_table.latex -- the trim is
+       # booktabs-only syntax and printed as literal text in the paper's class
+       "".join(rf"\cmidrule{{{2 + 2 * i}-{3 + 2 * i}}}" for i in range(len(FAMILIES))),
+       " & " + " & ".join(sample for _, sample in keys) + r" \\", r"\midrule"]
+cells = lambda f: [res[k][f] for k in keys]
+tex += ["Release month & " + " & ".join(f"${res[k]['b']:.3f}^{{{res[k]['star']}}}$"
+                                        for k in keys) + r" \\",
         " & " + " & ".join(f"$({v:.3f})$" for v in cells("se")) + r" \\",
-        " & " + " & ".join(f"$[{res[f]['lo']:.3f}, {res[f]['hi']:.3f}]$"
-                           for f, _ in FAMILIES) + r" \\",
+        " & " + " & ".join(f"$[{res[k]['lo']:.3f}, {res[k]['hi']:.3f}]$"
+                           for k in keys) + r" \\",
         r"\addlinespace",
-        "Problem fixed effects & " + " & ".join(f"Yes ({res[f]['J']})"
-                                                for f, _ in FAMILIES) + r" \\",
+        "Problem fixed effects & " + " & ".join(f"Yes ({res[k]['J']})"
+                                                for k in keys) + r" \\",
         "Observations & " + " & ".join(f"${v:,}$".replace(",", "{,}")
                                        for v in cells("n")) + r" \\",
         "Model clusters & " + " & ".join(f"${v}$" for v in cells("G")) + r" \\",
-        "Bootstrap-$t$ $p$ & " + " & ".join(f"${res[f]['p']:.3f}$"
-                                            for f, _ in FAMILIES) + r" \\",
+        "Bootstrap-$t$ $p$ & " + " & ".join(f"${res[k]['p']:.3f}$"
+                                            for k in keys) + r" \\",
         r"\midrule",
         "Quarterly reduction & " + " & ".join(f"${v:.1f}\\%$" for v in cells("q")) + r" \\",
         "Half-life (months) & " + " & ".join(f"${v:.1f}$" for v in cells("hl")) + r" \\",
