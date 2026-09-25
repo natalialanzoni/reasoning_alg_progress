@@ -68,6 +68,10 @@ except ModuleNotFoundError:             # only if code/ft_style is missing
 HERE = os.path.dirname(os.path.abspath(__file__))
 _spec = importlib.util.spec_from_file_location("pf", os.path.join(HERE, "paper_figures_71226.py"))
 pf = importlib.util.module_from_spec(_spec); _spec.loader.exec_module(pf)
+# the ONE definition of "did this trial count" / "was it correct" (CLAUDE.md rule 1);
+# only its two pure helpers are used, so its own pf copy is irrelevant here
+_fs_spec = importlib.util.spec_from_file_location("fs", os.path.join(HERE, "figures_sept.py"))
+fs = importlib.util.module_from_spec(_fs_spec); _fs_spec.loader.exec_module(fs)
 OUT = os.path.join(os.path.dirname(HERE), "figures", "figs_sept")
 
 # ---- MATCH FIGURE 1: drop MATH-500, keep the 40 competition problems --------
@@ -137,9 +141,16 @@ ANTH = list(pf.OPUS_MODELS) + [
 
 
 def model_points(mfiles, successes_only):
-    """Per model: (label, date, center, lo, hi) in tokens; point = between-problem
-    geomean excess, error bar = 95% CI from the spread ACROSS problems (clustered)."""
-    REF = ref_of(mfiles)      # this family's floor, not the global default
+    """Per model: (label, date, center, lo, hi, own floor) in tokens. The point is the
+    SAME quantity the fitted curve draws: exp(mean over problems of mean log(L - C_j))
+    excess tokens, plus this model's own mean floor. Error bar = 95% CI from the spread
+    ACROSS problems.
+
+    It used to average log(L/C_j - 1) and multiply back by the ARITHMETIC mean floor.
+    exp(mean log((L - C_j)/C_j)) is geomean excess / GEOMEAN floor, so every dot's
+    excess came out inflated by arith/geo floor (~1.22: 316/257 OpenAI, 441/361
+    Anthropic 4.7+) and sat ~19% above the curve drawn through it -- the rule-3 DV
+    mismatch (CLAUDE.md) surviving in the dots after the fit and band were fixed."""
     out = []
     for label, date, path in mfiles:
         prob = {}
@@ -147,26 +158,26 @@ def model_points(mfiles, successes_only):
             tid = str(r["task_id"])
             if tid not in pf.CANON_KEYS:
                 continue
-            tt = r.get("thinking_tokens", [1] * len(r["correct"]))
-            for tok, c, th in zip(r["total_completion_tokens"], r["correct"], tt):
-                if tok < 50 or (successes_only and not c):   # see _trial_ok
+            texts = r.get("response_texts", [None] * len(r["correct"]))
+            for tok, c, txt in zip(r["total_completion_tokens"], r["correct"], texts):
+                if not fs._trial_ok(tok, txt):
                     continue
-                h = tok / pf.floor_for(label, tid)
-                if h > 1:
-                    prob.setdefault(tid, []).append(math.log(h - 1))
+                if successes_only and not fs._trial_correct(tok, c):
+                    continue
+                cj = pf.floor_for(label, tid)          # this model's own tokenizer
+                if tok > cj:
+                    prob.setdefault(tid, []).append(math.log(tok - cj))
         pm = [float(np.mean(v)) for v in prob.values() if v]
         if not pm:
             continue
         mu = float(np.mean(pm))
         se = float(np.std(pm, ddof=1) / math.sqrt(len(pm))) if len(pm) > 1 else 0.0
-        # Convert back to tokens with THIS MODEL's floor, not the family's. The ratio
-        # above is already per-model; multiplying by a single family floor put Opus
-        # 4.5 and 4.6 24% too high on the token panel, because they are measured
-        # against 355 while the family reference is Fable 5.1's 441.
+        # Back to tokens with THIS MODEL's floor, not the family's: Opus 4.5 and 4.6
+        # are measured against 355, not Fable 5.1's 441.
         own = pf.mean_floor(label, prob.keys())
-        out.append((label, date, (1 + math.exp(mu)) * own,
-                    (1 + math.exp(mu - 1.96 * se)) * own,
-                    (1 + math.exp(mu + 1.96 * se)) * own, own))
+        out.append((label, date, math.exp(mu) + own,
+                    math.exp(mu - 1.96 * se) + own,
+                    math.exp(mu + 1.96 * se) + own, own))
     return out
 
 

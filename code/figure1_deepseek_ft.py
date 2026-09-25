@@ -17,9 +17,10 @@ by SiliconFlow, which truncates intermittently at 32,768 and ignores max_tokens
 entirely for models with no effort knob (R1 ran to 66,106; V3.2 to 82,918). So
 every family here is right-censored at a COMMON 32,768: a trace needing more is
 scored WRONG and its token count clamped, exactly as a 32,768-capped backend would
-have produced. That costs the incumbent families almost nothing -- 23/2,543 OpenAI
-trials (0.90%) and 25/1,565 Anthropic (1.60%) -- so the columns are directly
-comparable rather than DeepSeek being a caveat-laden outlier.
+have produced. That costs the incumbent families little -- 57/2,880 OpenAI trials
+(2.0%) and 60/1,920 Anthropic (3.1%), though Opus 4.6 alone loses 33/320 and gpt-5
+25/320 -- against 227/960 (23.6%) for DeepSeek. The footer computes these shares
+rather than quoting them.
 
 Sample = the same 40 competition problems as fig1_grid (AIME 2026 I/II + HMMT Feb
 2026; MATH-500 excluded), floor recomputed over those 40. DeepSeek covers 40/40.
@@ -126,10 +127,12 @@ def series(model_files, successes_only=True):
                 if tok >= CLIP:
                     censored += 1
                     nt += 1                      # counted, scored wrong
-                    continue
+                    if not successes_only:       # all-attempts view: clamp, do not drop
+                        toks.append(CLIP)        # (dropping it put a model's all-attempts
+                    continue                     #  mean BELOW its correct-only mean)
                 if not fs._trial_ok(tok, txt):
                     continue
-                nt += 1; nc += int(c)
+                nt += 1; nc += int(fs._trial_correct(tok, c))
                 if c or not successes_only:
                     toks.append(tok)
         dates.append(date); mean.append(float(np.mean(toks)) if toks else np.nan)
@@ -141,6 +144,9 @@ def build(fname, successes_only=True):
     use_style()
     fig, axes = plt.subplots(2, 3, figsize=(15.0, 7.4), sharex="col")
     data = [series(f, successes_only) for _, f in FAMILIES]
+    # share of trials censored, per family -- the footer quotes these, so they are
+    # computed, not typed (a typed 1.4% went stale when the OpenAI series grew)
+    share = {fam: 100 * d[4] / max(1, len(d[1]) * 8 * len(KEYS)) for (fam, _), d in zip(FAMILIES, data)}
 
     all_tok = [v for _, _, m, _, _ in data for v in m if np.isfinite(v)]
     tok_hi = max(all_tok) * 1.30
@@ -206,8 +212,9 @@ def build(fname, successes_only=True):
                  y=0.985, fontsize=12, fontweight="bold")
     fig.text(0.5, 0.005,
              "All families censored at a common 32,768-token ceiling, so the rule is identical across "
-             "columns -- but DeepSeek absorbs 23.6% of it against OpenAI's 1.4%, which biases its accuracy "
-             "downward.\nDeepSeek = SiliconFlow/fp8 timeline (R1-0528 -> V3.2 -> V4 Pro April build).",
+             f"columns -- but DeepSeek absorbs {share['DeepSeek']:.1f}% of it against OpenAI's "
+             f"{share['OpenAI (GPT)']:.1f}% and Anthropic's {share['Anthropic (Opus + Fable)']:.1f}%, "
+             "which biases its accuracy downward.\nDeepSeek = SiliconFlow/fp8 timeline (R1-0528 -> V3.2 -> V4 Pro April build).",
              ha="center", fontsize=8, color="#555555")
     fig.tight_layout(rect=(0, 0.045, 1, 0.965))
     return save_figure(fig, fname, outdir=OUT)

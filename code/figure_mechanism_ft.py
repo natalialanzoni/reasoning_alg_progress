@@ -132,9 +132,10 @@ def shallowB(path):
             continue
         for c in e.get("completions", []):
             tok = c.get("n_tokens", 0)
-            if tok < 50:
+            # the central rules (CLAUDE.md rule 1), as the GLM path already uses
+            if not fs._trial_ok(tok, c.get("text"), cap=CAP):
                 continue
-            ok = bool(c.get("is_correct")) and tok < CAP   # AT the cap = truncated
+            ok = fs._trial_correct(tok, c.get("is_correct"), cap=CAP)   # AT the cap = wrong
             nt += 1; nc += int(ok)
             if ok:
                 toks.append(tok)
@@ -148,7 +149,8 @@ def hardB(path):
         if pid not in KEYS:
             continue
         toks = [c["n_tokens"] for c in e.get("completions", [])
-                if c.get("is_correct") and 50 <= c.get("n_tokens", 0) < CAP]
+                if fs._trial_ok(c.get("n_tokens", 0), c.get("text"), cap=CAP)
+                and fs._trial_correct(c.get("n_tokens", 0), c.get("is_correct"), cap=CAP)]
         if toks:
             prob[pid] = toks
     return prob

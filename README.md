@@ -12,7 +12,7 @@ The headline finding (Figure 1) is that across generations — OpenAI
 steadily toward the minimal-human-derivation floor while accuracy rises.
 Mean tokens per correct solution fall **8.5x** for OpenAI (20 months) and **4.8x**
 for Anthropic (9 months); the excess over the floor decays **31.5%/quarter** and
-**41.4%/quarter** respectively.
+**44.1%/quarter** respectively.
 
 ---
 
@@ -226,11 +226,11 @@ something about the sample or the spec changed.
 | Decay table | `table_decay.py` | same betas; N 2,609 / 1,794; 9 / 6 model clusters |
 | Thinking-only | `table_floor_robustness.py` | `thinking only` row: **33.1%** / **42.1%** (log L comparator 27.6% / 36.2%, not in the table) |
 | Fig 1 thinking | `figure1_grid_ft.py` | OpenAI 8,309 -> 649 (**12.8x**); Anthropic 7,804 -> 1,173 (**6.7x**) |
-| Fig 5 | `figure_latent_floor_ft.py` | pooled n~630/model. astra **2.83%** below min, **25.0%** below average; Fable 5.1 **2.38%** / **20.5%** / **27.7%** zero-thinking |
+| Fig 5 | `figure_latent_floor_ft.py` | whole benchmark k=8, n~300/model. astra **3.14%** below min, **14.8%** below average; Fable 5.1 **4.47%** / **16.9%** / **25.3%** zero-thinking. "Below average" is below each problem's own mean human solution, not below the single ~1.43x line drawn |
 | Case study | `figure_mechanism_ft.py` | scale 7,842 -> 4,693 (**1.7x**), acc 68.4% -> 73.8%; algorithm 14,241 -> 8,539 (**1.7x**), acc 83.4% -> 85.6% |
 | Floor table | `table_floor_robustness.py` | OpenAI **31.5-34.1**%/qtr (floor 316), Anthropic **44.1-47.8**%/qtr (floor 441) |
 | Effort | `figure_effort_ft.py` | 8 GPT models x 3 efforts, **k truncated to 8** (`K_CAP`); **low 33.5%**, **medium 35.6%**, **high 36.3%**/qtr |
-| Contamination | `figure_forecast_ft.py` | `fig4_forecast_precutoff_appendix`: GPT **22.0%**/qtr (7 models), Anthropic **29.5%** (4) |
+| Contamination | `figure_forecast_ft.py` | `fig4_forecast_precutoff_appendix`: GPT **22.0%**/qtr (7 models), Anthropic **31.1%** (4) |
 
 ### Which scripts are on the paper's sample
 
@@ -536,7 +536,7 @@ like-for-like comparison:
 | --- | --- | --- |
 | `log(thinking)` | **33.1%**/qtr ** | **42.1%**/qtr * |
 | `log L` (think+answer) | 27.6%/qtr ** | 36.2%/qtr * |
-| `log(L - MHD_j)` (headline) | 31.5%/qtr ** | 41.4%/qtr * |
+| `log(L - MHD_j)` (headline) | 31.5%/qtr ** | 44.1%/qtr * |
 
 Reasoning falls **5-6pp/quarter faster** than total output in both families, so
 keeping answers in `L` makes the headline **conservative**. Dropping gpt-5.1 entirely
@@ -636,6 +636,10 @@ about 41 of V4's 320 trials, so it is not well defined.
 | R1-0528 | 61.9% | 23,554 | 108 (33.8%) |
 | V3.2 | **83.8%** | 13,946 | 43 (13.4%) |
 | V4 Pro Apr `high` | **75.3%** | 11,862 | 76 (23.8%) |
+
+The figure applies `figures_sept._trial_ok`, which drops two V4 Pro trials with empty
+text below the ceiling (`aime_2026_i_09`), so it plots **75.8%** (241/318) where this
+table has 241/320.
 
 The V3.2 -> V4 dip is ~8.5 points and **survives a matched budget**. But the mechanism
 is the tail, not typical verbosity: V4 has the **shortest median** of the three while
