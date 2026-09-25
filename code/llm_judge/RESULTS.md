@@ -95,12 +95,15 @@ appendix table). **Whichever sample the paper uses, the prose must say which.**
 A trace is used only if both judges returned a count. 29 of 1,280 are dropped:
 
 * **27 have no verification count.** The v0 template puts `## Thoughts` first and
-  `<count>` last. On some long traces the judge lists every check it sees, line by line,
-  and never reaches `<count>`. All 35 original losses stopped at the 12,000-token cap.
-  Re-sent with the same prompt and judge at the model's 65,535-token maximum
-  (`judge_traces.py --retry-unparsable --max-out 65535`), 8 came back; 26 ran to the new
-  cap again, and one was a provider error that failed twice. The retry script does not
-  re-send a reply that already ran to the same cap.
+  `<count>` last. All 35 original losses stopped at the 12,000-token cap. Re-sent with
+  the same prompt and judge at 65,535 tokens, gemini-2.5-flash's maximum output
+  (`judge_traces.py --retry-unparsable --max-out 65535`), 8 came back and 27 ran to the
+  new cap again. Of those 27, about 16 are lists of 1,000-5,000 distinct lines itemising
+  every check, 3 are loops repeating one line, and 6 wrote under 20 lines, having spent
+  the budget on the model's hidden reasoning, which counts against the same cap. More
+  room would not help; recovering them would need a different prompt or judge setting,
+  i.e. a different instrument. The retry script does not re-send a reply that already
+  ran to the same cap.
 * **2 have no backtracking count** (gpt-oss-20b): the v6 judge ran away the same way.
 
 The drop is not random. It takes the longest traces: 10.8% of GLM 5.3's reasoning
