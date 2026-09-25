@@ -21,8 +21,9 @@ choices matter and both are the standard recommendation for few clusters
     bootstrap-t puts Anthropic at p = 0.066, i.e. NOT significant at 5% despite
     t = -5.8. Do not read significance off the reported interval.
 
-The interval is still printed because it is what the Figure 4 band shows, but the
-stars come from the bootstrap-t.
+The interval is printed to the console because it is what the Figure 4 band shows, but
+the LaTeX table carries neither the interval nor significance stars -- only the
+coefficient, its bootstrap SE, and the bootstrap-t p.
 
 Four columns: each family on all its models, and on the PRE-CUTOFF models only (training
 data ends before the Feb 2026 benchmark, the fig4_forecast_precutoff_appendix sample).
@@ -180,11 +181,11 @@ tex = [r"\begin{tabular}{l" + "c" * len(keys) + "}", r"\toprule",
        "".join(rf"\cmidrule{{{2 + 2 * i}-{3 + 2 * i}}}" for i in range(len(FAMILIES))),
        " & " + " & ".join(sample for _, sample in keys) + r" \\", r"\midrule"]
 cells = lambda f: [res[k][f] for k in keys]
-tex += ["Release month & " + " & ".join(f"${res[k]['b']:.3f}^{{{res[k]['star']}}}$"
-                                        for k in keys) + r" \\",
+# No significance stars and no interval row: the bootstrap-t p is reported in its own
+# row, and the percentile interval is anti-conservative here (see the module note), so
+# printing it would invite reading significance off it.
+tex += ["Release month & " + " & ".join(f"${res[k]['b']:.3f}$" for k in keys) + r" \\",
         " & " + " & ".join(f"$({v:.3f})$" for v in cells("se")) + r" \\",
-        " & " + " & ".join(f"$[{res[k]['lo']:.3f}, {res[k]['hi']:.3f}]$"
-                           for k in keys) + r" \\",
         r"\addlinespace",
         "Problem fixed effects & " + " & ".join(f"Yes ({res[k]['J']})"
                                                 for k in keys) + r" \\",
