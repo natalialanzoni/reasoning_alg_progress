@@ -1,5 +1,11 @@
 """Count backtracking / verification steps in reasoning traces with an LLM judge.
 
+SCOPE NOW: this script produced the VERIFICATION run the paper uses
+(out/judge_whole_gemini.jsonl, prompt v0) and the superseded backtracking runs
+v0-v3. The paper's backtracking run is v6, made by run_backtracking_v6.py, which
+line-numbers the trace and checks the judge's quotes -- this script does neither.
+The default is therefore --behaviours verification.
+
 WHAT THIS DOES
   For each trace: send the WHOLE chain-of-thought plus one Gandhi et al. prompt
   to the judge, read the <count> it returns, write one JSONL record. One call per
@@ -32,7 +38,8 @@ USAGE
   python code/llm_judge/judge_traces.py --estimate     # volume + cost, no calls
   python code/llm_judge/judge_traces.py --show-one     # print a real payload
   python code/llm_judge/judge_traces.py --limit 6 --send   # pilot (spread over problems)
-  python code/llm_judge/judge_traces.py --send            # full run (~$7, ~40 min)
+  python code/llm_judge/judge_traces.py --send            # verification, full run (~$7, ~40 min)
+  python code/llm_judge/run_backtracking_v6.py --send     # backtracking, full run
   python code/llm_judge/behaviour_table.py --tex paper_figs/table_behaviours.tex
 
   Needs ERA_OPENROUTER_V2 (or OPENROUTER_API_KEY) in the environment.
@@ -97,12 +104,12 @@ EDIT_NOTE = ("line 2 reframed from 'text from the internet' to 'the reasoning tr
 #                      abandonment; a v1 attempt then undercounted. v2 tests
 #                      whether the line of attack is CARRIED FORWARD, which is
 #                      visible on the page. See README.
-#   backtracking v3 -- IN USE. v2 undercounted:
+#   backtracking v3 -- superseded by v6 (run_backtracking_v6.py). v2 undercounted:
 #                      it refused brief ideas as "too undeveloped". v3 counts a
 #                      candidate however briefly raised, separates required case
 #                      eliminations from guessed ones, and counts recomputed wrong
 #                      values. Pilot and rationale in
-#                      for_RA_review/v3_backtracking/.
+#                      data/archive/llm_judge_superseded/review_packs/.
 PROMPT_VERSION = {"backtracking": "v3", "verification": "v0"}
 
 
@@ -128,13 +135,14 @@ def build_messages(behaviour, trace, version=None):
     return [{"role": "user", "content": t.replace("{response}", trace)}]
 
 
-def judge_one(client, behaviour, trace, model, version=None):
+def judge_one(client, behaviour, trace, model, version=None, max_out=MAX_OUT):
     r = client.chat.completions.create(
         model=model, messages=build_messages(behaviour, trace, version),
-        max_tokens=MAX_OUT, temperature=TEMPERATURE)
+        max_tokens=max_out, temperature=TEMPERATURE)
     txt = r.choices[0].message.content or ""
     m = COUNT_RE.search(txt)
-    return {"count": int(m.group(1)) if m else None, "raw": txt,
+    return {"count": int(m.group(1)) if m else None, "raw": txt, "max_tokens": max_out,
+            "finish": r.choices[0].finish_reason,
             "in_tok": r.usage.prompt_tokens, "out_tok": r.usage.completion_tokens}
 
 
@@ -144,7 +152,7 @@ def main():
     ap.add_argument("--prompt-version", default=None, choices=("v0", "v2", "v3"),
                     help="override the per-behaviour default in PROMPT_VERSION")
     ap.add_argument("--models", nargs="*", default=MODEL_ORDER)
-    ap.add_argument("--behaviours", nargs="*", default=["backtracking", "verification"],
+    ap.add_argument("--behaviours", nargs="*", default=["verification"],
                     choices=list(BEHAVIOURS))
     ap.add_argument("--limit", type=int, default=None,
                     help="N traces per model for piloting, SPREAD ACROSS PROBLEMS. Taking "
@@ -155,6 +163,11 @@ def main():
     ap.add_argument("--show-one", action="store_true")
     ap.add_argument("--send", action="store_true", help="REQUIRED to contact OpenRouter")
     ap.add_argument("--out", default=os.path.join(OUT_DIR, "judge_whole_gemini.jsonl"))
+    ap.add_argument("--max-out", type=int, default=MAX_OUT, help="output token cap per reply")
+    ap.add_argument("--retry-unparsable", action="store_true",
+                    help="re-send traces whose last record has no count (e.g. cut off at the "
+                         "output cap). The new record is appended; behaviour_table.py uses the "
+                         "last record per trace.")
     a = ap.parse_args()
 
     rows = load_all(a.models)
@@ -213,9 +226,17 @@ def main():
         for line in open(a.out):
             try:
                 d = json.loads(line)
-                done.add((d["model"], d["task_id"], d["sample"], d["behaviour"]))
+                key = (d["model"], d["task_id"], d["sample"], d["behaviour"])
             except Exception:
-                pass
+                continue
+            # the last record per trace decides, as in behaviour_table.py. A reply that
+            # already ran to this same cap is not retried: on those traces the v0 judge
+            # lists every check it sees and never reaches <count> (26 of 35 at 65,535).
+            ran_to_cap = d.get("finish") == "length" and (d.get("max_tokens") or 0) >= a.max_out
+            if a.retry_unparsable and d.get("count") is None and not ran_to_cap:
+                done.discard(key)
+            else:
+                done.add(key)
         print(f"resuming: {len(done)} already judged")
     todo = [j for j in jobs
             if (j["model"], j["task_id"], j["sample"], j["behaviour"]) not in done]
@@ -224,7 +245,7 @@ def main():
     n = 0
     with open(a.out, "a") as fh, ThreadPoolExecutor(max_workers=a.workers) as ex:
         fut = {ex.submit(judge_one, client, j["behaviour"], j["cot"], a.judge_model,
-                         a.prompt_version): j for j in todo}
+                         a.prompt_version, a.max_out): j for j in todo}
         for f in as_completed(fut):
             j = fut[f]
             rec = {k: j[k] for k in ("model", "task_id", "sample", "behaviour",

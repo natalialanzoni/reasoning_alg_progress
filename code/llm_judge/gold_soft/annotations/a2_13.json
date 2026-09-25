@@ -1,0 +1,40 @@
+{
+ "trace": "13",
+ "annotator": "a2",
+ "nlines": 13,
+ "instances": [],
+ "rejected": [
+  {
+   "lines": [
+    1,
+    1
+   ],
+   "what": "hesitation over whether prime squares fail",
+   "why_not": "verification"
+  },
+  {
+   "lines": [
+    3,
+    3
+   ],
+   "what": "range of m corrected (m>=6, not 3 or 4)",
+   "why_not": "error fix"
+  },
+  {
+   "lines": [
+    7,
+    7
+   ],
+   "what": "count of composites and prime squares",
+   "why_not": "other: main computation"
+  },
+  {
+   "lines": [
+    9,
+    11
+   ],
+   "what": "checks m=16, m=12 and prime squares below 101",
+   "why_not": "verification"
+  }
+ ]
+}

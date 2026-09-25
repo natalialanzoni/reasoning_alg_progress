@@ -1,15 +1,16 @@
 \begin{tabular}{lcccc}
 \toprule
- & \multicolumn{2}{c}{Scale} & \multicolumn{2}{c}{Algorithm} \\
+ & \multicolumn{2}{c}{Scale} & \multicolumn{2}{c}{Post-training} \\
 \cmidrule{2-3}\cmidrule{4-5}
  & gpt-oss-20B & gpt-oss-120B & GLM 5.2 & GLM 5.3 \\
 \midrule
-Verification, per trace & $10.53$ & $5.02$ & $13.44$ & $9.76$ \\
-Verification, per 10k reasoning tokens & $9.16$ & $9.02$ & $8.36$ & $10.27$ \\
-Backtracking, per trace & $5.30$ & $3.07$ & $3.90$ & $4.52$ \\
-Backtracking, per 10k reasoning tokens & $4.63$ & $5.43$ & $2.38$ & $4.62$ \\
+Verification, per trace & $10.54$ & $5.02$ & $13.41$ & $11.11$ \\
+Verification, per 10k reasoning tokens & $9.17$ & $9.02$ & $8.28$ & $11.28$ \\
+Backtracking, per trace & $5.32$ & $2.92$ & $2.56$ & $2.94$ \\
+Backtracking, per 10k reasoning tokens & $4.63$ & $5.24$ & $1.58$ & $2.98$ \\
 \addlinespace
-Median CoT characters & $19{,}873$ & $11{,}980$ & $31{,}566$ & $9{,}206$ \\
-Traces judged & $313$ & $318$ & $309$ & $305$ \\
+Mean reasoning tokens & $11{,}495$ & $5{,}559$ & $16{,}193$ & $9{,}849$ \\
+Median reasoning tokens & $6{,}515$ & $4{,}030$ & $12{,}723$ & $3{,}372$ \\
+Traces judged & $312$ & $318$ & $312$ & $309$ \\
 \bottomrule
 \end{tabular}

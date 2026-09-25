@@ -1,42 +1,62 @@
 # LLM judge — counting backtracking and verification in reasoning traces
 
 **The deliverable is `paper_figs/table_behaviours.tex`, built by
-`behaviour_table.py` from `out/judge_whole_gemini.jsonl`. Nothing else in this
-folder feeds the paper.** Everything else is either the script that produced that
-JSONL, documentation of how we got there, or the RA adjudication pack.
+`behaviour_table.py` from two judge runs: `out/judge_whole_gemini.jsonl`
+(verification) and `out/judge_backtracking_v6.jsonl` (backtracking). Nothing else
+in this folder feeds the paper.** Everything else is either a script that produced
+those files, documentation of how we got there, or an RA adjudication pack.
 
 Counts two of Gandhi et al.'s cognitive behaviours in the traces behind
 `fig_mechanism`, to ask what actually changes when a model gets more efficient:
 does it verify less, backtrack less, or just write less?
 
+Run everything from the repo root with the project venv (`./venv/bin/python`); the
+system `python3` lacks numpy and tiktoken.
+
 ```
-python code/llm_judge/judge_traces.py --estimate            # volume + cost, sends nothing
-python code/llm_judge/judge_traces.py --show-one            # print one real payload
-python code/llm_judge/judge_traces.py --limit 6 --send      # pilot, spread over problems
-python code/llm_judge/judge_traces.py --send                # full run, ~$6, ~40 min
-python code/llm_judge/behaviour_table.py --tex paper_figs/table_behaviours.tex
+./venv/bin/python code/llm_judge/judge_traces.py --send          # verification, ~$6, ~40 min
+./venv/bin/python code/llm_judge/judge_traces.py --retry-unparsable --max-out 65535 --send   # re-send cut-off replies
+./venv/bin/python code/llm_judge/run_backtracking_v6.py          # backtracking: volume + cost, sends nothing
+./venv/bin/python code/llm_judge/run_backtracking_v6.py --send   # backtracking, ~$280, resumable
+./venv/bin/python code/llm_judge/behaviour_table.py --tex paper_figs/table_behaviours.tex
+./venv/bin/python code/llm_judge/behaviour_table.py --correct-only --tex paper_figs/table_behaviours_correct.tex
+./venv/bin/python code/llm_judge/prompt_robustness_table.py --tex paper_figs/table_backtracking_prompts.tex
+./venv/bin/python code/llm_judge/make_prompt_image.py            # appendix prompt figures
 ```
 
 Needs `ERA_OPENROUTER_V2` (or `OPENROUTER_API_KEY`). **Nothing is sent without
-`--send`.**
+`--send`.** Both runs resume where they stopped. `behaviour_table.py` refuses to
+write the `.tex` while any trace has no record, so a half-finished run cannot
+reach the paper. By default it uses one sample for both behaviours: traces with both
+counts (`--no-common-sample` to turn this off). RESULTS.md has what the 29 dropped
+traces do.
 
 ## Files
 
 | File | Role |
 | --- | --- |
 | `verification_v0.txt` | **in use.** Gandhi et al.'s template + one domain edit |
-| `backtracking_v3.txt` | **in use.** See "The backtracking prompt, v0 → v3" |
-| `backtracking_v0.txt`, `backtracking_v2.txt` | superseded; kept so old runs stay readable |
+| `backtracking_v6.txt` | **in use.** See "The backtracking prompt, v4 → v6" |
 | `load_traces.py` | loads the CoT for the four fig_mechanism models, normalised |
-| `judge_traces.py` | sends each whole trace to the judge, parses `<count>` |
-| `behaviour_table.py` | **builds `paper_figs/table_behaviours.tex`** |
-| `out/judge_whole_gemini.jsonl` | verification (and the superseded v0 backtracking) |
-| `out/judge_backtracking_v3.jsonl` | **the backtracking run the paper uses** |
-| `for_RA_review/v3_backtracking/` | 20 sheets, v0/v2/v3 side by side |
+| `judge_traces.py` | the verification run (and the superseded backtracking v0–v3 runs) |
+| `run_backtracking_v6.py` | the backtracking run: line-numbers each trace, checks the judge's quotes |
+| `behaviour_table.py` | **builds `paper_figs/table_behaviours.tex`** (and `_correct.tex` with `--correct-only`) |
+| `prompt_robustness_table.py` | appendix table: backtracking levers under prompts v0/v2/v3/v6, and v6 with problems weighted equally |
+| `make_prompt_image.py` | appendix figures of the two prompts the paper's runs used |
+| `out/judge_whole_gemini.jsonl` | **the verification run the paper uses** (its v0 backtracking records are superseded and never read) |
+| `out/judge_backtracking_v6.jsonl` | **the backtracking run the paper uses** |
+| `out/judge_backtracking_v2.jsonl`, `_v3.jsonl` | superseded backtracking runs, kept because the appendix table reads them |
+| `out/pilot_v6_gemini-3.1-pro-preview.jsonl` | the 20-trace v6 pilot scored against `gold_soft/` (the validation run) |
+| `pilot.py`, `pilot_v4.py` | the pilot harness; `run_backtracking_v6.py`, `gold_soft/` and the RA pack import its line numbering, quote check and matching |
+| `recall_check.py` | GLM 5.3's pre-computation recall attempts (30% / 18% / 83 claims, all traces) |
+| `gold_soft/` | **the soft key v6 is validated against**; `score_soft.py` scores a pilot against it |
+| `for_RA_review/v6_backtracking/` | RA pack: check the soft key, then v6 against it |
+| `for_RA_review/review_traces/` | the 20 review traces, their index (file, model, task, sample) and problem statements |
+| `data/archive/llm_judge_superseded/` | everything superseded: prompts v0–v5, the strict key, the v4/v5 and non-chosen v6 pilots, the v0/v2/v3 RA packs, `audit.py`, `make_review_pack.py` (see its WHY_ARCHIVED.md) |
 
 ## The prompts
 
-Verbatim from `pretraining_analysis/prompts/` in the upstream repo, with **one
+**Verification** is verbatim from `pretraining_analysis/prompts/` in the upstream repo, with **one
 documented edit**: line 2 read
 
 > You will be provided with text from the internet.
@@ -61,7 +81,7 @@ pretraining templates are the only domain-general pair upstream.
 ## Traces
 
 The four models in `fig_mechanism`: gpt-oss-20b -> gpt-oss-120b (scale) and
-GLM 5.2 -> GLM 5.3 (algorithm), on the 40 competition problems at k=8 = 1,280
+GLM 5.2 -> GLM 5.3 (post-training), on the 40 competition problems at k=8 = 1,280
 traces. **CoT only on both sides**, which needs normalising because the two
 families store it differently:
 
@@ -202,3 +222,44 @@ it stood.
 examples to confirm one rule three verifications or one? v0 counts three, so the
 count partly measures how many examples a model tries, which scales with trace
 length. If the paper leans on verification counts, it should say which it means.
+
+## The backtracking prompt, v4 → v6
+
+v3 was replaced after review. The paper measures **wasted search**, so the
+construct is deliberately soft: *"tries an approach and gives it up to do
+something different"*. The writer need not commit to the approach or say it failed.
+v6 is a rewrite, not the upstream template plus an edit — **say so in the
+appendix**, and quote `backtracking_v6.txt` in full.
+
+* **v4** asked for each instance with the lines where it was adopted and
+  abandoned, each with a verbatim quote, so every instance can be checked on the
+  page. The count used is the number of instances whose abandon quote is found in
+  the trace; the judge's own `<count>` is recorded but not trusted.
+* **v5** and **v6** simplified the definition to the soft construct above,
+  keeping two exclusions: verification of a completed step, and ruling out a case
+  the solution requires. Returning to the same approach is one entry.
+* **Judge:** gemini-3.1-pro-preview (`pilot.py --compare` has the others). The
+  pilot's 24,000-token output cap cut off 1/20 replies, because the judge's
+  reasoning counts against it; the full run uses the model's 65,536.
+
+**Validation.** `gold_strict.json` (archived) measures the stricter construct and cannot
+validate v6. `gold_soft/` is a key for the soft construct: two annotators (Claude
+models) counted each of the 20 traces blind to every judge. Anthropic's
+usage-policy filter stopped four annotator runs, so 12 traces are double-counted,
+7 single, and trace 04 has none; they were not retried. Against it
+(`gold_soft/score_soft.py`), of v6's 121 entries:
+
+* 80 match a key entry;
+* 27 land on an entry already matched — about half are the same approach listed
+  twice, the rest separate ideas inside a long episode;
+* 14 match nothing: 3 at spots an annotator rejected as verification, 4 as error
+  fixes, 7 other.
+
+v6 misses most one-line ideas the annotators marked borderline (9/35 found) and 7
+of 36 firm ones. On the same traces its newer/older ratios track the annotator's:
+GLM 5.3/5.2 0.70 vs 0.71, gpt-oss 120b/20b 1.24 vs 1.18 (annotator 2, 2–5 traces
+per model, so suggestive, not proof). The two annotators agree with each other
+(mean difference 1.5 per trace) better than v6 agrees with either (3.0–3.5).
+
+**Open until the RA pack comes back:** the key is not person-checked, and whether
+one-line ideas count is undecided.

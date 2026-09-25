@@ -1,0 +1,309 @@
+{
+ "trace": "11",
+ "annotator": "a2",
+ "nlines": 1885,
+ "instances": [
+  {
+   "approach": "A_i = set of divisors of i",
+   "visits": [
+    [
+     16,
+     17
+    ]
+   ],
+   "abandon_line": 17,
+   "abandon_quote": "Then $|A_i| = d(i)$. But we need $|A_i| = i$.",
+   "switched_to": "Other constructions (vectors, prime-power pairs)",
+   "tier": "borderline",
+   "reason": "Construction proposed and dropped after a one-line size check."
+  },
+  {
+   "approach": "A_i = tuples with all coordinates at most i",
+   "visits": [
+    [
+     24,
+     24
+    ]
+   ],
+   "abandon_line": 24,
+   "abandon_quote": "that doesn't match.",
+   "switched_to": "Prime-power-indexed construction",
+   "tier": "borderline",
+   "reason": "Raised and dismissed in one line."
+  },
+  {
+   "approach": "Prime-power-indexed construction A_i = {(p,e) : p^e | i}",
+   "visits": [
+    [
+     25,
+     29
+    ]
+   ],
+   "abandon_line": 29,
+   "abandon_quote": "This doesn't equal $i$.",
+   "switched_to": "Decomposing the gcd as a sum of phi(d) (the S_d construction)",
+   "tier": "firm",
+   "reason": "Commits to a specific construction, computes |A_i|, finds it fails, and moves to a different construction."
+  },
+  {
+   "approach": "Differences B_k = A_k minus the union of A_d over proper divisors d",
+   "visits": [
+    [
+     36,
+     36
+    ]
+   ],
+   "abandon_line": 36,
+   "abandon_quote": "No, $\\gcd(i, j)$ is not the number of common divisors",
+   "switched_to": "The phi-sum decomposition",
+   "tier": "borderline",
+   "reason": "Briefly proposed and rejected in the same line with no work."
+  },
+  {
+   "approach": "Candidate: every M_d = d (sum = sigma(250)), i.e. A_d are initial intervals",
+   "visits": [
+    [
+     84,
+     101
+    ],
+    [
+     179,
+     191
+    ],
+    [
+     286,
+     296
+    ],
+    [
+     319,
+     321
+    ],
+    [
+     464,
+     465
+    ]
+   ],
+   "abandon_line": 465,
+   "abandon_quote": "they cannot both be intervals.",
+   "switched_to": "Assigning numbers to the nodes to trade off the M_d",
+   "tier": "firm",
+   "reason": "Proposes that the lower bound sigma(250) is reached and checks it several times before ruling it out (min vs gcd, V_5 does not fit)."
+  },
+  {
+   "approach": "Exchange/nested up-sets argument for ordering numbers",
+   "visits": [
+    [
+     363,
+     373
+    ]
+   ],
+   "abandon_line": 375,
+   "abandon_quote": "Let's reverse the perspective.",
+   "switched_to": "Bucket-count (frequency) heuristics",
+   "tier": "borderline",
+   "reason": "Starts a swapping argument, wavers ('Not exactly nested', 'Wait, no.') and drops it for a different view."
+  },
+  {
+   "approach": "Heuristic: give the smallest numbers to nodes lying in the most buckets (count descending)",
+   "visits": [
+    [
+     409,
+     414
+    ],
+    [
+     533,
+     589
+    ],
+    [
+     689,
+     743
+    ],
+    [
+     912,
+     939
+    ]
+   ],
+   "abandon_line": 939,
+   "abandon_quote": "The capacity effect outweighed the count effect!",
+   "switched_to": "Interval / permutation formulation (scheduling-style ordering of blocks)",
+   "tier": "firm",
+   "reason": "Adopted several times, each time refuted by the small 00/10/01/11 example, and finally replaced by a different formulation."
+  },
+  {
+   "approach": "Greedy by minimum immediate increase (assign to the node in the fewest buckets, count ascending)",
+   "visits": [
+    [
+     485,
+     504
+    ],
+    [
+     590,
+     687
+    ],
+    [
+     795,
+     837
+    ]
+   ],
+   "abandon_line": 837,
+   "abandon_quote": "The greedy choice is short-sighted.",
+   "switched_to": "Assigning from the largest number downward",
+   "tier": "firm",
+   "reason": "Runs the step-by-step greedy and shows it forces huge maxima later (M_12 example)."
+  },
+  {
+   "approach": "Assigning numbers from 250 downward (largest numbers to the fewest buckets)",
+   "visits": [
+    [
+     844,
+     910
+    ]
+   ],
+   "abandon_line": 912,
+   "abandon_quote": "Let's combine this with the count.",
+   "switched_to": "Combining count and capacity, then the interval-permutation formulation",
+   "tier": "borderline",
+   "reason": "Real work (the 150..31 fill comparisons), but its capacity insight is carried forward, so it is unclear whether it was dropped or absorbed."
+  },
+  {
+   "approach": "Right-to-left greedy minimising S(v)*|U_v ∪ U_P| at each step (cost 1996)",
+   "visits": [
+    [
+     1247,
+     1321
+    ],
+    [
+     1481,
+     1512
+    ]
+   ],
+   "abandon_line": 1512,
+   "abandon_quote": "greedy minimizes the CURRENT cost, but causes large nodes to have HUGE costs later!",
+   "switched_to": "Placing nodes in descending order of size S (cost 499), then local swaps",
+   "tier": "firm",
+   "reason": "Commits to the greedy and its value 1996, returns to it after the manual orderings do better, and explicitly rejects it."
+  }
+ ],
+ "rejected": [
+  {
+   "lines": [
+    14,
+    15
+   ],
+   "what": "gcd confused with number of common divisors",
+   "why_not": "error fix"
+  },
+  {
+   "lines": [
+    20,
+    20
+   ],
+   "what": "'vectors or something' mention",
+   "why_not": "other: planning aloud, no approach taken up"
+  },
+  {
+   "lines": [
+    53,
+    57
+   ],
+   "what": "Asking whether the S_d construction is the only one",
+   "why_not": "verification"
+  },
+  {
+   "lines": [
+    159,
+    176
+   ],
+   "what": "Re-checking that only the S_k with k | 250 matter",
+   "why_not": "verification"
+  },
+  {
+   "lines": [
+    216,
+    264
+   ],
+   "what": "Re-deriving that any partition into V_k works",
+   "why_not": "verification"
+  },
+  {
+   "lines": [
+    304,
+    304
+   ],
+   "what": "Bipartite matching / flow mentioned",
+   "why_not": "other: named only, never taken up"
+  },
+  {
+   "lines": [
+    417,
+    428
+   ],
+   "what": "Process buckets in increasing size",
+   "why_not": "other: planning aloud, flows straight into the frequency analysis"
+  },
+  {
+   "lines": [
+    941,
+    948
+   ],
+   "what": "Weighted-completion-time scheduling analogy",
+   "why_not": "other: turns directly into the interval-permutation formulation that is kept"
+  },
+  {
+   "lines": [
+    960,
+    1082
+   ],
+   "what": "Claims that sigma must be a linear extension and that M_m = prefix sum; corrected to the max over the down-set",
+   "why_not": "error fix (same interval-permutation method)"
+  },
+  {
+   "lines": [
+    1159,
+    1214
+   ],
+   "what": "Linear-extension requirement dropped after checking the intersection property",
+   "why_not": "error fix"
+  },
+  {
+   "lines": [
+    1323,
+    1413
+   ],
+   "what": "Manual orderings 1976, 1956, 1156, 598, 518",
+   "why_not": "other: successive improvements in the same permutation search, not a switch of method"
+  },
+  {
+   "lines": [
+    1531,
+    1628
+   ],
+   "what": "Swaps around the 499 order (12/02, 03/12, 11/02)",
+   "why_not": "verification (local-optimality checks, 499 kept)"
+  },
+  {
+   "lines": [
+    1632,
+    1645
+   ],
+   "what": "Apparent 376/476 confusion resolved",
+   "why_not": "error fix"
+  },
+  {
+   "lines": [
+    1721,
+    1749
+   ],
+   "what": "Apparent 497 improvement recomputed as 506",
+   "why_not": "error fix"
+  },
+  {
+   "lines": [
+    1814,
+    1885
+   ],
+   "what": "Final recheck of the C values and arithmetic",
+   "why_not": "verification"
+  }
+ ]
+}

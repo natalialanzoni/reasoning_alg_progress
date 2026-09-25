@@ -1,0 +1,44 @@
+sending 20 calls: prompt v5, judge anthropic/claude-sonnet-4.5
+  01  ok  out_tok=619 finish=stop
+  02  ok  out_tok=114 finish=stop
+  03  ok  out_tok=665 finish=stop
+  04  ok  out_tok=256 finish=stop
+  05  ok  out_tok=104 finish=stop
+  06  ok  out_tok=12 finish=stop
+  07  ok  out_tok=81 finish=stop
+  08  ok  out_tok=256 finish=stop
+  09  ok  out_tok=112 finish=stop
+  10  ok  out_tok=104 finish=stop
+  11  ok  out_tok=108 finish=stop
+  12  ok  out_tok=138 finish=stop
+  13  ok  out_tok=96 finish=stop
+  14  ok  out_tok=575 finish=stop
+  15  ok  out_tok=10 finish=stop
+  16  ok  out_tok=110 finish=stop
+  17  ok  out_tok=360 finish=stop
+  18  ok  out_tok=110 finish=stop
+  19  ok  out_tok=404 finish=stop
+  20  ok  out_tok=88 finish=stop
+
+=== prompt v5  judge anthropic/claude-sonnet-4.5 ===
+tr  model         gold firm | cnt lst ver  TP dup | share: judge  gold
+01  gpt-oss-120b     7    4 |   8   8   8   5   1 |         73%   78%  
+02  gpt-oss-20b      4    2 |   1   1   1   1   0 |         26%   23%  
+03  gpt-oss-120b     4    3 |   9   9   9   3   1 |         63%   29%  
+04  gpt-oss-120b     4    3 |   3   3   3   2   1 |         25%   38%  
+05  GLM 5.3          5    2 |   1   1   1   1   0 |          1%   26%  
+06  GLM 5.3          0    0 |   0   0   0   0   0 |          0%    0%  
+07  gpt-oss-20b      3    3 |   1   1   1   0   0 |         30%   22%  
+08  GLM 5.2          4    3 |   2   2   2   0   0 |         13%   19%  
+09  gpt-oss-20b      5    4 |   1   1   1   0   0 |         95%   19%  
+10  gpt-oss-20b      7    5 |   1   1   1   1   0 |          3%   39%  
+11  GLM 5.2          6    3 |   1   1   1   0   0 |          1%   22%  
+12  GLM 5.2          3    1 |   1   1   1   0   0 |         53%    7%  
+13  GLM 5.3          0    0 |   1   1   1   0   0 |         21%    0%  
+14  gpt-oss-120b     0    0 |   1   1   1   0   0 |          7%    0%  
+15  GLM 5.2          0    0 |   0   0   0   0   0 |          0%    0%  
+16  GLM 5.2          4    1 |   1   1   1   0   0 |         51%    7%  
+17  gpt-oss-20b      0    0 |   0   0   0   0   0 |          0%    0%  
+18  GLM 5.3          1    1 |   1   1   1   1   0 |         41%   42%  
+19  GLM 5.3          6    4 |   5   5   5   3   1 |         25%   48%  
+20  gpt-oss-120b     7    6 |   1   1   1   1   0 |         69%   48%  

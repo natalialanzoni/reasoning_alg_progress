@@ -1,0 +1,40 @@
+{
+ "trace": "14",
+ "annotator": "a1",
+ "nlines": 213,
+ "instances": [],
+ "rejected": [
+  {
+   "lines": [
+    29,
+    37
+   ],
+   "what": "musing about which equations to subtract next",
+   "why_not": "restatement"
+  },
+  {
+   "lines": [
+    39,
+    47
+   ],
+   "what": "introducing S=b+c, P=bc then working with b,c directly (S kept)",
+   "why_not": "other: notation, S used throughout"
+  },
+  {
+   "lines": [
+    137,
+    149
+   ],
+   "what": "checking distinctness and consistency of S",
+   "why_not": "verification"
+  },
+  {
+   "lines": [
+    151,
+    207
+   ],
+   "what": "solving for b,c explicitly to confirm",
+   "why_not": "verification"
+  }
+ ]
+}

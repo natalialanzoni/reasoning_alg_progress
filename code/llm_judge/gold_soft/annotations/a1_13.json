@@ -1,0 +1,32 @@
+{
+ "trace": "13",
+ "annotator": "a1",
+ "nlines": 13,
+ "instances": [],
+ "rejected": [
+  {
+   "lines": [
+    1,
+    1
+   ],
+   "what": "refining which n+1 fail (primes, prime squares)",
+   "why_not": "restatement"
+  },
+  {
+   "lines": [
+    3,
+    5
+   ],
+   "what": "range of m corrected from 3..101 to 6..101",
+   "why_not": "error fix"
+  },
+  {
+   "lines": [
+    9,
+    11
+   ],
+   "what": "checking m=16, m=12 and the prime-square list",
+   "why_not": "verification"
+  }
+ ]
+}

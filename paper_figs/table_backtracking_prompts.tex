@@ -1,0 +1,14 @@
+\begin{tabular}{lccccc}
+\toprule
+ & \multicolumn{4}{c}{Judge prompt} & v6, each problem \\
+\cmidrule{2-5}
+Backtracking, newer / older & v0 & v2 & v3 & v6 & weighted equally \\
+\midrule
+Scale, per trace & $0.43\times$ & $0.60\times$ & $0.64\times$ & $0.59\times$ & $0.49\times$ \\
+Scale, per 10k reasoning tokens & $0.74\times$ & $1.01\times$ & $1.09\times$ & $1.03\times$ & $1.01\times$ \\
+Post-training, per trace & $0.89\times$ & $1.79\times$ & $1.39\times$ & $1.45\times$ & $1.30\times$ \\
+Post-training, per 10k reasoning tokens & $1.70\times$ & $3.31\times$ & $2.61\times$ & $2.66\times$ & $3.09\times$ \\
+\addlinespace
+Correct traces judged & $972$ & $971$ & $971$ & $981$ & $981$ \\
+\bottomrule
+\end{tabular}

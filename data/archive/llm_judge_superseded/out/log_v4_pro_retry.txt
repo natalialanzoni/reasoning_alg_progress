@@ -1,0 +1,25 @@
+sending 1 calls: prompt v4, judge google/gemini-2.5-pro
+  04  ok  out_tok=1448 finish=error
+
+=== prompt v4  judge google/gemini-2.5-pro ===
+tr  model         gold firm | cnt lst ver  TP dup | share: judge  gold
+01  gpt-oss-120b     7    4 |   6   6   6   4   0 |         72%   78%  
+02  gpt-oss-20b      4    2 |   2   2   2   1   1 |         12%   23%  
+03  gpt-oss-120b     4    3 |   2   2   2   1   0 |         59%   29%  
+04  gpt-oss-120b     4    3 |   -   0   0   0   0 |          0%   38%  
+05  GLM 5.3          5    2 |   5   5   3   3   0 |         51%   26%  
+06  GLM 5.3          0    0 |   4   4   3   0   0 |          2%    0%  
+07  gpt-oss-20b      3    3 |   3   3   2   2   0 |         13%   22%  
+08  GLM 5.2          4    3 |   5   5   5   3   0 |         32%   19%  
+09  gpt-oss-20b      5    4 |   5   5   4   2   1 |         51%   19%  
+10  gpt-oss-20b      7    5 |   4   4   4   2   0 |         87%   39%  
+11  GLM 5.2          6    3 |   5   5   5   3   0 |         26%   22%  
+12  GLM 5.2          3    1 |   1   1   1   1   0 |          1%    7%  
+13  GLM 5.3          0    0 |   0   0   0   0   0 |          0%    0%  
+14  gpt-oss-120b     0    0 |   0   0   0   0   0 |          0%    0%  
+15  GLM 5.2          0    0 |   1   1   1   0   0 |         42%    0%  
+16  GLM 5.2          4    1 |   6   6   6   3   2 |          6%    7%  
+17  gpt-oss-20b      0    0 |   0   0   0   0   0 |          0%    0%  
+18  GLM 5.3          1    1 |   2   2   1   0   0 |          2%   42%  
+19  GLM 5.3          6    4 |   7   7   7   3   1 |         62%   48%  
+20  gpt-oss-120b     7    6 |   6   6   6   6   0 |         50%   48%  

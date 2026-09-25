@@ -107,7 +107,9 @@ def _load_glm(label):
             out.append({"model": label, "task_id": tid, "sample": i, "cot": cot,
                         "tokens": tok, "cot_tokens": r["thinking_tokens"][i],
                         "cot_tokens_exact": True,
-                        "correct": bool(r["correct"][i])})
+                        # the figures' rule: a trace at the output cap was cut off
+                        # before answering, so it scores wrong whatever the grader said
+                        "correct": fs._trial_correct(tok, r["correct"][i])})
     return out
 
 
@@ -136,7 +138,7 @@ def _load_oss(label):
             out.append({"model": label, "task_id": tid, "sample": i, "cot": cot,
                         "tokens": tok, "cot_tokens": tok * frac,
                         "cot_tokens_exact": False,
-                        "correct": bool(c.get("is_correct"))})
+                        "correct": fs._trial_correct(tok, c.get("is_correct"))})
     return out
 
 

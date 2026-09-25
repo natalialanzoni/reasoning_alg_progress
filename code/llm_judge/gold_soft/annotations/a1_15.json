@@ -1,0 +1,19 @@
+{"trace": "15", "annotator": "a1", "nlines": 183,
+ "instances": [
+   {"approach": "7 values as a 4+3 split of distinct roots between the two quartics f and g",
+    "visits": [[40, 41]],
+    "abandon_line": 61,
+    "abandon_quote": "So the roots of $g(S)=0$ are exactly the negatives",
+    "switched_to": "symmetry g(-S)=f(S), so the values are ±S_1..±S_4 and 7 values means exactly one S_i = 0",
+    "tier": "borderline",
+    "reason": "The alternative reading (one quartic gives 4 roots, the other gives 3, none shared) is raised in one line with no work and is dropped once the root symmetry is found."}
+ ],
+ "rejected": [
+   {"lines": [32, 37], "what": "multiplying the two quartic conditions into a degree-8 polynomial", "why_not": "other: a reformulation that is refined into f and g and kept, not dropped"},
+   {"lines": [40, 40], "what": "reading 7 values as one double root of the octic", "why_not": "other: agrees with the final picture (S=0 is a double root), so it was never given up"},
+   {"lines": [45, 46], "what": "writing S^2 - n/6 = ±2 sqrt(...)", "why_not": "other: a passing remark replaced at once by the observation that f and g are quartics; no approach was taken up"},
+   {"lines": [77, 105], "what": "re-deriving the condition from explicit sign sums S_1..S_4 and their product", "why_not": "verification"},
+   {"lines": [107, 125], "what": "ruling out S_i = S_j, S_i = -S_j, and two zero S_i", "why_not": "required case"},
+   {"lines": [129, 142], "what": "'Let me double check this' recap of the counting argument", "why_not": "verification"},
+   {"lines": [144, 172], "what": "numeric check with n=132 (roots 16, 3±4i) and remark on n=12", "why_not": "verification"}
+ ]}

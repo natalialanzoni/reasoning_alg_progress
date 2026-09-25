@@ -30,8 +30,9 @@ and ranks GLM 5.2 highest at 40% -- despite GLM 5.2 making no real recall attemp
 at all. That column is not reported here because it cannot be read correctly.
 
 GLM 5.3 attempts recall ~100x more than any other model here (marker hits per 10k tokens; present in 54% of its traces vs ~11%) and gets ZERO of its
-84 pre-computation claims right. It cites 2024 most (1,054 times), then 2025, 2020,
-2014 -- never 2026, because its training predates the benchmark.
+83 pre-computation claims right (over all 320 of its traces; 62 claims in its correct
+traces). It cites contest years from 1984 to 2025, most often 2024 (1,054 times), then
+2025, 2020, 2014 -- never 2026, because its training predates the benchmark.
 
 So: NOT contamination. Confabulated retrieval. Which is also why backtracking
 markers need the recall-context exclusion in behaviour_table.py -- "let me

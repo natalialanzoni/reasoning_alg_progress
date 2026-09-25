@@ -1,0 +1,32 @@
+{
+ "trace": "17",
+ "annotator": "a2",
+ "nlines": 77,
+ "instances": [],
+ "rejected": [
+  {
+   "lines": [
+    53,
+    56
+   ],
+   "what": "S1 recomputed; apparent 16/27 vs 16/81 mismatch resolved",
+   "why_not": "verification"
+  },
+  {
+   "lines": [
+    57,
+    73
+   ],
+   "what": "S2 and final P recomputed",
+   "why_not": "verification"
+  },
+  {
+   "lines": [
+    75,
+    75
+   ],
+   "what": "cross-check by simulation or generating functions, just sketched",
+   "why_not": "verification"
+  }
+ ]
+}

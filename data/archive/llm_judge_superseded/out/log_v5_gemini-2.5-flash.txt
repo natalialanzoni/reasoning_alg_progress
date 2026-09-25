@@ -1,0 +1,4 @@
+sending 20 calls: prompt v5, judge google/gemini-2.5-flash
+  01  ok  out_tok=1354 finish=stop
+  02  ok  out_tok=166 finish=stop
+  03  ok  out_tok=910 finish=stop

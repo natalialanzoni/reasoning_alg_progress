@@ -44,10 +44,14 @@ TABLES=(
 # disappears from the record even though its file survives.
 EXTRA_RUN=(
   "llm_judge/behaviour_table.py --tex paper_figs/table_behaviours.tex"
+  "llm_judge/behaviour_table.py --correct-only --tex paper_figs/table_behaviours_correct.tex"
+  "llm_judge/prompt_robustness_table.py --tex paper_figs/table_backtracking_prompts.tex"
   "llm_judge/make_prompt_image.py"
 )
 EXTRA_ARTIFACTS=(                       # artifact : producing script, for MANIFEST
   "table_behaviours.tex:llm_judge/behaviour_table.py"
+  "table_behaviours_correct.tex:llm_judge/behaviour_table.py --correct-only"
+  "table_backtracking_prompts.tex:llm_judge/prompt_robustness_table.py"
   "fig_judge_prompt_backtracking.pdf:llm_judge/make_prompt_image.py"
   "fig_judge_prompt_verification.pdf:llm_judge/make_prompt_image.py"
 )

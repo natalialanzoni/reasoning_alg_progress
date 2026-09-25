@@ -171,7 +171,10 @@ def avg_ref_pooled(paths):
             if tid not in KEYS:
                 continue
             ratio = pf.CANON[tid]["mean"] / pf.CANON[tid]["min"]
-            per_trace += [ratio] * sum(1 for c in r["correct"] if c)
+            texts = r.get("response_texts", [None] * len(r["correct"]))
+            n_ok = sum(1 for tok, c, txt in zip(r["total_completion_tokens"], r["correct"], texts)
+                       if fs._trial_ok(tok, txt) and fs._trial_correct(tok, c))
+            per_trace += [ratio] * n_ok
     return float(np.median(per_trace))
 
 
@@ -194,7 +197,7 @@ for (fam, fam_c), shallow in zip(FAM_COLORS, [SAMPLES[0][1], SAMPLES[0][2]]):
     PAIRED.append((fam, fam_c, [(l, d, [p]) for l, d, p in shallow]))
 
 AVG_REF = avg_ref_pooled([p for _, _, models in PAIRED for _, _, ps in models for p in ps])
-print(f"fig5 (POOLED whole benchmark k=8 + hard-but-doable k=32); "
+print(f"fig5 (whole benchmark k=8); "
       f"average human derivation = {AVG_REF:.2f}x the minimum\n")
 
 for ax, (fam, fam_c, models) in zip(axes, PAIRED):

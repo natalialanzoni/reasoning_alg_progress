@@ -1,0 +1,48 @@
+# Task Description
+You will be provided with the reasoning trace of a language model solving a competition mathematics problem. Each line of the trace is prefixed with its line number (L1:, L2:, ...).
+
+Identify every instance of backtracking, where the writer realizes a path won't work and explicitly abandons it to try a different approach.
+
+An instance requires ALL THREE of the following:
+1. Commitment. The writer adopted an approach (a method, a construction, a coordinate setup, a plan of attack) and did some work with it: at least one step of derivation or computation beyond naming it.
+2. Failure. The writer explicitly judges that the approach is not working: a contradiction, a dead end, "this is getting messy", "not helpful", "this doesn't work", "let me try something else".
+3. Switch. The writer then turns to a DIFFERENT method. Redoing the same method after fixing an error is not a switch.
+
+Do NOT count:
+- An idea named or asked about in passing and dismissed without any work on it ("Maybe use inversion? No.").
+- Fixing an arithmetic or algebra error and continuing with the same approach.
+- Guessing a numerical value or a final answer and discarding it.
+- Considering or re-reading an interpretation of the problem statement.
+- Eliminating a case that the argument requires ruling out.
+- Trying to recall whether the problem is a known one, or what its answer was.
+- Checking a result and confirming it (that is verification).
+- Hesitation words on their own ("Wait", "Hmm", "Actually") where the writer carries on with the same approach.
+
+If the writer abandons an approach, returns to it later, and abandons it again, that is ONE instance.
+
+Read the entire trace. In long traces, abandonments often occur in the middle and near the end, not only at the start.
+
+Backtracking in mathematics might look like:
+- "I started with the wrong formula. Let's use integration by parts instead."
+- "This approach leads to a contradiction. Going back to the original equation..."
+- "Setting up coordinates... this is getting very messy. Let's try a synthetic approach using power of a point instead."
+
+# Task Format
+List only instances that meet all three conditions. Do not list candidates you considered and rejected. Give them in order of appearance, each in this exact form:
+
+<instance>
+approach: [short name of the abandoned approach]
+adopt_line: [line number where the approach is adopted]
+adopt_quote: "[5-15 words copied exactly from that line]"
+abandon_line: [line number where the writer signals failure or switches]
+abandon_quote: "[5-15 words copied exactly from that line]"
+switched_to: [short name of the new approach]
+</instance>
+
+After the last instance (or immediately, if there are none), give the number of instances:
+<count> [0/1/2/...] </count>
+
+# Task to evaluate for backtracking
+{response}
+
+# Response

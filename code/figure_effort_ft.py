@@ -91,7 +91,9 @@ _ref_run = (DATA / "hard_but_doable_10q_k32"
             / "gpt-5_medium_thinking_benchmark_hard_but_doable_10.json")
 _PLOTTED = sorted({str(r["task_id"]) for r in load_rows(_ref_run)
                    if str(r["task_id"]) in CANON_KEYS})
-REF = float(np.mean([CANON[t]["min"] for t in _PLOTTED]))
+# per-tokenizer floor (CLAUDE.md rule 2). Every model here is OpenAI, so this is the
+# o200k floor; it equals CANON[t]["min"] on all 40 problems, but reads the rule's API
+REF = pf.mean_floor("gpt-5", _PLOTTED)
 print(f"fig_effort: floor = {REF:.0f} tok over the {len(_PLOTTED)} hard-but-doable "
       f"problems actually plotted (the 40-problem floor is "
       f"{np.mean([CANON[t]['min'] for t in CANON_KEYS]):.0f})")
@@ -143,16 +145,20 @@ def gather(eff):
             # central rules (figures_sept): zero-thinking traces are valid, and a
             # cap-hit trace is a real attempt that FAILED -- it must not supply a
             # "successful" length to the regression.
-            toks = [t for t, x in zip(r["total_completion_tokens"], texts)
-                    if fs._trial_ok(t, x)]
+            # the LINE uses the same traces as the legend RATE -- correct ones -- and
+            # Figure 1's convention; it used to average every valid trace, wrong answers
+            # and cap hits included (up to +4.6% for gpt-5.1 high)
+            toks = [t for t, x, c in zip(r["total_completion_tokens"], texts, r["correct"])
+                    if fs._trial_ok(t, x) and fs._trial_correct(t, c)]
             if toks:
                 by_id[tid] = float(np.mean(toks))
             for tok, c, txt in zip(r["total_completion_tokens"], r["correct"], texts):
                 if not fs._trial_ok(tok, txt) or not fs._trial_correct(tok, c):
                     continue
-                if tok > CANON[tid]["min"]:
+                cj = pf.floor_for(m, tid)                   # the model's own tokenizer
+                if tok > cj:
                     reg.append({"problem": tid, "month": month,
-                                "y": math.log(tok - CANON[tid]["min"]), "model": m})
+                                "y": math.log(tok - cj), "model": m})
         dates.append(DATES[m]); per_model.append(by_id)
     common = sorted(set.intersection(*[set(d) for d in per_model])) if per_model else []
     traj = {tid: [d[tid] for d in per_model] for tid in common}
@@ -193,7 +199,7 @@ ax.annotate("minimal human derivation",
 handles.append(mlines.Line2D([], [], color=FLOOR_C, lw=2.2, label="Minimal human derivation"))
 
 ax.set_ylim(bottom=0)
-ax.set_ylabel("Mean output tokens")
+ax.set_ylabel("Mean output tokens (correct traces)")
 ax.set_xlabel("Release date")
 ax.yaxis.set_major_formatter(unit_formatter(1e3, "k"))
 ax.xaxis.set_major_locator(mdates.MonthLocator(interval=4))

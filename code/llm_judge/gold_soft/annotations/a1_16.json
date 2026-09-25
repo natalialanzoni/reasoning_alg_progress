@@ -1,0 +1,443 @@
+{
+ "trace": "16",
+ "annotator": "a1",
+ "nlines": 1612,
+ "instances": [
+  {
+   "approach": "conjecture that A lies on the circumcircle of BIC",
+   "visits": [
+    [
+     58,
+     65
+    ]
+   ],
+   "abandon_line": 65,
+   "abandon_quote": "So $A$ is not on the circumcircle of $BIC$ in general.",
+   "switched_to": "power of A with respect to circle BIC",
+   "tier": "firm",
+   "reason": "A claimed fact is taken up, tested by an angle check, and dropped."
+  },
+  {
+   "approach": "inversion centered at A with radius sqrt(AB*AC)",
+   "visits": [
+    [
+     69,
+     69
+    ]
+   ],
+   "abandon_line": 70,
+   "abandon_quote": "Let's find the power of $A$ with respect to the circumcircle of $BIC$.",
+   "switched_to": "power of A computation",
+   "tier": "borderline",
+   "reason": "Raised as a one-line question and never pursued."
+  },
+  {
+   "approach": "power of A wrt circle BIC (via second intersection B' on AB / chord along AI)",
+   "visits": [
+    [
+     67,
+     68
+    ],
+    [
+     70,
+     75
+    ],
+    [
+     78,
+     79
+    ],
+    [
+     128,
+     133
+    ],
+    [
+     137,
+     138
+    ]
+   ],
+   "abandon_line": 139,
+   "abandon_quote": "If $IO_1$ is parallel to $AI$, then $O_1$ lies on the line $AI$.",
+   "switched_to": "angle chase showing A, I, O1 collinear",
+   "tier": "firm",
+   "reason": "Returned to several times with some setup work but never completed; replaced by the collinearity angle chase."
+  },
+  {
+   "approach": "known fact: reflection of I over BC lies on circumcircle of ABC",
+   "visits": [
+    [
+     76,
+     77
+    ]
+   ],
+   "abandon_line": 77,
+   "abandon_quote": "But we are looking at the circumcircle of $BIC$.",
+   "switched_to": "power of A again",
+   "tier": "borderline",
+   "reason": "A recalled fact is raised and immediately set aside as irrelevant."
+  },
+  {
+   "approach": "vector setup with I at origin to test whether IO1 is parallel to AI",
+   "visits": [
+    [
+     91,
+     126
+    ]
+   ],
+   "abandon_line": 127,
+   "abandon_quote": "This looks complicated. Let's use a simpler relation.",
+   "switched_to": "power of A, then synthetic angle chase",
+   "tier": "firm",
+   "reason": "Substantial vector/dot-product work is explicitly abandoned as too complicated."
+  },
+  {
+   "approach": "guess that circle BIC is orthogonal to the incircle",
+   "visits": [
+    [
+     134,
+     135
+    ]
+   ],
+   "abandon_line": 135,
+   "abandon_quote": "No, if they were orthogonal, the distance between centers would be",
+   "switched_to": "power of A / collinearity",
+   "tier": "borderline",
+   "reason": "Recalled theorem raised and rejected in two lines."
+  },
+  {
+   "approach": "reflect O1 over BC",
+   "visits": [
+    [
+     144,
+     144
+    ]
+   ],
+   "abandon_line": 144,
+   "abandon_quote": "is the circumcenter of $BIC'$ where $C'$ is reflection of $C$... no.",
+   "switched_to": "angle chase in triangle BO1I",
+   "tier": "borderline",
+   "reason": "One-line idea dropped with 'no'."
+  },
+  {
+   "approach": "express sin B / sin C = 7/5 in terms of u, v",
+   "visits": [
+    [
+     283,
+     284
+    ],
+    [
+     702,
+     704
+    ]
+   ],
+   "abandon_line": 704,
+   "abandon_quote": "This does not directly give $\\tan((B-C)/2)$.",
+   "switched_to": "tangent rule tan((B-C)/2) = (b-c)/(b+c) cot(A/2)",
+   "tier": "borderline",
+   "reason": "Tried briefly twice and set aside as not expressible simply."
+  },
+  {
+   "approach": "identity (b^2-c^2)/(b^2+c^2) via sines",
+   "visits": [
+    [
+     285,
+     287
+    ]
+   ],
+   "abandon_line": 288,
+   "abandon_quote": "Let's use the half-angle formulas with sides.",
+   "switched_to": "half-angle / tangent rule with sides",
+   "tier": "borderline",
+   "reason": "Identity written down and dropped without work."
+  },
+  {
+   "approach": "find a rational/integer root of the Case 1 cubic (in x, then in z = a^2 - 4)",
+   "visits": [
+    [
+     318,
+     348
+    ],
+    [
+     424,
+     442
+    ],
+    [
+     497,
+     521
+    ],
+    [
+     580,
+     645
+    ],
+    [
+     805,
+     868
+    ],
+    [
+     913,
+     915
+    ]
+   ],
+   "abandon_line": 1229,
+   "abandon_quote": "has no rational roots, so $a^2$ is not rational.",
+   "switched_to": "searching for an error / alternative configurations of Gamma",
+   "tier": "firm",
+   "reason": "Long rational-root hunt aimed at a nice answer is given up, and the writer concludes the reasoning must contain an error."
+  },
+  {
+   "approach": "Gamma as the A-mixtilinear incircle",
+   "visits": [
+    [
+     874,
+     875
+    ],
+    [
+     1218,
+     1225
+    ],
+    [
+     1420,
+     1422
+    ]
+   ],
+   "abandon_line": 1422,
+   "abandon_quote": "If $r_{mix} = 2r$, then $s-a = 2s \\implies -a = s",
+   "switched_to": "testing integer values of a in the cubic",
+   "tier": "firm",
+   "reason": "Interpretation raised three times, radius formula attempted, then ruled out."
+  },
+  {
+   "approach": "Gamma as incircle of the excentral triangle",
+   "visits": [
+    [
+     1307,
+     1309
+    ]
+   ],
+   "abandon_line": 1309,
+   "abandon_quote": "The incircle of the excentral triangle has radius $2R$, not $2r$.",
+   "switched_to": "questioning whether E, F are real",
+   "tier": "borderline",
+   "reason": "Idea raised and dismissed in three lines."
+  },
+  {
+   "approach": "Gamma is the A-excircle, candidate a = 4",
+   "visits": [
+    [
+     1374,
+     1418
+    ]
+   ],
+   "abandon_line": 1409,
+   "abandon_quote": "We just checked that $a=4$ does not work.",
+   "switched_to": "A-mixtilinear incircle and integer checks",
+   "tier": "firm",
+   "reason": "Writer derives candidate a=4 from r_a=2r, tests it in the cubic, and rejects it."
+  },
+  {
+   "approach": "integer candidates a = 7, 8, 2, 10, 5",
+   "visits": [
+    [
+     1425,
+     1429
+    ],
+    [
+     1540,
+     1546
+    ]
+   ],
+   "abandon_line": 1546,
+   "abandon_quote": "Since $g(21) = 931$ and $g(22) = 38$, the root is very close to 22.",
+   "switched_to": "numerical root localization",
+   "tier": "firm",
+   "reason": "Guessed integer answers are each substituted and rejected."
+  },
+  {
+   "approach": "candidate a = sqrt(26)",
+   "visits": [
+    [
+     1450,
+     1469
+    ],
+    [
+     1509,
+     1532
+    ],
+    [
+     1595,
+     1596
+    ]
+   ],
+   "abandon_line": 1511,
+   "abandon_quote": "If the answer is $\\sqrt{26}$, then $g(22)$ must be 0. But it's 38.",
+   "switched_to": "rechecking g(z), then guessing a=6",
+   "tier": "firm",
+   "reason": "Candidate is proposed, checked twice and rejected; it is re-mentioned once at 1596 before the writer turns to 6."
+  },
+  {
+   "approach": "Gamma as B- or C-excircle",
+   "visits": [
+    [
+     1567,
+     1574
+    ]
+   ],
+   "abandon_line": 1574,
+   "abandon_quote": "This implies $I_b$ is on $AI$, which is false.",
+   "switched_to": "rechecking b, c labelling",
+   "tier": "borderline",
+   "reason": "Alternative interpretation raised and ruled out quickly by a perpendicularity argument."
+  },
+  {
+   "approach": "Gamma is the circumcircle of BIC",
+   "visits": [
+    [
+     1589,
+     1593
+    ]
+   ],
+   "abandon_line": 1593,
+   "abandon_quote": "This is not true in general.",
+   "switched_to": "guessing the answer",
+   "tier": "borderline",
+   "reason": "Thin interpretation check dismissed in a few lines."
+  }
+ ],
+ "rejected": [
+  {
+   "lines": [
+    19,
+    21
+   ],
+   "what": "external bisector / opposite ray set aside, assume O on ray AI",
+   "why_not": "other: planning; these cases are handled later as required cases"
+  },
+  {
+   "lines": [
+    43,
+    47
+   ],
+   "what": "are omega and Gamma tangent?",
+   "why_not": "other: side check, answered and moved on"
+  },
+  {
+   "lines": [
+    84,
+    90
+   ],
+   "what": "angle chase with perpendicular bisectors paused, resumed and completed at 143-169",
+   "why_not": "other: resumed and succeeded, not given up"
+  },
+  {
+   "lines": [
+    233,
+    272
+   ],
+   "what": "Case 2: Gamma centered on opposite ray",
+   "why_not": "required case"
+  },
+  {
+   "lines": [
+    443,
+    490
+   ],
+   "what": "Case 2 cubic has no root in (0,1)",
+   "why_not": "required case"
+  },
+  {
+   "lines": [
+    349,
+    378
+   ],
+   "what": "recheck of cubic derivation",
+   "why_not": "verification"
+  },
+  {
+   "lines": [
+    380,
+    423
+   ],
+   "what": "recheck of radical axis positions and R'",
+   "why_not": "verification"
+  },
+  {
+   "lines": [
+    526,
+    542
+   ],
+   "what": "power-of-A computation giving x=d, corrected",
+   "why_not": "error fix"
+  },
+  {
+   "lines": [
+    633,
+    645
+   ],
+   "what": "wrong z-cubic coefficients (18900, 98000), fixed at 781-804",
+   "why_not": "error fix"
+  },
+  {
+   "lines": [
+    656,
+    677
+   ],
+   "what": "external angle bisector ruled out",
+   "why_not": "required case"
+  },
+  {
+   "lines": [
+    680,
+    690
+   ],
+   "what": "O between A and I ruled out",
+   "why_not": "required case"
+  },
+  {
+   "lines": [
+    705,
+    717
+   ],
+   "what": "tangent rule identity verified",
+   "why_not": "verification"
+  },
+  {
+   "lines": [
+    946,
+    972
+   ],
+   "what": "re-verify O1 on AI",
+   "why_not": "verification"
+  },
+  {
+   "lines": [
+    1032,
+    1077
+   ],
+   "what": "Case 2 recomputed with O at -3d, root x > 1",
+   "why_not": "error fix"
+  },
+  {
+   "lines": [
+    1329,
+    1339
+   ],
+   "what": "segments vs lines interpretation",
+   "why_not": "restatement"
+  },
+  {
+   "lines": [
+    1579,
+    1587
+   ],
+   "what": "check whether swapping b and c matters",
+   "why_not": "verification"
+  },
+  {
+   "lines": [
+    1595,
+    1612
+   ],
+   "what": "candidate a = 6: rejected by g(32) at 1534-1538 but finally chosen ('I will guess 6.')",
+   "why_not": "other: kept as the final answer, not abandoned"
+  }
+ ]
+}

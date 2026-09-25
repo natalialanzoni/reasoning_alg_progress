@@ -24,6 +24,7 @@ Writes:
 Output -> figures/figs_sept/fig1_grid*.{png,pdf}
 """
 import importlib.util
+import math
 import os
 import re
 import sys
@@ -191,7 +192,8 @@ def hard_perproblem(hard_files, successes_only=True):
             diff[pid] = r.get("difficulty")
             texts = r.get("response_texts", [None] * len(r["correct"]))
             toks = [tok for tok, c, txt in zip(r["total_completion_tokens"], r["correct"], texts)
-                    if (c or not successes_only) and fs._trial_ok(tok, txt)]
+                    if fs._trial_ok(tok, txt)
+                    and (fs._trial_correct(tok, c) or not successes_only)]
             if toks:
                 d = prob.setdefault(pid, {"i": [], "med": [], "lo": [], "hi": []})
                 d["i"].append(i); d["med"].append(np.median(toks))
@@ -298,7 +300,13 @@ def build(fname, full_row3, successes_only=True, thinking_only=False):
             xs = hdx[d["i"]]
             a2.fill_between(xs, d["lo"], d["hi"], color=c, alpha=alpha, lw=0, zorder=1)
             a2.plot(xs, d["med"], color=c, lw=lw, alpha=0.95, zorder=2)
-        a2.set_ylim(0, 30000 if full_row3 else 34000)
+        # fixed tops keep the main figure's layout; raise one only if data would be cut
+        # off (all-attempts: Opus 4.6's hmmt_2026_feb_comb_09 band reaches 40,000)
+        top = 30000 if full_row3 else 34000
+        data_hi = max((float(np.max(d["hi"])) for d in prob.values()), default=0.0)
+        if data_hi > top:
+            top = math.ceil(data_hi * 1.05 / 2000) * 2000
+        a2.set_ylim(0, top)
         a2.yaxis.set_major_formatter(unit_formatter(1e3, "k"))
         for _a in (a0, a1, a2):
             _a.xaxis.set_major_locator(mdates.MonthLocator(interval=6))
