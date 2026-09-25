@@ -67,7 +67,7 @@ on the algorithm lever, by 1.90×.
 token (0.99×); backtracking density rises 1.16×. The bigger model writes about 40%
 shorter traces at the same verification density.
 
-**Algorithm (5.2 → 5.3).** Trace length collapses to 0.29×. Verification count
+**Algorithm (5.2 → 5.3).** Median trace length collapses to 0.28×. Verification count
 falls 1.38× while length falls 1.66×, so density *rises* 1.23× — verification is
 preserved relative to length rather than increased. Backtracking density rises
 1.90×, the largest effect in the table.
