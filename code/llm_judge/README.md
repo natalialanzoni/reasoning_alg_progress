@@ -80,7 +80,7 @@ pretraining templates are the only domain-general pair upstream.
 ## Traces
 
 The four models in `fig_mechanism`: gpt-oss-20b -> gpt-oss-120b (scale) and
-GLM 5.2 -> GLM 5.3 (algorithm), on the 40 competition problems at k=8 = 1,280
+GLM 5.2 -> GLM 5.3 (post-training), on the 40 competition problems at k=8 = 1,280
 traces. **CoT only on both sides**, which needs normalising because the two
 families store it differently:
 

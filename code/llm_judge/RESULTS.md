@@ -48,7 +48,7 @@ the default). Why, and what the 29 dropped traces do, is below.
 | lever | median reasoning tokens | verif /trace | verif /10k | backtrack /trace | backtrack /10k | markers /10k |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | **Scale** gpt-oss 20B→120B | 0.62× | 0.48× | 0.98× | 0.55× | 1.13× | 0.55× |
-| **Algorithm** GLM 5.2→5.3 | 0.27× | 0.83× | 1.36× | 1.15× | 1.89× | 4.20× |
+| **Post-training** GLM 5.2→5.3 | 0.27× | 0.83× | 1.36× | 1.15× | 1.89× | 4.20× |
 
 ## Reading this
 
@@ -62,14 +62,14 @@ the density of both rises (1.36× and 1.89×).
 `table_backtracking_prompts.tex` (from `prompt_robustness_table.py`) runs the same
 traces under four judge prompts. Backtracks per correct trace fall 0.43–0.64× with
 scale under every prompt, and change 0.89–1.79× with post-training. The markers agree on
-direction for the algorithm lever (4.20×) but are narrower by construction: they count
+direction for the post-training lever (4.20×) but are narrower by construction: they count
 only explicit abandonment language, and they have known recall gaps (the set lacks
 "another approach" and "step wrong").
 
 **Validation.** An RA checked v6 against the hand-counted key on the 20 review traces.
 78% of the judge's entries are real abandoned approaches, 16% repeat an entry, and 5%
 are verifications; it finds 67% of substantive approaches. The error is consistent
-between GLM 5.2 and 5.3, so the algorithm lever holds at about 2×. For gpt-oss the judge
+between GLM 5.2 and 5.3, so the post-training lever holds at about 2×. For gpt-oss the judge
 counts relatively more on 120B, so the scale reduction is, if anything, understated.
 
 ## All traces, or correct traces only?
@@ -81,13 +81,13 @@ common sample it keeps 982 traces:
 | lever, correct traces | verif /trace | verif /10k | backtrack /trace | backtrack /10k |
 | --- | ---: | ---: | ---: | ---: |
 | Scale | 0.50× | 0.89× | 0.59× | 1.05× |
-| Algorithm | 0.76× | 1.39× | 1.45× | 2.66× |
+| Post-training | 0.76× | 1.39× | 1.45× | 2.66× |
 
 Restricting raises every rate, because incorrect traces are long and behaviour-sparse.
 Selection by problem is not a concern: the two models of each pair solve almost exactly
 the same problems (37/37 and 39/39, 38 in common). Weighting every problem equally, so a
 model that solves more samples of a hard problem does not weight it more, gives 0.50× and
-1.02× for scale backtracking and 1.30× and 3.09× for the algorithm (last column of the
+1.02× for scale backtracking and 1.30× and 3.09× for post-training (last column of the
 appendix table). **Whichever sample the paper uses, the prose must say which.**
 
 ## 29 traces dropped from both behaviours
@@ -110,7 +110,7 @@ The drop is not random. It takes the longest traces: 10.8% of GLM 5.3's reasonin
 tokens, 5.0% of GLM 5.2's, 4.9% of gpt-oss-20b's and 2.2% of 120B's. It removes the
 same traces from both behaviours, so the two are compared on one sample. Keeping each
 behaviour's own sample (`--no-common-sample`) moves the backtracking levers from 1.13× to
-1.16× (scale) and 1.89× to 1.90× (algorithm). Every conclusion holds on either sample.
+1.16× (scale) and 1.89× to 1.90× (post-training). Every conclusion holds on either sample.
 
 ## The open question
 

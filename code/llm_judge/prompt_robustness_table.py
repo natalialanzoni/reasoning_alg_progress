@@ -74,11 +74,12 @@ def main():
     common = {k(r) for r in ver} & {k(r) for r in runs["v6"]}
     print(f"sample: {len(common)} of {len(ct)} traces; lost within it by "
           + ", ".join(f"{n} {len(common - {k(r) for r in rs})}" for n, rs in runs.items()))
-    cols, n_eq = {}, {}
+    cols, n_eq, n_col = {}, {}, {}
     for name, _ in RUNS:
         rs = [r for r in runs[name] if k(r) in common]
         if not a.all_traces:
             rs = [r for r in rs if r["correct"]]
+        n_col[name] = len(rs)
         col, eq = {}, {}
         for lever, old, new in LEVERS:
             R = {m: [r for r in rs if r["model"] == m] for m in (old, new)}
@@ -90,6 +91,7 @@ def main():
         cols[name] = col
         if eq:
             cols["v6, problems equal"] = eq
+            n_col["v6, problems equal"] = len(rs)
     order = [n for n, _ in RUNS] + ["v6, problems equal"]
 
     rows = [((lever, unit), f"{lever.split()[0].capitalize()}, per {'trace' if unit == 'trace' else '10k tokens'}")
@@ -98,6 +100,7 @@ def main():
     print(f"  {'':28}" + "".join(f"{c:>20}" for c in order))
     for key, lab in rows:
         print(f"  {lab:28}" + "".join(f"{cols[c][key]:>19.2f}x" for c in order))
+    print(f"  {'traces judged':28}" + "".join(f"{n_col[c]:>20}" for c in order))
     print(f"  problems in the equal-weight column: {n_eq}")
     if a.tex:
         t = [r"\begin{tabular}{lccccc}", r"\toprule",
@@ -107,7 +110,9 @@ def main():
         for key, lab in rows:
             t.append(lab.replace("10k tokens", "10k reasoning tokens") + " & "
                      + " & ".join(f"${cols[c][key]:.2f}\\times$" for c in order) + r" \\")
-        t += [r"\bottomrule", r"\end{tabular}"]
+        # each column's own n: v0-v3 also lose the few traces their judge could not count
+        t += [r"\addlinespace", "Traces judged & " + " & ".join(f"${n_col[c]}$" for c in order) + r" \\",
+              r"\bottomrule", r"\end{tabular}"]
         Path(a.tex).write_text("\n".join(t) + "\n")
         print(f"wrote {a.tex}")
 

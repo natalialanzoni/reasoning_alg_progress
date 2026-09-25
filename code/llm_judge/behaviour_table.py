@@ -78,7 +78,7 @@ JUDGED_BT = os.path.join(HERE, "out", "judge_backtracking_v6.jsonl")
 MODEL_ORDER = ["gpt-oss-20b", "gpt-oss-120b", "GLM 5.2", "GLM 5.3"]
 NAN = float("nan")
 LEVERS = [("SCALE      gpt-oss 20B -> 120B", "gpt-oss-20b", "gpt-oss-120b"),
-          ("ALGORITHM  GLM 5.2 -> 5.3", "GLM 5.2", "GLM 5.3")]
+          ("POST-TRAINING  GLM 5.2 -> 5.3", "GLM 5.2", "GLM 5.3")]
 
 HIGH_PRECISION = [
     r"\b(?:doesn'?t|does not|won'?t|will not|didn'?t)\s+work\b",
@@ -255,7 +255,7 @@ def main():
 def latex(res, path, common):
     """Emit the paper table. Mirrors table_decay.py's booktabs style."""
     t = [r"\begin{tabular}{lcccc}", r"\toprule",
-         r" & \multicolumn{2}{c}{Scale} & \multicolumn{2}{c}{Algorithm} \\",
+         r" & \multicolumn{2}{c}{Scale} & \multicolumn{2}{c}{Post-training} \\",
          # No (lr) trim: the parenthesised optional argument is booktabs-specific
          # syntax, and a document whose \cmidrule comes from somewhere else (or from
          # a class that stubs it) prints "(lr)2-3(lr)4-5" as literal text instead of
