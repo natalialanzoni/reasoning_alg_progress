@@ -22,6 +22,8 @@ a script produces stays in `figures/figs_sept/`.
 | `table_decay.tex` | `code/table_decay.py` | see below |
 | `table_floor_robustness.tex` | `code/table_floor_robustness.py` | see below |
 | `table_behaviours.tex` | `code/llm_judge/behaviour_table.py` | see below |
+| `table_behaviours_correct.tex` | `code/llm_judge/behaviour_table.py --correct-only` | see below |
+| `table_backtracking_prompts.tex` | `code/llm_judge/prompt_robustness_table.py` | see below |
 | `fig_judge_prompt_backtracking.pdf` | `code/llm_judge/make_prompt_image.py` | see below |
 | `fig_judge_prompt_verification.pdf` | `code/llm_judge/make_prompt_image.py` | see below |
 
