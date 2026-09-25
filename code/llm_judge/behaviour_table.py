@@ -249,10 +249,10 @@ def main():
         if gaps:
             raise SystemExit(f"\nNOT writing {a.tex}: traces with no record yet {gaps}. "
                              "Finish the judge run first.")
-        latex(res, a.tex, a.common_sample)
+        latex(res, a.tex, a.common_sample, a.correct_only)
 
 
-def latex(res, path, common):
+def latex(res, path, common, correct_only=False):
     """Emit the paper table. Mirrors table_decay.py's booktabs style."""
     t = [r"\begin{tabular}{lcccc}", r"\toprule",
          r" & \multicolumn{2}{c}{Scale} & \multicolumn{2}{c}{Post-training} \\",
@@ -264,6 +264,7 @@ def latex(res, path, common):
          r"\cmidrule{2-3}\cmidrule{4-5}",
          r" & gpt-oss-20B & gpt-oss-120B & GLM 5.2 & GLM 5.3 \\", r"\midrule"]
     names = ["gpt-oss-20b", "gpt-oss-120b", "GLM 5.2", "GLM 5.3"]
+    n_label = "Correct traces judged" if correct_only else "Traces judged"
     cell = lambda k: " & ".join("$" + f"{res[m][k]:.2f}" + "$" for m in names) + r" \\"
     big = lambda k: " & ".join("$" + f"{res[m][k]:,.0f}".replace(",", "{,}") + "$" for m in names) + r" \\"
     t += ["Verification, per trace & " + cell("verif_trace"),
@@ -274,9 +275,9 @@ def latex(res, path, common):
           "Mean reasoning tokens & " + big("mean_tokens"),
           "Median reasoning tokens & " + big("median_tokens"),
           # one n when both behaviours use the same traces; otherwise each its own
-          *(["Traces judged & " + " & ".join(f"${res[m]['verif_n']}$" for m in names) + r" \\"] if common else
-            ["Traces judged, verification & " + " & ".join(f"${res[m]['verif_n']}$" for m in names) + r" \\",
-             "Traces judged, backtracking & " + " & ".join(f"${res[m]['bt_n']}$" for m in names) + r" \\"]),
+          *([n_label + " & " + " & ".join(f"${res[m]['verif_n']}$" for m in names) + r" \\"] if common else
+            [n_label + ", verification & " + " & ".join(f"${res[m]['verif_n']}$" for m in names) + r" \\",
+             n_label + ", backtracking & " + " & ".join(f"${res[m]['bt_n']}$" for m in names) + r" \\"]),
           r"\bottomrule", r"\end{tabular}"]
     tex = "\n".join(t)
     Path(path).write_text(tex + "\n")

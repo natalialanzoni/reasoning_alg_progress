@@ -111,7 +111,7 @@ def main():
             t.append(lab.replace("10k tokens", "10k reasoning tokens") + " & "
                      + " & ".join(f"${cols[c][key]:.2f}\\times$" for c in order) + r" \\")
         # each column's own n: v0-v3 also lose the few traces their judge could not count
-        t += [r"\addlinespace", "Traces judged & " + " & ".join(f"${n_col[c]}$" for c in order) + r" \\",
+        t += [r"\addlinespace", ("Traces judged" if a.all_traces else "Correct traces judged") + " & " + " & ".join(f"${n_col[c]}$" for c in order) + r" \\",
               r"\bottomrule", r"\end{tabular}"]
         Path(a.tex).write_text("\n".join(t) + "\n")
         print(f"wrote {a.tex}")
