@@ -32,85 +32,82 @@ The fix matters for one claim: scale verification per 10k moves from 0.91× to
 
 ## Per model
 
-All traces, per 10k reasoning tokens.
+All traces, per 10k reasoning tokens. **One sample for both behaviours**: the 1,251 traces
+with both a verification and a backtracking count (`behaviour_table.py --common-sample`,
+the default). Why, and what the 29 dropped traces do, is below.
 
-| model | traces (verif) | verif /trace | verif /10k | traces (backtrack) | backtrack /trace | backtrack /10k | markers /10k |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| gpt-oss-20b | 313 | 10.53 | 9.16 | 318 | 5.37 | 4.59 | 0.55 |
-| gpt-oss-120b | 318 | 5.02 | 9.02 | 320 | 3.00 | 5.32 | 0.30 |
-| GLM 5.2 | 309 | 13.44 | 8.36 | 320 | 2.67 | 1.60 | 0.52 |
-| GLM 5.3 | 305 | 9.76 | 10.27 | 320 | 3.26 | 3.05 | 2.25 |
-
-Each behaviour has its own trace count, because unparsable replies are dropped per
-behaviour.
+| model | traces | verif /trace | verif /10k | backtrack /trace | backtrack /10k | markers /10k |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| gpt-oss-20b | 312 | 10.54 | 9.17 | 5.32 | 4.63 | 0.55 |
+| gpt-oss-120b | 318 | 5.02 | 9.02 | 2.92 | 5.24 | 0.31 |
+| GLM 5.2 | 312 | 13.41 | 8.28 | 2.56 | 1.58 | 0.51 |
+| GLM 5.3 | 309 | 11.11 | 11.28 | 2.94 | 2.98 | 2.14 |
 
 ## The two levers
 
-| lever | median reasoning tokens | verif /trace | verif /10k | backtrack /10k | markers /10k |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| **Scale** gpt-oss 20B→120B | 0.60× | 0.48× | 0.99× | 1.16× | 0.55× |
-| **Algorithm** GLM 5.2→5.3 | 0.28× | 0.73× | 1.23× | 1.90× | 4.35× |
-
-Backtracking v3 (gemini-2.5-flash) gave 1.17× and 1.94× on the same traces, so the
-v3 → v6 change moves the levers by under 3%. v6's absolute counts are lower for GLM
-(5.2: 2.67 per trace against v3's 3.90).
+| lever | median reasoning tokens | verif /trace | verif /10k | backtrack /trace | backtrack /10k | markers /10k |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| **Scale** gpt-oss 20B→120B | 0.62× | 0.48× | 0.98× | 0.55× | 1.13× | 0.55× |
+| **Algorithm** GLM 5.2→5.3 | 0.27× | 0.83× | 1.36× | 1.15× | 1.89× | 4.20× |
 
 ## Reading this
 
-**Per trace, both levers cut behaviour counts mainly by cutting trace length. Per
-token, verification is flat to slightly up and backtracking rises.** The
-defensible headline is that efficiency gains come mostly from *writing less*, not
-from *reasoning differently* — with the caveat that backtracking density does move
-on the algorithm lever, by 1.90×.
+**Scale searches less; post-training writes less.** With scale, verifications and
+backtracks per trace both roughly halve, in line with the shorter trace, so their density
+per token is roughly unchanged. With post-training the median trace collapses to 0.27×,
+verifications per trace fall only 17%, and backtracks per trace do not fall at all, so
+the density of both rises (1.36× and 1.89×).
 
-**Scale (20B → 120B).** Verification falls 0.48× per trace but is unchanged per
-token (0.99×); backtracking density rises 1.16×. The bigger model writes about 40%
-shorter traces at the same verification density.
+**Backtracking depends on its definition; the conclusions do not.**
+`table_backtracking_prompts.tex` (from `prompt_robustness_table.py`) runs the same
+traces under four judge prompts. Backtracks per correct trace fall 0.43–0.64× with
+scale under every prompt, and change 0.89–1.79× with post-training. The markers agree on
+direction for the algorithm lever (4.20×) but are narrower by construction: they count
+only explicit abandonment language, and they have known recall gaps (the set lacks
+"another approach" and "step wrong").
 
-**Algorithm (5.2 → 5.3).** Median trace length collapses to 0.28×. Verification count
-falls 1.38× while length falls 1.66×, so density *rises* 1.23× — verification is
-preserved relative to length rather than increased. Backtracking density rises
-1.90×, the largest effect in the table.
-
-**The markers disagree on size, not direction.** They give 4.35× for the algorithm
-lever against the judge's 1.90×. They count only explicit abandonment language, so
-they are narrower by construction, and they have known recall gaps — the set lacks
-"another approach" and "step wrong", both of which appear in traces where the
-judge correctly found instances the markers missed.
+**Validation.** An RA checked v6 against the hand-counted key on the 20 review traces.
+78% of the judge's entries are real abandoned approaches, 16% repeat an entry, and 5%
+are verifications; it finds 67% of substantive approaches. The error is consistent
+between GLM 5.2 and 5.3, so the algorithm lever holds at about 2×. For gpt-oss the judge
+counts relatively more on 120B, so the scale reduction is, if anything, understated.
 
 ## All traces, or correct traces only?
 
-The table above pools all judged traces: 1,245 verification (981 correct, 264
-incorrect). `behaviour_table.py --correct-only` restricts to traces that reached
-the right answer; with `--tex paper_figs/table_behaviours_correct.tex` it writes
-the paper's correct-only table.
+`--correct-only` restricts to traces that reached the right answer
+(`--tex paper_figs/table_behaviours_correct.tex` writes the paper's version). On the
+common sample it keeps 982 traces:
 
-Restricting raises every rate substantially — incorrect traces are long and
-verification-sparse — and moves the algorithm backtracking lever from 1.90× to
-2.85×. **The scale backtracking lever nearly vanishes on correct traces: 1.16× →
-1.05×.** The rise in backtracking density with scale is carried by the incorrect
-traces, so "backtracking rises with scale" should not be stated without that
-qualifier. The selection concern is mild, because the pass-rate gap *within* each
-lever is small (20b 69% vs 120b 74%; GLM 5.2 85% vs 5.3 87%), so the two columns
-of a comparison are not built on very different problem mixes. **Whichever the
-paper uses, the prose must say which** — the two differ by up to 44%.
+| lever, correct traces | verif /trace | verif /10k | backtrack /trace | backtrack /10k |
+| --- | ---: | ---: | ---: | ---: |
+| Scale | 0.50× | 0.89× | 0.59× | 1.05× |
+| Algorithm | 0.76× | 1.39× | 1.45× | 2.66× |
 
-## 2 backtracking traces could not be judged
+Restricting raises every rate, because incorrect traces are long and behaviour-sparse.
+Selection by problem is not a concern: the two models of each pair solve almost exactly
+the same problems (37/37 and 39/39, 38 in common). Weighting every problem equally, so a
+model that solves more samples of a hard problem does not weight it more, gives 0.50× and
+1.02× for scale backtracking and 1.30× and 3.09× for the algorithm (last column of the
+appendix table). **Whichever sample the paper uses, the prose must say which.**
 
-v6 returned no count for 2 of 1,280 traces, both gpt-oss-20b
-(`aime_2026_ii_13` s3 and `hmmt_2026_feb_geo_08` s7). On both the judge ran away:
-one listed 35+ entries until it hit the 65,536-token output cap, and the other
-wrote ~63k tokens with no entries in the required format. Six further replies were
-empty provider errors; the run retries those, and all six succeeded.
+## 29 traces dropped from both behaviours
 
-The loss is 1.3% of gpt-oss-20b's reasoning tokens and 0% of every other model's.
-It touches only the scale lever, and barely:
+A trace is used only if both judges returned a count. 29 of 1,280 are dropped:
 
-| lever | observed | imputed at 20b's own long-trace rate | worst case, missing = 0 |
-| --- | ---: | ---: | ---: |
-| Scale 20b→120b | 1.16× | 1.16× | 1.17× |
+* **27 have no verification count.** The v0 template puts `## Thoughts` first and
+  `<count>` last. On some long traces the judge lists every check it sees, line by line,
+  and never reaches `<count>`. All 35 original losses stopped at the 12,000-token cap.
+  Re-sent with the same prompt and judge at the model's 65,535-token maximum
+  (`judge_traces.py --retry-unparsable --max-out 65535`), 8 came back; 26 ran to the new
+  cap again, and one was a provider error that failed twice. The retry script does not
+  re-send a reply that already ran to the same cap.
+* **2 have no backtracking count** (gpt-oss-20b): the v6 judge ran away the same way.
 
-(v3 lost 25 traces, up to 10.8% of one model's tokens, pointing along both levers.)
+The drop is not random. It takes the longest traces: 10.8% of GLM 5.3's reasoning
+tokens, 5.0% of GLM 5.2's, 4.9% of gpt-oss-20b's and 2.2% of 120B's. It removes the
+same traces from both behaviours, so the two are compared on one sample. Keeping each
+behaviour's own sample (`--no-common-sample`) moves the backtracking levers from 1.13× to
+1.16× (scale) and 1.89× to 1.90× (algorithm). Every conclusion holds on either sample.
 
 ## The open question
 

@@ -156,6 +156,9 @@ def main():
     ap.add_argument("--tex", default=None, help="also write the paper table to this .tex path")
     ap.add_argument("--correct-only", action="store_true",
                     help="restrict to traces that reached the right answer")
+    ap.add_argument("--common-sample", action=argparse.BooleanOptionalAction, default=True,
+                    help="use only traces with a count for BOTH behaviours (default), so the "
+                         "two behaviours are measured on the same traces")
     ap.add_argument("--keep-recall", action="store_true",
                     help="do NOT drop marker hits in memory-recall context (shows the bias)")
     a = ap.parse_args()
@@ -171,6 +174,9 @@ def main():
     CT = {(t["model"], t["task_id"], t["sample"]): t["cot_tokens"] for t in traces}
     approx = sorted({t["model"] for t in traces if not t["cot_tokens_exact"]})
 
+    def key(r):
+        return (r["model"], r["task_id"], r["sample"])
+
     def ctok(r):
         return CT[(r["model"], r["task_id"], r["sample"])]   # load_judged checked the join
 
@@ -179,12 +185,21 @@ def main():
         J[b], drop[b], missing[b] = load_judged(path, b, set(CT))
     about = {b: sorted({(r.get("judge_model"), r.get("prompt_version", "v0")) for r in v})
              for b, v in J.items()}
+    if a.common_sample:
+        # A reply with no count is dropped per behaviour, and the two runs drop different
+        # traces (v0 verification runs away on some long traces). Keep the intersection, so
+        # a difference between the behaviours cannot come from different samples.
+        both = set.intersection(*({key(r) for r in v} for v in J.values()))
+        for b in J:
+            drop[b] += len(J[b]) - sum(key(r) in both for r in J[b])
+            J[b] = [r for r in J[b] if key(r) in both]
     if a.correct_only:
         J = {b: [r for r in v if r["correct"]] for b, v in J.items()}
         traces = [t for t in traces if t["correct"]]
     print(f"  sample: {'CORRECT traces only' if a.correct_only else 'all traces'}"
           f"   rates per 10k REASONING tokens"
-          f"   (estimated for {', '.join(approx)}; exact elsewhere)")
+          f"   (estimated for {', '.join(approx)}; exact elsewhere)"
+          f"   {'COMMON sample: traces with both counts' if a.common_sample else 'each behaviour on its own traces'}")
     for b in J:
         print(f"  {b:12} judge/prompt {about[b]}   {len(J[b])} traces used, "
               f"{drop[b]} unparsable dropped, {len(missing[b])} not yet judged")
@@ -197,7 +212,9 @@ def main():
     for m in MODEL_ORDER:
         g = [r for r in J["verification"] if r["model"] == m]
         jb = [r for r in J["backtracking"] if r["model"] == m]
-        t = [r for r in traces if r["model"] == m]
+        # the traces the rates use: with --common-sample the length and marker rows cover
+        # exactly the judged traces, so per trace / per 10k x 1e4 = mean tokens
+        t = [r for r in traces if r["model"] == m and (not a.common_sample or key(r) in both)]
         # pooled, not mean-of-ratios -- see the module note. nan only while a run is
         # incomplete (--tex refuses that case).
         rate = lambda rs: 1e4 * sum(r["count"] for r in rs) / sum(ctok(r) for r in rs) if rs else NAN
@@ -232,10 +249,10 @@ def main():
         if gaps:
             raise SystemExit(f"\nNOT writing {a.tex}: traces with no record yet {gaps}. "
                              "Finish the judge run first.")
-        latex(res, a.tex)
+        latex(res, a.tex, a.common_sample)
 
 
-def latex(res, path):
+def latex(res, path, common):
     """Emit the paper table. Mirrors table_decay.py's booktabs style."""
     t = [r"\begin{tabular}{lcccc}", r"\toprule",
          r" & \multicolumn{2}{c}{Scale} & \multicolumn{2}{c}{Algorithm} \\",
@@ -256,9 +273,10 @@ def latex(res, path):
           r"\addlinespace",
           "Mean reasoning tokens & " + big("mean_tokens"),
           "Median reasoning tokens & " + big("median_tokens"),
-          # each behaviour has its own n: unparsable replies are dropped per behaviour
-          "Traces judged, verification & " + " & ".join(f"${res[m]['verif_n']}$" for m in names) + r" \\",
-          "Traces judged, backtracking & " + " & ".join(f"${res[m]['bt_n']}$" for m in names) + r" \\",
+          # one n when both behaviours use the same traces; otherwise each its own
+          *(["Traces judged & " + " & ".join(f"${res[m]['verif_n']}$" for m in names) + r" \\"] if common else
+            ["Traces judged, verification & " + " & ".join(f"${res[m]['verif_n']}$" for m in names) + r" \\",
+             "Traces judged, backtracking & " + " & ".join(f"${res[m]['bt_n']}$" for m in names) + r" \\"]),
           r"\bottomrule", r"\end{tabular}"]
     tex = "\n".join(t)
     Path(path).write_text(tex + "\n")

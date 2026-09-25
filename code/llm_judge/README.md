@@ -15,6 +15,7 @@ system `python3` lacks numpy and tiktoken.
 
 ```
 ./venv/bin/python code/llm_judge/judge_traces.py --send          # verification, ~$6, ~40 min
+./venv/bin/python code/llm_judge/judge_traces.py --retry-unparsable --max-out 65535 --send   # re-send cut-off replies
 ./venv/bin/python code/llm_judge/run_backtracking_v6.py          # backtracking: volume + cost, sends nothing
 ./venv/bin/python code/llm_judge/run_backtracking_v6.py --send   # backtracking, ~$280, resumable
 ./venv/bin/python code/llm_judge/behaviour_table.py --tex paper_figs/table_behaviours.tex
@@ -26,7 +27,9 @@ system `python3` lacks numpy and tiktoken.
 Needs `ERA_OPENROUTER_V2` (or `OPENROUTER_API_KEY`). **Nothing is sent without
 `--send`.** Both runs resume where they stopped. `behaviour_table.py` refuses to
 write the `.tex` while any trace has no record, so a half-finished run cannot
-reach the paper.
+reach the paper. By default it uses one sample for both behaviours: traces with both
+counts (`--no-common-sample` to turn this off). RESULTS.md has what the 29 dropped
+traces do.
 
 ## Files
 

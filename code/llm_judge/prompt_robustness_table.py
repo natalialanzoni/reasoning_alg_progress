@@ -4,11 +4,13 @@
   python code/llm_judge/prompt_robustness_table.py --all-traces      # the same, all traces
 
 The main table uses v6. This one shows how much the answer depends on how backtracking is
-defined: the same 1,280 traces judged under the four prompts we ran (v0 upstream, v2 carried
+defined: the same traces judged under the four prompts we ran (v0 upstream, v2 carried
 forward, v3 brief candidates, v6 wasted search; README has what each counts). Correct traces
 only by default, matching the paper's per-correct-trace framing.
 
-Cells are newer/bigger over older/smaller. Rates are pooled exactly as in behaviour_table.py,
+Sample: the main table's (traces with both a verification and a v6 count). Within it,
+v0-v3 each also lose the few traces their own judge could not count; the script prints how
+many. Cells are newer/bigger over older/smaller. Rates are pooled exactly as in behaviour_table.py,
 using its loader, so the v6 column reproduces the main table's ratios. The last column is v6
 with every problem weighted equally: each model's per-problem mean (per trace) or per-problem
 pooled rate (per 10k), averaged over the problems both models have traces for, so a model
@@ -58,11 +60,23 @@ def main():
 
     traces = load_all()
     ct = {k(t): t["cot_tokens"] for t in traces}
-    cols, n_eq = {}, {}
+    # The main table's sample: traces with both a verification and a v6 count. The v6
+    # column is therefore exactly the main table's; v0-v3 each also lose the few traces
+    # their own judge could not count (intersecting all four would drop 79 of the longest
+    # traces, and different ones per prompt).
+    runs = {}
     for name, f in RUNS:
         rs, _, missing = load_judged(os.path.join(HERE, "out", f), "backtracking", set(ct))
         if missing:
             raise SystemExit(f"{name}: {len(missing)} traces have no record")
+        runs[name] = rs
+    ver, _, _ = load_judged(os.path.join(HERE, "out", "judge_whole_gemini.jsonl"), "verification", set(ct))
+    common = {k(r) for r in ver} & {k(r) for r in runs["v6"]}
+    print(f"sample: {len(common)} of {len(ct)} traces; lost within it by "
+          + ", ".join(f"{n} {len(common - {k(r) for r in rs})}" for n, rs in runs.items()))
+    cols, n_eq = {}, {}
+    for name, _ in RUNS:
+        rs = [r for r in runs[name] if k(r) in common]
         if not a.all_traces:
             rs = [r for r in rs if r["correct"]]
         col, eq = {}, {}
